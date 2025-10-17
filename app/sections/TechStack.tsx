@@ -46,7 +46,9 @@ const TechStack = () => {
       <div className="container mx-auto max-w-6xl">
         {/* Section Header */}
         <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight mb-2">My Tech Stack</h2>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight mb-2">
+            My <span className="italic bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Tech-Stack</span>
+          </h2>
           <h2 className="text-sm text-gray-400 uppercase tracking-wider">
             Technologies I&apos;ve been working with and I constantly try to improve
           </h2>
