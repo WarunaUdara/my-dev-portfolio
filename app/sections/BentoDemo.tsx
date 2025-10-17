@@ -1,6 +1,7 @@
 "use client"
 import { CalendarIcon, FileTextIcon } from "@radix-ui/react-icons"
 import { BellIcon, Share2Icon } from "lucide-react"
+import Image from "next/image"
 
 import { cn } from "@/lib/utils"
 
@@ -82,18 +83,85 @@ const features = [
   },
   {
     Icon: Share2Icon,
-    name: "Integrations",
-    description: "Supports 100+ integrations and counting.",
+    name: "",
+    description: "",
     href: "#",
-    cta: "Learn more",
+    cta: "",
     className: "col-span-3 lg:col-span-2",
     background: (
-      <div className="absolute inset-0 flex items-center justify-center opacity-30">
-        <img 
-          src="/circles.svg" 
-          alt="" 
-          className="w-full h-full object-cover"
-        />
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <Image 
+            src="/circles.svg" 
+            alt="" 
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        {/* Heading at Top */}
+        <div className="absolute top-6 left-6 right-6 z-20">
+          <h3 className="text-2xl sm:text-3xl font-serif leading-tight">
+            Passionate about <span className="italic bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">cutting-edge technologies</span>
+          </h3>
+        </div>
+        
+        {/* Animated Cards Container - Positioned Lower */}
+        <div className="absolute inset-0 flex items-end justify-center pb-4 pt-24">
+          {/* Card 1 - Bottom Left (Gradient Card) */}
+          <div className="absolute bottom-12 left-8 w-32 h-44 rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:rotate-[-12deg] group-hover:translate-x-[-15px] group-hover:translate-y-[-8px] group-hover:scale-105">
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400 opacity-90"></div>
+            <div className="absolute inset-0 p-4 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="w-10 h-1.5 bg-white/40 rounded-full"></div>
+                <div className="w-16 h-1.5 bg-white/40 rounded-full"></div>
+                <div className="w-12 h-1.5 bg-white/40 rounded-full"></div>
+              </div>
+              <div className="w-8 h-8 bg-white/30 rounded-full"></div>
+            </div>
+          </div>
+
+          {/* Card 2 - Center Bottom (Website Mockup) */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-56 h-36 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:translate-y-[20px] group-hover:scale-105 z-10">
+            {/* Browser Chrome */}
+            <div className="absolute top-0 left-0 right-0 h-7 bg-gray-800 flex items-center px-2.5 gap-2">
+              <div className="flex gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              </div>
+              <div className="flex-1 ml-2">
+                <div className="w-28 h-3.5 bg-gray-700 rounded transition-all duration-500 group-hover:w-36"></div>
+              </div>
+            </div>
+            
+            {/* Website Content */}
+            <div className="absolute top-7 left-0 right-0 bottom-0 bg-gradient-to-br from-gray-900 to-gray-800 p-3 flex flex-col items-center justify-center">
+              <div className="text-center space-y-1.5">
+                <div className="w-28 h-2.5 bg-white/20 rounded mx-auto transition-all duration-500 group-hover:w-36"></div>
+                <div className="w-20 h-1.5 bg-white/15 rounded mx-auto transition-all duration-500 group-hover:w-24"></div>
+              </div>
+              <div className="flex gap-2 mt-3">
+                <div className="w-14 h-5 bg-purple-500/60 rounded-md transition-all duration-500 group-hover:bg-purple-500"></div>
+                <div className="w-14 h-5 bg-gray-600/60 rounded-md transition-all duration-500 group-hover:bg-gray-600"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3 - Bottom Right (Gradient Card) */}
+          <div className="absolute bottom-12 right-8 w-32 h-44 rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:rotate-[12deg] group-hover:translate-x-[15px] group-hover:translate-y-[8px] group-hover:scale-105">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-pink-300 to-purple-300 opacity-90"></div>
+            <div className="absolute inset-0 p-4 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="w-14 h-1.5 bg-white/40 rounded-full"></div>
+                <div className="w-10 h-1.5 bg-white/40 rounded-full"></div>
+                <div className="w-16 h-1.5 bg-white/40 rounded-full"></div>
+              </div>
+              <div className="w-8 h-8 bg-white/30 rounded-full"></div>
+            </div>
+          </div>
+        </div>
       </div>
     ),
   },
@@ -114,17 +182,10 @@ const features = [
 
 export function BentoDemo() {
   return (
-    <section className="relative bg-black text-white py-20 px-4 sm:px-6">
-      <div className="container mx-auto max-w-6xl">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <p className="text-xs sm:text-sm text-gray-400 uppercase tracking-widest mb-4">
-            FEATURED WORK
-          </p>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif">
-            Projects & <span className="italic bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Features</span>
-          </h2>
-        </div>
+    <section className="relative bg-gradient-to-b from-transparent via-black/80 to-black text-white -mt-32 pt-40 px-4 sm:px-6 pb-20">
+      
+      <div className="container mx-auto max-w-6xl relative z-20">
+        
 
         {/* Bento Grid */}
         <BentoGrid>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Aurora from "../ui/Aurora";
+import { BentoDemo } from "./BentoDemo";
 
 export default function Hero() {
   return (
@@ -107,9 +108,13 @@ export default function Hero() {
               priority
               unoptimized
             />
+            
           </div>
+          
         </section>
+        <BentoDemo/>
       </main>
+      
     </div>
   );
 }
