@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import CurvedLoop from '../ui/CurvedLoop';
 
 const TechStack = () => {
   // All technologies in a single array without row separation
@@ -76,6 +77,17 @@ const TechStack = () => {
             </div>
           ))}
         </div>
+      </div>
+      <br /><br />
+      <div className="container mx-auto">
+        <CurvedLoop 
+          marqueeText="Scalable ✦ Maintainable ✦ Secure ✦ Fast ✦ Reliable ✦ "
+          speed={2}
+          curveAmount={0}
+          direction="right"
+          interactive={true}
+          className="font-serif text-white/80"
+        />
       </div>
     </section>
   );
