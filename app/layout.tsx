@@ -23,6 +23,11 @@ export const metadata: Metadata = {
     template: "%s | Waruna Udara Sampath"
   },
   description: "Full Stack Software Developer specializing in Java, Spring Boot, React/Next.js, and microservices architecture. BICT (Hons) undergraduate with expertise in Docker, AWS, and cloud-native applications.",
+  icons: {
+    icon: '/icon.ico',
+    shortcut: '/icon.ico',
+    apple: '/icon.ico',
+  },
   keywords: [
     "Full Stack Developer",
     "Java Developer",

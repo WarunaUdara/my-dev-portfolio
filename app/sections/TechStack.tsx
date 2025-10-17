@@ -83,7 +83,7 @@ const TechStack = () => {
       <br /><br />
       <div className="container mx-auto">
         <CurvedLoop 
-          marqueeText="Scalable ✦ Maintainable ✦ Secure ✦ Fast ✦ Reliable ✦ "
+          marqueeText="Scalability ✦ Maintainability ✦ Security ✦ Performance ✦ Reliability"
           speed={2}
           curveAmount={0}
           direction="right"
