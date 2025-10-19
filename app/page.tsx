@@ -5,6 +5,7 @@ import TechStack from "./sections/TechStack";
 import CurvedLoopImpl from "./sections/CurvedLoopImpl";
 import GitHubActivity from "./sections/GitHubActivity";
 import RevealingQuote from "./sections/RevealingQuote";
+import Footer from "./sections/Footer";
 
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       <TechStack/>
       <CurvedLoopImpl/>
       <GitHubActivity/>
+      <Footer/>
       
       
       

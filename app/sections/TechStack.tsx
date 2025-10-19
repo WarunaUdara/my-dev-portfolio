@@ -3,7 +3,6 @@ import Image from 'next/image';
 import CurvedLoop from '../ui/CurvedLoop';
 
 const TechStack = () => {
-  // All technologies in a single array without row separation
   const techStack = [
     { name: 'React', icon: '/icons8-react-24.png' },
     { name: 'Next.js', icon: '/icons8-nextjs-144.png' },
@@ -39,6 +38,8 @@ const TechStack = () => {
     { name: 'IntelliJ IDEA', icon: '/icons8-intellij-idea-96.png' },
     { name: 'GitLab', icon: '/icons8-gitlab-96.png' },
     { name: 'Oracle', icon: '/icons8-oracle-96.png' },
+    { name: 'Bun', icon: '/Bun.png' },
+    { name: 'Linux', icon: '/Linux.png' },
   ];
 
   return (
