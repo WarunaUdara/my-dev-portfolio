@@ -5,8 +5,6 @@ import Image from "next/image"
 
 import { cn } from "@/lib/utils"
 
-
-
 import { BentoCard, BentoGrid } from "@/app/ui/BentoGrid"
 import { Marquee } from "@/components/ui/marquee"
 
@@ -42,6 +40,19 @@ const features = [
     cta: "Learn more",
     className: "col-span-3 lg:col-span-1",
     background: (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-6xl opacity-20">🔔</div>
+      </div>
+    ),
+  },
+  {
+    Icon: BellIcon,
+    name: "Notifications",
+    description: "Get notified when something happens.",
+    href: "#",
+    cta: "Learn more",
+    className: "col-span-3 lg:col-span-2",
+    background: (
       <Marquee
         pauseOnHover
         className="absolute top-10 [mask-image:linear-gradient(to_top,transparent_40%,#000_100%)] [--duration:20s]"
@@ -66,19 +77,6 @@ const features = [
           </figure>
         ))}
       </Marquee>
-    ),
-  },
-  {
-    Icon: BellIcon,
-    name: "Notifications",
-    description: "Get notified when something happens.",
-    href: "#",
-    cta: "Learn more",
-    className: "col-span-3 lg:col-span-2",
-    background: (
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-6xl opacity-20">🔔</div>
-      </div>
     ),
   },
   {
@@ -123,28 +121,38 @@ const features = [
           </div>
 
           {/* Card 2 - Center Bottom (Website Mockup) */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-56 h-36 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:translate-y-[20px] group-hover:scale-105 z-10">
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:translate-y-[20px] group-hover:scale-105 z-10">
             {/* Browser Chrome */}
-            <div className="absolute top-0 left-0 right-0 h-7 bg-gray-800 flex items-center px-2.5 gap-2">
+            <div className="absolute top-0 left-0 right-0 h-8 bg-gray-800 flex items-center px-3 gap-2">
               <div className="flex gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
               </div>
               <div className="flex-1 ml-2">
-                <div className="w-28 h-3.5 bg-gray-700 rounded transition-all duration-500 group-hover:w-36"></div>
+                <div className="w-32 h-4 bg-gray-700 rounded flex items-center px-2 transition-all duration-500 group-hover:w-40">
+                  <div className="w-2 h-2 rounded-full bg-gray-500"></div>
+                </div>
               </div>
             </div>
             
             {/* Website Content */}
-            <div className="absolute top-7 left-0 right-0 bottom-0 bg-gradient-to-br from-gray-900 to-gray-800 p-3 flex flex-col items-center justify-center">
-              <div className="text-center space-y-1.5">
-                <div className="w-28 h-2.5 bg-white/20 rounded mx-auto transition-all duration-500 group-hover:w-36"></div>
-                <div className="w-20 h-1.5 bg-white/15 rounded mx-auto transition-all duration-500 group-hover:w-24"></div>
+            <div className="absolute top-8 left-0 right-0 bottom-0 bg-gradient-to-br from-gray-900 to-gray-800 p-4 flex flex-col items-center justify-center">
+              <div className="text-center space-y-2 mb-4">
+                <h3 className="text-white text-sm font-semibold transition-all duration-500 group-hover:text-base">
+                  Websites that stand out
+                </h3>
+                <p className="text-gray-400 text-xs transition-all duration-500 group-hover:text-sm">
+                  and make a difference
+                </p>
               </div>
-              <div className="flex gap-2 mt-3">
-                <div className="w-14 h-5 bg-purple-500/60 rounded-md transition-all duration-500 group-hover:bg-purple-500"></div>
-                <div className="w-14 h-5 bg-gray-600/60 rounded-md transition-all duration-500 group-hover:bg-gray-600"></div>
+              <div className="flex gap-3">
+                <button className="px-4 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs rounded-full font-medium transition-all duration-500 group-hover:px-5 group-hover:py-2">
+                  Get started
+                </button>
+                <button className="px-4 py-1.5 bg-transparent border border-gray-600 hover:border-gray-500 text-white text-xs rounded-full font-medium transition-all duration-500 group-hover:px-5 group-hover:py-2">
+                  Read More
+                </button>
               </div>
             </div>
           </div>
@@ -185,8 +193,6 @@ export function BentoDemo() {
     <section className="relative bg-gradient-to-b from-transparent via-black/80 to-black text-white -mt-32 pt-40 px-4 sm:px-6 pb-20">
       
       <div className="container mx-auto max-w-6xl relative z-20">
-        
-
         {/* Bento Grid */}
         <BentoGrid>
           {features.map((feature, idx) => (
