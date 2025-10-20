@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Aurora from "../ui/Aurora";
+import FloatingSparkles from "../ui/FloatingSparkles";
 import { BentoDemo } from "./BentoDemo";
 
 export default function Hero() {
@@ -98,7 +99,7 @@ export default function Hero() {
           </div>
 
           {/* Eclipse Background - Full Width */}
-          <div className="absolute bottom-0 sm:-bottom-48 left-0 right-0 w-screen pointer-events-none z-10">
+          <div className="absolute bottom-0 sm:-bottom-40 left-0 right-0 w-screen pointer-events-none z-10">
             <Image
               src="/eclipse.png"
               alt=""
@@ -108,8 +109,10 @@ export default function Hero() {
               priority
               unoptimized
             />
-            
           </div>
+
+          {/* Floating Sparkles Effect */}
+          <FloatingSparkles />
           
         </section>
         <BentoDemo/>

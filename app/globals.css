@@ -62,6 +62,24 @@
     transform: translateY(calc(-100% - var(--gap)));
     }
   }
+
+  @keyframes float-up {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.8;
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-200px) translateX(20px);
+    }
+    100% {
+      transform: translateY(-400px) translateX(-10px);
+      opacity: 0;
+    }
+  }
 }
 
 body {
@@ -69,6 +87,27 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Floating Sparkles Animation */
+@keyframes float-up {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-600px) translateX(15px);
+    opacity: 0;
+  }
 }
 
 /* Font utility classes */
