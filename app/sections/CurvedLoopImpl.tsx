@@ -1,5 +1,4 @@
 import React from 'react'
-import CurvedLoop from '../ui/CurvedLoop'
 
 const CurvedLoopImpl = () => {
   return (

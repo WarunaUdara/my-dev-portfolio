@@ -29,6 +29,11 @@ export const metadata: Metadata = {
     apple: '/icon.ico',
   },
   keywords: [
+    "Waruna",
+    "Udara",
+    "Sampath",
+    "Waruna Udara",
+    "Waruna Udara Sampath",
     "Full Stack Developer",
     "Java Developer",
     "Spring Boot",
@@ -55,17 +60,19 @@ export const metadata: Metadata = {
     "TypeScript",
     "REST API",
     "Sri Lanka",
+    "Software Engineer",
+    "developer",
   ],
   authors: [{ name: "Waruna Udara Sampath" }],
   creator: "Waruna Udara Sampath",
-  metadataBase: new URL("https://warunaudara.vercel.app/"), // Replace with your actual domain
+  metadataBase: new URL("https://warunadev.vercel.app/"), // Replace with your actual domain
   alternates: {
     canonical: "/"
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://warunaudara.vercel.app/",
+    url: "https://warunadev.vercel.app/",
     title: "Waruna Udara Sampath - Full Stack Software Developer",
     description: "Full Stack Developer specializing in Java, Spring Boot, React/Next.js, and microservices. Building scalable cloud-native applications.",
     siteName: "Waruna Udara Sampath Portfolio",
@@ -89,7 +96,7 @@ export const metadata: Metadata = {
     }
   },
   verification: {
-    //google: "your-google-verification-code", // Add after setting up Google Search Console
+    google: "jKjVbwKMX1zDgzTQNEPZyWizM0b77IKGp1iWmgj_Ufo",
   }
 };
 
