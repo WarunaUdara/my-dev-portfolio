@@ -111,7 +111,7 @@ export default function RootLayout({
     "name": "Waruna Udara Sampath",
     "jobTitle": "Full Stack Software Developer",
     "description": "BICT (Hons) undergraduate specializing in microservices and full-stack development",
-    "url": "https://warunaudara.vercel.app/",
+    "url": "https://warunadev.vercel.app/",
     "email": "warunaudarasam2003@gmail.com",
     
     "address": {

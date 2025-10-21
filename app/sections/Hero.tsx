@@ -99,7 +99,7 @@ export default function Hero() {
           </div>
 
           {/* Eclipse Background - Full Width */}
-          <div className="absolute bottom-0 sm:-bottom-40 left-0 right-0 w-screen pointer-events-none z-10">
+          <div className="absolute bottom-0  sm:-bottom-40 left-0 right-0 w-screen pointer-events-none z-10">
             <Image
               src="/eclipse.png"
               alt=""

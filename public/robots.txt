@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://warunadev.vercel.app/sitemap.xml
