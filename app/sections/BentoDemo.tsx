@@ -44,7 +44,7 @@ const features = [
 
         {/* Text Overlay - Top */}
         <div className="absolute top-4 left-4 right-4 z-10 text-center pointer-events-none">
-          <p className="text-xs sm:text-sm text-white leading-relaxed">
+          <p className="text-sm sm:text-sm text-white leading-relaxed">
             I&apos;m very flexible with time
           </p>
           <p className="text-xs sm:text-sm text-white leading-relaxed">
