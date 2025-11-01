@@ -161,14 +161,52 @@ const features = [
     ),
   },
   {
-    name: "Calendar",
-    description: "Use the calendar to filter your files by date.",
+    name: "Resume",
+    description: "Download my professional resume and learn more about my experience.",
     className: "col-span-3 lg:col-span-1",
-    href: "#",
-    cta: "Learn more",
+    href: "/waruna-udara-sampath-resume lts.pdf",
+    cta: "Download CV",
     background: (
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-6xl opacity-20">📅</div>
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Animated Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-8)]/20 via-[var(--color-9)]/10 to-transparent"></div>
+        
+        {/* Floating Document Icon with Glow */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative group-hover:scale-110 transition-transform duration-500">
+            {/* Glow Effect */}
+            <div className="absolute inset-0 bg-[var(--color-8)] opacity-20 blur-3xl rounded-full scale-150 group-hover:opacity-40 transition-opacity duration-500"></div>
+            
+            {/* Document Icon */}
+            <div className="relative w-24 h-28 bg-gradient-to-br from-[var(--color-3)] to-[var(--color-4)] rounded-lg shadow-2xl border border-[var(--color-5)] overflow-hidden">
+              {/* Document Header */}
+              <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] opacity-80"></div>
+              
+              {/* Document Lines */}
+              <div className="absolute top-10 left-3 right-3 space-y-2">
+                <div className="h-1.5 bg-[var(--color-6)] rounded-full w-3/4 opacity-60"></div>
+                <div className="h-1.5 bg-[var(--color-6)] rounded-full w-full opacity-50"></div>
+                <div className="h-1.5 bg-[var(--color-6)] rounded-full w-5/6 opacity-40"></div>
+                <div className="h-1.5 bg-[var(--color-6)] rounded-full w-2/3 opacity-30"></div>
+              </div>
+              
+              {/* Download Arrow */}
+              <div className="absolute bottom-2 right-2 w-6 h-6 bg-[var(--color-8)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-9)] transition-colors duration-300">
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+              
+              {/* Folded Corner */}
+              <div className="absolute top-0 right-0 w-0 h-0 border-l-[20px] border-l-transparent border-t-[20px] border-t-[var(--color-7)] opacity-40"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Floating Particles */}
+        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-[var(--color-8)] rounded-full opacity-60 animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/3 w-1.5 h-1.5 bg-[var(--color-9)] rounded-full opacity-40 animate-pulse delay-300"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-1 h-1 bg-[var(--color-8)] rounded-full opacity-50 animate-pulse delay-700"></div>
       </div>
     ),
   },
