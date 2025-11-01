@@ -6,13 +6,14 @@ const About = () => {
   return (
     <section id="about" className="relative min-h-screen bg-black text-white py-20 px-4 sm:px-6">
       <div className="container mx-auto max-w-6xl">
+        {/* Section Label */}
+            <p className="text-sm text-gray-400 uppercase tracking-wider text-center py-8">
+              KNOW ABOUT ME
+            </p>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Content */}
           <div className="space-y-8">
-            {/* Section Label */}
-            <p className="text-sm text-gray-400 uppercase tracking-wider">
-              KNOW ABOUT ME
-            </p>
+            
 
             {/* Main Heading */}
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight text-center lg:text-left">

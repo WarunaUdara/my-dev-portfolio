@@ -1,9 +1,28 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import Aurora from "../ui/Aurora";
 import FloatingSparkles from "../ui/FloatingSparkles";
 import { BentoDemo } from "./BentoDemo";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 
 export default function Hero() {
+  const [showToast, setShowToast] = useState(false);
+
+  const handleCopyEmail = async () => {
+    const email = "warunaudarasam2003@gmail.com";
+    
+    try {
+      await navigator.clipboard.writeText(email);
+      
+      // Show toast
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);
+    } catch (err) {
+      console.error('Failed to copy email:', err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Main Content */}
@@ -21,6 +40,7 @@ export default function Hero() {
               amplitude={1.0}
               speed={0.5}
             />
+            
           </div>
 
           <div className="container mx-auto max-w-6xl w-full z-20 px-4 sm:px-6 relative">
@@ -55,27 +75,18 @@ export default function Hero() {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-6 sm:mt-8 w-full sm:w-auto">
-                <button className="w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
-                  Let&apos;s Connect
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </button>
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-4 sm:mt-6 w-full sm:w-auto">
+                
+                <a href="https://www.linkedin.com/in/waruna-udara/" target="_blank" rel="noopener noreferrer">
+                  <InteractiveHoverButton> Let&apos;s Connect </InteractiveHoverButton>
+                </a>
 
-                <button className="w-full sm:w-auto px-4 py-3 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2 text-sm sm:text-base">
+                <button className="w-full sm:w-auto px-4 py-3 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2 text-sm sm:text-base group"
+                  onClick={handleCopyEmail}
+                  type="button"
+                >
                   <svg
-                    className="w-5 h-5 flex-shrink-0"
+                    className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -115,6 +126,32 @@ export default function Hero() {
           <FloatingSparkles />
           
         </section>
+
+        {/* Toast Notification - Outside hero to prevent layout shift */}
+        {showToast && (
+          <div className="fixed top-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 z-[100] pointer-events-auto px-4 sm:px-0">
+            <div className="bg-[var(--color-2)] border border-[var(--color-5)] rounded-xl shadow-2xl p-4 flex items-center gap-3 w-full sm:min-w-[320px] max-w-[90vw] sm:max-w-none animate-in slide-in-from-top-2 fade-in duration-300">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[var(--color-8)] to-[var(--color-9)] flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-semibold text-sm">Copied to clipboard!</p>
+                
+              </div>
+              <a
+                href="mailto:warunaudarasam2003@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-shrink-0 px-3 py-1.5 bg-[var(--color-8)] hover:bg-[var(--color-9)] text-white text-xs rounded-lg transition-colors font-medium whitespace-nowrap"
+              >
+                Send Email
+              </a>
+            </div>
+          </div>
+        )}
+
         <BentoDemo/>
       </main>
       

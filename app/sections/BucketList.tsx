@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface BucketItem {
@@ -10,11 +10,11 @@ interface BucketItem {
   link?: string;
 }
 
-const initialBucketItems: BucketItem[] = [
+const bucketItems: BucketItem[] = [
     { id: 1, text: "Skydiving", completed: false },
     { id: 2, text: "Find my first job", completed: false },
     { id: 3, text: "Solo travel to another country", completed: true },
-    { id: 4, text: "Create portfolio website", completed: true, date: "May 2025", link: "https://warunadev.vercel.app/" },
+    { id: 4, text: "Create portfolio website", completed: true,  link: "https://warunadev.vercel.app/" },
     { id: 5, text: "Certified Kubernetes Administrator", completed: false },
     { id: 6, text: "Parents trip to india", completed: false },
     { id: 7, text: "Remote working with client from abroad", completed: false },
@@ -37,16 +37,8 @@ const initialBucketItems: BucketItem[] = [
 ];
 
 const BucketList = () => {
-  const [items, setItems] = useState<BucketItem[]>(initialBucketItems);
-
-  const toggleItem = (id: number) => {
-    setItems(items.map(item => 
-      item.id === id ? { ...item, completed: !item.completed } : item
-    ));
-  };
-
-  const completedCount = items.filter(item => item.completed).length;
-  const totalCount = items.length;
+  const completedCount = bucketItems.filter(item => item.completed).length;
+  const totalCount = bucketItems.length;
   const progress = (completedCount / totalCount) * 100;
 
   return (
@@ -81,7 +73,7 @@ const BucketList = () => {
 
         {/* Bucket List Items */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-          {items.map((item, index) => (
+          {bucketItems.map((item, index) => (
             <div
               key={item.id}
               className={cn(
@@ -99,14 +91,13 @@ const BucketList = () => {
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div>
 
               <div className="relative flex items-start gap-4">
-                {/* Custom Checkbox */}
-                <button
-                  onClick={() => toggleItem(item.id)}
+                {/* Custom Checkbox - Display Only */}
+                <div
                   className={cn(
                     "flex-shrink-0 mt-0.5 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 transition-all duration-300 relative overflow-hidden",
                     item.completed
                       ? "bg-gradient-to-br from-[var(--color-8)] to-[var(--color-9)] border-[var(--color-8)]"
-                      : "border-[var(--color-6)] hover:border-[var(--color-8)] hover:bg-[var(--color-3)]"
+                      : "border-[var(--color-6)]"
                   )}
                 >
                   {/* Checkmark */}
@@ -126,7 +117,7 @@ const BucketList = () => {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                </button>
+                </div>
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
@@ -155,7 +146,6 @@ const BucketList = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-[var(--color-8)] hover:text-[var(--color-9)] transition-colors inline-flex items-center gap-1 mt-1"
-                          onClick={(e) => e.stopPropagation()}
                         >
                           <span className="truncate max-w-[200px]">{item.link}</span>
                           <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
