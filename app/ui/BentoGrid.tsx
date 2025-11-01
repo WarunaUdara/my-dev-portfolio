@@ -57,6 +57,7 @@ const BentoCard = ({
     {...props}
   >
     <div>{background}</div>
+    {(name || description || cta) && (
       <div className="p-4">
       <div className="pointer-events-none z-10 flex transform-gpu flex-col gap-1 transition-all duration-300 lg:group-hover:-translate-y-10">
         {name && <h3 className="text-xl font-semibold text-white">
@@ -83,6 +84,7 @@ const BentoCard = ({
         </Button>
       </div>}
     </div>
+    )}
 
     {cta && <div
       className={cn(

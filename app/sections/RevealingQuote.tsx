@@ -88,7 +88,7 @@ const RevealingQuote = () => {
           </p>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif mb-2">
             What{" "}
-            <span className="italic bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+            <span className="italic bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] bg-clip-text text-transparent">
               Drives Me
             </span>
           </h2>

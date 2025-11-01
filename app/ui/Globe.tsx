@@ -3,7 +3,7 @@
 
 import createGlobe, { COBEOptions } from "cobe";
 import { useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,7 @@ const GLOBE_CONFIG: COBEOptions = {
   glowColor: [0.2, 0.4, 0.8],
   markers: [
     // Sri Lanka highlighted
-    { location: [7.8731, 80.7718], size: 0.05 },
+    { location: [7.8731, 80.7718], size: 0.04 },
     // Other locations
     // { location: [14.5995, 120.9842], size: 0.03 },
     // { location: [19.076, 72.8777], size: 0.05 },
@@ -85,16 +85,17 @@ export function Globe({
   }, []);
 
   // Detect device type and viewport size
-  const getDeviceConfig = () => {
+  const getDeviceConfig = useCallback(() => {
     const isMobile = window.innerWidth < 768;
     const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
     
     return {
       devicePixelRatio: isMobile ? 0.8 : isTablet ? 1.2 : config.devicePixelRatio,
       mapSamples: isMobile ? 8000 : isTablet ? 10000 : config.mapSamples,
-      scale: isMobile ? 0.9 : isTablet ? 0.95 : 1,
+      // CSS scaling removed; use COBE internal scale so the sphere fills canvas without shifting
+      globeScale: isMobile ? 1.25 : isTablet ? 1.12 : 1.0,
     };
-  };
+  }, [config]);
 
   // Initialize and cleanup the globe instance
   useEffect(() => {
@@ -109,6 +110,7 @@ export function Globe({
       ...config,
       devicePixelRatio: deviceSettings.devicePixelRatio,
       mapSamples: deviceSettings.mapSamples,
+      scale: deviceSettings.globeScale,
     };
 
     try {
@@ -146,7 +148,7 @@ export function Globe({
         frameId.current = null;
       }
     };
-  }, [rs, config, dimensions.width, dimensions.height, isClient]);
+  }, [rs, config, dimensions.width, dimensions.height, isClient, getDeviceConfig]);
 
   // Handle resize and initial size calculation
   useEffect(() => {
@@ -158,19 +160,21 @@ export function Globe({
         const rect = containerRef.current.getBoundingClientRect();
         const newWidth = Math.floor(rect.width);
         const newHeight = Math.floor(rect.height);
-        
+  // Use the larger axis so the sphere fills the full card width/height and crops nicely
+  const size = Math.floor(Math.max(newWidth, newHeight));
+
         // Only update if there's a meaningful change to avoid unnecessary re-renders
         if (
-          Math.abs(newWidth - dimensions.width) > 5 || 
-          Math.abs(newHeight - dimensions.height) > 5
+          Math.abs(size - dimensions.width) > 5 ||
+          Math.abs(size - dimensions.height) > 5
         ) {
-          setDimensions({ width: newWidth, height: newHeight });
+          setDimensions({ width: size, height: size });
         }
-        
+
         // Make sure the canvas is properly sized for the container
         if (canvasRef.current) {
-          canvasRef.current.style.width = `${newWidth}px`;
-          canvasRef.current.style.height = `${newHeight}px`;
+          canvasRef.current.style.width = `${size}px`;
+          canvasRef.current.style.height = `${size}px`;
         }
       }
     };
@@ -220,41 +224,44 @@ export function Globe({
     );
   }
 
-  // Determine scale based on device
-  const scale = isClient ? getDeviceConfig().scale : 1;
+  // No CSS scale — COBE 'scale' is used instead
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "absolute inset-0 flex items-center justify-center",
+        "absolute inset-0",
         className,
       )}
     >
       <canvas
         className={cn(
-          "w-full h-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]",
+          "block opacity-70 transition-opacity duration-500 [contain:layout_paint_size]",
         )}
         ref={canvasRef}
         onPointerDown={(e) => {
           pointerInteracting.current = e.clientX;
           updatePointerInteraction(e.clientX);
-          // Use pointer capture for better touch interaction
-          canvasRef.current?.setPointerCapture(e.pointerId);
+          // For mouse/stylus only; allow browser to handle vertical scroll on touch
+          if (e.pointerType !== 'touch') {
+            canvasRef.current?.setPointerCapture(e.pointerId);
+          }
         }}
         onPointerUp={(e) => {
           updatePointerInteraction(null);
-          canvasRef.current?.releasePointerCapture(e.pointerId);
+          if (e.pointerType !== 'touch') {
+            canvasRef.current?.releasePointerCapture(e.pointerId);
+          }
         }}
         onPointerOut={() => updatePointerInteraction(null)}
         onPointerCancel={() => updatePointerInteraction(null)}
         onPointerMove={(e) => updateMovement(e.clientX)}
-        onTouchMove={(e) =>
-          e.touches[0] && updateMovement(e.touches[0].clientX)
-        }
         style={{ 
-          touchAction: 'none',  // Prevents browser default touch actions
-          transform: `scale(${scale})` // Apply proper scaling based on device
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          touchAction: 'pan-y'
         }}
       />
     </div>

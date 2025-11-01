@@ -16,7 +16,7 @@ export default function Hero() {
           {/* Aurora Background Animation */}
           <div className="absolute inset-0 z-0">
             <Aurora
-              colorStops={["#47007a", "#000000", "#9810fa"]}
+              colorStops={["#003CAA", "#000000", "#0059FF"]}
               blend={0.6}
               amplitude={1.0}
               speed={0.5}
@@ -95,7 +95,7 @@ export default function Hero() {
 
           {/* Purple Glow Effect on Eclipse */}
           <div className="absolute bottom-0 sm:-bottom-48 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[200px] sm:h-[300px] pointer-events-none z-5">
-            <div className="absolute inset-0 bg-gradient-to-b from-purple-600/40 via-purple-500/20 to-transparent blur-3xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-600/40 via-blue-500/20 to-transparent blur-3xl"></div>
           </div>
 
           {/* Eclipse Background - Full Width */}

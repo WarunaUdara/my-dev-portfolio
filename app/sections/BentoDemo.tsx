@@ -39,26 +39,23 @@ const features = [
     className: "col-span-3 lg:col-span-1",
     background: (
       <div className="absolute inset-0 overflow-hidden">
-        {/* Globe - Centered and Properly Scaled */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] flex items-center justify-center opacity-70">
-          <Globe />
-        </div>
+        {/* Globe - Centered */}
+        <Globe />
 
         {/* Text Overlay - Top */}
-        <div className="absolute top-6 left-6 right-6 z-10 text-center">
-          <p className="text-sm sm:text-base text-white leading-relaxed">
+        <div className="absolute top-4 left-4 right-4 z-10 text-center pointer-events-none">
+          <p className="text-xs sm:text-sm text-white leading-relaxed">
             I&apos;m very flexible with time
           </p>
-          <p className="text-sm sm:text-base text-white leading-relaxed">
+          <p className="text-xs sm:text-sm text-white leading-relaxed">
             zone communications
           </p>
         </div>
 
         {/* Location Label - Bottom Left */}
-        <div className="absolute bottom-10 left-6 z-10">
-                    <h4 className="text-xl font-semibold text-white">Sri Lanka</h4>
-
+        <div className="absolute bottom-4 left-4 z-10 pointer-events-none">
           <p className="text-xs text-gray-400 mb-1">Remote</p>
+          <h4 className="text-lg sm:text-xl font-semibold text-white">Sri Lanka</h4>
         </div>
       </div>
     ),
