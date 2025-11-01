@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white py-20 px-8 border-t border-gray-900">
+    <footer className="bg-black text-white py-20 px-8 border-t border-[var(--color-2)]">
       <div className="max-w-7xl mx-auto">
         {/* Main Footer Content */}
         <div className="flex flex-col md:flex-row justify-between gap-16 mb-16">
@@ -20,7 +20,7 @@ const Footer = () => {
                 priority
               />
               </div>
-            <p className="text-gray-500 text-sm leading-relaxed">
+            <p className="text-gray-300 text-sm leading-relaxed">
               Thank you for visiting my portfolio. If you have any questions or would like to collaborate, feel free to reach out.
             </p>
           </div>
@@ -34,11 +34,11 @@ const Footer = () => {
                 <li>
                   <Link
                     href="#hero"
-                    className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
+                    className="group inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors relative"
                   >
                     <span className="relative">
                       Home
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
+                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] group-hover:w-full transition-all duration-300"></span>
                     </span>
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>
@@ -46,11 +46,11 @@ const Footer = () => {
                 <li>
                   <Link
                     href="#about"
-                    className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
+                    className="group inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors relative"
                   >
                     <span className="relative">
                       About
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
+                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] group-hover:w-full transition-all duration-300"></span>
                     </span>
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>
@@ -58,7 +58,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="#tech-stack"
-                    className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
+                    className="group inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors relative"
                   >
                     <span className="relative">
                       Tech Stack

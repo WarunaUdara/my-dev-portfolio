@@ -48,7 +48,7 @@ const TechStack = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight mb-2">
-            My <span className="italic bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Tech-Stack</span>
+            My <span className="italic bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] bg-clip-text text-transparent">Tech-Stack</span>
           </h2>
           <h2 className="text-sm text-gray-400 uppercase tracking-wider">
             Technologies I&apos;ve been working with and I constantly try to improve
@@ -60,7 +60,7 @@ const TechStack = () => {
           {techStack.map((tech, index) => (
             <div
               key={index}
-              className="group relative w-12 h-12 sm:w-14 sm:h-14 bg-gray-900 rounded-2xl flex items-center justify-center hover:bg-gray-800 transition-all duration-300 hover:scale-110 p-0"
+              className="group relative w-12 h-12 sm:w-14 sm:h-14 bg-[var(--color-2)] rounded-2xl flex items-center justify-center hover:bg-[var(--color-3)] transition-all duration-300 hover:scale-110 p-0"
               title={tech.name}
             >
               <Image
@@ -73,7 +73,7 @@ const TechStack = () => {
               
               {/* Tooltip */}
               <div className="absolute bottom-full mb-1 hidden group-hover:block z-10">
-                <div className="bg-gray-800 text-white text-xs px-3 py-1 rounded-lg whitespace-nowrap">
+                <div className="bg-[var(--color-3)] text-white text-xs px-3 py-1 rounded-lg whitespace-nowrap">
                   {tech.name}
                 </div>
               </div>

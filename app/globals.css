@@ -4,22 +4,36 @@
 
 /* CSS Variables for theming - Dark Mode Only */
 :root {
-  /* Dark theme colors - Blue accent only */
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --primary: #3b82f6;
+  /* OKLCH Color Palette - Purple/Violet Scale */
+  --color-1: oklch(0.181 0.028 252.0);
+  --color-2: oklch(0.212 0.039 252.0);
+  --color-3: oklch(0.277 0.077 252.0);
+  --color-4: oklch(0.328 0.107 252.0);
+  --color-5: oklch(0.374 0.131 252.0);
+  --color-6: oklch(0.425 0.152 252.0);
+  --color-7: oklch(0.493 0.172 252.0);
+  --color-8: oklch(0.579 0.191 252.0);
+  --color-9: oklch(0.629 0.187 252.0);
+  --color-10: oklch(0.682 0.176 252.0);
+  --color-11: oklch(0.849 0.107 252.0);
+  --color-12: oklch(0.921 0.063 252.0);
+
+  /* Dark theme colors mapped to OKLCH palette */
+  --background: var(--color-1);
+  --foreground: #ffffff;
+  --primary: var(--color-8);
   --primary-foreground: #ffffff;
-  --secondary: #1f2937;
-  --secondary-foreground: #f9fafb;
-  --accent: #60a5fa;
-  --accent-foreground: #0a0a0a;
-  --muted: #111827;
-  --muted-foreground: #9ca3af;
-  --card: #111827;
-  --card-foreground: #ededed;
-  --border: #374151;
-  --input: #374151;
-  --ring: #3b82f6;
+  --secondary: var(--color-2);
+  --secondary-foreground: #ffffff;
+  --accent: var(--color-9);
+  --accent-foreground: #ffffff;
+  --muted: var(--color-2);
+  --muted-foreground: #e5e5e5;
+  --card: var(--color-2);
+  --card-foreground: #ffffff;
+  --border: var(--color-4);
+  --input: var(--color-4);
+  --ring: var(--color-8);
 }
 
 @theme inline {

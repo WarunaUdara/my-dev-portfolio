@@ -59,7 +59,7 @@ const features = [
         <div className="absolute bottom-10 left-6 z-10">
                     <h4 className="text-xl font-semibold text-white">Sri Lanka</h4>
 
-          <p className="text-xs text-gray-500 mb-1">Remote</p>
+          <p className="text-xs text-gray-400 mb-1">Remote</p>
         </div>
       </div>
     ),
@@ -90,7 +90,7 @@ const features = [
         <div className="absolute top-6 left-6 right-6 z-20">
           <h3 className="text-2xl sm:text-3xl font-serif leading-tight">
             Passionate about{" "}
-            <span className="italic bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+            <span className="italic bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] bg-clip-text text-transparent">
               cutting-edge technologies
             </span>
           </h3>
@@ -100,7 +100,7 @@ const features = [
         <div className="absolute inset-0 flex items-end justify-center pb-4 pt-24">
           {/* Card 1 - Bottom Left (Gradient Card) */}
           <div className="absolute bottom-12 left-8 w-32 h-44 rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:rotate-[-12deg] group-hover:translate-x-[-15px] group-hover:translate-y-[-8px] group-hover:scale-105">
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400 opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-9)] via-[var(--color-8)] to-[var(--color-7)] opacity-90"></div>
             <div className="absolute inset-0 p-4 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="w-10 h-1.5 bg-white/40 rounded-full"></div>
@@ -114,34 +114,34 @@ const features = [
           {/* Card 2 - Center Bottom (Website Mockup) */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:translate-y-[20px] group-hover:scale-105 z-10">
             {/* Browser Chrome */}
-            <div className="absolute top-0 left-0 right-0 h-8 bg-gray-800 flex items-center px-3 gap-2">
+            <div className="absolute top-0 left-0 right-0 h-8 bg-[var(--color-3)] flex items-center px-3 gap-2">
               <div className="flex gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
                 <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
                 <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
               </div>
               <div className="flex-1 ml-2">
-                <div className="w-32 h-4 bg-gray-700 rounded flex items-center px-2 transition-all duration-500 group-hover:w-40">
-                  <div className="w-2 h-2 rounded-full bg-gray-500"></div>
+                <div className="w-32 h-4 bg-[var(--color-4)] rounded flex items-center px-2 transition-all duration-500 group-hover:w-40">
+                  <div className="w-2 h-2 rounded-full bg-[var(--color-6)]"></div>
                 </div>
               </div>
             </div>
 
             {/* Website Content */}
-            <div className="absolute top-8 left-0 right-0 bottom-0 bg-gradient-to-br from-gray-900 to-gray-800 p-4 flex flex-col items-center justify-center">
+            <div className="absolute top-8 left-0 right-0 bottom-0 bg-gradient-to-br from-[var(--color-2)] to-[var(--color-3)] p-4 flex flex-col items-center justify-center">
               <div className="text-center space-y-2 mb-4">
                 <h3 className="text-white text-sm font-semibold transition-all duration-500 group-hover:text-base">
                   Building elegant solutions
                 </h3>
-                <p className="text-gray-400 text-sm font-semibold transition-all duration-500 group-hover:text-sm">
+                <p className="text-gray-300 text-sm font-semibold transition-all duration-500 group-hover:text-sm">
                   that are secure and scalable
                 </p>
               </div>
               <div className="flex gap-3">
-                <button className="px-4 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs rounded-full font-medium transition-all duration-500 group-hover:px-5 group-hover:py-2">
+                <button className="px-4 py-1.5 bg-[var(--color-8)] hover:bg-[var(--color-9)] text-white text-xs rounded-full font-medium transition-all duration-500 group-hover:px-5 group-hover:py-2">
                   Get Started
                 </button>
-                <button className="px-4 py-1.5 bg-transparent border border-gray-600 hover:border-gray-500 text-white text-xs rounded-full font-medium transition-all duration-500 group-hover:px-5 group-hover:py-2">
+                <button className="px-4 py-1.5 bg-transparent border border-[var(--color-5)] hover:border-[var(--color-7)] text-white text-xs rounded-full font-medium transition-all duration-500 group-hover:px-5 group-hover:py-2">
                   Read More
                 </button>
               </div>
@@ -150,7 +150,7 @@ const features = [
 
           {/* Card 3 - Bottom Right (Gradient Card) */}
           <div className="absolute bottom-12 right-8 w-32 h-44 rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:rotate-[12deg] group-hover:translate-x-[15px] group-hover:translate-y-[8px] group-hover:scale-105">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-pink-300 to-purple-300 opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-8)] via-[var(--color-9)] to-[var(--color-7)] opacity-90"></div>
             <div className="absolute inset-0 p-4 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="w-14 h-1.5 bg-white/40 rounded-full"></div>
@@ -229,7 +229,7 @@ export function BentoDemo() {
                         onClick={handleClick}
                         className={cn(
                           "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
-                          "border-gray-700 bg-gray-800/50 hover:bg-gray-800 hover:border-purple-500/50",
+                          "border-[var(--color-4)] bg-[var(--color-2)]/50 hover:bg-[var(--color-3)] hover:border-[var(--color-7)]/50",
                           "transform-gpu blur-[1px] transition-all duration-300 ease-out",
                           "lg:hover:blur-none", // Desktop: remove blur on hover
                           "active:blur-none", // Mobile: remove blur on touch
@@ -239,20 +239,20 @@ export function BentoDemo() {
                         <div className="flex flex-col gap-2">
                           {/* Blog Post Title */}
                           <div className="flex flex-col">
-                            <figcaption className="text-sm font-semibold text-white group-hover:text-purple-400 group-active:text-purple-400 transition-colors line-clamp-2">
+                            <figcaption className="text-sm font-semibold text-white group-hover:text-[var(--color-9)] group-active:text-[var(--color-9)] transition-colors line-clamp-2">
                               {f.name}
                             </figcaption>
-                            <span className="text-xs text-gray-500 mt-1">Medium</span>
+                            <span className="text-xs text-gray-400 mt-1">Medium</span>
                           </div>
                         </div>
 
                         {/* Blog Post Description */}
-                        <blockquote className="mt-3 text-xs text-gray-400 line-clamp-3 leading-relaxed">
+                        <blockquote className="mt-3 text-xs text-gray-300 line-clamp-3 leading-relaxed">
                           {f.body}
                         </blockquote>
 
                         {/* Read More Indicator */}
-                        <div className="mt-3 flex items-center gap-1 text-xs text-purple-400 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
+                        <div className="mt-3 flex items-center gap-1 text-xs text-[var(--color-8)] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
                           <span className="hidden lg:inline">Read more</span>
                           <span className="lg:hidden">Hold to open</span>
                           <svg

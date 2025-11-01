@@ -15,16 +15,16 @@ const About = () => {
             </p>
 
             {/* Main Heading */}
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight text-center lg:text-left">
               <span className="block">Full-Stack Developer and</span>
-              <span className="block">a little bit of{' '}</span>
-              <span className="block italic bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-                everything
+              <span >a little bit of{' '}</span>
+              <span className=" italic bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] bg-clip-text text-transparent">
+              everything
               </span>
             </h2>
 
             {/* Description Paragraphs */}
-            <div className="space-y-6 text-gray-300 text-base sm:text-lg leading-relaxed">
+            <div className="space-y-6 text-gray-200 text-base sm:text-lg leading-relaxed">
               <p>
                 I&apos;m Waruna Udara Sampath, a proactive full-stack developer passionate 
                 about creating dynamic web experiences. From frontend to backend, I thrive 
@@ -62,7 +62,7 @@ const About = () => {
                 <Github className="w-6 h-6" />
               </a>
               <a 
-                href="https://www.instagram.com/waruna_udara/" 
+                href="https://www.instagram.com/w.u.d.s/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
@@ -75,11 +75,11 @@ const About = () => {
           {/* Right Image */}
           <div className="relative lg:order-last order-first">
             <div className="relative w-full max-w-md mx-auto lg:max-w-full">
-              {/* Blue Gradient Background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl transform rotate-3"></div>
+              {/* Purple Gradient Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-7)] to-[var(--color-8)] rounded-3xl transform rotate-3"></div>
               
               {/* Image Container */}
-              <div className="relative rounded-3xl overflow-hidden">
+              <div className="relative rounded-3xl overflow-hidden ">
                 <Image
                   src="/WarunaUdaraSampath.jpg"
                   alt="Waruna Udara Sampath"
