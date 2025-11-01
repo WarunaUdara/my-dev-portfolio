@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
 import { Globe } from "@/app/ui/Globe"
 
 import { cn } from "@/lib/utils";
@@ -179,30 +178,6 @@ const features = [
 ];
 
 export function BentoDemo() {
-  const [touchTimer, setTouchTimer] = useState<NodeJS.Timeout | null>(null);
-
-  const handleTouchStart = (link: string) => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      const timer = setTimeout(() => {
-        window.open(link, '_blank');
-      }, 500); // 500ms long-press
-      setTouchTimer(timer);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (touchTimer) {
-      clearTimeout(touchTimer);
-      setTouchTimer(null);
-    }
-  };
-
-  const handleClick = (e: React.MouseEvent) => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      e.preventDefault();
-    }
-  };
-
   return (
     <section className="relative bg-gradient-to-b from-transparent via-black/80 to-black text-white -mt-32 pt-40 px-4 sm:px-6 pb-20">
       <div className="container mx-auto max-w-6xl relative z-20">
@@ -224,9 +199,6 @@ export function BentoDemo() {
                         href={f.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onTouchStart={() => handleTouchStart(f.link)}
-                        onTouchEnd={handleTouchEnd}
-                        onClick={handleClick}
                         className={cn(
                           "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
                           "border-[var(--color-4)] bg-[var(--color-2)]/50 hover:bg-[var(--color-3)] hover:border-[var(--color-7)]/50",
@@ -253,8 +225,7 @@ export function BentoDemo() {
 
                         {/* Read More Indicator */}
                         <div className="mt-3 flex items-center gap-1 text-xs text-[var(--color-8)] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
-                          <span className="hidden lg:inline">Read more</span>
-                          <span className="lg:hidden">Hold to open</span>
+                          <span>Read more</span>
                           <svg
                             className="w-3 h-3"
                             fill="none"
