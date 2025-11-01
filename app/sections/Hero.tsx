@@ -1,13 +1,51 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Aurora from "../ui/Aurora";
 import FloatingSparkles from "../ui/FloatingSparkles";
 import { BentoDemo } from "./BentoDemo";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 
+// Register GSAP plugin
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Hero() {
   const [showToast, setShowToast] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!heroRef.current) return;
+
+    const hero = heroRef.current;
+
+    // Create parallax scroll animation
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: hero,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+        invalidateOnRefresh: true,
+      },
+    });
+
+    // Animate scale and border radius
+    tl.to(hero, {
+      scale: 0.85,
+      borderRadius: "32px",
+      ease: "none",
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars.trigger === hero) {
+          trigger.kill();
+        }
+      });
+    };
+  }, []);
 
   const handleCopyEmail = async () => {
     const email = "warunaudarasam2003@gmail.com";
@@ -29,8 +67,10 @@ export default function Hero() {
       <main className="relative">
         {/* Hero Section */}
         <section
+          ref={heroRef}
           id="hero"
-          className="relative min-h-screen flex items-center justify-center overflow-hidden"
+          className="relative min-h-screen flex items-center justify-center overflow-hidden origin-top will-change-transform"
+          style={{ transformOrigin: 'top center' }}
         >
           {/* Aurora Background Animation */}
           <div className="absolute inset-0 z-0">

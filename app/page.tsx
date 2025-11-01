@@ -17,10 +17,10 @@ export default function Home() {
       
       <Hero />
       <About/>
-      <BucketList/>
       <RevealingQuote/>
       <TechStack/>
       <GitHubActivity/>
+      <BucketList/>
       <Footer/>
       
       
