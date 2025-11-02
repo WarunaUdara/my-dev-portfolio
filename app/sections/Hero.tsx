@@ -223,7 +223,7 @@ export default function Hero() {
                   </div>
                 </div>
                 <span className="bg-gradient-to-b from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent">
-                  a Full Stack Developer
+                  a Software Developer
                 </span>
               </div>
 
