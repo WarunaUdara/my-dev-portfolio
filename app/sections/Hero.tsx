@@ -20,8 +20,120 @@ export default function Hero() {
 
     const hero = heroRef.current;
 
-    // Create parallax scroll animation
-    const tl = gsap.timeline({
+    // Initial loading animations
+    const ctx = gsap.context(() => {
+      // Timeline for initial entrance animations
+      const entranceTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      // Fade in and zoom the main heading (staggered words)
+      entranceTl.fromTo(
+        ".hero-heading-line",
+        { 
+          opacity: 0, 
+          y: 60,
+          scale: 0.9,
+        },
+        { 
+          opacity: 1, 
+          y: 0,
+          scale: 1,
+          duration: 1.2,
+          stagger: 0.2,
+        }
+      );
+
+      // Fade in subheading with slight delay
+      entranceTl.fromTo(
+        ".hero-subheading",
+        { 
+          opacity: 0, 
+          y: 30,
+        },
+        { 
+          opacity: 1, 
+          y: 0,
+          duration: 0.8,
+        },
+        "-=0.6"
+      );
+
+      // Fade and slide in CTA buttons
+      entranceTl.fromTo(
+        ".hero-cta",
+        { 
+          opacity: 0, 
+          y: 30,
+        },
+        { 
+          opacity: 1, 
+          y: 0,
+          duration: 0.8,
+        },
+        "-=0.4"
+      );
+
+      // Fade in aurora background
+      entranceTl.fromTo(
+        ".aurora-bg",
+        { 
+          opacity: 0,
+        },
+        { 
+          opacity: 1,
+          duration: 1.5,
+        },
+        0
+      );
+
+      // Eclipse animation - fade up and zoom in
+      entranceTl.fromTo(
+        ".eclipse-wrapper",
+        { 
+          opacity: 0,
+          y: 100,
+          scale: 1.1,
+        },
+        { 
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "-=1"
+      );
+
+      // Glow effect fade in
+      entranceTl.fromTo(
+        ".eclipse-glow",
+        { 
+          opacity: 0,
+          scale: 0.8,
+        },
+        { 
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+        },
+        "-=1.2"
+      );
+
+      // Sparkles fade in
+      entranceTl.fromTo(
+        ".sparkles-wrapper",
+        { 
+          opacity: 0,
+        },
+        { 
+          opacity: 1,
+          duration: 1,
+        },
+        "-=0.8"
+      );
+    }, hero);
+
+    // Scroll-triggered parallax animation
+    const scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: hero,
         start: "top top",
@@ -31,14 +143,15 @@ export default function Hero() {
       },
     });
 
-    // Animate scale and border radius
-    tl.to(hero, {
+    // Animate scale and border radius on scroll
+    scrollTl.to(hero, {
       scale: 0.85,
       borderRadius: "32px",
       ease: "none",
     });
 
     return () => {
+      ctx.revert();
       ScrollTrigger.getAll().forEach(trigger => {
         if (trigger.vars.trigger === hero) {
           trigger.kill();
@@ -73,7 +186,7 @@ export default function Hero() {
           style={{ transformOrigin: 'top center' }}
         >
           {/* Aurora Background Animation */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 z-0 aurora-bg opacity-0">
             <Aurora
               colorStops={["#003CAA", "#000000", "#0059FF"]}
               blend={0.6}
@@ -88,12 +201,12 @@ export default function Hero() {
             <div className="flex flex-col items-center justify-center text-center space-y-6 sm:space-y-8">
               {/* Main Heading */}
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl font-serif leading-tight">
-                <span className="block">Transforming ideas into</span>
-                <span className="block xl:text-8xl italic font-serif">seamless solutions</span>
+                <span className="block hero-heading-line opacity-0">Transforming ideas into</span>
+                <span className="block xl:text-8xl italic font-serif hero-heading-line opacity-0">seamless solutions</span>
               </h1>
 
               {/* Subheading with Silver Gradient */}
-              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-xl">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-xl hero-subheading opacity-0">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <span className="bg-gradient-to-b from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent">
                     Hello, I&apos;m Waruna Udara
@@ -115,7 +228,7 @@ export default function Hero() {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-4 sm:mt-6 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-4 sm:mt-6 w-full sm:w-auto hero-cta opacity-0">
                 
                 <a href="https://www.linkedin.com/in/waruna-udara/" target="_blank" rel="noopener noreferrer">
                   <InteractiveHoverButton> Let&apos;s Connect </InteractiveHoverButton>
@@ -145,12 +258,12 @@ export default function Hero() {
           </div>
 
           {/* Purple Glow Effect on Eclipse */}
-          <div className="absolute bottom-0 sm:-bottom-48 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[200px] sm:h-[300px] pointer-events-none z-5">
+          <div className="absolute bottom-0 sm:-bottom-48 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[200px] sm:h-[300px] pointer-events-none z-5 eclipse-glow opacity-0">
             <div className="absolute inset-0 bg-gradient-to-b from-blue-600/40 via-blue-500/20 to-transparent blur-3xl"></div>
           </div>
 
           {/* Eclipse Background - Full Width */}
-          <div className="absolute bottom-0  sm:-bottom-40 left-0 right-0 w-screen pointer-events-none z-10">
+          <div className="absolute bottom-0 sm:-bottom-40 left-0 right-0 w-screen pointer-events-none z-10 eclipse-wrapper opacity-0">
             <Image
               src="/eclipse.png"
               alt=""
@@ -163,7 +276,9 @@ export default function Hero() {
           </div>
 
           {/* Floating Sparkles Effect */}
-          <FloatingSparkles />
+          <div className="sparkles-wrapper opacity-0">
+            <FloatingSparkles />
+          </div>
           
         </section>
 
