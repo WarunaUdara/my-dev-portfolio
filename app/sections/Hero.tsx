@@ -13,6 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -163,14 +164,46 @@ export default function Hero() {
   const handleCopyEmail = async () => {
     const email = "warunaudarasam2003@gmail.com";
     
+    // Check if we're in the browser
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     try {
-      await navigator.clipboard.writeText(email);
-      
-      // Show toast
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 4000);
+      // Modern clipboard API (works in HTTPS)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(email);
+        setToastMessage("Copied to clipboard!");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 4000);
+      } else {
+        // Fallback for older browsers or non-HTTPS
+        const textArea = document.createElement("textarea");
+        textArea.value = email;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        const successful = document.execCommand('copy');
+        textArea.remove();
+        
+        if (successful) {
+          setToastMessage("Copied to clipboard!");
+          setShowToast(true);
+          setTimeout(() => setShowToast(false), 4000);
+        } else {
+          throw new Error('Fallback copy failed');
+        }
+      }
     } catch (err) {
       console.error('Failed to copy email:', err);
+      // Show error message to user
+      setToastMessage("Couldn't copy. Click 'Send Email' instead.");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);
     }
   };
 
@@ -292,8 +325,7 @@ export default function Hero() {
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white font-semibold text-sm">Copied to clipboard!</p>
-                
+                <p className="text-white font-semibold text-sm">{toastMessage}</p>
               </div>
               <a
                 href="mailto:warunaudarasam2003@gmail.com"

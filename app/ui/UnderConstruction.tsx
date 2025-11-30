@@ -23,7 +23,7 @@ const UnderConstruction = () => {
         
         {/* Description */}
         <p className="text-lg sm:text-xl text-gray-400 mb-12 leading-relaxed">
-          This section is currently being crafted with attention to detail.
+          This section is currently being crafted with attention to detail. 
           <br className="hidden sm:block" />
           Check back soon for something amazing.
         </p>
