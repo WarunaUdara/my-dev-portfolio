@@ -32,11 +32,11 @@ export function NavBar({ items, className }: NavBarProps) {
   }, [])
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
-    e.preventDefault()
     setActiveTab(item.name)
 
-    // Only scroll if URL is a hash (section link)
+    // Only prevent default and scroll if URL is a hash (section link)
     if (item.url.startsWith('#') && item.url.length > 1) {
+      e.preventDefault()
       const targetId = item.url.substring(1)
       const targetElement = document.getElementById(targetId)
       
@@ -47,6 +47,7 @@ export function NavBar({ items, className }: NavBarProps) {
         })
       }
     }
+    // For regular URLs (like /under-construction), let Next.js handle navigation normally
   }
 
   return (
