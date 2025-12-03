@@ -151,6 +151,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${inter.variable} ${instrumentSerif.variable} antialiased`}
+        suppressHydrationWarning
       >
         {children}
       </body>

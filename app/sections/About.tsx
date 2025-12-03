@@ -62,14 +62,14 @@ const About = () => {
               >
                 <Github className="w-6 h-6" />
               </a>
-              <a 
+              {/* <a 
                 href="https://www.instagram.com/w.u.d.s/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <Instagram className="w-6 h-6" />
-              </a>
+              </a> */}
             </div>
           </div>
 

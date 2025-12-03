@@ -21,7 +21,7 @@ const bucketItems: BucketItem[] = [
     { id: 8, text: "Certified AWS Solutions Architect Associate", completed: false, date: "2026" },
     { id: 9, text: "Write 10 articles", completed: false },
     { id: 10, text: "Get 1,000 organic LinkedIn followers", completed: true, date: "May 2023" },
-    { id: 11, text: "Get a muscular body", completed: false },
+    { id: 11, text: "Organize or Co-Host a Tech Event", completed: true },
     { id: 12, text: "University degree", completed: true },
     { id: 13, text: "Sport Car", completed: false },
     { id: 14, text: "Hike a mountain", completed: true },
@@ -31,7 +31,7 @@ const bucketItems: BucketItem[] = [
     { id: 18, text: "Speak infront of 1000 people", completed: false },
     { id: 19, text: "Solo hike", completed: false },
     { id: 20, text: "Participate in Hackathons", completed: true },
-    { id: 21, text: "Organize or Co-Host a Tech Event", completed: true },
+    
 
     
 ];

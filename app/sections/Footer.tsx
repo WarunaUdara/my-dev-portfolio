@@ -114,7 +114,7 @@ const Footer = () => {
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     href="https://www.instagram.com/waruna_udara/"
                     target="_blank"
@@ -127,7 +127,7 @@ const Footer = () => {
                     </span>
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <a
                     href="mailto:warunaudara03@gmail.com"

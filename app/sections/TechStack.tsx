@@ -40,6 +40,9 @@ const TechStack = () => {
     { name: 'Oracle', icon: '/icons8-oracle-96.png' },
     { name: 'Bun', icon: '/Bun.png' },
     { name: 'Linux', icon: '/Linux.png' },
+    { name: 'Firebase', icon: '/google-firebase-logo-icon-hd.png' },
+    { name: 'Azure', icon: '/icons8-azure-96.png' },
+    { name: 'Flyway', icon: '/flyway-seeklogo.png' },
   ];
 
   return (
