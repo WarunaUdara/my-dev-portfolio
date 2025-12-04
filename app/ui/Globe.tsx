@@ -214,7 +214,7 @@ export function Globe({
   if (!isClient || error) {
     return (
       <div className={cn(
-        "absolute inset-0 flex items-center justify-center bg-blue-900/20 rounded-lg",
+        "absolute inset-0 flex items-center justify-center bg-[var(--color-2)]/20 rounded-lg",
         className
       )}>
         <div className="text-white text-sm sm:text-base text-center p-4">

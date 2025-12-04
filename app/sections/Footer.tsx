@@ -55,21 +55,10 @@ const Footer = () => {
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>
                 </li>
+                
                 <li>
                   <Link
-                    href="/under-construction"
-                    className="group inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors relative"
-                  >
-                    <span className="relative">
-                      Tech Stack
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/under-construction"
+                    href="#projects"
                     className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
                   >
                     <span className="relative">
@@ -159,7 +148,7 @@ const Footer = () => {
               href="https://www.linkedin.com/in/waruna-udara/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-gray-900 text-gray-400 hover:bg-gray-800 hover:text-blue-400 transition-all duration-300 hover:scale-110"
+              className="p-2 rounded-full bg-gray-900 text-gray-400 hover:bg-gray-800 hover:text-[var(--color-9)] transition-all duration-300 hover:scale-110"
               aria-label="LinkedIn"
             >
               <Linkedin className="w-4 h-4" />

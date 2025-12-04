@@ -4,7 +4,7 @@
 
 /* CSS Variables for theming - Dark Mode Only */
 :root {
-  /* OKLCH Color Palette - Purple/Violet Scale */
+  /* OKLCH Color Palette - blue/slate Scale */
   --color-1: oklch(0% 0 0);
   --color-2: oklch(0.212 0.039 252.0);
   --color-3: oklch(0.277 0.077 252.0);

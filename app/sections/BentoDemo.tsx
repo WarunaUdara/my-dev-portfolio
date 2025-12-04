@@ -246,7 +246,7 @@ export function BentoDemo() {
                         <div className="flex flex-col gap-2">
                           {/* Blog Post Title */}
                           <div className="flex flex-col">
-                            <figcaption className="text-sm font-semibold text-white group-hover:text-[var(--color-9)] group-active:text-[var(--color-9)] transition-colors line-clamp-2">
+                            <figcaption className="text-sm font-semibold text-white transition-colors line-clamp-2">
                               {f.name}
                             </figcaption>
                             <span className="text-xs text-gray-400 mt-1">Medium</span>

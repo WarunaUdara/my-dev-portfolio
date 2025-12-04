@@ -292,7 +292,7 @@ export default function Hero() {
 
           {/* Purple Glow Effect on Eclipse */}
           <div className="absolute bottom-0 sm:-bottom-48 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[200px] sm:h-[300px] pointer-events-none z-5 eclipse-glow opacity-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-600/40 via-blue-500/20 to-transparent blur-3xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-8)]/40 via-[var(--color-9)]/20 to-transparent blur-3xl"></div>
           </div>
 
           {/* Eclipse Background - Full Width */}

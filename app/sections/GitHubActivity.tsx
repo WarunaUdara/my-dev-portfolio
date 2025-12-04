@@ -103,8 +103,8 @@ const GitHubActivity = () => {
             icon={<GitFork className="w-7 h-7" />}
             label="Total Forks" 
             value={stats.totalForks}
-            color="border-blue-500/20 hover:border-blue-500/50"
-            iconColor="text-blue-400"
+            color="border-[var(--color-5)]/20 hover:border-[var(--color-8)]/50"
+            iconColor="text-[var(--color-9)]"
           />
         </div>
       </div>
