@@ -47,8 +47,8 @@ const BentoCard = ({
     key={name}
     className={cn(
       "group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl",
-      // Dark styles using OKLCH palette
-      "bg-[var(--color-2)]/50 backdrop-blur-sm",
+      // Dark styles with pure black/slate background
+      "bg-black/80 backdrop-blur-sm",
       "border border-[var(--color-4)]",
       "shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.3)]",
       "hover:border-[var(--color-5)] transition-all duration-300",

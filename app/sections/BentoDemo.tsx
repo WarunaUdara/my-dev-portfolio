@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Globe } from "@/app/ui/Globe"
+import { MapPin } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -39,23 +40,27 @@ const features = [
     className: "col-span-3 lg:col-span-1",
     background: (
       <div className="absolute inset-0 overflow-hidden">
-        {/* Globe - Centered */}
-        <Globe />
-
-        {/* Text Overlay - Top */}
-        <div className="absolute top-4 left-4 right-4 z-10 text-center pointer-events-none">
-          <p className="text-sm sm:text-sm text-white leading-relaxed">
-            I&apos;m very flexible with time
-          </p>
-          <p className="text-xs sm:text-sm text-white leading-relaxed">
-            zone communications
-          </p>
+        {/* Heading - Top Left */}
+        <div className="text-center absolute top-6 left-4 right-4 z-10">
+          <h3 className="text-2xl sm:text-3xl font-serif leading-tight ">
+            I&apos;m very flexible with time zone communications
+          </h3>
         </div>
 
-        {/* Location Label - Bottom Left */}
-        <div className="absolute bottom-4 left-4 z-10 pointer-events-none">
-          <p className="text-xs text-gray-400 mb-1">Remote</p>
-          <h4 className="text-lg sm:text-xl font-semibold text-white">Sri Lanka</h4>
+        {/* Globe - Scaled up for zoom effect */}
+        <div className="absolute inset-0 flex items-center justify-center scale-125 -translate-y-4 pt-56">
+          <Globe />
+        </div>
+        
+        {/* Location Info - Bottom Left */}
+        <div className="absolute bottom-4 left-4 z-10">
+          <div className="items-center gap-3">
+            <span className="text-gray-300 text-sm font-medium">Remote</span>
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[var(--color-8)]" />
+              <span className="text-white text-sm font-semibold">Sri Lanka</span>
+            </div>
+          </div>
         </div>
       </div>
     ),
@@ -110,21 +115,21 @@ const features = [
           {/* Card 2 - Center Bottom (Website Mockup) */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:translate-y-[20px] group-hover:scale-105 z-10">
             {/* Browser Chrome */}
-            <div className="absolute top-0 left-0 right-0 h-8 bg-[var(--color-3)] flex items-center px-3 gap-2">
+            <div className="absolute top-0 left-0 right-0 h-8 bg-gray-900 flex items-center px-3 gap-2">
               <div className="flex gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
                 <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
                 <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
               </div>
               <div className="flex-1 ml-2">
-                <div className="w-32 h-4 bg-[var(--color-4)] rounded flex items-center px-2 transition-all duration-500 group-hover:w-40">
-                  <div className="w-2 h-2 rounded-full bg-[var(--color-6)]"></div>
+                <div className="w-32 h-4 bg-gray-800 rounded flex items-center px-2 transition-all duration-500 group-hover:w-40">
+                  <div className="w-2 h-2 rounded-full bg-gray-600"></div>
                 </div>
               </div>
             </div>
 
             {/* Website Content */}
-            <div className="absolute top-8 left-0 right-0 bottom-0 bg-gradient-to-br from-[var(--color-2)] to-[var(--color-3)] p-4 flex flex-col items-center justify-center">
+            <div className="absolute top-8 left-0 right-0 bottom-0 bg-gradient-to-br from-gray-950 to-black p-4 flex flex-col items-center justify-center">
               <div className="text-center space-y-2 mb-4">
                 <h3 className="text-white text-sm font-semibold transition-all duration-500 group-hover:text-base">
                   Building elegant solutions
@@ -178,7 +183,7 @@ const features = [
             <div className="absolute inset-0 bg-[var(--color-8)] opacity-20 blur-3xl rounded-full scale-150 group-hover:opacity-40 transition-opacity duration-500"></div>
             
             {/* Document Icon */}
-            <div className="relative w-24 h-28 bg-gradient-to-br from-[var(--color-3)] to-[var(--color-4)] rounded-lg shadow-2xl border border-[var(--color-5)] overflow-hidden">
+            <div className="relative w-24 h-28 bg-gradient-to-br from-gray-900 to-gray-950 rounded-lg shadow-2xl border border-gray-700 overflow-hidden">
               {/* Document Header */}
               <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] opacity-80"></div>
               
@@ -236,7 +241,7 @@ export function BentoDemo() {
                         rel="noopener noreferrer"
                         className={cn(
                           "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
-                          "border-[var(--color-4)] bg-[var(--color-2)]/50 hover:bg-[var(--color-3)] hover:border-[var(--color-7)]/50",
+                          "border-gray-800 bg-black/60 hover:bg-gray-900/80 hover:border-gray-700",
                           "transform-gpu blur-[1px] transition-all duration-300 ease-out",
                           "lg:hover:blur-none", // Desktop: remove blur on hover
                           "active:blur-none", // Mobile: remove blur on touch
