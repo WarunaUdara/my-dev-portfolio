@@ -1,5 +1,5 @@
 import React from 'react'
-import { Github, Linkedin, Mail, FileText, X, Send, BookOpen } from 'lucide-react'
+import { Github, Linkedin, Mail, X, Send, BookOpen, FileText } from 'lucide-react'
 
 const Links = () => {
   const links = [
@@ -38,6 +38,12 @@ const Links = () => {
       url: 'mailto:warunaudarasam2003@gmail.com',
       icon: <Mail className="w-5 h-5" />,
       description: 'Connect on BlueSky'
+    },
+    {
+      title: 'Resume',
+      url: '/resume.pdf',
+      icon: <FileText className="w-5 h-5" />,
+      description: 'View my resume'
     }
   ]
 

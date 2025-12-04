@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { LucideIcon, ChevronDown, Link as LinkIcon, Image as ImageIcon, FileText } from "lucide-react"
+import { LucideIcon, ChevronDown, Link as LinkIcon, Image as ImageIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface NavItem {
