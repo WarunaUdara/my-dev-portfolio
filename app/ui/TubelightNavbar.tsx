@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
-import { LucideIcon } from "lucide-react"
+import Image from "next/image"
+import { LucideIcon, ChevronDown, Link as LinkIcon, Image as ImageIcon, FileText } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface NavItem {
@@ -20,6 +21,7 @@ interface NavBarProps {
 export function NavBar({ items, className }: NavBarProps) {
   const [activeTab, setActiveTab] = useState(items[0].name)
   const [isMobile, setIsMobile] = useState(false)
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,6 +35,12 @@ export function NavBar({ items, className }: NavBarProps) {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
     setActiveTab(item.name)
+
+    // Don't navigate if it's the More menu
+    if (item.name === 'More') {
+      e.preventDefault()
+      return
+    }
 
     // Only prevent default and scroll if URL is a hash (section link)
     if (item.url.startsWith('#') && item.url.length > 1) {
@@ -61,41 +69,139 @@ export function NavBar({ items, className }: NavBarProps) {
         {items.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.name
+          const isMoreMenu = item.name === 'More'
 
           return (
-            <Link
+            <div 
               key={item.name}
-              href={item.url}
-              onClick={(e) => handleNavClick(e, item)}
-              className={cn(
-                "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
-                "text-foreground/80 hover:text-primary",
-                isActive && "bg-muted text-primary",
-              )}
+              className="relative"
+              onMouseEnter={() => isMoreMenu && setShowMoreMenu(true)}
+              onMouseLeave={() => isMoreMenu && setShowMoreMenu(false)}
             >
-              <span className="hidden md:inline relative z-10">{item.name}</span>
-              <span className="md:hidden relative z-10">
-                <Icon size={18} strokeWidth={2.5} />
-              </span>
-              {isActive && (
-                <motion.div
-                  layoutId="lamp"
-                  className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"
-                  initial={false}
-                  transition={{
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
-                  }}
-                >
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
-                    <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
-                    <div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
-                    <div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
-                  </div>
-                </motion.div>
+              <Link
+                href={item.url}
+                onClick={(e) => handleNavClick(e, item)}
+                className={cn(
+                  "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors flex items-center gap-1",
+                  "text-foreground/80 hover:text-primary",
+                  isActive && "bg-muted text-primary",
+                )}
+              >
+                <span className="hidden md:inline relative z-10">{item.name}</span>
+                <span className="md:hidden relative z-10">
+                  <Icon size={18} strokeWidth={2.5} />
+                </span>
+                {isMoreMenu && (
+                  <ChevronDown size={16} className="hidden md:inline" />
+                )}
+                {isActive && (
+                  <motion.div
+                    layoutId="lamp"
+                    className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"
+                    initial={false}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30,
+                    }}
+                  >
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
+                      <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
+                      <div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
+                      <div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
+                    </div>
+                  </motion.div>
+                )}
+              </Link>
+
+              {/* Dropdown Menu for More */}
+              {isMoreMenu && (
+                <AnimatePresence>
+                  {showMoreMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-[780px] bg-black/95 backdrop-blur-xl rounded-3xl border border-white/10 p-4 shadow-2xl"
+                    >
+                      <div className="grid grid-cols-3 gap-3">
+                        {/* Column 1 - Guestbook */}
+                        <Link
+                          href="/under-construction"
+                          className="group relative block rounded-2xl overflow-hidden h-52 hover:scale-[1.02] transition-transform"
+                        >
+                          <Image
+                            src="/guestbook.png"
+                            alt="Guestbook"
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                          <div className="absolute bottom-6 left-6">
+                            <h3 className="text-white font-serif text-2xl font-bold mb-2">Guestbook</h3>
+                            <p className="text-white/70 text-sm">Let me know you were here</p>
+                          </div>
+                        </Link>
+
+                        {/* Column 2 - Bucket List */}
+                        <Link
+                          href="/bucket-list"
+                          className="group relative block rounded-2xl overflow-hidden h-52 hover:scale-[1.02] transition-transform"
+                        >
+                          <Image
+                            src="/bucket-list.png"
+                            alt="Bucket List"
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                          <div className="absolute bottom-6 left-6">
+                            <h3 className="text-white font-serif text-2xl font-bold mb-2">Bucket List</h3>
+                            <p className="text-white/70 text-sm">Things to do at least once in my life</p>
+                          </div>
+                        </Link>
+
+                        {/* Column 3 - Links and Uses stacked */}
+                        <div className="space-y-3">
+                          {/* Links Card */}
+                          <Link
+                            href="/links"
+                            className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-5 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
+                          >
+                            <div className="flex items-start gap-4">
+                              <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                                <LinkIcon size={22} className="text-white" />
+                              </div>
+                              <div>
+                                <h4 className="text-white font-semibold text-base mb-1.5">Links</h4>
+                                <p className="text-white/60 text-xs leading-relaxed">All my links are here</p>
+                              </div>
+                            </div>
+                          </Link>
+
+                          {/* Uses Card */}
+                          <Link
+                            href="/under-construction"
+                            className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-5 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
+                          >
+                            <div className="flex items-start gap-4">
+                              <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                                <ImageIcon size={22} className="text-white" />
+                              </div>
+                              <div>
+                                <h4 className="text-white font-semibold text-base mb-1.5">Uses</h4>
+                                <p className="text-white/60 text-xs leading-relaxed">A peek into my digital...</p>
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               )}
-            </Link>
+            </div>
           )
         })}
       </div>
