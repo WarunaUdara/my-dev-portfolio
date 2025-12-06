@@ -79,8 +79,8 @@ const BucketList = () => {
               className={cn(
                 "group relative p-4 sm:p-5 rounded-xl border transition-all duration-300 animate-in fade-in slide-in-from-bottom-4",
                 item.completed 
-                  ? "bg-[var(--color-2)]/30 border-[var(--color-8)]/50" 
-                  : "bg-[var(--color-2)]/50 border-[var(--color-4)] hover:border-[var(--color-7)]/50 hover:bg-[var(--color-3)]/50"
+                  ? "bg-zinc-900/50 border-[var(--color-8)]/50" 
+                  : "bg-zinc-900/50 border-white/10 hover:border-white/30 hover:bg-zinc-800/50"
               )}
               style={{
                 animationDelay: `${index * 50}ms`,
@@ -88,6 +88,7 @@ const BucketList = () => {
               }}
             >
               {/* Glow effect on hover */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div>
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div>
 
               <div className="relative flex items-start gap-4">

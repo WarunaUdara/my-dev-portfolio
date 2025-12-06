@@ -52,14 +52,8 @@ const techStack = [
   { name: 'Git', icon: '/icons8-git-144.png' },
   { name: 'GitHub', icon: '/icons8-github-50.png' },
   { name: 'GitLab', icon: '/icons8-gitlab-96.png' },
-  { name: 'Postman', icon: '/icons8-postman-inc-96.png' },
-  { name: 'VS Code', icon: '/icons8-vs-code-96.png' },
-  { name: 'IntelliJ IDEA', icon: '/icons8-intellij-idea-96.png' },
 
-  // 8. Design / Prototyping
-  { name: 'Figma', icon: '/icons8-figma-96.png' },
-
-  // 9. Additional Platforms
+  // 8. Additional Platforms
   { name: 'Firebase', icon: '/google-firebase-logo-icon-hd.png' }
 ];
 

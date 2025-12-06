@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { LucideIcon, ChevronDown, Link as LinkIcon, Image as ImageIcon, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -19,12 +20,17 @@ interface NavBarProps {
 }
 
 export function NavBar({ items, className }: NavBarProps) {
+  const pathname = usePathname()
   const [activeTab, setActiveTab] = useState(items[0].name)
   const [isMobile, setIsMobile] = useState(false)
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [showMobileModal, setShowMobileModal] = useState(false)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  // Check if we're on a "More" menu page
+  const moreMenuPages = ['/uses', '/bucket-list', '/links', '/under-construction']
+  const isOnMorePage = moreMenuPages.some(page => pathname.startsWith(page))
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,6 +41,21 @@ export function NavBar({ items, className }: NavBarProps) {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
+
+  // Set active tab based on current route
+  useEffect(() => {
+    if (pathname === '/' || pathname.startsWith('/#')) {
+      const hash = pathname.split('#')[1]
+      if (hash) {
+        const item = items.find(i => i.url === `#${hash}`)
+        if (item) setActiveTab(item.name)
+      } else {
+        setActiveTab(items[0].name)
+      }
+    } else if (isOnMorePage) {
+      setActiveTab('More')
+    }
+  }, [pathname, items, isOnMorePage])
 
   // Handle body scroll lock when mobile modal is open
   useEffect(() => {
@@ -226,7 +247,7 @@ export function NavBar({ items, className }: NavBarProps) {
 
                 {/* Uses Card */}
                 <Link
-                  href="/under-construction"
+                  href="/uses"
                   onClick={handleMenuItemClick}
                   className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-5 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
                 >
@@ -375,7 +396,7 @@ export function NavBar({ items, className }: NavBarProps) {
 
                             {/* Uses Card */}
                             <Link
-                              href="/under-construction"
+                              href="/uses"
                               onClick={handleMenuItemClick}
                               className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-5 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
                             >
