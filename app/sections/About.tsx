@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Linkedin, Github, Instagram } from 'lucide-react';
+import { Linkedin, Github } from 'lucide-react';
 
 const About = () => {
   return (
