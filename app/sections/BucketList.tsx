@@ -88,8 +88,8 @@ const BucketList = () => {
               }}
             >
               {/* Glow effect on hover */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div>
+              {/* <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div>
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div> */}
 
               <div className="relative flex items-start gap-4">
                 {/* Custom Checkbox - Display Only */}
