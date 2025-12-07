@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 interface NavItem {
   name: string
   url: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: React.ComponentType<{ className?: string; size?: number; strokeWidth?: number }>
 }
 
 interface NavBarProps {
