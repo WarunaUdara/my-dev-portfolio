@@ -4,7 +4,7 @@ import { IconBrandLinkedin, IconBrandGithub } from '@tabler/icons-react';
 
 const About = () => {
   return (
-    <section id="about" className="relative min-h-screen bg-black text-white py-20 px-4 sm:px-6">
+    <section id="about" className="relative min-h-screen bg-black text-white py-20 px-4 sm:px-6 scroll-mt-20">
       <div className="container mx-auto max-w-6xl">
         {/* Section Label */}
             <p className="text-sm text-gray-400 uppercase tracking-wider text-center py-8">

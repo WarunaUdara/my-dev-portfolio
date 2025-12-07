@@ -129,7 +129,7 @@ const Projects = () => {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative bg-black text-white overflow-hidden py-20"
+      className="relative bg-black text-white overflow-hidden py-20 scroll-mt-20"
     >
       {/* Section Title */}
       <div className="container mx-auto px-6 mb-12 text-center">
@@ -189,6 +189,8 @@ const Projects = () => {
                               fill
                               className="object-contain object-bottom"
                               sizes="(max-width: 1024px) 100vw, 60vw"
+                              priority={index === 0}
+                              quality={85}
                             />
                           </div>
                         </Lens>
@@ -203,6 +205,8 @@ const Projects = () => {
                             fill
                             className="object-contain object-bottom"
                             sizes="100vw"
+                            priority={index === 0}
+                            quality={85}
                           />
                         </div>
                       </div>

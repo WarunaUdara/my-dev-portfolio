@@ -296,6 +296,8 @@ export default function GuestbookPage() {
                       width={40}
                       height={40}
                       className="rounded-full"
+                      loading="eager"
+                      quality={75}
                     />
                     <div>
                       <h4 className="text-white font-medium text-sm">{user.displayName}</h4>
@@ -348,6 +350,8 @@ export default function GuestbookPage() {
                         width={48}
                         height={48}
                         className="rounded-full flex-shrink-0"
+                        loading="lazy"
+                        quality={75}
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-2">

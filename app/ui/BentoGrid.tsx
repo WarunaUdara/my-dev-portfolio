@@ -20,6 +20,18 @@ interface BentoCardProps extends ComponentPropsWithoutRef<"div"> {
   cta: string
 }
 
+// Track CV download
+const handleCVDownload = async () => {
+  try {
+    await fetch('/api/cv-download', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Failed to track download:', error);
+  }
+};
+
 const BentoGrid = ({ children, className, ...props }: BentoGridProps) => {
   return (
     <div
@@ -77,7 +89,16 @@ const BentoCard = ({
           size="sm"
           className="pointer-events-auto p-0 text-[var(--color-8)] hover:text-[var(--color-9)]"
         >
-          <a href={href} target="_blank" rel="noopener noreferrer">
+          <a 
+            href={href} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            onClick={(e) => {
+              if (href.includes('resume') || href.includes('cv')) {
+                handleCVDownload();
+              }
+            }}
+          >
             {cta}
             <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" />
           </a>
@@ -97,7 +118,16 @@ const BentoCard = ({
         size="sm"
         className="pointer-events-auto p-0 text-[var(--color-8)] hover:text-[var(--color-9)]"
       >
-        <a href={href} target="_blank" rel="noopener noreferrer">
+        <a 
+          href={href} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          onClick={(e) => {
+            if (href.includes('resume') || href.includes('cv')) {
+              handleCVDownload();
+            }
+          }}
+        >
           {cta}
           <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" />
         </a>

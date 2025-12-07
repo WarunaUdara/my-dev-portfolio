@@ -9,6 +9,7 @@ import Footer from "./sections/Footer";
 import Projects from "./sections/Projects";
 import { NavBar } from "./ui/TubelightNavbar";
 import { IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react'
+import Explore from "./sections/Explore";
 
 
 
@@ -32,9 +33,9 @@ export default function Home() {
       <Projects/>
       <TechStack/>
       <GitHubActivity/>
-      {/* <BucketList/> */}
+      <Explore/>
       <Footer/>
-      {/* <Links/> */}
+      
       <NavBar items={navItems} />
 
       

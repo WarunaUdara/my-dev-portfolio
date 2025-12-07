@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 import { BentoCard, BentoGrid } from "@/app/ui/BentoGrid";
 import { Marquee } from "@/components/ui/marquee";
+import { DottedGlowBackground } from "@/components/ui/dotted-glow-background";
 
 const articles = [
   {
@@ -174,13 +175,25 @@ const features = [
     background: (
       <div className="absolute inset-0 overflow-hidden">
         {/* Animated Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-8)]/20 via-[var(--color-9)]/10 to-transparent"></div>
         
+        <div className="absolute inset-0 bg-black to-transparent"></div>
+        <DottedGlowBackground
+        className="pointer-events-none mask-radial-to-90% mask-radial-at-center"
+        opacity={1}
+        gap={10}
+        radius={1.6}
+        colorLightVar="--color-neutral-500"
+        glowColorLightVar="--color-neutral-600"
+        colorDarkVar="--color-neutral-500"
+        glowColorDarkVar="--color-sky-800"
+        backgroundOpacity={0}
+        speedMin={0.3}
+        speedMax={1.6}
+        speedScale={1}
+      />
         {/* Floating Document Icon with Glow */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative group-hover:scale-110 transition-transform duration-500">
-            {/* Glow Effect */}
-            <div className="absolute inset-0 bg-[var(--color-8)] opacity-20 blur-3xl rounded-full scale-150 group-hover:opacity-40 transition-opacity duration-500"></div>
             
             {/* Document Icon */}
             <div className="relative w-24 h-28 bg-gradient-to-br from-gray-900 to-gray-950 rounded-lg shadow-2xl border border-gray-700 overflow-hidden">
@@ -208,10 +221,6 @@ const features = [
           </div>
         </div>
 
-        {/* Floating Particles */}
-        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-[var(--color-8)] rounded-full opacity-60 animate-pulse"></div>
-        <div className="absolute top-3/4 right-1/3 w-1.5 h-1.5 bg-[var(--color-9)] rounded-full opacity-40 animate-pulse delay-300"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-1 h-1 bg-[var(--color-8)] rounded-full opacity-50 animate-pulse delay-700"></div>
       </div>
     ),
   },
