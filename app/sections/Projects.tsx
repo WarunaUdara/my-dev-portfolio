@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Lens } from '../ui/lens';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,7 +52,7 @@ const Projects = () => {
       descriptionPoints: [
         "Developed with Next.js 15, React 19, and TypeScript for type safety.",
         "GSAP animations with ScrollTrigger for interactive experiences.",
-        "Deployed on Vercel with optimized performance and SEO."
+        "Deployed on Vercel, Static assets are deployed to a global Content Delivery Network (CDN) for low latency and instant delivery worldwide, which optimizes performance and SEO."
       ],
       techStack: [
         { name: "Next.js", icon: "/icons8-nextjs-144.png" },
@@ -60,7 +61,8 @@ const Projects = () => {
         { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
         { name: "Vercel", icon: "/vercel.png" },
         { name: "Bun", icon: "/Bun.png" },
-        { name: "GSAP", icon: "/gsap-logo_svgstack_com_28451764740258.png" }
+        { name: "GSAP", icon: "/gsap-logo_svgstack_com_28451764740258.png" },
+        { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" }
       ],
       imageSrc: "/projects-portfolio.png",
       gradient: "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-900",
@@ -177,20 +179,22 @@ const Projects = () => {
                   {/* Image - Landscape aspect ratio, sticks to bottom */}
                   <div className="relative w-full pt-24 md:pt-28 lg:pt-28">
                     <div className="relative w-full aspect-[16/9] lg:aspect-[16/9]">
-                      {/* Desktop: padding on all sides */}
+                      {/* Desktop: padding on all sides with Lens effect */}
                       <div className="hidden lg:block absolute inset-0 px-6 pb-6">
-                        <div className="relative w-full h-full rounded-2xl overflow-hidden">
-                          <Image
-                            src={project.imageSrc}
-                            alt={project.title}
-                            fill
-                            className="object-contain object-bottom"
-                            sizes="(max-width: 1024px) 100vw, 60vw"
-                          />
-                        </div>
+                        <Lens zoomFactor={1.8} lensSize={200}>
+                          <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                            <Image
+                              src={project.imageSrc}
+                              alt={project.title}
+                              fill
+                              className="object-contain object-bottom"
+                              sizes="(max-width: 1024px) 100vw, 60vw"
+                            />
+                          </div>
+                        </Lens>
                       </div>
                       
-                      {/* Mobile: small padding on sides only, no bottom padding */}
+                      {/* Mobile: small padding on sides only, no bottom padding, no lens */}
                       <div className="lg:hidden absolute inset-0 px-3 pt-0 pb-0">
                         <div className="relative w-full h-full rounded-2xl overflow-hidden">
                           <Image
