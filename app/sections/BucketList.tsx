@@ -26,14 +26,14 @@ const bucketItems: BucketItem[] = [
     { id: 12, text: "University degree", completed: true },
     { id: 13, text: "Sport Car", completed: false },
     { id: 14, text: "Hike a mountain", completed: true },
-    { id: 15, text: "Start a startup", completed: false },
+    { id: 15, text: "Do 10 CSR activities", completed: true , date: "4/10 done | 2 pending"},
     { id: 16, text: "Teach coding to 100 students", completed: true },
     { id: 17, text: "Speak infront of 100 people", completed: true },
     { id: 18, text: "Speak infront of 1000 people", completed: false },
     { id: 19, text: "Solo hike", completed: false },
     { id: 20, text: "Participate in Hackathons", completed: true },
     { id: 21, text: "First client project", completed: true },
-    { id: 22, text: "Do 10 CSR activities", completed: true , date: "4/10 done | 2 pending"},
+   
     
 
     
