@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
+import { AuthProvider } from "@/contexts/AuthContext";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const inter = Inter({
@@ -153,7 +155,11 @@ export default function RootLayout({
         className={`${inter.variable} ${instrumentSerif.variable} antialiased`}
         suppressHydrationWarning
       >
-        {children}
+        <AuthProvider>
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+        </AuthProvider>
       </body>
     </html>
   );

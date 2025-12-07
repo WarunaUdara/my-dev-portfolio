@@ -103,9 +103,9 @@ const Footer = () => {
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </a>
                 </li>
-                {/* <li>
+                <li>
                   <a
-                    href="https://www.instagram.com/waruna_udara/"
+                    href="https://www.instagram.com/waruna_udarax/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
@@ -116,7 +116,7 @@ const Footer = () => {
                     </span>
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </a>
-                </li> */}
+                </li>
                 <li>
                   <a
                     href="mailto:warunaudara03@gmail.com"
@@ -163,7 +163,7 @@ const Footer = () => {
               <Github className="w-4 h-4" />
             </a>
             <a
-              href="https://www.instagram.com/waruna_udara/"
+              href="https://www.instagram.com/waruna_udarax/"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full bg-gray-900 text-gray-400 hover:bg-gray-800 hover:text-pink-400 transition-all duration-300 hover:scale-110"

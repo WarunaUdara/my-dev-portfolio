@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { NavBar } from "@/app/ui/TubelightNavbar";
 import Footer from "@/app/sections/Footer";
-import { House, User, Briefcase, FileText } from 'lucide-react';
+import { IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,10 +68,10 @@ export default function UsesPage() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
-    { name: 'Home', url: '/', icon: House  },
-    { name: 'About', url: '/#about', icon: User },
-    { name: 'Projects', url: '/#projects', icon: Briefcase },
-    { name: 'More', url: '/uses', icon: FileText }
+    { name: 'Home', url: '/', icon: IconHome  },
+    { name: 'About', url: '/#about', icon: IconUser },
+    { name: 'Projects', url: '/#projects', icon: IconBriefcase },
+    { name: 'More', url: '/uses', icon: IconFileText }
   ]
 
   useEffect(() => {

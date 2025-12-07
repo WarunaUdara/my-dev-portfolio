@@ -1,49 +1,55 @@
 import React from 'react'
-import { Github, Linkedin, Mail, X, Send, BookOpen, FileText } from 'lucide-react'
+import { IconBrandGithub, IconBrandLinkedin, IconMail, IconBrandX, IconSend, IconBook, IconFileText, IconBrandInstagram } from '@tabler/icons-react'
 
 const Links = () => {
   const links = [
     {
       title: 'LinkedIn',
       url: 'https://www.linkedin.com/in/waruna-udara/',
-      icon: <Linkedin className="w-5 h-5" />,
+      icon: <IconBrandLinkedin className="w-5 h-5" />,
       description: 'Connect with me professionally'
     },
     {
       title: 'Telegram',
       url: 'https://t.me/WarunaUdara',
-      icon: <Send className="w-5 h-5" />,
+      icon: <IconSend className="w-5 h-5" />,
       description: 'Message me on Telegram'
     },
     {
       title: 'GitHub',
       url: 'https://github.com/WarunaUdara',
-      icon: <Github className="w-5 h-5" />,
+      icon: <IconBrandGithub className="w-5 h-5" />,
       description: 'Check out my projects'
     },
     {
       title: 'Guestbook',
-      url: '/under-construction',
-      icon: <BookOpen className="w-5 h-5" />,
+      url: '/guestbook',
+      icon: <IconBook className="w-5 h-5" />,
       description: 'Sign my guestbook'
     },
     {
       title: 'X (Twitter)',
       url: 'https://x.com/waruna_udara',
-      icon: <X className="w-5 h-5" />,
+      icon: <IconBrandX className="w-5 h-5" />,
       description: 'Follow me on X'
     },
     {
       title: 'Email',
       url: 'mailto:warunaudarasam2003@gmail.com',
-      icon: <Mail className="w-5 h-5" />,
+      icon: <IconMail className="w-5 h-5" />,
       description: 'Connect on BlueSky'
     },
     {
       title: 'Resume',
       url: '/resume.pdf',
-      icon: <FileText className="w-5 h-5" />,
+      icon: <IconFileText className="w-5 h-5" />,
       description: 'View my resume'
+    },
+    {
+      title: 'Instagram',
+      url: 'https://www.instagram.com/waruna_udarax/',
+      icon: <IconBrandInstagram className="w-5 h-5" />,
+      description: 'Follow me on Instagram'
     }
   ]
 

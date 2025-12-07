@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Globe } from "@/app/ui/Globe"
-import { MapPin } from "lucide-react";
+import { IconMapPin } from "@tabler/icons-react";
 
 import { cn } from "@/lib/utils";
 
@@ -57,7 +57,7 @@ const features = [
           <div className="items-center gap-3">
             <span className="text-gray-300 text-sm font-medium">Remote</span>
             <div className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-[var(--color-8)]" />
+              <IconMapPin className="w-3.5 h-3.5 text-[var(--color-8)]" />
               <span className="text-white text-sm font-semibold">Sri Lanka</span>
             </div>
           </div>

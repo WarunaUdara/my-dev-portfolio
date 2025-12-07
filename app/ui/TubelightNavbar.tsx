@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { LucideIcon, ChevronDown, Link as LinkIcon, Image as ImageIcon, X } from "lucide-react"
+import { IconChevronDown, IconLink, IconPhoto, IconX } from "@tabler/icons-react"
 import { cn } from "@/lib/utils"
 
 interface NavItem {
   name: string
   url: string
-  icon: LucideIcon
+  icon: React.ComponentType<{ className?: string }>
 }
 
 interface NavBarProps {
@@ -29,7 +29,7 @@ export function NavBar({ items, className }: NavBarProps) {
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Check if we're on a "More" menu page
-  const moreMenuPages = ['/uses', '/bucket-list', '/links', '/under-construction']
+  const moreMenuPages = ['/uses', '/bucket-list', '/links', '/guestbook', '/under-construction']
   const isOnMorePage = moreMenuPages.some(page => pathname.startsWith(page))
 
   useEffect(() => {
@@ -184,7 +184,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   onClick={() => setShowMobileModal(false)}
                   className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
                 >
-                  <X size={18} className="text-white" />
+                  <IconX size={18} className="text-white" />
                 </button>
               </div>
 
@@ -192,7 +192,7 @@ export function NavBar({ items, className }: NavBarProps) {
               <div className="p-4 space-y-3">
                 {/* Guestbook Card */}
                 <Link
-                  href="/under-construction"
+                  href="/guestbook"
                   onClick={handleMenuItemClick}
                   className="group relative block rounded-2xl overflow-hidden h-40"
                 >
@@ -236,7 +236,7 @@ export function NavBar({ items, className }: NavBarProps) {
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                      <LinkIcon size={24} className="text-white" />
+                      <IconLink size={24} className="text-white" />
                     </div>
                     <div>
                       <h4 className="text-white font-semibold text-base mb-1">Links</h4>
@@ -253,7 +253,7 @@ export function NavBar({ items, className }: NavBarProps) {
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                      <ImageIcon size={24} className="text-white" />
+                      <IconPhoto size={24} className="text-white" />
                     </div>
                     <div>
                       <h4 className="text-white font-semibold text-base mb-1">Uses</h4>
@@ -301,7 +301,7 @@ export function NavBar({ items, className }: NavBarProps) {
                     <Icon size={18} strokeWidth={2.5} />
                   </span>
                   {isMoreMenu && (
-                    <ChevronDown size={16} className="hidden md:inline" />
+                    <IconChevronDown size={16} className="hidden md:inline" />
                   )}
                   {isActive && (
                     <motion.div
@@ -339,7 +339,7 @@ export function NavBar({ items, className }: NavBarProps) {
                         <div className="grid grid-cols-3 gap-3">
                           {/* Column 1 - Guestbook */}
                           <Link
-                            href="/under-construction"
+                            href="/guestbook"
                             onClick={handleMenuItemClick}
                             className="group relative block rounded-2xl overflow-hidden h-52 hover:scale-[1.02] transition-transform"
                           >
@@ -385,7 +385,7 @@ export function NavBar({ items, className }: NavBarProps) {
                             >
                               <div className="flex items-start gap-4">
                                 <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                  <LinkIcon size={22} className="text-white" />
+                                  <IconLink size={22} className="text-white" />
                                 </div>
                                 <div>
                                   <h4 className="text-white font-semibold text-base mb-1.5">Links</h4>
@@ -402,7 +402,7 @@ export function NavBar({ items, className }: NavBarProps) {
                             >
                               <div className="flex items-start gap-4">
                                 <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                  <ImageIcon size={22} className="text-white" />
+                                  <IconPhoto size={22} className="text-white" />
                                 </div>
                                 <div>
                                   <h4 className="text-white font-semibold text-base mb-1.5">Uses</h4>

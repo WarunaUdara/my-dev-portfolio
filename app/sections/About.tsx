@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Linkedin, Github } from 'lucide-react';
+import { IconBrandLinkedin, IconBrandGithub } from '@tabler/icons-react';
 
 const About = () => {
   return (
@@ -52,7 +52,7 @@ const About = () => {
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                <Linkedin className="w-6 h-6" />
+                <IconBrandLinkedin className="w-6 h-6" />
               </a>
               <a 
                 href="https://github.com/WarunaUdara" 
@@ -60,7 +60,7 @@ const About = () => {
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                <Github className="w-6 h-6" />
+                <IconBrandGithub className="w-6 h-6" />
               </a>
               {/* <a 
                 href="https://www.instagram.com/w.u.d.s/" 
