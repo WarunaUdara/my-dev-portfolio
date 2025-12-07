@@ -326,7 +326,7 @@ const Explore = () => {
                     className="absolute left-8 top-4 w-40 h-48 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl p-6 shadow-2xl border border-cyan-500/30 -rotate-12 group-hover:rotate-[-8deg] transition-transform duration-500 overflow-hidden"
                     style={{ willChange: 'transform' }}
                   >
-                    <DottedGlowBackground
+                    {/* <DottedGlowBackground
                       className="pointer-events-none absolute inset-0"
                       opacity={0.8}
                       gap={8}
@@ -339,7 +339,7 @@ const Explore = () => {
                       speedMin={0.3}
                       speedMax={1.2}
                       speedScale={1}
-                    />
+                    /> */}
                     <div className="relative z-10 space-y-3">
                       <div className="h-3 bg-cyan-400/40 rounded-full w-3/4"></div>
                       <div className="h-3 bg-white/20 rounded-full w-full"></div>
@@ -353,7 +353,7 @@ const Explore = () => {
                     className="absolute right-8 top-12 w-40 h-48 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl p-6 shadow-2xl border border-purple-500/30 rotate-12 group-hover:rotate-[8deg] transition-transform duration-500 overflow-hidden"
                     style={{ willChange: 'transform' }}
                   >
-                    <DottedGlowBackground
+                    {/* <DottedGlowBackground
                       className="pointer-events-none absolute inset-0"
                       opacity={0.8}
                       gap={8}
@@ -366,7 +366,7 @@ const Explore = () => {
                       speedMin={0.3}
                       speedMax={1.2}
                       speedScale={1}
-                    />
+                    /> */}
                     <div className="relative z-10 space-y-3">
                       <div className="h-3 bg-purple-400/40 rounded-full w-2/3"></div>
                       <div className="h-3 bg-white/20 rounded-full w-full"></div>
