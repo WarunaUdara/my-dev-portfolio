@@ -261,7 +261,7 @@ const Explore = () => {
             <Link href="/uses" className="block">
               <div 
                 ref={card1Ref}
-                className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 border-2 border-white/10 rounded-[32px] p-8 h-[380px] overflow-hidden transition-border duration-300"
+                className="relative bg-black border-2 border-white/10 rounded-[32px] p-8 h-[380px] overflow-hidden transition-border duration-300"
               >
                 {/* Hover Arrow */}
                 <div className="absolute bottom-8 right-8 w-12 h-12 bg-white/10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -309,7 +309,7 @@ const Explore = () => {
             <Link href="/guestbook" className="block">
               <div 
                 ref={card2Ref}
-                className="relative bg-gradient-to-br from-zinc-900 to-zinc-950 border-2 border-white/10 rounded-[32px] p-8 h-[380px] overflow-hidden transition-border duration-300"
+                className="relative bg-black border-2 border-white/10 rounded-[32px] p-8 h-[380px] overflow-hidden transition-border duration-300"
               >
                 
                 {/* Hover Arrow */}
@@ -395,7 +395,7 @@ const Explore = () => {
           <div className="group relative md:col-span-2 lg:col-span-1">
             <div 
               ref={card3Ref}
-              className="relative bg-gradient-to-br from-zinc-900 to-black border-2 border-white/10 rounded-[32px] p-8 h-[380px] overflow-hidden transition-border duration-300"
+              className="relative bg-black border-2 border-white/10 rounded-[32px] p-8 h-[380px] overflow-hidden transition-border duration-300"
             >
               {/* Spotify Logo */}
               <div className="flex items-center gap-3 mb-6">
