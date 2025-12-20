@@ -34,6 +34,7 @@ const tools: Tool[] = [
   { name: "ChatWise", icon: "/chat-wise.png", link: "https://chatwise.app/" },
   { name: "Spotify", icon: "/spotify-logo.png", link: "https://www.spotify.com/" },
   { name: "Opal", icon: "/opal.png", link: "https://www.opal.so/" },
+  { name: "Opencode", icon: "/opencode-logo-dark.png", link: "https://opencode.ai/" },
 ];
 
 function ToolCard({ tool }: { tool: Tool }) {
