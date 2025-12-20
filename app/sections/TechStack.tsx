@@ -10,6 +10,8 @@ const techStack = [
   { name: 'Python', icon: '/icons8-python-144.png' },
   { name: 'JavaScript', icon: '/icons8-javascript-144.png' },
   { name: 'TypeScript', icon: '/ts.png' },
+  { name: 'Rust', icon: '/rust-logo.png' },
+  
 
   // 2. Web Fundamentals
   { name: 'HTML5', icon: '/icons8-html5-144.png' },
