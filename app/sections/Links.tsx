@@ -50,7 +50,14 @@ const Links = () => {
       url: 'https://www.instagram.com/waruna_udarax/',
       icon: <IconBrandInstagram className="w-5 h-5" />,
       description: 'Follow me on Instagram'
+    },
+    {
+      title: 'CertDirectory',
+      url: 'https://certdirectory.io/profile/waruna-udara',
+      icon: <IconBook className="w-5 h-5" />,
+      description: 'Visit my Cloud native community profile'
     }
+    
   ]
 
   return (
