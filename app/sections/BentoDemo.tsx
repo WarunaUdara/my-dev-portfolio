@@ -170,7 +170,7 @@ const features = [
     name: "Resume",
     description: "Download my professional resume and learn more about my experience.",
     className: "col-span-3 lg:col-span-1",
-    href: "/resume.pdf",
+    href: "/waruna-udara-sampath-resume.pdf",
     cta: "Download CV",
     background: (
       <div className="absolute inset-0 overflow-hidden">
