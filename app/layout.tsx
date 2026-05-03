@@ -19,6 +19,9 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
+const siteUrl = new URL("https://warunadev.vercel.app");
+const socialImageUrl = new URL("/og-image.png?v=20260504", siteUrl).toString();
+
 export const metadata: Metadata = {
   title: {
     default: "Waruna Udara Sampath - Full Stack Software Developer",
@@ -67,23 +70,29 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Waruna Udara Sampath" }],
   creator: "Waruna Udara Sampath",
-  metadataBase: new URL("https://warunadev.vercel.app/"), // Replace with your actual domain
+  metadataBase: siteUrl,
   alternates: {
     canonical: "/"
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://warunadev.vercel.app/",
+    url: siteUrl.toString(),
     title: "Waruna Udara Sampath - Full Stack Software Developer",
     description: "Full Stack Developer specializing in Java, Spring Boot, React/Next.js, and microservices. Building scalable cloud-native applications.",
     siteName: "Waruna Udara Sampath Portfolio",
     images: [{
-      url: "/og-image.png",
+      url: socialImageUrl,
       width: 1200,
       height: 630,
       alt: "Waruna Udara Sampath - Full Stack Software Developer Portfolio"
     }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Waruna Udara Sampath - Full Stack Software Developer",
+    description: "Full Stack Developer specializing in Java, Spring Boot, React/Next.js, and microservices. Building scalable cloud-native applications.",
+    images: [socialImageUrl],
   },
   
   robots: {
