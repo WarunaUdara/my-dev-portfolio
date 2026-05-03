@@ -8,11 +8,12 @@ import { IconBrandSpotify } from '@tabler/icons-react';
 import { DottedGlowBackground } from '@/components/ui/dotted-glow-background';
 
 interface SpotifyData {
+  isAvailable?: boolean;
   isPlaying: boolean;
   title: string;
   artist: string;
   album: string;
-  albumImageUrl: string;
+  albumImageUrl: string | null;
   songUrl: string;
 }
 
@@ -44,7 +45,7 @@ const Explore = () => {
         const response = await fetch('/api/spotify/now-playing');
         if (response.ok) {
           const data = await response.json();
-          setSpotifyData(data);
+          setSpotifyData(data.isAvailable === false ? null : data);
         }
       } catch (error) {
         console.error('Failed to fetch Spotify data:', error);
@@ -446,17 +447,19 @@ const Explore = () => {
                     </div>
 
                     {/* Album Cover */}
-                    <div ref={albumRef} className="relative w-40 h-40 rounded-lg overflow-hidden shadow-2xl z-10 transition-shadow duration-300">
-                      <Image
-                        src={spotifyData.albumImageUrl}
-                        alt={spotifyData.album}
-                        fill
-                        className="object-cover"
-                        sizes="160px"
-                        priority
-                        quality={90}
-                      />
-                    </div>
+                    {spotifyData.albumImageUrl && (
+                      <div ref={albumRef} className="relative w-40 h-40 rounded-lg overflow-hidden shadow-2xl z-10 transition-shadow duration-300">
+                        <Image
+                          src={spotifyData.albumImageUrl}
+                          alt={spotifyData.album}
+                          fill
+                          className="object-cover"
+                          sizes="160px"
+                          priority
+                          quality={90}
+                        />
+                      </div>
+                    )}
                   </div>
                 </a>
               ) : (

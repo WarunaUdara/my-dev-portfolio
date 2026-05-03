@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
-const SPOTIFY_NOW_PLAYING_URL = 'https://api.spotify.com/v1/me/player/currently-playing';
+const SPOTIFY_NOW_PLAYING_URL =
+  'https://api.spotify.com/v1/me/player/currently-playing?market=from_token&additional_types=track,episode';
 const SPOTIFY_RECENTLY_PLAYED_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=1';
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;
@@ -13,6 +14,7 @@ interface SpotifyToken {
 }
 
 interface SpotifyTrack {
+  type: 'track';
   name: string;
   artists: Array<{ name: string }>;
   album: {
@@ -24,9 +26,22 @@ interface SpotifyTrack {
   };
 }
 
+interface SpotifyEpisode {
+  type: 'episode';
+  name: string;
+  show: {
+    name: string;
+    images: Array<{ url: string; height: number; width: number }>;
+  };
+  external_urls: {
+    spotify: string;
+  };
+}
+
 interface SpotifyNowPlaying {
   is_playing: boolean;
-  item: SpotifyTrack;
+  item: SpotifyTrack | SpotifyEpisode | null;
+  currently_playing_type: 'track' | 'episode' | 'ad' | 'unknown';
 }
 
 interface SpotifyRecentlyPlayed {
@@ -60,10 +75,24 @@ async function getAccessToken(): Promise<string> {
   return data.access_token;
 }
 
+async function getSpotifyError(response: Response) {
+  try {
+    const body = await response.json();
+    return JSON.stringify(body);
+  } catch {
+    try {
+      return await response.text();
+    } catch {
+      return response.statusText;
+    }
+  }
+}
+
 async function getNowPlaying(access_token: string) {
   const response = await fetch(SPOTIFY_NOW_PLAYING_URL, {
     headers: {
       Authorization: `Bearer ${access_token}`,
+      Accept: 'application/json',
     },
     cache: 'no-store',
   });
@@ -73,7 +102,11 @@ async function getNowPlaying(access_token: string) {
   }
 
   if (!response.ok) {
-    throw new Error('Failed to fetch now playing');
+    const error = await getSpotifyError(response);
+    console.warn(
+      `Spotify currently-playing unavailable (${response.status}): ${error}`
+    );
+    return null;
   }
 
   const data: SpotifyNowPlaying = await response.json();
@@ -84,16 +117,43 @@ async function getRecentlyPlayed(access_token: string) {
   const response = await fetch(SPOTIFY_RECENTLY_PLAYED_URL, {
     headers: {
       Authorization: `Bearer ${access_token}`,
+      Accept: 'application/json',
     },
     cache: 'no-store',
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch recently played');
+    const error = await getSpotifyError(response);
+    console.warn(
+      `Spotify recently-played unavailable (${response.status}): ${error}`
+    );
+    return null;
   }
 
   const data: SpotifyRecentlyPlayed = await response.json();
-  return data.items[0];
+  return data.items[0] ?? null;
+}
+
+function formatTrack(track: SpotifyTrack, isPlaying: boolean) {
+  return {
+    isPlaying,
+    title: track.name,
+    artist: track.artists.map((artist) => artist.name).join(', '),
+    album: track.album.name,
+    albumImageUrl: track.album.images[0]?.url || null,
+    songUrl: track.external_urls.spotify,
+  };
+}
+
+function formatEpisode(episode: SpotifyEpisode) {
+  return {
+    isPlaying: true,
+    title: episode.name,
+    artist: episode.show.name,
+    album: 'Podcast episode',
+    albumImageUrl: episode.show.images[0]?.url || null,
+    songUrl: episode.external_urls.spotify,
+  };
 }
 
 export async function GET() {
@@ -110,36 +170,29 @@ export async function GET() {
     // Try to get currently playing
     const nowPlaying = await getNowPlaying(access_token);
     
-    if (nowPlaying && nowPlaying.is_playing) {
-      const track = nowPlaying.item;
-      return NextResponse.json({
-        isPlaying: true,
-        title: track.name,
-        artist: track.artists.map((artist) => artist.name).join(', '),
-        album: track.album.name,
-        albumImageUrl: track.album.images[0]?.url || null,
-        songUrl: track.external_urls.spotify,
-      });
+    if (nowPlaying?.is_playing && nowPlaying.item) {
+      if (nowPlaying.item.type === 'track') {
+        return NextResponse.json(formatTrack(nowPlaying.item, true));
+      }
+
+      if (nowPlaying.item.type === 'episode') {
+        return NextResponse.json(formatEpisode(nowPlaying.item));
+      }
     }
 
     // If nothing is currently playing, get recently played
     const recentlyPlayed = await getRecentlyPlayed(access_token);
     
     if (recentlyPlayed) {
-      const track = recentlyPlayed.track;
-      return NextResponse.json({
-        isPlaying: false,
-        title: track.name,
-        artist: track.artists.map((artist) => artist.name).join(', '),
-        album: track.album.name,
-        albumImageUrl: track.album.images[0]?.url || null,
-        songUrl: track.external_urls.spotify,
-      });
+      return NextResponse.json(formatTrack(recentlyPlayed.track, false));
     }
 
     return NextResponse.json(
-      { error: 'No track data available' },
-      { status: 404 }
+      {
+        error: 'No Spotify activity available',
+        isAvailable: false,
+      },
+      { status: 200 }
     );
 
   } catch (error) {

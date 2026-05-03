@@ -235,7 +235,7 @@ export default function Hero() {
               {/* Main Heading */}
               <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl font-serif leading-tight">
                 <span className="block hero-heading-line opacity-0">Transforming ideas into</span>
-                <span className="block xl:text-8xl italic font-serif hero-heading-line opacity-0">seamless solutions</span>
+                <span className="block xl:text-8xl italic font-serif hero-heading-line opacity-0 bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent [text-shadow:0_18px_55px_rgba(226,232,240,0.18)]">seamless solutions</span>
               </h1>
 
               {/* Subheading with Silver Gradient */}
@@ -306,6 +306,8 @@ export default function Hero() {
               priority
               unoptimized
             />
+            <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+            <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black via-black/70 to-transparent"></div>
           </div>
 
           {/* Floating Sparkles Effect */}
