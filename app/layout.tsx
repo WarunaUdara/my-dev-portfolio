@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     description: "Full Stack Developer specializing in Java, Spring Boot, React/Next.js, and microservices. Building scalable cloud-native applications.",
     siteName: "Waruna Udara Sampath Portfolio",
     images: [{
-      url: "/og-image.jpg",
+      url: "/og-image.png",
       width: 1200,
       height: 630,
       alt: "Waruna Udara Sampath - Full Stack Software Developer Portfolio"
