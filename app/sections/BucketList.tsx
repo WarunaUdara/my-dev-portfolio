@@ -7,36 +7,58 @@ interface BucketItem {
   text: string;
   completed: boolean;
   date?: string;
+  note?: string;
   link?: string;
-
 }
 
 const bucketItems: BucketItem[] = [
-    { id: 1, text: "Skydiving", completed: false },
-    { id: 2, text: "Find my first job", completed: false },
-    { id: 3, text: "Solo travel to another country", completed: true },
-    { id: 4, text: "Create portfolio website", completed: true,  link: "https://warunadev.vercel.app/" },
-    { id: 5, text: "Certified Kubernetes Administrator", completed: false },
-    { id: 6, text: "Parents trip to india", completed: false },
-    { id: 7, text: "Remote working with client from abroad", completed: false },
-    { id: 8, text: "Certified AWS Solutions Architect Associate", completed: false, date: "2026" },
-    { id: 9, text: "Write 10 articles", completed: false, date: "4/10 done" },
-    { id: 10, text: "Get 1,000 organic LinkedIn followers", completed: true, date: "May 2023" },
-    { id: 11, text: "Organize or Co-Host a Tech Event", completed: true },
-    { id: 12, text: "University degree", completed: true },
-    { id: 13, text: "Sport Car", completed: false },
-    { id: 14, text: "Hike a mountain", completed: true },
-    { id: 15, text: "Do 10 CSR activities", completed: true , date: "4/10 done | 2 pending"},
-    { id: 16, text: "Teach coding to 100 students", completed: true },
-    { id: 17, text: "Speak infront of 100 people", completed: true },
-    { id: 18, text: "Speak infront of 1000 people", completed: false },
-    { id: 19, text: "Solo hike", completed: false },
-    { id: 20, text: "Participate in Hackathons", completed: true },
-    { id: 21, text: "First client project", completed: true },
-   
-    
-
-    
+  { id: 1, text: "Skydiving", completed: false },
+  { id: 2, text: "Find my first job", completed: false },
+  { id: 3, text: "Solo travel to another country", completed: true },
+  { id: 4, text: "Create portfolio website", completed: true, link: "https://warunadev.vercel.app/" },
+  { id: 5, text: "Certified Kubernetes Administrator", completed: false },
+  { id: 6, text: "Parents trip to India", completed: false },
+  { id: 7, text: "Remote working with client from abroad", completed: false },
+  { id: 8, text: "Certified AWS Solutions Architect Associate", completed: false, date: "2026" },
+  { id: 9, text: "Write 10 articles", completed: false, date: "4/10 done" },
+  { id: 10, text: "Get 1,000 organic LinkedIn followers", completed: true, date: "May 2023" },
+  { id: 11, text: "Organize or co-host a tech event", completed: true },
+  { id: 12, text: "University degree", completed: true },
+  { id: 13, text: "Sport car", completed: false },
+  { id: 14, text: "Hike a mountain", completed: true },
+  { id: 15, text: "Do 10 CSR activities", completed: true, date: "4/10 done | 2 pending" },
+  { id: 16, text: "Teach coding to 100 students", completed: true },
+  { id: 17, text: "Speak in front of 100 people", completed: true },
+  { id: 18, text: "Speak in front of 1000 people", completed: false },
+  { id: 19, text: "Solo hike", completed: false },
+  { id: 20, text: "Participate in hackathons", completed: true },
+  { id: 21, text: "First client project", completed: true },
+  {
+    id: 22,
+    text: "Go pure vegetarian",
+    completed: true,
+    date: "2021",
+    note: "No meat, no eggs. No exceptions, no 'just this once.' Years in and don't miss it.",
+  },
+  {
+    id: 23,
+    text: "Hit the gym consistently for a year",
+    completed: false,
+    note: "Started lifting, did 6 months, fell off, started again.",
+  },
+  {
+    id: 24,
+    text: "Learn Karate",
+    completed: true,
+    date: "5 years",
+    note: "Stayed consistent and earned the black belt.",
+  },
+  {
+    id: 25,
+    text: "Meditate for 30 consecutive days",
+    completed: false,
+    note: "Longest streak: 9 days.",
+  },
 ];
 
 const BucketList = () => {
@@ -137,12 +159,17 @@ const BucketList = () => {
                   </p>
                   
                   {/* Date or Link */}
-                  {(item.date || item.link) && (
+                  {(item.date || item.note || item.link) && (
                     <div className="mt-2 text-xs sm:text-sm">
                       {item.date && (
                         <span className="text-[var(--color-8)] font-medium">
                           {item.date}
                         </span>
+                      )}
+                      {item.note && (
+                        <p className="mt-1 text-gray-400 leading-relaxed">
+                          {item.note}
+                        </p>
                       )}
                       {item.link && (
                         <a
