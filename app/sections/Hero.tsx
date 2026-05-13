@@ -215,7 +215,7 @@ export default function Hero() {
         <section
           ref={heroRef}
           id="hero"
-          className="relative min-h-screen flex items-center justify-center overflow-hidden origin-top will-change-transform"
+          className="relative min-h-screen flex items-center justify-center overflow-hidden origin-top will-change-transform pb-28 sm:pb-0"
           style={{ transformOrigin: 'top center' }}
         >
           {/* Aurora Background Animation */}
@@ -229,17 +229,17 @@ export default function Hero() {
             
           </div>
 
-          <div className="container mx-auto max-w-6xl w-full z-20 px-4 sm:px-6 relative">
+          <div className="container mx-auto max-w-6xl w-full z-20 px-6 sm:px-6 relative flex items-center justify-center">
             {/* Hero Content */}
-            <div className="flex flex-col items-center justify-center text-center space-y-6 sm:space-y-8">
+            <div className="flex flex-col items-center justify-center text-center w-full space-y-5 sm:space-y-8">
               {/* Main Heading */}
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl font-serif leading-tight">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-7xl font-serif leading-tight w-full">
                 <span className="block hero-heading-line opacity-0">Transforming ideas into</span>
-                <span className="block xl:text-8xl italic font-serif hero-heading-line opacity-0 bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent [text-shadow:0_18px_55px_rgba(226,232,240,0.18)]">seamless solutions</span>
+                <span className="block text-5xl sm:text-6xl xl:text-8xl italic font-serif hero-heading-line opacity-0 bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent [text-shadow:0_18px_55px_rgba(226,232,240,0.18)]">seamless solutions</span>
               </h1>
 
               {/* Subheading with Silver Gradient */}
-              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-xl hero-subheading opacity-0">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-xl hero-subheading opacity-0">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <span className="bg-gradient-to-b from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent">
                     Hello, I&apos;m Waruna Udara
@@ -261,13 +261,13 @@ export default function Hero() {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-4 sm:mt-6 w-full sm:w-auto hero-cta opacity-0">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 w-full hero-cta opacity-0">
                 
                 <a href="https://www.linkedin.com/in/waruna-udara/" target="_blank" rel="noopener noreferrer">
                   <InteractiveHoverButton> Let&apos;s Connect </InteractiveHoverButton>
                 </a>
 
-                <button className="w-full sm:w-auto px-4 py-3 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2 text-sm sm:text-base group"
+                <button className="max-w-full sm:w-auto px-4 py-3 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2 text-sm sm:text-base group"
                   onClick={handleCopyEmail}
                   type="button"
                 >
@@ -290,13 +290,30 @@ export default function Hero() {
             </div>
           </div>
 
+          {/* Mobile Eclipse - pinned to the hero section */}
+          <div className="absolute inset-x-0 bottom-0 sm:hidden pointer-events-none z-30 eclipse-wrapper opacity-0">
+            <div className="relative mx-auto h-[100px] w-full overflow-hidden">
+              <Image
+                src="/eclipse.svg"
+                alt=""
+                fill
+                sizes="100vw"
+                className="object-cover object-bottom"
+                priority
+                unoptimized
+              />
+              <div className="absolute inset-y-0 left-0 w-1/5 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
+              <div className="absolute inset-y-0 right-0 w-1/5 bg-gradient-to-l from-black via-black/60 to-transparent"></div>
+            </div>
+          </div>
+
           {/* Purple Glow Effect on Eclipse */}
-          <div className="absolute bottom-0 sm:-bottom-48 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[200px] sm:h-[300px] pointer-events-none z-5 eclipse-glow opacity-0">
+          <div className="hidden sm:block absolute -bottom-16 sm:-bottom-48 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[200px] sm:h-[300px] pointer-events-none z-5 eclipse-glow opacity-0">
             <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-8)]/40 via-[var(--color-9)]/20 to-transparent blur-3xl"></div>
           </div>
 
           {/* Eclipse Background - Full Width */}
-          <div className="absolute bottom-0 sm:-bottom-40 left-0 right-0 w-full overflow-hidden pointer-events-none z-10 eclipse-wrapper opacity-0">
+          <div className="hidden sm:block absolute -bottom-16 sm:-bottom-40 left-0 right-0 w-full overflow-hidden pointer-events-none z-10 eclipse-wrapper opacity-0">
             <Image
               src="/eclipse.png"
               alt=""
