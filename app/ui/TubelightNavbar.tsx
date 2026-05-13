@@ -197,7 +197,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   className="group relative block rounded-2xl overflow-hidden h-40"
                 >
                   <Image
-                    src="/guestbook.png"
+                    src="/guestbook.webp"
                     alt="Guestbook"
                     fill
                     className="object-cover"
@@ -216,7 +216,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   className="group relative block rounded-2xl overflow-hidden h-40"
                 >
                   <Image
-                    src="/bucket-list.png"
+                    src="/bucket-list.webp"
                     alt="Bucket List"
                     fill
                     className="object-cover"
@@ -344,7 +344,7 @@ export function NavBar({ items, className }: NavBarProps) {
                             className="group relative block rounded-2xl overflow-hidden h-52 hover:scale-[1.02] transition-transform"
                           >
                             <Image
-                              src="/guestbook.png"
+                              src="/guestbook.webp"
                               alt="Guestbook"
                               fill
                               className="object-cover"
@@ -363,7 +363,7 @@ export function NavBar({ items, className }: NavBarProps) {
                             className="group relative block rounded-2xl overflow-hidden h-52 hover:scale-[1.02] transition-transform"
                           >
                             <Image
-                              src="/bucket-list.png"
+                              src="/bucket-list.webp"
                               alt="Bucket List"
                               fill
                               className="object-cover"
