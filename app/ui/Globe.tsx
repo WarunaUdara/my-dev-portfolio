@@ -26,10 +26,10 @@ const DEFAULT_MARKERS: GlobeMarker[] = [
 ];
 
 const DEFAULT_ARCS: GlobeArc[] = [
-  { from: [7.8731, 80.7718], to: [51.5074, -0.1278] }, // Sri Lanka -> London
-  { from: [7.8731, 80.7718], to: [25.2048, 55.2708] },  // Sri Lanka -> Dubai
-  { from: [7.8731, 80.7718], to: [35.6762, 139.6503] }, // Sri Lanka -> Tokyo
-  { from: [7.8731, 80.7718], to: [37.78, -122.44] },   // Sri Lanka -> SF
+  { from: [7.8731, 80.7718], to: [51.5074, -0.1278] },
+  { from: [7.8731, 80.7718], to: [25.2048, 55.2708] },
+  { from: [7.8731, 80.7718], to: [35.6762, 139.6503] },
+  { from: [7.8731, 80.7718], to: [37.78, -122.44] },
 ];
 
 interface GlobeProps {
@@ -47,50 +47,50 @@ export function Globe({
 }: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const pointerInteracting = useRef<number | null>(null);
   const pointerInteractionMovement = useRef(0);
   const phiRef = useRef(0.8);
-  const thetaRef = useRef(0.2);
+  const thetaVal = 0.2;
 
   const [labelPositions, setLabelPositions] = useState<
-    Array<{ id: string; label: string; percentX: number; percentY: number; opacity: number }>
+    Array<{ id: string; label: string; px: number; py: number; opacity: number }>
   >([]);
 
-  // Project 3D lat/lon to 2D percentage coordinates on canvas matching Cobe v2
-  const calculatePositions = useCallback(
-    (phi: number, theta: number) => {
-      const r = 0.385; // Cobe sphere radius multiplier
+  // Cobe projects the globe with a visual radius of ~43.5% of canvas size.
+  // Longitude is applied as -(lon + phi) internally.
+  const projectMarkers = useCallback(
+    (phi: number, theta: number, containerWidth: number) => {
+      const R = containerWidth * 0.435;
+      const cx = containerWidth / 2;
+      const cy = containerWidth / 2;
 
       const positions = markers.map((m) => {
         const [lat, lon] = m.location;
         const latRad = (lat * Math.PI) / 180;
         const lonRad = (lon * Math.PI) / 180;
 
-        // 1. 3D coordinates on unit sphere
-        const x0 = Math.cos(latRad) * Math.sin(lonRad + phi);
-        const y0 = Math.sin(latRad);
-        const z0 = Math.cos(latRad) * Math.cos(lonRad + phi);
+        // Cobe internal: longitude offset is -(lon + phi)
+        const adjustedLon = lonRad + phi;
 
-        // 2. Rotate by theta tilt around X-axis
-        const x = x0;
-        const y = y0 * Math.cos(theta) - z0 * Math.sin(theta);
-        const z = y0 * Math.sin(theta) + z0 * Math.cos(theta);
+        // Spherical to Cartesian
+        const sx = Math.cos(latRad) * Math.sin(adjustedLon);
+        const sy = Math.sin(latRad);
+        const sz = Math.cos(latRad) * Math.cos(adjustedLon);
 
-        // 3. Screen percentage relative to center
-        const percentX = 50 + x * r * 100;
-        const percentY = 50 - y * r * 100;
+        // Theta rotation around X-axis (tilt)
+        const rx = sx;
+        const ry = sy * Math.cos(theta) - sz * Math.sin(theta);
+        const rz = sy * Math.sin(theta) + sz * Math.cos(theta);
 
-        // 4. Front hemisphere visibility & smooth opacity fade
-        const opacity = z > 0.15 ? Math.min(1, (z - 0.15) * 4) : 0;
+        // Orthographic projection
+        const px = cx + rx * R;
+        const py = cy - ry * R;
 
-        return {
-          id: m.id,
-          label: m.label,
-          percentX,
-          percentY,
-          opacity,
-        };
+        // Visibility: front face only, with smooth fade
+        const opacity = rz > 0.1 ? Math.min(1, (rz - 0.1) * 5) : 0;
+
+        return { id: m.id, label: m.label, px, py, opacity };
       });
 
       setLabelPositions(positions);
@@ -112,13 +112,12 @@ export function Globe({
 
     if (!canvasRef.current || width === 0) return;
 
-    // Initialize Cobe v2 with onRender callback
     const globe = createGlobe(canvasRef.current, {
       devicePixelRatio: 2,
       width: width * 2,
       height: width * 2,
       phi: phiRef.current,
-      theta: thetaRef.current,
+      theta: thetaVal,
       dark: 1,
       diffuse: 1.2,
       mapSamples: 16000,
@@ -145,11 +144,11 @@ export function Globe({
         }
         const currentPhi = phiRef.current + pointerInteractionMovement.current;
         state.phi = currentPhi;
-        state.theta = thetaRef.current;
+        state.theta = thetaVal;
         state.width = width * 2;
         state.height = width * 2;
 
-        calculatePositions(currentPhi, thetaRef.current);
+        projectMarkers(currentPhi, thetaVal, width);
       },
     });
 
@@ -163,7 +162,7 @@ export function Globe({
       globe.destroy();
       window.removeEventListener("resize", onResize);
     };
-  }, [markers, arcs, speed, calculatePositions]);
+  }, [markers, arcs, speed, projectMarkers]);
 
   return (
     <div
@@ -175,18 +174,14 @@ export function Globe({
         className="h-full w-full opacity-0 transition-opacity duration-700 [contain:layout_paint_size] cursor-grab active:cursor-grabbing"
         onPointerDown={(e) => {
           pointerInteracting.current = e.clientX;
-          if (canvasRef.current) {
-            canvasRef.current.style.cursor = "grabbing";
-          }
+          if (canvasRef.current) canvasRef.current.style.cursor = "grabbing";
         }}
         onPointerUp={() => {
           if (pointerInteracting.current !== null) {
             phiRef.current += pointerInteractionMovement.current;
             pointerInteracting.current = null;
             pointerInteractionMovement.current = 0;
-            if (canvasRef.current) {
-              canvasRef.current.style.cursor = "grab";
-            }
+            if (canvasRef.current) canvasRef.current.style.cursor = "grab";
           }
         }}
         onPointerOut={() => {
@@ -194,9 +189,7 @@ export function Globe({
             phiRef.current += pointerInteractionMovement.current;
             pointerInteracting.current = null;
             pointerInteractionMovement.current = 0;
-            if (canvasRef.current) {
-              canvasRef.current.style.cursor = "grab";
-            }
+            if (canvasRef.current) canvasRef.current.style.cursor = "grab";
           }
         }}
         onMouseMove={(e) => {
@@ -213,26 +206,31 @@ export function Globe({
         }}
       />
 
-      {/* Cobe v2 Anchored Location Badges */}
+      {/* Anchored marker labels — small, sharp-edged boxes */}
       {labelPositions.map((pos) => (
         <div
           key={pos.id}
-          className="absolute pointer-events-none transition-opacity duration-300 transform -translate-x-1/2 -translate-y-full mb-1 flex flex-col items-center"
+          className="absolute pointer-events-none flex flex-col items-center"
           style={{
-            left: `${pos.percentX}%`,
-            top: `${pos.percentY}%`,
+            left: `${pos.px}px`,
+            top: `${pos.py}px`,
+            transform: "translate(-50%, -100%)",
             opacity: pos.opacity,
+            transition: "opacity 0.25s ease",
             zIndex: pos.opacity > 0.5 ? 25 : 10,
           }}
         >
-          {/* Label Badge */}
-          <div className="bg-white text-gray-950 font-mono text-[10px] sm:text-xs font-bold tracking-wide px-2 py-0.5 rounded shadow-lg flex items-center gap-1.5 border border-white/90">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-            <span>{pos.label}</span>
+          {/* Sharp-edge label box */}
+          <div
+            className="bg-white/95 text-[#0a0a0a] font-mono leading-none tracking-wider px-1.5 py-[3px] shadow-md border border-white/80 flex items-center gap-1"
+            style={{ fontSize: "9px", fontWeight: 700 }}
+          >
+            <span className="inline-block w-[5px] h-[5px] bg-blue-500 flex-shrink-0"></span>
+            {pos.label}
           </div>
 
-          {/* Pointer line */}
-          <div className="w-0.5 h-2 bg-white/80"></div>
+          {/* Thin connector line */}
+          <div className="w-[1px] h-[6px] bg-white/70"></div>
         </div>
       ))}
     </div>
