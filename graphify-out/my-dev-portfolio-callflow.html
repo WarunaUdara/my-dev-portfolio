@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>my-dev-portfolio — Complete Call Flow &amp; Architecture Documentation</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg: #0f172a; --surface: #1e293b; --border: #334155;
+  --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+  --warn: #fbbf24; --err: #f87171; --ok: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+h1 { font-size: 2.4rem; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h2 { font-size: 1.7rem; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h3 { font-size: 1.25rem; margin: 32px 0 12px; color: var(--accent); }
+h4 { font-size: 1.05rem; margin: 20px 0 8px; color: var(--warn); }
+p { margin: 8px 0; color: var(--muted); }
+.subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 32px; }
+.mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto; position: relative; }
+.mermaid.is-enhanced { padding: 0; overflow: hidden; min-height: 260px; }
+.mermaid-viewport { padding: 54px 24px 24px; overflow: hidden; cursor: grab; touch-action: none; min-height: 260px; }
+.mermaid-viewport.is-dragging { cursor: grabbing; }
+.mermaid-viewport svg { max-width: none !important; height: auto; transform-origin: 0 0; transition: transform 120ms ease; }
+.mermaid-toolbar { position: absolute; top: 10px; right: 10px; z-index: 3; display: flex; align-items: center; gap: 6px; padding: 6px; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.28); }
+.mermaid-toolbar button, .mermaid-toolbar .zoom-level { height: 28px; min-width: 32px; border: 1px solid var(--border); border-radius: 6px; background: #1e293b; color: var(--text); font: 600 0.78rem system-ui, sans-serif; display: inline-flex; align-items: center; justify-content: center; }
+.mermaid-toolbar button { cursor: pointer; }
+.mermaid-toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+.mermaid-toolbar .zoom-level { min-width: 52px; color: var(--muted); background: transparent; }
+.call-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.92rem; }
+.call-table th { background: #1a2744; color: var(--accent); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+.call-table td { padding: 8px 14px; border: 1px solid var(--border); vertical-align: top; }
+.call-table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+.tag-async { background: #7c3aed33; color: #a78bfa; }
+.tag-class { background: #05966933; color: var(--ok); }
+.tag-func { background: #2563eb33; color: var(--accent); }
+.tag-cmd { background: #d9770633; color: var(--warn); }
+.tag-endpoint { background: #dc262633; color: var(--err); }
+.tag-hook { background: #db277733; color: #f472b6; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin: 16px 0; }
+.arrow-chain { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--accent); padding: 10px; background: rgba(56,189,248,0.06); border-radius: 6px; }
+code { font-family: 'Fira Code', 'Cascadia Code', monospace; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; font-size: 0.88em; }
+ul, ol { margin: 8px 0 8px 24px; color: var(--muted); }
+li { margin: 4px 0; }
+a { color: var(--accent); }
+hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+.nav { position: sticky; top: 0; background: var(--bg); z-index: 10; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9rem; }
+.nav a { text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+@media (max-width: 768px) { .container { padding: 16px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>my-dev-portfolio — Complete Call Flow &amp; Architecture Documentation</h1>
+<p class="subtitle">Generated from graphify knowledge graph: 283 nodes, 347 edges, 23 communities. Commit: 3e2f896</p>
+
+<div class="nav">
+    <a href="#overview">Architecture Overview</a>
+    <a href="#build-graph">Graph Build</a>
+    <a href="#ingest-cache-update">Ingestion &amp; Updates</a>
+    <a href="#serve-api">Serving API</a>
+    <a href="#cn">cn</a>
+    <a href="#guestbook-page-tsx">guestbook/page.tsx</a>
+    <a href="#confetti-tsx">confetti.tsx</a>
+    <a href="#explore-tsx">Explore.tsx</a>
+    <a href="#projects-tsx">Projects.tsx</a>
+    <a href="#techstack-tsx">TechStack.tsx</a>
+    <a href="#eslint-config-mjs">eslint.config.mjs</a>
+    <a href="#under-construction-page-tsx">under-construction/page.tsx</a>
+    <a href="#next-config-ts">next.config.ts</a>
+    <a href="#postcss-config-mjs">postcss.config.mjs</a>
+    <a href="#tailwind-config-ts">tailwind.config.ts</a>
+    <a href="#other">Other</a>
+</div>
+
+<!-- ====== Architecture Overview ====== -->
+<h2 id="overview">1. Architecture Overview</h2>
+
+<div class="mermaid">
+
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    BUILD_GRAPH_321CBB04("Graph Build<br/><small>159 nodes</small>")
+    class BUILD_GRAPH_321CBB04 module;
+    INGEST_CACHE_UPDATE_FF457338("Ingestion &amp; Updates<br/><small>5 nodes</small>")
+    class INGEST_CACHE_UPDATE_FF457338 module;
+    SERVE_API_35EC8E86("Serving API<br/><small>18 nodes</small>")
+    class SERVE_API_35EC8E86 module;
+    CN_B0BC9ABD("cn<br/><small>34 nodes</small>")
+    class CN_B0BC9ABD module;
+    GUESTBOOK_PAGE_TSX_0C901B28("guestbook/page.tsx<br/><small>21 nodes</small>")
+    class GUESTBOOK_PAGE_TSX_0C901B28 module;
+    CONFETTI_TSX_12F59CD8("confetti.tsx<br/><small>12 nodes</small>")
+    class CONFETTI_TSX_12F59CD8 module;
+    EXPLORE_TSX_1C39BCB3("Explore.tsx<br/><small>6 nodes</small>")
+    class EXPLORE_TSX_1C39BCB3 module;
+    PROJECTS_TSX_B5A4CE9C("Projects.tsx<br/><small>6 nodes</small>")
+    class PROJECTS_TSX_B5A4CE9C module;
+    TECHSTACK_TSX_FD2C2E4F("TechStack.tsx<br/><small>5 nodes</small>")
+    class TECHSTACK_TSX_FD2C2E4F module;
+    ESLINT_CONFIG_MJS_F6B77F9F("eslint.config.mjs<br/><small>5 nodes</small>")
+    class ESLINT_CONFIG_MJS_F6B77F9F module;
+    UNDER_CONSTRUCTION_PAGE_TSX_A66BC4AA("under-construction/page.tsx<br/><small>4 nodes</small>")
+    class UNDER_CONSTRUCTION_PAGE_TSX_A66BC4AA module;
+    NEXT_CONFIG_TS_3EBADBB5("next.config.ts<br/><small>2 nodes</small>")
+    class NEXT_CONFIG_TS_3EBADBB5 module;
+    POSTCSS_CONFIG_MJS_47380EE3("postcss.config.mjs<br/><small>2 nodes</small>")
+    class POSTCSS_CONFIG_MJS_47380EE3 module;
+    TAILWIND_CONFIG_TS_50974F0F("tailwind.config.ts<br/><small>2 nodes</small>")
+    class TAILWIND_CONFIG_TS_50974F0F module;
+    OTHER_D0941E68("Other<br/><small>2 nodes</small>")
+    class OTHER_D0941E68 module;
+    BUILD_GRAPH_321CBB04 -->|imports x5| CN_B0BC9ABD
+    GUESTBOOK_PAGE_TSX_0C901B28 -->|imports x4| BUILD_GRAPH_321CBB04
+    GUESTBOOK_PAGE_TSX_0C901B28 -->|imports x2| CN_B0BC9ABD
+    BUILD_GRAPH_321CBB04 -->|imports x2| GUESTBOOK_PAGE_TSX_0C901B28
+    CN_B0BC9ABD -->|imports x2| EXPLORE_TSX_1C39BCB3
+    CN_B0BC9ABD -->|imports x2| CONFETTI_TSX_12F59CD8
+    CONFETTI_TSX_12F59CD8 -->|imports x2| CN_B0BC9ABD
+    BUILD_GRAPH_321CBB04 -->|imports| EXPLORE_TSX_1C39BCB3
+    BUILD_GRAPH_321CBB04 -->|imports| PROJECTS_TSX_B5A4CE9C
+    BUILD_GRAPH_321CBB04 -->|imports| TECHSTACK_TSX_FD2C2E4F
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h4>Architecture Layers</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>Layer</th><th>Nodes</th><th>Communities</th></tr>
+      <tr><td>Graph Build</td><td>159</td><td><code>0, 2, 3, 4, 6, 8</code></td></tr><tr><td>Ingestion &amp; Updates</td><td>5</td><td><code>12</code></td></tr><tr><td>Serving API</td><td>18</td><td><code>7, 16, 17</code></td></tr><tr><td>cn</td><td>34</td><td><code>1</code></td></tr><tr><td>guestbook/page.tsx</td><td>21</td><td><code>5</code></td></tr><tr><td>confetti.tsx</td><td>12</td><td><code>9</code></td></tr><tr><td>Explore.tsx</td><td>6</td><td><code>10</code></td></tr><tr><td>Projects.tsx</td><td>6</td><td><code>11</code></td></tr><tr><td>TechStack.tsx</td><td>5</td><td><code>13</code></td></tr><tr><td>eslint.config.mjs</td><td>5</td><td><code>14</code></td></tr><tr><td>under-construction/page.tsx</td><td>4</td><td><code>15</code></td></tr><tr><td>next.config.ts</td><td>2</td><td><code>18</code></td></tr><tr><td>postcss.config.mjs</td><td>2</td><td><code>19</code></td></tr><tr><td>tailwind.config.ts</td><td>2</td><td><code>20</code></td></tr><tr><td>Other</td><td>2</td><td><code>21, 22</code></td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Core Flow</h4>
+    <div class="arrow-chain">Ingestion &amp; Updates -&gt; Graph Build -&gt; cn -&gt; Explore.tsx -&gt; Serving API -&gt; guestbook/page.tsx -&gt; confetti.tsx</div>
+  </div>
+</div>
+<div class="grid">
+  <div class="card">
+    <h4>Graph Report Highlights</h4>
+    <ul>
+      <li>283 nodes · 347 edges · 23 communities (14 shown, 9 thin omitted)</li>
+      <li>Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS</li>
+      <li>Token cost: 0 input · 0 output</li>
+      <li>1. `cn()` - 19 edges</li>
+      <li>2. `compilerOptions` - 16 edges</li>
+      <li>3. `NavBar()` - 7 edges</li>
+    </ul>
+  </div>
+</div>
+<hr>
+<!-- ====== 2. Graph Build ====== -->
+<h2 id="build-graph">2. Graph Build</h2>
+<p>Graph Build groups implementation around packagejson, app, tsconfigjson, componentsjson, mostly in package.json, tsconfig.json, components.json. This section covers 159 nodes and 170 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Graph Build (159 nodes, 170 edges)
+    subgraph build_graph_app_sections_Footer_tsx_7b80f090["app/sections/Footer.tsx"]
+        app_sections_footer_70c60024("Footer.tsx")
+        app_sections_footer_footer_17366a69("Footer()<br/><small>app/sections/Footer.tsx</small>")
+    end
+    subgraph build_graph_app_sections_GitHubActivity_tsx_5c48623a["app/sections/GitHubActivity.tsx"]
+        app_sections_githubactivity_7f3ac579("GitHubActivity.tsx")
+        app_sections_githubactivity_githubactivity_e4077835("GitHubActivity()<br/><small>app/sections/GitHubActivity.tsx</small>")
+    end
+    subgraph build_graph_app_sections_RevealingQuote_tsx_52973853["app/sections/RevealingQuote.tsx"]
+        app_sections_revealingquote_192c1e6b("RevealingQuote.tsx")
+        app_sections_revealingquote_revealingquote_690787f0("RevealingQuote()<br/><small>app/sections/RevealingQuote.tsx</small>")
+    end
+    subgraph build_graph_app_ui_TubelightNavbar_tsx_b501acc2["app/ui/TubelightNavbar.tsx"]
+        app_ui_tubelightnavbar_aef36ded("TubelightNavbar.tsx")
+        app_ui_tubelightnavbar_navbar_82c101d1("NavBar()<br/><small>app/ui/TubelightNavbar.tsx</small>")
+    end
+    subgraph build_graph_components_SmoothScroll_tsx_d35272be["components/SmoothScroll.tsx"]
+        components_smoothscroll_579ef445("SmoothScroll.tsx")
+        components_smoothscroll_smoothscroll_ccd1da80("SmoothScroll()<br/><small>components/SmoothScroll.tsx</small>")
+    end
+    subgraph build_graph_package_json_4e40bfbd["package.json"]
+        package_dependencies_canvas_confetti_6786c35d("canvas-confetti<br/><small>package.json</small>")
+        package_dependencies_class_variance_authority_28e7f25f("class-variance-authority<br/><small>package.json</small>")
+    end
+    app_bucket_list_page_0ab3506f("page.tsx")
+    app_layout_ed349684("layout.tsx")
+    app_links_page_7ba15d90("page.tsx")
+    app_page_c77e992c("page.tsx")
+    app_sections_about_c14e7ec5("About.tsx")
+    app_sections_links_83e87c2c("Links.tsx")
+    app_bucket_list_page_0ab3506f -->|imports| app_sections_footer_70c60024
+    app_bucket_list_page_0ab3506f -->|imports| app_sections_footer_footer_17366a69
+    app_bucket_list_page_0ab3506f -->|imports| app_ui_tubelightnavbar_aef36ded
+    app_bucket_list_page_0ab3506f -->|imports| app_ui_tubelightnavbar_navbar_82c101d1
+    app_layout_ed349684 -->|imports| components_smoothscroll_579ef445
+    app_layout_ed349684 -->|imports| components_smoothscroll_smoothscroll_ccd1da80
+    app_links_page_7ba15d90 -->|imports| app_sections_footer_70c60024
+    app_links_page_7ba15d90 -->|imports| app_sections_footer_footer_17366a69
+    app_links_page_7ba15d90 -->|imports| app_sections_links_83e87c2c
+    app_links_page_7ba15d90 -->|imports| app_ui_tubelightnavbar_aef36ded
+    app_links_page_7ba15d90 -->|imports| app_ui_tubelightnavbar_navbar_82c101d1
+    app_page_c77e992c -->|imports| app_sections_about_c14e7ec5
+    app_page_c77e992c -->|imports| app_sections_footer_70c60024
+    app_page_c77e992c -->|imports| app_sections_footer_footer_17366a69
+    app_page_c77e992c -->|imports| app_sections_githubactivity_7f3ac579
+    app_page_c77e992c -->|imports| app_sections_githubactivity_githubactivity_e4077835
+    app_page_c77e992c -->|imports| app_sections_revealingquote_192c1e6b
+    app_page_c77e992c -->|imports| app_sections_revealingquote_revealingquote_690787f0
+    app_page_c77e992c -->|imports| app_ui_tubelightnavbar_aef36ded
+    app_page_c77e992c -->|imports| app_ui_tubelightnavbar_navbar_82c101d1
+    %% Omitted for readability: 141 nodes, 0 edges
+    class app_sections_footer_70c60024 ui;
+    class app_sections_footer_footer_17366a69 ui;
+    class app_sections_githubactivity_7f3ac579 ui;
+    class app_sections_githubactivity_githubactivity_e4077835 ui;
+    class app_sections_revealingquote_192c1e6b ui;
+    class app_sections_revealingquote_revealingquote_690787f0 ui;
+    class app_ui_tubelightnavbar_aef36ded ui;
+    class app_ui_tubelightnavbar_navbar_82c101d1 ui;
+    class components_smoothscroll_579ef445 ui;
+    class components_smoothscroll_smoothscroll_ccd1da80 ui;
+    class package_dependencies_canvas_confetti_6786c35d function;
+    class package_dependencies_class_variance_authority_28e7f25f function;
+    class app_bucket_list_page_0ab3506f ui;
+    class app_layout_ed349684 ui;
+    class app_links_page_7ba15d90 ui;
+    class app_page_c77e992c ui;
+    class app_sections_about_c14e7ec5 ui;
+    class app_sections_links_83e87c2c ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>dependencies</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>dependencies node in package.json.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>@octokit/rest</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>@octokit/rest</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>@octokit/rest node in package.json.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>@octokit/rest</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>@octokit/rest</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>@octokit/rest node in package.json.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>@radix-ui/react-icons</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>@radix-ui/react-icons</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>@radix-ui/react-icons node in package.json.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>@radix-ui/react-icons</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>@radix-ui/react-icons</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>@radix-ui/react-icons node in package.json.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>@radix-ui/react-slot</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>@radix-ui/react-slot</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>@radix-ui/react-slot node in package.json.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>@radix-ui/react-slot</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>@radix-ui/react-slot</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>@radix-ui/react-slot node in package.json.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>@tabler/icons-react</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>@tabler/icons-react</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>@tabler/icons-react node in package.json.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>@tabler/icons-react</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>@tabler/icons-react</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>@tabler/icons-react node in package.json.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>@types/canvas-confetti</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>@types/canvas-confetti</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>@types/canvas-confetti node in package.json.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>@types/canvas-confetti</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>@types/canvas-confetti</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>@types/canvas-confetti node in package.json.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>canvas-confetti</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>canvas-confetti</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>canvas-confetti node in package.json.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>canvas-confetti</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>canvas-confetti</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>canvas-confetti node in package.json.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>class-variance-authority</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>class-variance-authority</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>class-variance-authority node in package.json.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>class-variance-authority</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>class-variance-authority</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>class-variance-authority node in package.json.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>clsx</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>clsx</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>clsx node in package.json.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>clsx</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>clsx</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>clsx node in package.json.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>cobe</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>cobe</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>cobe node in package.json.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>cobe</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>cobe</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>cobe node in package.json.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>firebase</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>firebase</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>firebase node in package.json.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>firebase</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>firebase</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>firebase node in package.json.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>firebase-admin</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>firebase-admin</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>firebase-admin node in package.json.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>firebase-admin</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>firebase-admin</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>firebase-admin node in package.json.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>gsap</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>gsap</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>gsap node in package.json.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>gsap</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>gsap</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>gsap node in package.json.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>lucide-react</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>lucide-react</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>lucide-react node in package.json.</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>lucide-react</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>lucide-react</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>lucide-react node in package.json.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>motion</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>motion</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>motion node in package.json.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>motion</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>motion</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>No direct outbound edge</td>
+  <td>motion node in package.json.</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>next</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>next</code><br><small style="color:var(--muted)">package.json</small></td>
+  <td>next node in package.json.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>package.json</code></td><td>77 nodes</td></tr>
+<tr><td><code>tsconfig.json</code></td><td>27 nodes</td></tr>
+<tr><td><code>components.json</code></td><td>20 nodes</td></tr>
+<tr><td><code>app/layout.tsx</code></td><td>7 nodes</td></tr>
+<tr><td><code>app/uses/page.tsx</code></td><td>5 nodes</td></tr>
+<tr><td><code>app/ui/TubelightNavbar.tsx</code></td><td>4 nodes</td></tr>
+<tr><td><code>components/SmoothScroll.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>app/bucket-list/page.tsx</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x103, imports x44, imports x13, extends x8. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 3. Ingestion & Updates ====== -->
+<h2 id="ingest-cache-update">3. Ingestion &amp; Updates</h2>
+<p>Ingestion &amp; Updates groups implementation around firebase, admints, download, routets, mostly in lib/firebase-admin.ts, api/cv-download/route.ts. This section covers 5 nodes and 4 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Ingestion &amp; Updates (5 nodes, 4 edges)
+    subgraph ingest_cache_update_lib_firebase_admin_ts_a63a479a["lib/firebase-admin.ts"]
+        lib_firebase_admin_d8513bc4("firebase-admin.ts")
+        lib_firebase_admin_initializefirebaseadmin_c69c73e6("initializeFirebaseAdmin()<br/><small>lib/firebase-admin.ts</small>")
+        lib_firebase_admin_admindb_db_8e51e8ff("adminDb: db<br/><small>lib/firebase-admin.ts</small>")
+    end
+    subgraph ingest_cache_update_api_cv_download_route_ts_e5ba6d23["api/cv-download/route.ts"]
+        app_api_cv_download_route_7fc2d05a("route.ts")
+        app_api_cv_download_route_post_4fbe8953("POST()<br/><small>api/cv-download/route.ts</small>")
+    end
+    app_api_cv_download_route_7fc2d05a -->|imports| lib_firebase_admin_d8513bc4
+    class lib_firebase_admin_d8513bc4 module;
+    class lib_firebase_admin_initializefirebaseadmin_c69c73e6 function;
+    class lib_firebase_admin_admindb_db_8e51e8ff function;
+    class app_api_cv_download_route_7fc2d05a api;
+    class app_api_cv_download_route_post_4fbe8953 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>cv-download/route.ts</code><br><small style="color:var(--muted)">api/cv-download/route.ts</small></td>
+  <td><span class="tag tag-endpoint">API</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>firebase-admin.ts</code><br><small style="color:var(--muted)">lib/firebase-admin.ts</small></td>
+  <td>Module file in api/cv-download/route.ts.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>POST()</code><br><small style="color:var(--muted)">api/cv-download/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>POST() node in api/cv-download/route.ts.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>firebase-admin.ts</code><br><small style="color:var(--muted)">lib/firebase-admin.ts</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td><code>route.ts</code><br><small style="color:var(--muted)">api/cv-download/route.ts</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in lib/firebase-admin.ts.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>initializeFirebaseAdmin()</code><br><small style="color:var(--muted)">lib/firebase-admin.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>initializeFirebaseAdmin() node in lib/firebase-admin.ts.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>{ adminDb: db }</code><br><small style="color:var(--muted)">lib/firebase-admin.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>{ adminDb: db } node in lib/firebase-admin.ts.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>lib/firebase-admin.ts</code></td><td>3 nodes</td></tr>
+<tr><td><code>api/cv-download/route.ts</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x3, imports x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 4. Serving API ====== -->
+<h2 id="serve-api">4. Serving API</h2>
+<p>Serving API groups implementation around routets, app, api, now, mostly in spotify/now-playing/route.ts, github/stats/route.ts, github/contributions/route.ts. This section covers 18 nodes and 22 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Serving API (18 nodes, 22 edges)
+    subgraph serve_api_spotify_now_playing_route_ts_170992b9["spotify/now-playing/route.ts"]
+        app_api_spotify_now_playing_route_getspotifyerro_20cfa2ad("getSpotifyError()<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_formatepisode_2bd3fafb("formatEpisode()<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_formattrack_7deb3272("formatTrack()<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_getaccesstoken_034ae3d0("getAccessToken()<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_getnowplaying_bbd47cad("getNowPlaying()<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_getrecentlypla_52821442("getRecentlyPlayed()<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_get_5cbd4314("GET()<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_spotifyepisode_d7350c15("SpotifyEpisode<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_spotifynowplay_5a9a5f6e("SpotifyNowPlaying<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_spotifyrecentl_c07139eb("SpotifyRecentlyPlayed<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_spotifytoken_a2d30411("SpotifyToken<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_spotifytrack_dcbd5ac9("SpotifyTrack<br/><small>spotify/now-playing/route.ts</small>")
+        app_api_spotify_now_playing_route_8dc50949("route.ts")
+    end
+    subgraph serve_api_github_stats_route_ts_a01b1b13["github/stats/route.ts"]
+        app_api_github_stats_route_get_0ccf324a("GET()<br/><small>github/stats/route.ts</small>")
+        app_api_github_stats_route_octokit_16da620b("octokit<br/><small>github/stats/route.ts</small>")
+        app_api_github_stats_route_33c17b6d("route.ts")
+    end
+    subgraph serve_api_github_contributions_route_ts_e471229c["github/contributions/route.ts"]
+        app_api_github_contributions_route_get_eba216e7("GET()<br/><small>github/contributions/route.ts</small>")
+        app_api_github_contributions_route_c56b8dd2("route.ts")
+    end
+    app_api_spotify_now_playing_route_getaccesstoken_034ae3d0 -->|calls| app_api_spotify_now_playing_route_get_5cbd4314
+    app_api_spotify_now_playing_route_getspotifyerro_20cfa2ad -->|calls| app_api_spotify_now_playing_route_getnowplaying_bbd47cad
+    app_api_spotify_now_playing_route_getspotifyerro_20cfa2ad -->|calls| app_api_spotify_now_playing_route_getrecentlypla_52821442
+    app_api_spotify_now_playing_route_getnowplaying_bbd47cad -->|calls| app_api_spotify_now_playing_route_get_5cbd4314
+    app_api_spotify_now_playing_route_getrecentlypla_52821442 -->|calls| app_api_spotify_now_playing_route_get_5cbd4314
+    app_api_spotify_now_playing_route_formattrack_7deb3272 -->|calls| app_api_spotify_now_playing_route_get_5cbd4314
+    app_api_spotify_now_playing_route_formatepisode_2bd3fafb -->|calls| app_api_spotify_now_playing_route_get_5cbd4314
+    class app_api_spotify_now_playing_route_getspotifyerro_20cfa2ad function;
+    class app_api_spotify_now_playing_route_formatepisode_2bd3fafb function;
+    class app_api_spotify_now_playing_route_formattrack_7deb3272 function;
+    class app_api_spotify_now_playing_route_getaccesstoken_034ae3d0 function;
+    class app_api_spotify_now_playing_route_getnowplaying_bbd47cad function;
+    class app_api_spotify_now_playing_route_getrecentlypla_52821442 function;
+    class app_api_spotify_now_playing_route_get_5cbd4314 function;
+    class app_api_spotify_now_playing_route_spotifyepisode_d7350c15 klass;
+    class app_api_spotify_now_playing_route_spotifynowplay_5a9a5f6e klass;
+    class app_api_spotify_now_playing_route_spotifyrecentl_c07139eb klass;
+    class app_api_spotify_now_playing_route_spotifytoken_a2d30411 klass;
+    class app_api_spotify_now_playing_route_spotifytrack_dcbd5ac9 klass;
+    class app_api_spotify_now_playing_route_8dc50949 api;
+    class app_api_github_stats_route_get_0ccf324a function;
+    class app_api_github_stats_route_octokit_16da620b function;
+    class app_api_github_stats_route_33c17b6d api;
+    class app_api_github_contributions_route_get_eba216e7 function;
+    class app_api_github_contributions_route_c56b8dd2 api;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>now-playing/route.ts</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-endpoint">API</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>SpotifyToken</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>SpotifyToken node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>SpotifyTrack</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>SpotifyTrack node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>SpotifyEpisode</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>SpotifyEpisode node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>SpotifyNowPlaying</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>SpotifyNowPlaying node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>SpotifyRecentlyPlayed</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>SpotifyRecentlyPlayed node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>getAccessToken()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>GET()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td>getAccessToken() node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>getSpotifyError()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>getNowPlaying()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small><br><code>getRecentlyPlayed()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td>getSpotifyError() node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>getNowPlaying()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>getSpotifyError()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><code>GET()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td>getNowPlaying() node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>getRecentlyPlayed()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>getSpotifyError()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><code>GET()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td>getRecentlyPlayed() node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>formatTrack()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>GET()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td>formatTrack() node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>formatEpisode()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>GET()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td>formatEpisode() node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>GET()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>formatEpisode()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small><br><code>formatTrack()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small><br><code>getAccessToken()</code><br><small style="color:var(--muted)">spotify/now-playing/route.ts</small><br>+2 more</td>
+  <td>No direct outbound edge</td>
+  <td>GET() node in spotify/now-playing/route.ts.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>stats/route.ts</code><br><small style="color:var(--muted)">github/stats/route.ts</small></td>
+  <td><span class="tag tag-endpoint">API</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in github/stats/route.ts.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>octokit</code><br><small style="color:var(--muted)">github/stats/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>octokit node in github/stats/route.ts.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>GET()</code><br><small style="color:var(--muted)">github/stats/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>GET() node in github/stats/route.ts.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>contributions/route.ts</code><br><small style="color:var(--muted)">github/contributions/route.ts</small></td>
+  <td><span class="tag tag-endpoint">API</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in github/contributions/route.ts.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>GET()</code><br><small style="color:var(--muted)">github/contributions/route.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>GET() node in github/contributions/route.ts.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>spotify/now-playing/route.ts</code></td><td>13 nodes</td></tr>
+<tr><td><code>github/stats/route.ts</code></td><td>3 nodes</td></tr>
+<tr><td><code>github/contributions/route.ts</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x15, calls x7. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 5. cn ====== -->
+<h2 id="cn">5. cn</h2>
+<p>cn groups implementation around app, sections, bentogridtsx, components, mostly in app/ui/BentoGrid.tsx, app/sections/BentoDemo.tsx, app/sections/BucketList.tsx. This section covers 34 nodes and 61 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: cn (34 nodes, 61 edges)
+    subgraph cn_app_ui_BentoGrid_tsx_b1556905["app/ui/BentoGrid.tsx"]
+        app_ui_bentogrid_69ba783b("BentoGrid.tsx")
+        app_ui_bentogrid_handlecvdownload_88c34f42("handleCVDownload()<br/><small>app/ui/BentoGrid.tsx</small>")
+        app_ui_bentogrid_bentocard_1acc25a1("BentoCard()<br/><small>app/ui/BentoGrid.tsx</small>")
+        app_ui_bentogrid_bentogrid_76b2ce18("BentoGrid()<br/><small>app/ui/BentoGrid.tsx</small>")
+    end
+    subgraph cn_app_sections_BentoDemo_tsx_42782d62["app/sections/BentoDemo.tsx"]
+        app_sections_bentodemo_e4652647("BentoDemo.tsx")
+        app_sections_bentodemo_bentodemo_23568946("BentoDemo()<br/><small>app/sections/BentoDemo.tsx</small>")
+    end
+    subgraph cn_app_sections_BucketList_tsx_572aa721["app/sections/BucketList.tsx"]
+        app_sections_bucketlist_6d46facd("BucketList.tsx")
+        app_sections_bucketlist_bucketlist_63dec9d5("BucketList()<br/><small>app/sections/BucketList.tsx</small>")
+    end
+    subgraph cn_app_ui_Globe_tsx_2bff5e7a["app/ui/Globe.tsx"]
+        app_ui_globe_globe_222c805c("Globe()<br/><small>app/ui/Globe.tsx</small>")
+        app_ui_globe_5ec3a19a("Globe.tsx")
+    end
+    subgraph cn_components_ui_marquee_tsx_de058f32["components/ui/marquee.tsx"]
+        components_ui_marquee_marquee_f14b4945("Marquee()<br/><small>components/ui/marquee.tsx</small>")
+        components_ui_marquee_0e27d878("marquee.tsx")
+    end
+    subgraph cn_components_ui_placeholders_and_vanish_input_t_80cece1f["components/ui/placeholders-and-vanish-input.tsx"]
+        components_ui_placeholders_and_vanish_input_42a1aefa("placeholders-and-vanish-input.tsx")
+        components_ui_placeholders_and_vanish_input_plac_6dad7c36("PlaceholdersAndVanishInput()<br/><small>components/ui/placeholders-and-vanish-input.tsx</small>")
+    end
+    subgraph cn_lib_utils_ts_4311f483["lib/utils.ts"]
+        lib_utils_cn_b8743bb6("cn()<br/><small>lib/utils.ts</small>")
+        lib_utils_ee1a3a1b("utils.ts")
+    end
+    app_sections_hero_b50a9994("Hero.tsx")
+    components_ui_interactive_hover_button_interacti_e755d04e("InteractiveHoverButton()<br/><small>components/ui/interactive-hover-button.tsx</small>")
+    app_sections_bentodemo_bentodemo_23568946 -->|calls| lib_utils_cn_b8743bb6
+    app_sections_bucketlist_bucketlist_63dec9d5 -->|calls| lib_utils_cn_b8743bb6
+    app_ui_bentogrid_handlecvdownload_88c34f42 -->|calls| app_ui_bentogrid_bentocard_1acc25a1
+    app_ui_bentogrid_bentogrid_76b2ce18 -->|calls| lib_utils_cn_b8743bb6
+    app_ui_bentogrid_bentocard_1acc25a1 -->|calls| lib_utils_cn_b8743bb6
+    app_ui_globe_globe_222c805c -->|calls| lib_utils_cn_b8743bb6
+    components_ui_interactive_hover_button_interacti_e755d04e -->|calls| lib_utils_cn_b8743bb6
+    components_ui_marquee_marquee_f14b4945 -->|calls| lib_utils_cn_b8743bb6
+    components_ui_placeholders_and_vanish_input_plac_6dad7c36 -->|calls| lib_utils_cn_b8743bb6
+    app_sections_bentodemo_e4652647 -->|imports| app_ui_bentogrid_69ba783b
+    app_sections_bentodemo_e4652647 -->|imports| app_ui_bentogrid_bentocard_1acc25a1
+    app_sections_bentodemo_e4652647 -->|imports| app_ui_bentogrid_bentogrid_76b2ce18
+    app_sections_bentodemo_e4652647 -->|imports| app_ui_globe_5ec3a19a
+    app_sections_bentodemo_e4652647 -->|imports| app_ui_globe_globe_222c805c
+    app_sections_bentodemo_e4652647 -->|imports| components_ui_marquee_0e27d878
+    app_sections_bentodemo_e4652647 -->|imports| components_ui_marquee_marquee_f14b4945
+    app_sections_bentodemo_e4652647 -->|imports| lib_utils_ee1a3a1b
+    app_sections_bentodemo_e4652647 -->|imports| lib_utils_cn_b8743bb6
+    app_sections_bentodemo_e4652647 -->|imports| app_sections_hero_b50a9994
+    app_sections_bentodemo_bentodemo_23568946 -->|imports| app_sections_hero_b50a9994
+    app_sections_bucketlist_6d46facd -->|imports| lib_utils_ee1a3a1b
+    app_sections_bucketlist_6d46facd -->|imports| lib_utils_cn_b8743bb6
+    app_sections_hero_b50a9994 -->|imports| components_ui_interactive_hover_button_interacti_e755d04e
+    app_ui_bentogrid_69ba783b -->|imports| lib_utils_ee1a3a1b
+    %% Omitted for readability: 16 nodes, 7 edges
+    class app_ui_bentogrid_69ba783b ui;
+    class app_ui_bentogrid_handlecvdownload_88c34f42 ui;
+    class app_ui_bentogrid_bentocard_1acc25a1 ui;
+    class app_ui_bentogrid_bentogrid_76b2ce18 ui;
+    class app_sections_bentodemo_e4652647 ui;
+    class app_sections_bentodemo_bentodemo_23568946 ui;
+    class app_sections_bucketlist_6d46facd ui;
+    class app_sections_bucketlist_bucketlist_63dec9d5 ui;
+    class app_ui_globe_globe_222c805c ui;
+    class app_ui_globe_5ec3a19a ui;
+    class components_ui_marquee_marquee_f14b4945 ui;
+    class components_ui_marquee_0e27d878 ui;
+    class components_ui_placeholders_and_vanish_input_42a1aefa ui;
+    class components_ui_placeholders_and_vanish_input_plac_6dad7c36 ui;
+    class lib_utils_cn_b8743bb6 function;
+    class lib_utils_ee1a3a1b module;
+    class app_sections_hero_b50a9994 ui;
+    class components_ui_interactive_hover_button_interacti_e755d04e ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>BentoCard()</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small><br><code>BentoGrid()</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small><br><code>BentoGrid.tsx</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small><br>+7 more</td>
+  <td>Module file in app/sections/BentoDemo.tsx.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>articles</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>articles node in app/sections/BentoDemo.tsx.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>features</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>features node in app/sections/BentoDemo.tsx.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>BentoDemo()</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small><br><code>Hero.tsx</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td>BentoDemo() node in app/sections/BentoDemo.tsx.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>BucketList.tsx</code><br><small style="color:var(--muted)">app/sections/BucketList.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small><br><code>utils.ts</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>Module file in app/sections/BucketList.tsx.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>BucketItem</code><br><small style="color:var(--muted)">app/sections/BucketList.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>BucketItem node in app/sections/BucketList.tsx.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>bucketItems</code><br><small style="color:var(--muted)">app/sections/BucketList.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>bucketItems node in app/sections/BucketList.tsx.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>BucketList()</code><br><small style="color:var(--muted)">app/sections/BucketList.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>BucketList() node in app/sections/BucketList.tsx.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>Hero.tsx</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>BentoDemo()</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small><br><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><code>Aurora()</code><br><small style="color:var(--muted)">app/ui/Aurora.tsx</small><br><code>Aurora.tsx</code><br><small style="color:var(--muted)">app/ui/Aurora.tsx</small><br><code>FloatingSparkles()</code><br><small style="color:var(--muted)">app/ui/FloatingSparkles.tsx</small><br>+3 more</td>
+  <td>Module file in app/sections/Hero.tsx.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>Hero()</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Hero() node in app/sections/Hero.tsx.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>Aurora.tsx</code><br><small style="color:var(--muted)">app/ui/Aurora.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Hero.tsx</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in app/ui/Aurora.tsx.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>AuroraProps</code><br><small style="color:var(--muted)">app/ui/Aurora.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>AuroraProps node in app/ui/Aurora.tsx.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>Aurora()</code><br><small style="color:var(--muted)">app/ui/Aurora.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Hero.tsx</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Aurora() node in app/ui/Aurora.tsx.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>BentoGrid.tsx</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small><br><code>utils.ts</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>Module file in app/ui/BentoGrid.tsx.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>BentoGridProps</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>BentoGridProps node in app/ui/BentoGrid.tsx.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>BentoCardProps</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>BentoCardProps node in app/ui/BentoGrid.tsx.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>handleCVDownload()</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>BentoCard()</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small></td>
+  <td>handleCVDownload() node in app/ui/BentoGrid.tsx.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>BentoGrid()</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>BentoGrid() node in app/ui/BentoGrid.tsx.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>BentoCard()</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small><br><code>handleCVDownload()</code><br><small style="color:var(--muted)">app/ui/BentoGrid.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>BentoCard() node in app/ui/BentoGrid.tsx.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>FloatingSparkles.tsx</code><br><small style="color:var(--muted)">app/ui/FloatingSparkles.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Hero.tsx</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in app/ui/FloatingSparkles.tsx.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>Sparkle</code><br><small style="color:var(--muted)">app/ui/FloatingSparkles.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Sparkle node in app/ui/FloatingSparkles.tsx.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>FloatingSparkles()</code><br><small style="color:var(--muted)">app/ui/FloatingSparkles.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Hero.tsx</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>FloatingSparkles() node in app/ui/FloatingSparkles.tsx.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>Globe.tsx</code><br><small style="color:var(--muted)">app/ui/Globe.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small><br><code>utils.ts</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>Module file in app/ui/Globe.tsx.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>GLOBE_CONFIG</code><br><small style="color:var(--muted)">app/ui/Globe.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Reads, resolves, or persists project configuration.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>Globe()</code><br><small style="color:var(--muted)">app/ui/Globe.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>Globe() node in app/ui/Globe.tsx.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>interactive-hover-button.tsx</code><br><small style="color:var(--muted)">components/ui/interactive-hover-button.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Hero.tsx</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small><br><code>utils.ts</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>Module file in components/ui/interactive-hover-button.tsx.</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>InteractiveHoverButton()</code><br><small style="color:var(--muted)">components/ui/interactive-hover-button.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Hero.tsx</code><br><small style="color:var(--muted)">app/sections/Hero.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>InteractiveHoverButton() node in components/ui/interactive-hover-button.tsx.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>marquee.tsx</code><br><small style="color:var(--muted)">components/ui/marquee.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small><br><code>utils.ts</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>Module file in components/ui/marquee.tsx.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>MarqueeProps</code><br><small style="color:var(--muted)">components/ui/marquee.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>MarqueeProps node in components/ui/marquee.tsx.</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>Marquee()</code><br><small style="color:var(--muted)">components/ui/marquee.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>BentoDemo.tsx</code><br><small style="color:var(--muted)">app/sections/BentoDemo.tsx</small></td>
+  <td><code>cn()</code><br><small style="color:var(--muted)">lib/utils.ts</small></td>
+  <td>Marquee() node in components/ui/marquee.tsx.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>app/ui/BentoGrid.tsx</code></td><td>6 nodes</td></tr>
+<tr><td><code>app/sections/BentoDemo.tsx</code></td><td>4 nodes</td></tr>
+<tr><td><code>app/sections/BucketList.tsx</code></td><td>4 nodes</td></tr>
+<tr><td><code>app/ui/Aurora.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>app/ui/FloatingSparkles.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>app/ui/Globe.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>components/ui/marquee.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>app/sections/Hero.tsx</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x23, imports x15, imports x14, calls x9. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 6. guestbook/page.tsx ====== -->
+<h2 id="guestbook-page-tsx">6. guestbook/page.tsx</h2>
+<p>guestbook/page.tsx groups implementation around firebasets, guestbook, pagetsx, authcontexttsx, mostly in lib/firebase.ts, app/guestbook/page.tsx, contexts/AuthContext.tsx. This section covers 21 nodes and 29 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: guestbook/page.tsx (21 nodes, 29 edges)
+    subgraph guestbook_page_tsx_app_guestbook_page_tsx_7370ea32["app/guestbook/page.tsx"]
+        app_guestbook_page_f928cb72("page.tsx")
+        app_guestbook_page_guestbookpage_b2852504("GuestbookPage()<br/><small>app/guestbook/page.tsx</small>")
+        app_guestbook_page_message_e6f780a4("Message<br/><small>app/guestbook/page.tsx</small>")
+        app_guestbook_page_toaststate_c15bd490("ToastState<br/><small>app/guestbook/page.tsx</small>")
+        app_guestbook_page_placeholders_7d4f658d("placeholders<br/><small>app/guestbook/page.tsx</small>")
+    end
+    subgraph guestbook_page_tsx_lib_firebase_ts_8c49c33e["lib/firebase.ts"]
+        lib_firebase_4946b335("firebase.ts")
+        lib_firebase_db_4ccc17d1("db<br/><small>lib/firebase.ts</small>")
+        lib_firebase_auth_11724df3("auth<br/><small>lib/firebase.ts</small>")
+        lib_firebase_githubprovider_9875349e("githubProvider<br/><small>lib/firebase.ts</small>")
+        lib_firebase_googleprovider_2d7fad2f("googleProvider<br/><small>lib/firebase.ts</small>")
+    end
+    subgraph guestbook_page_tsx_components_Toast_tsx_1a87ee61["components/Toast.tsx"]
+        components_toast_1c0c6b8d("Toast.tsx")
+        components_toast_toast_3e725bbc("Toast()<br/><small>components/Toast.tsx</small>")
+        components_toast_toastprops_08ed5a7b("ToastProps<br/><small>components/Toast.tsx</small>")
+    end
+    subgraph guestbook_page_tsx_contexts_AuthContext_tsx_c7b719c0["contexts/AuthContext.tsx"]
+        contexts_authcontext_be127c4b("AuthContext.tsx")
+        contexts_authcontext_useauth_88d39795("useAuth()<br/><small>contexts/AuthContext.tsx</small>")
+        contexts_authcontext_authcontext_d6cbda45("AuthContext<br/><small>contexts/AuthContext.tsx</small>")
+    end
+    subgraph guestbook_page_tsx_components_MessageSkeleton_ts_0776a28c["components/MessageSkeleton.tsx"]
+        components_messageskeleton_0f3f74e9("MessageSkeleton.tsx")
+        components_messageskeleton_messageskeleton_30184e62("MessageSkeleton()<br/><small>components/MessageSkeleton.tsx</small>")
+    end
+    app_guestbook_page_guestbookpage_b2852504 -->|calls| contexts_authcontext_useauth_88d39795
+    app_guestbook_page_f928cb72 -->|imports| components_messageskeleton_0f3f74e9
+    app_guestbook_page_f928cb72 -->|imports| components_messageskeleton_messageskeleton_30184e62
+    app_guestbook_page_f928cb72 -->|imports| components_toast_1c0c6b8d
+    app_guestbook_page_f928cb72 -->|imports| components_toast_toast_3e725bbc
+    app_guestbook_page_f928cb72 -->|imports| contexts_authcontext_be127c4b
+    app_guestbook_page_f928cb72 -->|imports| contexts_authcontext_useauth_88d39795
+    app_guestbook_page_f928cb72 -->|imports| lib_firebase_4946b335
+    app_guestbook_page_f928cb72 -->|imports| lib_firebase_db_4ccc17d1
+    contexts_authcontext_be127c4b -->|imports| lib_firebase_4946b335
+    contexts_authcontext_be127c4b -->|imports| lib_firebase_auth_11724df3
+    contexts_authcontext_be127c4b -->|imports| lib_firebase_githubprovider_9875349e
+    contexts_authcontext_be127c4b -->|imports| lib_firebase_googleprovider_2d7fad2f
+    %% Omitted for readability: 3 nodes, 0 edges
+    class app_guestbook_page_f928cb72 ui;
+    class app_guestbook_page_guestbookpage_b2852504 ui;
+    class app_guestbook_page_message_e6f780a4 ui;
+    class app_guestbook_page_toaststate_c15bd490 ui;
+    class app_guestbook_page_placeholders_7d4f658d ui;
+    class lib_firebase_4946b335 module;
+    class lib_firebase_db_4ccc17d1 function;
+    class lib_firebase_auth_11724df3 function;
+    class lib_firebase_githubprovider_9875349e function;
+    class lib_firebase_googleprovider_2d7fad2f function;
+    class components_toast_1c0c6b8d ui;
+    class components_toast_toast_3e725bbc ui;
+    class components_toast_toastprops_08ed5a7b ui;
+    class contexts_authcontext_be127c4b ui;
+    class contexts_authcontext_useauth_88d39795 ui;
+    class contexts_authcontext_authcontext_d6cbda45 ui;
+    class components_messageskeleton_0f3f74e9 ui;
+    class components_messageskeleton_messageskeleton_30184e62 ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>guestbook/page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>AuthContext.tsx</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small><br><code>db</code><br><small style="color:var(--muted)">lib/firebase.ts</small><br><code>firebase.ts</code><br><small style="color:var(--muted)">lib/firebase.ts</small><br>+5 more</td>
+  <td>Module file in app/guestbook/page.tsx.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Message</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Message node in app/guestbook/page.tsx.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>ToastState</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ToastState node in app/guestbook/page.tsx.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>placeholders</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>placeholders node in app/guestbook/page.tsx.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>GuestbookPage()</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>useAuth()</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>MessageSkeleton.tsx</code><br><small style="color:var(--muted)">components/MessageSkeleton.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in components/MessageSkeleton.tsx.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>MessageSkeleton()</code><br><small style="color:var(--muted)">components/MessageSkeleton.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>MessageSkeleton() node in components/MessageSkeleton.tsx.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>Toast.tsx</code><br><small style="color:var(--muted)">components/Toast.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in components/Toast.tsx.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>ToastProps</code><br><small style="color:var(--muted)">components/Toast.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ToastProps node in components/Toast.tsx.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>Toast()</code><br><small style="color:var(--muted)">components/Toast.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Toast() node in components/Toast.tsx.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>AuthContext.tsx</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td><code>auth</code><br><small style="color:var(--muted)">lib/firebase.ts</small><br><code>firebase.ts</code><br><small style="color:var(--muted)">lib/firebase.ts</small><br><code>githubProvider</code><br><small style="color:var(--muted)">lib/firebase.ts</small><br>+1 more</td>
+  <td>Module file in contexts/AuthContext.tsx.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>AuthContextType</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>AuthContextType node in contexts/AuthContext.tsx.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>AuthContext</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>AuthContext node in contexts/AuthContext.tsx.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>useAuth()</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>GuestbookPage()</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small><br><code>page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>useAuth() node in contexts/AuthContext.tsx.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>AuthProvider()</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>AuthProvider() node in contexts/AuthContext.tsx.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>firebase.ts</code><br><small style="color:var(--muted)">lib/firebase.ts</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td><code>AuthContext.tsx</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small><br><code>page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in lib/firebase.ts.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>firebaseConfig</code><br><small style="color:var(--muted)">lib/firebase.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Reads, resolves, or persists project configuration.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>auth</code><br><small style="color:var(--muted)">lib/firebase.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>AuthContext.tsx</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>auth node in lib/firebase.ts.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>db</code><br><small style="color:var(--muted)">lib/firebase.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>page.tsx</code><br><small style="color:var(--muted)">app/guestbook/page.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>db node in lib/firebase.ts.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>googleProvider</code><br><small style="color:var(--muted)">lib/firebase.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>AuthContext.tsx</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>googleProvider node in lib/firebase.ts.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>githubProvider</code><br><small style="color:var(--muted)">lib/firebase.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>AuthContext.tsx</code><br><small style="color:var(--muted)">contexts/AuthContext.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Turns a local path or remote repository into analysis context.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>lib/firebase.ts</code></td><td>6 nodes</td></tr>
+<tr><td><code>app/guestbook/page.tsx</code></td><td>5 nodes</td></tr>
+<tr><td><code>contexts/AuthContext.tsx</code></td><td>5 nodes</td></tr>
+<tr><td><code>components/Toast.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>components/MessageSkeleton.tsx</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x16, imports x7, imports x5, calls x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 7. confetti.tsx ====== -->
+<h2 id="confetti-tsx">7. confetti.tsx</h2>
+<p>confetti.tsx groups implementation around components, confettitsx, buttontsx, buttonvariants, mostly in components/ui/confetti.tsx, components/ui/button.tsx. This section covers 12 nodes and 12 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: confetti.tsx (12 nodes, 12 edges)
+    subgraph confetti_tsx_components_ui_confetti_tsx_821feb11["components/ui/confetti.tsx"]
+        components_ui_confetti_e11894a1("confetti.tsx")
+        components_ui_confetti_api_f2ce8507("Api<br/><small>components/ui/confetti.tsx</small>")
+        components_ui_confetti_confettibuttoncomponent_874c527f("ConfettiButtonComponent()<br/><small>components/ui/confetti.tsx</small>")
+        components_ui_confetti_confettibuttonprops_71b84b31("ConfettiButtonProps<br/><small>components/ui/confetti.tsx</small>")
+        components_ui_confetti_confetticomponent_7ee3586a("ConfettiComponent<br/><small>components/ui/confetti.tsx</small>")
+        components_ui_confetti_confetticontext_6cad12a5("ConfettiContext<br/><small>components/ui/confetti.tsx</small>")
+        components_ui_confetti_confettiref_0acc757c("ConfettiRef<br/><small>components/ui/confetti.tsx</small>")
+        components_ui_confetti_props_97516a9d("Props<br/><small>components/ui/confetti.tsx</small>")
+    end
+    subgraph confetti_tsx_components_ui_button_tsx_7039a286["components/ui/button.tsx"]
+        components_ui_button_83ab0aa6("button.tsx")
+        components_ui_button_button_808a3383("Button<br/><small>components/ui/button.tsx</small>")
+        components_ui_button_buttonprops_1fe54f32("ButtonProps<br/><small>components/ui/button.tsx</small>")
+        components_ui_button_buttonvariants_796d6050("buttonVariants<br/><small>components/ui/button.tsx</small>")
+    end
+    components_ui_button_83ab0aa6 -->|imports| components_ui_confetti_e11894a1
+    components_ui_button_button_808a3383 -->|imports| components_ui_confetti_e11894a1
+    class components_ui_confetti_e11894a1 ui;
+    class components_ui_confetti_api_f2ce8507 api;
+    class components_ui_confetti_confettibuttoncomponent_874c527f ui;
+    class components_ui_confetti_confettibuttonprops_71b84b31 ui;
+    class components_ui_confetti_confetticomponent_7ee3586a ui;
+    class components_ui_confetti_confetticontext_6cad12a5 ui;
+    class components_ui_confetti_confettiref_0acc757c ui;
+    class components_ui_confetti_props_97516a9d ui;
+    class components_ui_button_83ab0aa6 ui;
+    class components_ui_button_button_808a3383 ui;
+    class components_ui_button_buttonprops_1fe54f32 ui;
+    class components_ui_button_buttonvariants_796d6050 ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>button.tsx</code><br><small style="color:var(--muted)">components/ui/button.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>confetti.tsx</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td>Module file in components/ui/button.tsx.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>buttonVariants</code><br><small style="color:var(--muted)">components/ui/button.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>buttonVariants node in components/ui/button.tsx.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>ButtonProps</code><br><small style="color:var(--muted)">components/ui/button.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ButtonProps node in components/ui/button.tsx.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>Button</code><br><small style="color:var(--muted)">components/ui/button.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>confetti.tsx</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td>Button node in components/ui/button.tsx.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>confetti.tsx</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Button</code><br><small style="color:var(--muted)">components/ui/button.tsx</small><br><code>button.tsx</code><br><small style="color:var(--muted)">components/ui/button.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in components/ui/confetti.tsx.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>Api</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-endpoint">API</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Api node in components/ui/confetti.tsx.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>Props</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Props node in components/ui/confetti.tsx.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>ConfettiRef</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ConfettiRef node in components/ui/confetti.tsx.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>ConfettiContext</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ConfettiContext node in components/ui/confetti.tsx.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>ConfettiComponent</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ConfettiComponent node in components/ui/confetti.tsx.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>ConfettiButtonProps</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ConfettiButtonProps node in components/ui/confetti.tsx.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>ConfettiButtonComponent()</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ConfettiButtonComponent() node in components/ui/confetti.tsx.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>components/ui/confetti.tsx</code></td><td>8 nodes</td></tr>
+<tr><td><code>components/ui/button.tsx</code></td><td>4 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x10, imports x1, imports x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 8. Explore.tsx ====== -->
+<h2 id="explore-tsx">8. Explore.tsx</h2>
+<p>Explore.tsx groups implementation around exploretsx, dotted, glow, backgroundtsx, mostly in app/sections/Explore.tsx, components/ui/dotted-glow-background.tsx. This section covers 6 nodes and 6 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Explore.tsx (6 nodes, 6 edges)
+    subgraph explore_tsx_app_sections_Explore_tsx_bde77029["app/sections/Explore.tsx"]
+        app_sections_explore_95369199("Explore.tsx")
+        app_sections_explore_explore_768e4d46("Explore()<br/><small>app/sections/Explore.tsx</small>")
+        app_sections_explore_spotifydata_0796ff3a("SpotifyData<br/><small>app/sections/Explore.tsx</small>")
+    end
+    subgraph explore_tsx_components_ui_dotted_glow_background_529d23f4["components/ui/dotted-glow-background.tsx"]
+        components_ui_dotted_glow_background_a900e2a4("dotted-glow-background.tsx")
+        components_ui_dotted_glow_background_dottedglowb_a3dcd281("DottedGlowBackground()<br/><small>components/ui/dotted-glow-background.tsx</small>")
+        components_ui_dotted_glow_background_dottedglowb_9faab6d3("DottedGlowBackgroundProps<br/><small>components/ui/dotted-glow-background.tsx</small>")
+    end
+    app_sections_explore_95369199 -->|imports| components_ui_dotted_glow_background_a900e2a4
+    app_sections_explore_95369199 -->|imports| components_ui_dotted_glow_background_dottedglowb_a3dcd281
+    class app_sections_explore_95369199 ui;
+    class app_sections_explore_explore_768e4d46 ui;
+    class app_sections_explore_spotifydata_0796ff3a ui;
+    class components_ui_dotted_glow_background_a900e2a4 ui;
+    class components_ui_dotted_glow_background_dottedglowb_a3dcd281 ui;
+    class components_ui_dotted_glow_background_dottedglowb_9faab6d3 ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Explore.tsx</code><br><small style="color:var(--muted)">app/sections/Explore.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>dotted-glow-background.tsx</code><br><small style="color:var(--muted)">components/ui/dotted-glow-background.tsx</small><br><code>DottedGlowBackground()</code><br><small style="color:var(--muted)">components/ui/dotted-glow-background.tsx</small></td>
+  <td>Module file in app/sections/Explore.tsx.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>SpotifyData</code><br><small style="color:var(--muted)">app/sections/Explore.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>SpotifyData node in app/sections/Explore.tsx.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Explore()</code><br><small style="color:var(--muted)">app/sections/Explore.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Explore() node in app/sections/Explore.tsx.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>dotted-glow-background.tsx</code><br><small style="color:var(--muted)">components/ui/dotted-glow-background.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Explore.tsx</code><br><small style="color:var(--muted)">app/sections/Explore.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in components/ui/dotted-glow-background.tsx.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>DottedGlowBackgroundProps</code><br><small style="color:var(--muted)">components/ui/dotted-glow-background.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>DottedGlowBackgroundProps node in components/ui/dotted-glow-background.tsx.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>DottedGlowBackground()</code><br><small style="color:var(--muted)">components/ui/dotted-glow-background.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Explore.tsx</code><br><small style="color:var(--muted)">app/sections/Explore.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>DottedGlowBackground() node in components/ui/dotted-glow-background.tsx.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>app/sections/Explore.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>components/ui/dotted-glow-background.tsx</code></td><td>3 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x4, imports x1, imports x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 9. Projects.tsx ====== -->
+<h2 id="projects-tsx">9. Projects.tsx</h2>
+<p>Projects.tsx groups implementation around app, projectstsx, lenstsx, sections, mostly in app/sections/Projects.tsx, app/ui/lens.tsx. This section covers 6 nodes and 6 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Projects.tsx (6 nodes, 6 edges)
+    subgraph projects_tsx_app_sections_Projects_tsx_bdfeee4a["app/sections/Projects.tsx"]
+        app_sections_projects_50129ec6("Projects.tsx")
+        app_sections_projects_projectdata_6e3393af("ProjectData<br/><small>app/sections/Projects.tsx</small>")
+        app_sections_projects_projects_86b0aa95("Projects()<br/><small>app/sections/Projects.tsx</small>")
+    end
+    subgraph projects_tsx_app_ui_lens_tsx_e2dbe738["app/ui/lens.tsx"]
+        app_ui_lens_925cd5dd("lens.tsx")
+        app_ui_lens_lens_e0af8246("Lens()<br/><small>app/ui/lens.tsx</small>")
+        app_ui_lens_lensprops_ed62ec4a("LensProps<br/><small>app/ui/lens.tsx</small>")
+    end
+    app_sections_projects_50129ec6 -->|imports| app_ui_lens_925cd5dd
+    app_sections_projects_50129ec6 -->|imports| app_ui_lens_lens_e0af8246
+    class app_sections_projects_50129ec6 ui;
+    class app_sections_projects_projectdata_6e3393af ui;
+    class app_sections_projects_projects_86b0aa95 ui;
+    class app_ui_lens_925cd5dd ui;
+    class app_ui_lens_lens_e0af8246 ui;
+    class app_ui_lens_lensprops_ed62ec4a ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Projects.tsx</code><br><small style="color:var(--muted)">app/sections/Projects.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>Lens()</code><br><small style="color:var(--muted)">app/ui/lens.tsx</small><br><code>lens.tsx</code><br><small style="color:var(--muted)">app/ui/lens.tsx</small></td>
+  <td>Module file in app/sections/Projects.tsx.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>ProjectData</code><br><small style="color:var(--muted)">app/sections/Projects.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ProjectData node in app/sections/Projects.tsx.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Projects()</code><br><small style="color:var(--muted)">app/sections/Projects.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Projects() node in app/sections/Projects.tsx.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>lens.tsx</code><br><small style="color:var(--muted)">app/ui/lens.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Projects.tsx</code><br><small style="color:var(--muted)">app/sections/Projects.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in app/ui/lens.tsx.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>LensProps</code><br><small style="color:var(--muted)">app/ui/lens.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>LensProps node in app/ui/lens.tsx.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>Lens()</code><br><small style="color:var(--muted)">app/ui/lens.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>Projects.tsx</code><br><small style="color:var(--muted)">app/sections/Projects.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Lens() node in app/ui/lens.tsx.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>app/sections/Projects.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>app/ui/lens.tsx</code></td><td>3 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x4, imports x1, imports x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 10. TechStack.tsx ====== -->
+<h2 id="techstack-tsx">10. TechStack.tsx</h2>
+<p>TechStack.tsx groups implementation around app, curvedlooptsx, techstacktsx, sections, mostly in app/ui/CurvedLoop.tsx, app/sections/TechStack.tsx. This section covers 5 nodes and 4 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: TechStack.tsx (5 nodes, 4 edges)
+    subgraph techstack_tsx_app_ui_CurvedLoop_tsx_6870cf78["app/ui/CurvedLoop.tsx"]
+        app_ui_curvedloop_0a47a155("CurvedLoop.tsx")
+        app_ui_curvedloop_curvedloop_da198abe("CurvedLoop()<br/><small>app/ui/CurvedLoop.tsx</small>")
+        app_ui_curvedloop_curvedloopprops_864fd914("CurvedLoopProps<br/><small>app/ui/CurvedLoop.tsx</small>")
+    end
+    subgraph techstack_tsx_app_sections_TechStack_tsx_4bb1238f["app/sections/TechStack.tsx"]
+        app_sections_techstack_6dc55bf0("TechStack.tsx")
+        app_sections_techstack_techstack_45c737a8("TechStack()<br/><small>app/sections/TechStack.tsx</small>")
+    end
+    app_sections_techstack_6dc55bf0 -->|imports| app_ui_curvedloop_0a47a155
+    class app_ui_curvedloop_0a47a155 ui;
+    class app_ui_curvedloop_curvedloop_da198abe ui;
+    class app_ui_curvedloop_curvedloopprops_864fd914 ui;
+    class app_sections_techstack_6dc55bf0 ui;
+    class app_sections_techstack_techstack_45c737a8 ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>TechStack.tsx</code><br><small style="color:var(--muted)">app/sections/TechStack.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>CurvedLoop.tsx</code><br><small style="color:var(--muted)">app/ui/CurvedLoop.tsx</small></td>
+  <td>Module file in app/sections/TechStack.tsx.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>TechStack()</code><br><small style="color:var(--muted)">app/sections/TechStack.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>TechStack() node in app/sections/TechStack.tsx.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>CurvedLoop.tsx</code><br><small style="color:var(--muted)">app/ui/CurvedLoop.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>TechStack.tsx</code><br><small style="color:var(--muted)">app/sections/TechStack.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in app/ui/CurvedLoop.tsx.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>CurvedLoopProps</code><br><small style="color:var(--muted)">app/ui/CurvedLoop.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>CurvedLoopProps node in app/ui/CurvedLoop.tsx.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>CurvedLoop()</code><br><small style="color:var(--muted)">app/ui/CurvedLoop.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>CurvedLoop() node in app/ui/CurvedLoop.tsx.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>app/ui/CurvedLoop.tsx</code></td><td>3 nodes</td></tr>
+<tr><td><code>app/sections/TechStack.tsx</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x3, imports x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 11. eslint.config.mjs ====== -->
+<h2 id="eslint-config-mjs">11. eslint.config.mjs</h2>
+<p>eslint.config.mjs groups implementation around eslintconfigmjs, filename, dirname, compat, mostly in eslint.config.mjs. This section covers 5 nodes and 4 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: eslint.config.mjs (5 nodes, 4 edges)
+    eslint_config_80901414("eslint.config.mjs")
+    eslint_config_compat_b53fd4c8("compat<br/><small>eslint.config.mjs</small>")
+    eslint_config_dirname_b424eecd("__dirname<br/><small>eslint.config.mjs</small>")
+    eslint_config_eslintconfig_96927dc4("eslintConfig<br/><small>eslint.config.mjs</small>")
+    eslint_config_filename_aa2747a8("__filename<br/><small>eslint.config.mjs</small>")
+    eslint_config_80901414 -->|contains| eslint_config_compat_b53fd4c8
+    eslint_config_80901414 -->|contains| eslint_config_dirname_b424eecd
+    eslint_config_80901414 -->|contains| eslint_config_eslintconfig_96927dc4
+    eslint_config_80901414 -->|contains| eslint_config_filename_aa2747a8
+    class eslint_config_80901414 function;
+    class eslint_config_compat_b53fd4c8 function;
+    class eslint_config_dirname_b424eecd function;
+    class eslint_config_eslintconfig_96927dc4 function;
+    class eslint_config_filename_aa2747a8 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>eslint.config.mjs</code><br><small style="color:var(--muted)">eslint.config.mjs</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Reads, resolves, or persists project configuration.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>__filename</code><br><small style="color:var(--muted)">eslint.config.mjs</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>__filename node in eslint.config.mjs.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>__dirname</code><br><small style="color:var(--muted)">eslint.config.mjs</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>__dirname node in eslint.config.mjs.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>compat</code><br><small style="color:var(--muted)">eslint.config.mjs</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>compat node in eslint.config.mjs.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>eslintConfig</code><br><small style="color:var(--muted)">eslint.config.mjs</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Reads, resolves, or persists project configuration.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>eslint.config.mjs</code></td><td>5 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x4. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 12. under-construction/page.tsx ====== -->
+<h2 id="under-construction-page-tsx">12. under-construction/page.tsx</h2>
+<p>under-construction/page.tsx groups implementation around app, underconstructiontsx, under, construction, mostly in app/ui/UnderConstruction.tsx, app/under-construction/page.tsx. This section covers 4 nodes and 4 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: under-construction/page.tsx (4 nodes, 4 edges)
+    subgraph under_construction_page_tsx_app_ui_UnderConstruc_debbe0e3["app/ui/UnderConstruction.tsx"]
+        app_ui_underconstruction_04bd9844("UnderConstruction.tsx")
+        app_ui_underconstruction_underconstruction_fe23b422("UnderConstruction()<br/><small>app/ui/UnderConstruction.tsx</small>")
+    end
+    subgraph under_construction_page_tsx_app_under_constructi_c5a3c186["app/under-construction/page.tsx"]
+        app_under_construction_page_25420801("page.tsx")
+        app_under_construction_page_underconstructionpag_f1e119e1("UnderConstructionPage()<br/><small>app/under-construction/page.tsx</small>")
+    end
+    app_ui_underconstruction_04bd9844 -->|imports| app_under_construction_page_25420801
+    app_ui_underconstruction_underconstruction_fe23b422 -->|imports| app_under_construction_page_25420801
+    class app_ui_underconstruction_04bd9844 ui;
+    class app_ui_underconstruction_underconstruction_fe23b422 ui;
+    class app_under_construction_page_25420801 ui;
+    class app_under_construction_page_underconstructionpag_f1e119e1 ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>UnderConstruction.tsx</code><br><small style="color:var(--muted)">app/ui/UnderConstruction.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>page.tsx</code><br><small style="color:var(--muted)">app/under-construction/page.tsx</small></td>
+  <td>Module file in app/ui/UnderConstruction.tsx.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>UnderConstruction()</code><br><small style="color:var(--muted)">app/ui/UnderConstruction.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>page.tsx</code><br><small style="color:var(--muted)">app/under-construction/page.tsx</small></td>
+  <td>UnderConstruction() node in app/ui/UnderConstruction.tsx.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>under-construction/page.tsx</code><br><small style="color:var(--muted)">app/under-construction/page.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>UnderConstruction()</code><br><small style="color:var(--muted)">app/ui/UnderConstruction.tsx</small><br><code>UnderConstruction.tsx</code><br><small style="color:var(--muted)">app/ui/UnderConstruction.tsx</small></td>
+  <td>No direct outbound edge</td>
+  <td>Module file in app/under-construction/page.tsx.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>UnderConstructionPage()</code><br><small style="color:var(--muted)">app/under-construction/page.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Organizes documentation pages, navigation, or content lookup.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>app/ui/UnderConstruction.tsx</code></td><td>2 nodes</td></tr>
+<tr><td><code>app/under-construction/page.tsx</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x2, imports x1, imports x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 13. next.config.ts ====== -->
+<h2 id="next-config-ts">13. next.config.ts</h2>
+<p>next.config.ts groups implementation around nextconfigts, nextconfig, mostly in next.config.ts. This section covers 2 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: next.config.ts (2 nodes, 1 edges)
+    next_config_531ff3ba("next.config.ts")
+    next_config_nextconfig_cf9503a0("nextConfig<br/><small>next.config.ts</small>")
+    next_config_531ff3ba -->|contains| next_config_nextconfig_cf9503a0
+    class next_config_531ff3ba module;
+    class next_config_nextconfig_cf9503a0 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>next.config.ts</code><br><small style="color:var(--muted)">next.config.ts</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in next.config.ts.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>nextConfig</code><br><small style="color:var(--muted)">next.config.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Reads, resolves, or persists project configuration.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>next.config.ts</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 14. postcss.config.mjs ====== -->
+<h2 id="postcss-config-mjs">14. postcss.config.mjs</h2>
+<p>postcss.config.mjs groups implementation around postcssconfigmjs, config, mostly in postcss.config.mjs. This section covers 2 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: postcss.config.mjs (2 nodes, 1 edges)
+    postcss_config_bfe60bb8("postcss.config.mjs")
+    postcss_config_config_b5a26879("config<br/><small>postcss.config.mjs</small>")
+    postcss_config_bfe60bb8 -->|contains| postcss_config_config_b5a26879
+    class postcss_config_bfe60bb8 function;
+    class postcss_config_config_b5a26879 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>postcss.config.mjs</code><br><small style="color:var(--muted)">postcss.config.mjs</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Reads, resolves, or persists project configuration.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>config</code><br><small style="color:var(--muted)">postcss.config.mjs</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Reads, resolves, or persists project configuration.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>postcss.config.mjs</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 15. tailwind.config.ts ====== -->
+<h2 id="tailwind-config-ts">15. tailwind.config.ts</h2>
+<p>tailwind.config.ts groups implementation around tailwindconfigts, config, mostly in tailwind.config.ts. This section covers 2 nodes and 1 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: tailwind.config.ts (2 nodes, 1 edges)
+    tailwind_config_2024816e("tailwind.config.ts")
+    tailwind_config_config_3c3bbe06("config<br/><small>tailwind.config.ts</small>")
+    tailwind_config_2024816e -->|contains| tailwind_config_config_3c3bbe06
+    class tailwind_config_2024816e module;
+    class tailwind_config_config_3c3bbe06 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>tailwind.config.ts</code><br><small style="color:var(--muted)">tailwind.config.ts</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in tailwind.config.ts.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>config</code><br><small style="color:var(--muted)">tailwind.config.ts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Reads, resolves, or persists project configuration.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>tailwind.config.ts</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 16. Other ====== -->
+<h2 id="other">16. Other</h2>
+<p>Other groups implementation around components, confettitsx, confetti, confettibutton, mostly in components/ui/confetti.tsx. This section covers 2 nodes and 0 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Other (2 nodes, 0 edges)
+    components_ui_confetti_confetti_a6e63566("Confetti<br/><small>components/ui/confetti.tsx</small>")
+    components_ui_confetti_confettibutton_6a0a2ab8("ConfettiButton<br/><small>components/ui/confetti.tsx</small>")
+    class components_ui_confetti_confetti_a6e63566 ui;
+    class components_ui_confetti_confettibutton_6a0a2ab8 ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Confetti</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Confetti node in components/ui/confetti.tsx.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>ConfettiButton</code><br><small style="color:var(--muted)">components/ui/confetti.tsx</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ConfettiButton node in components/ui/confetti.tsx.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>components/ui/confetti.tsx</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: No high-confidence call edges detected. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<h2 id="stats">Project Statistics</h2>
+
+<div class="grid">
+  <div class="card">
+    <h4>Graph</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>Nodes</td><td>283</td></tr>
+      <tr><td>Edges</td><td>347</td></tr>
+      <tr><td>Hyperedges</td><td>0</td></tr>
+      <tr><td>Communities</td><td>23</td></tr>
+      <tr><td>Documented Sections</td><td>15</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Edge Confidence</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>EXTRACTED</td><td>347</td></tr>
+      <tr><td>INFERRED</td><td>0</td></tr>
+      <tr><td>AMBIGUOUS</td><td>0</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="text-align:center; padding:40px 0; color: var(--muted); font-size:0.9rem;">
+  <p>my-dev-portfolio — Architecture Documentation</p>
+  <p>Generated: 2026-07-26 12:09 UTC · graphify callflow-html</p>
+</div>
+
+</div><!-- .container -->
+
+<script>
+(function () {
+  const mermaidConfig = {
+    startOnLoad: false,
+    theme: 'dark',
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    themeVariables: {
+      primaryColor: '#1e293b',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#38bdf8',
+      secondaryColor: '#0f172a',
+      tertiaryColor: '#334155',
+      lineColor: '#64748b',
+      textColor: '#e2e8f0',
+    }
+  };
+
+  mermaid.initialize(mermaidConfig);
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function enhanceMermaidDiagrams() {
+    document.querySelectorAll('.mermaid').forEach((container) => {
+      if (container.dataset.zoomReady === 'true') return;
+      const svg = container.querySelector('svg');
+      if (!svg) return;
+
+      container.dataset.zoomReady = 'true';
+      container.classList.add('is-enhanced');
+
+      const viewport = document.createElement('div');
+      viewport.className = 'mermaid-viewport';
+      svg.parentNode.insertBefore(viewport, svg);
+      viewport.appendChild(svg);
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'mermaid-toolbar';
+      toolbar.innerHTML = [
+        '<button type="button" data-action="zoom-out" title="Zoom out">-</button>',
+        '<span class="zoom-level" data-role="level">100%</span>',
+        '<button type="button" data-action="zoom-in" title="Zoom in">+</button>',
+        '<button type="button" data-action="fit" title="Fit width">Fit</button>',
+        '<button type="button" data-action="reset" title="Reset view">Reset</button>'
+      ].join('');
+      container.insertBefore(toolbar, viewport);
+
+      const state = { scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, originX: 0, originY: 0 };
+      const level = toolbar.querySelector('[data-role="level"]');
+
+      function applyTransform() {
+        svg.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+        level.textContent = `${Math.round(state.scale * 100)}%`;
+      }
+
+      function zoomBy(delta) {
+        state.scale = clamp(state.scale + delta, 0.25, 3);
+        applyTransform();
+      }
+
+      function reset() {
+        state.scale = 1;
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      function fitWidth() {
+        const rawWidth = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width
+          ? svg.viewBox.baseVal.width
+          : svg.getBoundingClientRect().width / state.scale;
+        if (!rawWidth) {
+          reset();
+          return;
+        }
+        state.scale = clamp((viewport.clientWidth - 48) / rawWidth, 0.25, 1.4);
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      toolbar.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const action = button.dataset.action;
+        if (action === 'zoom-in') zoomBy(0.15);
+        if (action === 'zoom-out') zoomBy(-0.15);
+        if (action === 'fit') fitWidth();
+        if (action === 'reset') reset();
+      });
+
+      viewport.addEventListener('wheel', (event) => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        zoomBy(event.deltaY < 0 ? 0.1 : -0.1);
+      }, { passive: false });
+
+      viewport.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0) return;
+        state.dragging = true;
+        state.startX = event.clientX;
+        state.startY = event.clientY;
+        state.originX = state.x;
+        state.originY = state.y;
+        viewport.classList.add('is-dragging');
+        viewport.setPointerCapture(event.pointerId);
+      });
+
+      viewport.addEventListener('pointermove', (event) => {
+        if (!state.dragging) return;
+        state.x = state.originX + event.clientX - state.startX;
+        state.y = state.originY + event.clientY - state.startY;
+        applyTransform();
+      });
+
+      function endDrag(event) {
+        if (!state.dragging) return;
+        state.dragging = false;
+        viewport.classList.remove('is-dragging');
+        if (viewport.hasPointerCapture(event.pointerId)) {
+          viewport.releasePointerCapture(event.pointerId);
+        }
+      }
+
+      viewport.addEventListener('pointerup', endDrag);
+      viewport.addEventListener('pointercancel', endDrag);
+      applyTransform();
+    });
+  }
+
+  function renderMermaid() {
+    const result = mermaid.run
+      ? mermaid.run({ querySelector: '.mermaid' })
+      : Promise.resolve();
+    Promise.resolve(result)
+      .then(enhanceMermaidDiagrams)
+      .catch((error) => {
+        console.error('Mermaid render failed:', error);
+        enhanceMermaidDiagrams();
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderMermaid);
+  } else {
+    renderMermaid();
+  }
+})();
+</script>
+
+</body>
+</html>
