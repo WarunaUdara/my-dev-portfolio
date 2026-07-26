@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from '@/components/ui/Image';
 import { IconBrandLinkedin, IconBrandGithub } from '@tabler/icons-react';
 
 const About = () => {

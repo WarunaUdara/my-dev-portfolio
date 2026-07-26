@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
-import Image from "next/image"
-import { usePathname } from "next/navigation"
+import Link from "@/components/ui/Link"
+import Image from "@/components/ui/Image"
 import { IconChevronDown, IconLink, IconPhoto, IconX } from "@tabler/icons-react"
 import { cn } from "@/lib/utils"
 
@@ -20,7 +19,13 @@ interface NavBarProps {
 }
 
 export function NavBar({ items, className }: NavBarProps) {
-  const pathname = usePathname()
+  const [pathname, setPathname] = useState(typeof window !== 'undefined' ? window.location.pathname : '/');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPathname(window.location.pathname);
+    }
+  }, []);
   const [activeTab, setActiveTab] = useState(items[0].name)
   const [isMobile, setIsMobile] = useState(false)
   const [showMoreMenu, setShowMoreMenu] = useState(false)

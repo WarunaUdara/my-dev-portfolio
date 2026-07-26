@@ -33,7 +33,9 @@
   --card-foreground: #ffffff;
   --border: var(--color-4);
   --input: var(--color-4);
-  --ring: var(--color-8);
+  /* Font families */
+  --font-inter: 'Inter', sans-serif;
+  --font-instrument-serif: 'Instrument Serif', serif;
 }
 
 @theme inline {

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { IconTool, IconArrowLeft } from '@tabler/icons-react';
-import Link from 'next/link';
+import Link from '@/components/ui/Link';
 
 const UnderConstruction = () => {
   return (

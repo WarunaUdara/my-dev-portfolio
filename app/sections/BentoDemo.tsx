@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import Image from "@/components/ui/Image";
 import { Globe } from "@/app/ui/Globe"
 import { IconMapPin } from "@tabler/icons-react";
 

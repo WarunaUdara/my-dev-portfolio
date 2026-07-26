@@ -23,7 +23,7 @@ import Toast from '@/components/Toast';
 import { MessageSkeleton } from '@/components/MessageSkeleton';
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input';
 import { IconBrandGithub, IconBrandGoogle, IconPin, IconTrash, IconX, IconSend, IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react';
-import Image from 'next/image';
+import Image from '@/components/ui/Image';
 
 interface Message {
   id: string;

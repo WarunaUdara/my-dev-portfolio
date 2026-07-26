@@ -1,7 +1,7 @@
 import React from "react";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { Linkedin, Github, Instagram, ArrowUpRight } from "lucide-react";
-import Image from "next/image";
+import Image from "@/components/ui/Image";
 
 const Footer = () => {
   return (

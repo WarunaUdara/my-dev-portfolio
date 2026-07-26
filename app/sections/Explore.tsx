@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from '@/components/ui/Image';
+import Link from '@/components/ui/Link';
 import { gsap } from 'gsap';
 import { IconBrandSpotify } from '@tabler/icons-react';
 import { DottedGlowBackground } from '@/components/ui/dotted-glow-background';
