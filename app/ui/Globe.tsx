@@ -122,9 +122,9 @@ export function Globe({
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [0.1, 0.12, 0.25],
-      markerColor: [0.35, 0.65, 1.0],
-      glowColor: [0.2, 0.4, 0.9],
+      baseColor: [0.18, 0.18, 0.18],
+      markerColor: [0.4, 0.6, 1.0],
+      glowColor: [1, 1, 1],
       markers: markers.map((m) => ({
         location: m.location,
         size: m.size || 0.035,
@@ -133,9 +133,9 @@ export function Globe({
       arcs: arcs.map((a) => ({
         from: a.from,
         to: a.to,
-        color: a.color || [0.3, 0.5, 1.0],
+        color: a.color || [0.4, 0.6, 1.0],
       })),
-      arcColor: [0.3, 0.5, 1.0],
+      arcColor: [0.4, 0.6, 1.0],
       arcWidth: 0.5,
       arcHeight: 0.35,
       onRender: (state) => {

@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import Hero from '../sections/Hero';
 import About from '../sections/About';
+import Volunteering from '../sections/Volunteering';
 import RevealingQuote from '../sections/RevealingQuote';
 import Projects from '../sections/Projects';
 import TechStack from '../sections/TechStack';
@@ -26,6 +27,7 @@ function HomePage() {
     <div className="min-h-screen bg-background text-foreground scroll-smooth">
       <Hero />
       <About />
+      <Volunteering />
       <RevealingQuote />
       <Projects />
       <TechStack />
