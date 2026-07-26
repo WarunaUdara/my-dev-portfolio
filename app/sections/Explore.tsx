@@ -48,6 +48,12 @@ const Explore = () => {
   const vinylRef = useRef<HTMLDivElement>(null);
   const albumRef = useRef<HTMLDivElement>(null);
 
+  // Animation timeline refs
+  const card1TlRef = useRef<gsap.core.Timeline | null>(null);
+  const card2TlRef = useRef<gsap.core.Timeline | null>(null);
+  const card3TlRef = useRef<gsap.core.Timeline | null>(null);
+  const vinylTlRef = useRef<gsap.core.Tween | null>(null);
+
   // Setup hover-triggered animations
   useEffect(() => {
     // Card 1: Wave animation for icons - triggered on hover
