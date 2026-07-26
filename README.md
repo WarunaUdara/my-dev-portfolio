@@ -1,11 +1,12 @@
 # Waruna Udara Sampath — Full-Stack Developer Portfolio
 
-[![Next.js 15](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TanStack Router](https://img.shields.io/badge/TanStack-Router-FF4154?style=flat-square&logo=tanstack)](https://tanstack.com/router)
+[![TanStack Query](https://img.shields.io/badge/TanStack-Query-FF4154?style=flat-square&logo=tanstack)](https://tanstack.com/query)
+[![Vite 8](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)
 [![React 19](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 [![Firebase](https://img.shields.io/badge/Firebase-Auth_%26_Firestore-FFCA28?style=flat-square&logo=firebase)](https://firebase.google.com/)
-[![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?style=flat-square&logo=vercel)](https://vercel.app/)
 
 A modern, high-performance, dark-themed developer portfolio built by **Waruna Udara Sampath** (Full-Stack Software Developer, BICT Hons undergraduate at the University of Sri Jayewardenepura).
 

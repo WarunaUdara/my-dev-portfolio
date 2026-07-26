@@ -7,6 +7,8 @@ import { gsap } from 'gsap';
 import { IconBrandSpotify } from '@tabler/icons-react';
 import { DottedGlowBackground } from '@/components/ui/dotted-glow-background';
 
+import { useQuery } from '@tanstack/react-query';
+
 interface SpotifyData {
   isAvailable?: boolean;
   isPlaying: boolean;
@@ -18,9 +20,22 @@ interface SpotifyData {
 }
 
 const Explore = () => {
-  const [spotifyData, setSpotifyData] = useState<SpotifyData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  
+  const { data: spotifyData = null, isLoading } = useQuery<SpotifyData | null>({
+    queryKey: ['spotify-now-playing'],
+    queryFn: async () => {
+      try {
+        const response = await fetch('/api/spotify/now-playing');
+        if (!response.ok) return null;
+        const data = await response.json();
+        return data.isAvailable === false ? null : data;
+      } catch (error) {
+        console.error('Failed to fetch Spotify data:', error);
+        return null;
+      }
+    },
+    refetchInterval: 15000,
+  });
+
   // Refs for GSAP animations
   const card1Ref = useRef<HTMLDivElement>(null);
   const card2Ref = useRef<HTMLDivElement>(null);
@@ -32,32 +47,6 @@ const Explore = () => {
   const noteCard2Ref = useRef<HTMLDivElement>(null);
   const vinylRef = useRef<HTMLDivElement>(null);
   const albumRef = useRef<HTMLDivElement>(null);
-  
-  // Animation timeline refs
-  const card1TlRef = useRef<gsap.core.Timeline | null>(null);
-  const card2TlRef = useRef<gsap.core.Timeline | null>(null);
-  const card3TlRef = useRef<gsap.core.Timeline | null>(null);
-  const vinylTlRef = useRef<gsap.core.Tween | null>(null);
-
-  useEffect(() => {
-    const fetchSpotifyData = async () => {
-      try {
-        const response = await fetch('/api/spotify/now-playing');
-        if (response.ok) {
-          const data = await response.json();
-          setSpotifyData(data.isAvailable === false ? null : data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch Spotify data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchSpotifyData();
-    const interval = setInterval(fetchSpotifyData, 30000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Setup hover-triggered animations
   useEffect(() => {
