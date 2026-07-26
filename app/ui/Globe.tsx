@@ -55,11 +55,10 @@ export function Globe({
     Array<{ id: string; label: string; percentX: number; percentY: number; opacity: number }>
   >([]);
 
-  // Project 3D lat/lon to 2D percentage coordinates on canvas
+  // Project 3D lat/lon to 2D percentage coordinates on canvas matching Cobe v2
   const calculatePositions = useCallback(
     (phi: number, theta: number) => {
-      // COBE sphere radius factor is ~0.385 of total canvas width
-      const r = 0.385;
+      const r = 0.385; // Cobe v2 sphere radius multiplier
 
       const positions = markers.map((m) => {
         const [lat, lon] = m.location;
@@ -76,11 +75,11 @@ export function Globe({
         const y = y0 * Math.cos(theta) - z0 * Math.sin(theta);
         const z = y0 * Math.sin(theta) + z0 * Math.cos(theta);
 
-        // 3. Screen percentage relative to center (50%, 50%)
+        // 3. Screen percentage relative to center
         const percentX = 50 + x * r * 100;
         const percentY = 50 - y * r * 100;
 
-        // 4. Front hemisphere visibility & smooth fade
+        // 4. Front hemisphere visibility & smooth opacity fade
         const opacity = z > 0.15 ? Math.min(1, (z - 0.15) * 4) : 0;
 
         return {
@@ -100,6 +99,7 @@ export function Globe({
   useEffect(() => {
     let width = 0;
     let currentPhi = phiRef.current;
+    let animFrameId: number;
 
     const onResize = () => {
       if (containerRef.current) {
@@ -112,6 +112,7 @@ export function Globe({
 
     if (!canvasRef.current || width === 0) return;
 
+    // Initialize Cobe v2
     const globe = createGlobe(canvasRef.current, {
       devicePixelRatio: 2,
       width: width * 2,
@@ -138,21 +139,27 @@ export function Globe({
       arcColor: [0.35, 0.65, 1.0],
       arcWidth: 0.45,
       arcHeight: 0.35,
-      onRender: (state) => {
-        if (!pointerInteracting.current) {
-          currentPhi += speed;
-          phiRef.current = currentPhi;
-        } else {
-          currentPhi = phiRef.current + pointerInteractionMovement.current;
-        }
-        state.phi = currentPhi;
-        state.theta = thetaRef.current;
-        state.width = width * 2;
-        state.height = width * 2;
-
-        calculatePositions(currentPhi, thetaRef.current);
-      },
     });
+
+    // Cobe v2 Animation loop using globe.update({ phi })
+    const animate = () => {
+      if (!pointerInteracting.current) {
+        currentPhi += speed;
+        phiRef.current = currentPhi;
+      } else {
+        currentPhi = phiRef.current + pointerInteractionMovement.current;
+      }
+
+      globe.update({
+        phi: currentPhi,
+        theta: thetaRef.current,
+      });
+
+      calculatePositions(currentPhi, thetaRef.current);
+      animFrameId = requestAnimationFrame(animate);
+    };
+
+    animFrameId = requestAnimationFrame(animate);
 
     setTimeout(() => {
       if (canvasRef.current) {
@@ -161,6 +168,7 @@ export function Globe({
     }, 100);
 
     return () => {
+      cancelAnimationFrame(animFrameId);
       globe.destroy();
       window.removeEventListener("resize", onResize);
     };
@@ -206,7 +214,7 @@ export function Globe({
         }}
       />
 
-      {/* Dynamic Anchored Marker Labels (Percent-based coordinates matching WebGL canvas) */}
+      {/* Cobe v2 Anchored Location Badges */}
       {labelPositions.map((pos) => (
         <div
           key={pos.id}
@@ -218,13 +226,13 @@ export function Globe({
             zIndex: pos.opacity > 0.5 ? 25 : 10,
           }}
         >
-          {/* Label Badge matching reference image */}
+          {/* Label Badge */}
           <div className="bg-white text-gray-950 font-mono text-[10px] sm:text-xs font-bold tracking-wide px-2 py-0.5 rounded shadow-lg flex items-center gap-1.5 border border-white/90">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
             <span>{pos.label}</span>
           </div>
 
-          {/* Pointer line to marker dot */}
+          {/* Pointer line */}
           <div className="w-0.5 h-2 bg-white/80"></div>
         </div>
       ))}
