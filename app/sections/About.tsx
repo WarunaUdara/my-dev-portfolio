@@ -1,26 +1,57 @@
 import React from 'react';
 import Image from '@/components/ui/Image';
 import { IconBrandLinkedin, IconBrandGithub } from '@tabler/icons-react';
+import Frost from '@/components/canvasui/Frost';
 
 const About = () => {
   return (
-    <section id="about" className="relative min-h-screen bg-black text-white py-20 px-4 sm:px-6 scroll-mt-20">
-      <div className="container mx-auto max-w-6xl">
+    <section id="about" className="relative min-h-screen bg-black text-white py-20 px-4 sm:px-6 scroll-mt-20 overflow-hidden">
+      {/* Top-half Background Frost Layer */}
+      <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden pointer-events-auto z-0">
+        <Frost
+          frost={0.06}
+          strength={0.65}
+          contrast={2.8}
+          crispness={1.2}
+          highlight={0.4}
+          haze={0.4}
+          tintStrength={0.25}
+          refraction={1}
+          detail={2}
+          textureScale={2}
+          meltRadius={0.25}
+          meltNoise={0.25}
+          meltStrength={0.75}
+          refreeze={2}
+          opacity={0.5}
+          shimmer={0.15}
+          meltEdges
+          tintThin={[0.75, 0.8, 0.9]}
+          tintThick={[0.9, 0.93, 1.0]}
+          className="w-full h-full"
+        >
+          <div className="w-full h-full bg-gradient-to-b from-neutral-900/60 to-black/90"></div>
+        </Frost>
+        
+        {/* Dark Shadow & Blur Fade Overlay seamlessly blending top half into section bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-black/80 to-black pointer-events-none"></div>
+        <div className="absolute inset-0 bg-radial from-transparent via-black/40 to-black/80 pointer-events-none"></div>
+      </div>
+
+      <div className="container mx-auto max-w-6xl relative z-10">
         {/* Section Label */}
-            <p className="text-sm text-gray-400 uppercase tracking-wider text-center py-8">
-              KNOW ABOUT ME
-            </p>
+        <p className="text-sm text-gray-400 uppercase tracking-wider text-center py-8">
+          KNOW ABOUT ME
+        </p>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Content */}
           <div className="space-y-8">
-            
-
             {/* Main Heading */}
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight text-center lg:text-left">
               <span className="block">Full-Stack Developer and</span>
-              <span >a little bit of{' '}</span>
+              <span>a little bit of{' '}</span>
               <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">
-              everything
+                everything
               </span>
             </h2>
 
@@ -62,14 +93,6 @@ const About = () => {
               >
                 <IconBrandGithub className="w-6 h-6" />
               </a>
-              {/* <a 
-                href="https://www.instagram.com/w.u.d.s/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <Instagram className="w-6 h-6" />
-              </a> */}
             </div>
           </div>
 
@@ -80,7 +103,7 @@ const About = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-neutral-700 via-neutral-800 to-neutral-950 rounded-3xl transform rotate-3 border border-neutral-700/50"></div>
               
               {/* Image Container */}
-              <div className="relative rounded-3xl overflow-hidden ">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <Image
                   src="/WarunaUdaraSampath.jpg"
                   alt="Waruna Udara Sampath"
