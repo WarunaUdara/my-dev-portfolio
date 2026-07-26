@@ -45,12 +45,12 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href="#about"
+                    href="/about"
                     className="group inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors relative"
                   >
                     <span className="relative">
                       About
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] group-hover:w-full transition-all duration-300"></span>
+                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-gray-200 to-white group-hover:w-full transition-all duration-300"></span>
                     </span>
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>

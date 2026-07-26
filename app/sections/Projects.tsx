@@ -138,7 +138,7 @@ const Projects = () => {
         </p>
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight">
           Featured{' '}
-          <span className="italic bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] bg-clip-text text-transparent">
+          <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">
             Projects
           </span>
         </h2>

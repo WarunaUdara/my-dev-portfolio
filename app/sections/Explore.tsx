@@ -244,7 +244,7 @@ const Explore = () => {
           </p>
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight">
             Explore, experiment <br />
-            <span className="italic bg-gradient-to-r from-[var(--color-8)] via-[var(--color-9)] to-[var(--color-8)] bg-clip-text text-transparent">
+            <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">
               & say hello
             </span>
           </h2>

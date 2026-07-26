@@ -59,11 +59,11 @@ const BentoCard = ({
     key={name}
     className={cn(
       "group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl",
-      // Dark styles with pure black/slate background
-      "bg-black/80 backdrop-blur-sm",
-      "border border-[var(--color-4)]",
-      "shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.3)]",
-      "hover:border-[var(--color-5)] transition-all duration-300",
+      // Dark styles with pure black/neutral background and silver borders
+      "bg-black/90 backdrop-blur-sm",
+      "border border-neutral-800/80",
+      "shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)]",
+      "hover:border-neutral-700 transition-all duration-300",
       className
     )}
     {...props}
@@ -87,7 +87,7 @@ const BentoCard = ({
           variant="link"
           asChild
           size="sm"
-          className="pointer-events-auto p-0 text-[var(--color-8)] hover:text-[var(--color-9)]"
+          className="pointer-events-auto p-0 text-gray-300 hover:text-white transition-colors"
         >
           <a 
             href={href} 
@@ -116,7 +116,7 @@ const BentoCard = ({
         variant="link"
         asChild
         size="sm"
-        className="pointer-events-auto p-0 text-[var(--color-8)] hover:text-[var(--color-9)]"
+        className="pointer-events-auto p-0 text-gray-300 hover:text-white transition-colors"
       >
         <a 
           href={href} 

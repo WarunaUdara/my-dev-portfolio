@@ -4,31 +4,31 @@
 
 /* CSS Variables for theming - Dark Mode Only */
 :root {
-  /* OKLCH Color Palette - blue/slate Scale */
+  /* Silver / Monochromatic Neutral Scale */
   --color-1: oklch(0% 0 0);
-  --color-2: oklch(0.212 0.039 252.0);
-  --color-3: oklch(0.277 0.077 252.0);
-  --color-4: oklch(0.328 0.107 252.0);
-  --color-5: oklch(0.374 0.131 252.0);
-  --color-6: oklch(0.425 0.152 252.0);
-  --color-7: oklch(0.493 0.172 252.0);
-  --color-8: oklch(0.579 0.191 252.0);
-  --color-9: oklch(0.629 0.187 252.0);
-  --color-10: oklch(0.682 0.176 252.0);
-  --color-11: oklch(0.849 0.107 252.0);
-  --color-12: oklch(0.921 0.063 252.0);
+  --color-2: oklch(0.12 0 0);
+  --color-3: oklch(0.18 0 0);
+  --color-4: oklch(0.24 0 0);
+  --color-5: oklch(0.32 0 0);
+  --color-6: oklch(0.45 0 0);
+  --color-7: oklch(0.60 0 0);
+  --color-8: #cbd5e1;
+  --color-9: #f8fafc;
+  --color-10: #ffffff;
+  --color-11: #e2e8f0;
+  --color-12: #f1f5f9;
 
-  /* Dark theme colors mapped to OKLCH palette */
+  /* Dark theme colors mapped to Silver palette */
   --background: var(--color-1);
   --foreground: #ffffff;
   --primary: var(--color-8);
-  --primary-foreground: #ffffff;
+  --primary-foreground: #000000;
   --secondary: var(--color-2);
   --secondary-foreground: #ffffff;
   --accent: var(--color-9);
-  --accent-foreground: #ffffff;
+  --accent-foreground: #000000;
   --muted: var(--color-2);
-  --muted-foreground: #e5e5e5;
+  --muted-foreground: #a3a3a3;
   --card: var(--color-2);
   --card-foreground: #ffffff;
   --border: var(--color-4);

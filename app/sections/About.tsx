@@ -19,7 +19,7 @@ const About = () => {
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight text-center lg:text-left">
               <span className="block">Full-Stack Developer and</span>
               <span >a little bit of{' '}</span>
-              <span className=" italic bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] bg-clip-text text-transparent">
+              <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">
               everything
               </span>
             </h2>
@@ -76,8 +76,8 @@ const About = () => {
           {/* Right Image */}
           <div className="relative lg:order-last order-first">
             <div className="relative w-full max-w-md mx-auto lg:max-w-full">
-              {/* Purple Gradient Background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-7)] to-[var(--color-8)] rounded-3xl transform rotate-3"></div>
+              {/* Silver Neutral Frame Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-neutral-700 via-neutral-800 to-neutral-950 rounded-3xl transform rotate-3 border border-neutral-700/50"></div>
               
               {/* Image Container */}
               <div className="relative rounded-3xl overflow-hidden ">

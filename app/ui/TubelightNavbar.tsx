@@ -49,7 +49,9 @@ export function NavBar({ items, className }: NavBarProps) {
 
   // Set active tab based on current route
   useEffect(() => {
-    if (pathname === '/' || pathname.startsWith('/#')) {
+    if (pathname === '/about') {
+      setActiveTab('About')
+    } else if (pathname === '/' || pathname.startsWith('/#')) {
       const hash = pathname.split('#')[1]
       if (hash) {
         const item = items.find(i => i.url === `#${hash}`)

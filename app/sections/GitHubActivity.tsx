@@ -41,7 +41,7 @@ const GitHubActivity = () => {
             DEVELOPER INSIGHTS
           </p>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif">
-            GitHub <span className="italic bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] bg-clip-text text-transparent">Activity</span>
+            GitHub <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">Activity</span>
           </h2>
         </div>
 
