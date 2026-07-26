@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between gap-16 mb-16">
           {/* Brand Section - Left Side */}
           <div className="max-w-sm">
-            <div className="relative h-12 w-32 mb-4">
+            <div className="relative h-10 w-12 mb-4">
             <Image 
                 src="/logo.svg" 
                 alt="Logo" 
