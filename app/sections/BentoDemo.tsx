@@ -40,28 +40,29 @@ const features = [
     cta: "",
     className: "col-span-3 lg:col-span-1",
     background: (
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Heading - Top Left */}
-        <div className="text-center absolute top-6 left-4 right-4 z-10">
-          <h3 className="text-2xl sm:text-3xl font-serif leading-tight ">
-            I&apos;m very flexible with time zone communications
+      <div className="absolute inset-0 overflow-hidden bg-gradient-to-b from-gray-950/80 to-black p-6 flex flex-col justify-between">
+        {/* Header matching design sample */}
+        <div className="z-10 relative space-y-1">
+          <p className="text-[11px] font-mono uppercase tracking-widest text-blue-400 font-semibold">
+            FLEXIBLE WITH TIMEZONES
+          </p>
+          <h3 className="text-xl sm:text-2xl font-serif leading-snug text-white font-medium">
+            Based in Sri Lanka, available globally
           </h3>
         </div>
 
-        {/* Globe - Scaled up for zoom effect */}
-        <div className="absolute inset-0 flex items-center justify-center scale-125 -translate-y-4 pt-56">
-          <Globe />
+        {/* Globe Container */}
+        <div className="absolute inset-0 flex items-center justify-center pt-20 pb-4">
+          <Globe className="w-full max-w-[420px]" />
         </div>
         
-        {/* Location Info - Bottom Left */}
-        <div className="absolute bottom-4 left-4 z-10">
-          <div className="items-center gap-3">
-            <span className="text-gray-300 text-sm font-medium">Remote</span>
-            <div className="flex items-center gap-1.5">
-              <IconMapPin className="w-3.5 h-3.5 text-[var(--color-8)]" />
-              <span className="text-white text-sm font-semibold">Sri Lanka</span>
-            </div>
+        {/* Location Info Footer */}
+        <div className="z-10 relative flex items-center justify-between pt-4 border-t border-gray-800/60 text-xs">
+          <div className="flex items-center gap-1.5">
+            <IconMapPin className="w-3.5 h-3.5 text-blue-400 animate-bounce" />
+            <span className="text-white font-medium">Kalutara / Colombo, Sri Lanka</span>
           </div>
+          <span className="text-gray-400 font-mono">UTC+5:30</span>
         </div>
       </div>
     ),
