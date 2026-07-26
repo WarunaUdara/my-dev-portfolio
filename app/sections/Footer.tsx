@@ -2,11 +2,14 @@ import React from "react";
 import Link from "@/components/ui/Link";
 import { Linkedin, Github, Instagram, ArrowUpRight } from "lucide-react";
 import Image from "@/components/ui/Image";
+import CTA from "./CTA";
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white py-20 px-8 border-t border-[var(--color-2)]">
-      <div className="max-w-7xl mx-auto">
+    <>
+      <CTA />
+      <footer className="bg-black text-white py-20 px-8 border-t border-neutral-900">
+        <div className="max-w-7xl mx-auto">
         {/* Main Footer Content */}
         <div className="flex flex-col md:flex-row justify-between gap-16 mb-16">
           {/* Brand Section - Left Side */}
@@ -175,6 +178,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </>
   );
 };
 

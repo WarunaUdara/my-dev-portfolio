@@ -100,7 +100,7 @@ const techStack = [
         </div>
       </div>
       <br /><br />
-      <div className="container mx-auto">
+      {/* <div className="container mx-auto">
         <CurvedLoop 
           marqueeText="Scalability ✦ Maintainability ✦ Security ✦ Performance ✦ Reliability"
           speed={2}
@@ -109,7 +109,7 @@ const techStack = [
           interactive={true}
           className="font-serif text-white/80"
         />
-      </div>
+      </div> */}
     </section>
   );
 };
