@@ -46,30 +46,32 @@ The application features custom WebGL/GSAP smooth animations, real-time Spotify 
 
 ```mermaid
 graph TD
-    Client["User Browser / Client (React 19 + Next.js App Router)"]
+    Client["User Browser / Client"]
     
-    subgraph Frontend Services
-        Lenis["Lenis Smooth Scroll & GSAP ScrollTrigger"]
-        AuthCtx["AuthContext (Firebase Client Auth)"]
+    subgraph Frontend["Frontend Services"]
+        Lenis["Lenis Smooth Scroll Engine"]
+        AuthCtx["AuthContext (Firebase Auth)"]
         UI["UI Components & Bento Grid"]
     end
 
-    subgraph Serverless API Routes
+    subgraph Serverless["Serverless API Routes"]
         SpotifyAPI["/api/spotify/now-playing"]
-        GithubAPI["/api/github/stats & /contributions"]
+        GithubAPI["/api/github/stats & contributions"]
         CvAPI["/api/cv-download"]
     end
 
-    subgraph Cloud Infrastructure
-        FirebaseAuth["Firebase Auth (Google & GitHub OAuth)"]
+    subgraph Cloud["Cloud Infrastructure"]
+        FirebaseAuth["Firebase Auth (Google & GitHub)"]
         Firestore["Cloud Firestore Database"]
         SpotifyOAuth["Spotify Web API"]
         GithubGraphQL["GitHub GraphQL & REST API"]
     end
 
-    Client --> Frontend Services
-    AuthCtx --> FirebaseAuth
-    UI --> Firestore
+    Client --> UI
+    Client --> Lenis
+    Client --> AuthCtx
+    AuthCtx <--> FirebaseAuth
+    UI <--> Firestore
     Client --> SpotifyAPI
     Client --> GithubAPI
     Client --> CvAPI

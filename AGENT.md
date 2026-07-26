@@ -9,18 +9,19 @@ This document outlines the guidelines and specific Git workflow rules that Antig
 All development agents must follow this exact workflow:
 
 ```bash
-# 1. Sync with remote main branch
+# 1. Sync with remote main branch before starting work
 git checkout main
 git pull origin main
 
-# 2. Develop modular change
-# ... modify code, tests, or documentation ...
+# 2. Develop modular changes locally
+# ... edit code, assets, or docs ...
 
-# 3. Stage and commit changes (Conventional Commit style)
+# 3. Stage and commit granular changes locally (Conventional Commit style)
 git add <modified-files>
 git commit -m "type(scope): description"
+# Repeat step 3 for each small, logical change to build a rich local history
 
-# 4. Sync again and push to remote
+# 4. Push to remote origin ONLY after completing a significant milestone or task phase
 git pull origin main
 # resolve conflicts locally if any
 git push origin main
@@ -28,8 +29,9 @@ git push origin main
 
 ### Workflow Rules
 * **Target Branch**: Work directly on `main` unless explicitly instructed to use a feature branch.
-* **Frequency**: Commit early and commit often. Each small, logical, and modular change (e.g., adding a helper, updating a section, writing documentation, fixing a lint error) should be committed separately to build a rich and clear history.
-* **Pre-push Sync**: Always execute `git pull origin main` immediately before pushing.
+* **Granular Local Commits**: Commit early and commit often locally. Each small, logical, and modular change (e.g., adding a component, tweaking styling, updating docs) should be committed separately to build a rich version history.
+* **Batching Pushes**: Collect commits locally. Do NOT push every single commit to `origin/main`. Push to remote origin only upon completing a significant milestone, feature block, or when explicitly requested by the user.
+* **Pre-push Sync**: Always execute `git pull origin main` immediately before pushing to remote.
 * **Safe Pushes**: Never use force-push (`-f` or `--force`) on the `main` branch.
 * **Clutter Management**: Do not commit large generated files, caches, or virtual environments (`.venv`, `node_modules`, `.next`, etc.). Verify that they are covered by `.gitignore`.
 
