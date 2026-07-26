@@ -18,18 +18,16 @@ export interface GlobeArc {
 }
 
 const DEFAULT_MARKERS: GlobeMarker[] = [
-  { id: "colombo", label: "SRI LANKA", location: [6.9271, 79.8612], size: 0.05 },
-  { id: "london", label: "LONDON", location: [51.5074, -0.1278], size: 0.035 },
-  { id: "dubai", label: "DUBAI", location: [25.2048, 55.2708], size: 0.035 },
-  { id: "tokyo", label: "TOKYO", location: [35.6762, 139.6503], size: 0.035 },
-  { id: "sf", label: "SAN FRANCISCO", location: [37.7749, -122.4194], size: 0.035 },
+  { id: "colombo", label: "SRI LANKA", location: [6.9271, 79.8612], size: 0.04 },
+  { id: "london", label: "LONDON", location: [51.5074, -0.1278], size: 0.03 },
+  { id: "dubai", label: "DUBAI", location: [25.2048, 55.2708], size: 0.03 },
+  { id: "tokyo", label: "TOKYO", location: [35.6762, 139.6503], size: 0.03 },
 ];
 
 const DEFAULT_ARCS: GlobeArc[] = [
   { from: [6.9271, 79.8612], to: [51.5074, -0.1278] }, // Colombo -> London
   { from: [6.9271, 79.8612], to: [25.2048, 55.2708] },  // Colombo -> Dubai
   { from: [6.9271, 79.8612], to: [35.6762, 139.6503] }, // Colombo -> Tokyo
-  { from: [6.9271, 79.8612], to: [37.7749, -122.4194] },// Colombo -> SF
 ];
 
 interface GlobeProps {
@@ -54,38 +52,42 @@ export function Globe({
   const thetaRef = useRef(0.25);
 
   const [labelPositions, setLabelPositions] = useState<
-    Array<{ id: string; label: string; x: number; y: number; opacity: number }>
+    Array<{ id: string; label: string; percentX: number; percentY: number; opacity: number }>
   >([]);
 
-  // Project 3D lat/lon to 2D container coordinates
+  // Project 3D lat/lon to 2D percentage coordinates on canvas
   const calculatePositions = useCallback(
-    (phi: number, theta: number, containerWidth: number) => {
-      const radius = containerWidth * 0.42; // Globe visual radius
-      const centerX = containerWidth / 2;
-      const centerY = containerWidth / 2;
+    (phi: number, theta: number) => {
+      // COBE sphere radius factor is ~0.385 of total canvas width
+      const r = 0.385;
 
       const positions = markers.map((m) => {
         const [lat, lon] = m.location;
         const latRad = (lat * Math.PI) / 180;
         const lonRad = (lon * Math.PI) / 180;
 
-        // Spherical coordinate transformation
-        const x = Math.cos(latRad) * Math.sin(lonRad + phi);
-        const y =
-          Math.sin(latRad) * Math.cos(theta) -
-          Math.cos(latRad) * Math.cos(lonRad + phi) * Math.sin(theta);
-        const z =
-          Math.sin(latRad) * Math.sin(theta) +
-          Math.cos(latRad) * Math.cos(lonRad + phi) * Math.cos(theta);
+        // 1. 3D coordinates on unit sphere
+        const x0 = Math.cos(latRad) * Math.sin(lonRad + phi);
+        const y0 = Math.sin(latRad);
+        const z0 = Math.cos(latRad) * Math.cos(lonRad + phi);
 
-        // Front hemisphere visibility check
-        const opacity = z > 0.1 ? Math.min(1, (z - 0.1) * 3) : 0;
+        // 2. Rotate by theta tilt around X-axis
+        const x = x0;
+        const y = y0 * Math.cos(theta) - z0 * Math.sin(theta);
+        const z = y0 * Math.sin(theta) + z0 * Math.cos(theta);
+
+        // 3. Screen percentage relative to center (50%, 50%)
+        const percentX = 50 + x * r * 100;
+        const percentY = 50 - y * r * 100;
+
+        // 4. Front hemisphere visibility & smooth fade
+        const opacity = z > 0.15 ? Math.min(1, (z - 0.15) * 4) : 0;
 
         return {
           id: m.id,
           label: m.label,
-          x: centerX + x * radius,
-          y: centerY - y * radius,
+          percentX,
+          percentY,
           opacity,
         };
       });
@@ -117,7 +119,7 @@ export function Globe({
       phi: currentPhi,
       theta: thetaRef.current,
       dark: 1,
-      diffuse: 1.4,
+      diffuse: 1.3,
       mapSamples: 16000,
       mapBrightness: 6,
       baseColor: [0.1, 0.12, 0.25],
@@ -148,7 +150,7 @@ export function Globe({
         state.width = width * 2;
         state.height = width * 2;
 
-        calculatePositions(currentPhi, thetaRef.current, width);
+        calculatePositions(currentPhi, thetaRef.current);
       },
     });
 
@@ -167,7 +169,7 @@ export function Globe({
   return (
     <div
       ref={containerRef}
-      className={cn("relative mx-auto aspect-square w-full max-w-[500px]", className)}
+      className={cn("relative mx-auto aspect-square w-full max-w-[600px]", className)}
     >
       <canvas
         ref={canvasRef}
@@ -204,27 +206,26 @@ export function Globe({
         }}
       />
 
-      {/* Dynamic Anchored Marker Labels (Styled as modern badges matching design sample) */}
+      {/* Dynamic Anchored Marker Labels (Percent-based coordinates matching WebGL canvas) */}
       {labelPositions.map((pos) => (
         <div
           key={pos.id}
-          className="absolute pointer-events-none transition-opacity duration-300 transform -translate-x-1/2 -translate-y-full mb-2 flex flex-col items-center"
+          className="absolute pointer-events-none transition-opacity duration-300 transform -translate-x-1/2 -translate-y-full mb-1 flex flex-col items-center"
           style={{
-            left: `${pos.x}px`,
-            top: `${pos.y}px`,
+            left: `${pos.percentX}%`,
+            top: `${pos.percentY}%`,
             opacity: pos.opacity,
-            zIndex: pos.opacity > 0.5 ? 20 : 10,
+            zIndex: pos.opacity > 0.5 ? 25 : 10,
           }}
         >
-          {/* Label Badge */}
-          <div className="bg-white text-gray-950 font-mono text-[10px] sm:text-xs font-bold tracking-wider px-2 py-0.5 rounded shadow-lg flex items-center gap-1.5 border border-white/80">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+          {/* Label Badge matching reference image */}
+          <div className="bg-white text-gray-950 font-mono text-[10px] sm:text-xs font-bold tracking-wide px-2 py-0.5 rounded shadow-lg flex items-center gap-1.5 border border-white/90">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
             <span>{pos.label}</span>
           </div>
 
-          {/* Pointer Arrow / Dot indicator */}
-          <div className="w-0.5 h-2 bg-gradient-to-b from-white to-blue-400"></div>
-          <div className="w-2 h-2 rounded-full bg-blue-400 border border-white shadow-[0_0_8px_rgba(59,130,246,0.8)] -mt-1"></div>
+          {/* Pointer line to marker dot */}
+          <div className="w-0.5 h-2 bg-white/80"></div>
         </div>
       ))}
     </div>

@@ -51,13 +51,13 @@ const features = [
           </h3>
         </div>
 
-        {/* Globe Container */}
-        <div className="absolute inset-0 flex items-center justify-center pt-20 pb-4">
-          <Globe className="w-full max-w-[420px]" />
+        {/* Globe Container - Zoomed and shifted down matching original Image 1 layout */}
+        <div className="absolute inset-0 flex items-center justify-center scale-135 translate-y-14 pt-28 pointer-events-auto">
+          <Globe className="w-full max-w-[500px]" />
         </div>
         
         {/* Location Info Footer */}
-        <div className="z-10 relative flex items-center justify-between pt-4 border-t border-gray-800/60 text-xs">
+        <div className="z-10 relative flex items-center justify-between pt-4 border-t border-gray-800/60 text-xs pointer-events-none">
           <div className="flex items-center gap-1.5">
             <IconMapPin className="w-3.5 h-3.5 text-blue-400 animate-bounce" />
             <span className="text-white font-medium">Kalutara / Colombo, Sri Lanka</span>
