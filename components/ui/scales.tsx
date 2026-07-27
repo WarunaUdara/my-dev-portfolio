@@ -32,7 +32,7 @@ export const Scales = ({
     <div
       className={cn(
         "absolute inset-0 h-full w-full overflow-hidden pointer-events-none",
-        "[--pattern-scales:rgba(255,255,255,0.08)]",
+        "[--pattern-scales:rgba(255,255,255,0.18)]",
         className,
       )}
       style={

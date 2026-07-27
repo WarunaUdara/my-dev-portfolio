@@ -16,6 +16,7 @@ interface ToolItem {
 }
 
 const CRAFT_TOOLS: ToolItem[] = [
+  { name: "Zed", icon: "/zed.png", link: "https://zed.dev/" },
   { name: "VS Code", icon: "/icons8-vs-code-96.png", link: "https://code.visualstudio.com/" },
   { name: "IntelliJ IDEA", icon: "/icons8-intellij-idea-96.png", link: "https://www.jetbrains.com/idea/" },
   { name: "Postman", icon: "/icons8-postman-inc-96.png", link: "https://www.postman.com/" },
@@ -25,7 +26,10 @@ const CRAFT_TOOLS: ToolItem[] = [
 ];
 
 const CLI_TOOLS: ToolItem[] = [
-  { name: "Ghostty", icon: "/ghostty.webp", link: "https://ghostty.org/" },
+  { name: "Ghostty", icon: "/ghostty copy.webp", link: "https://ghostty.org/" },
+  { name: "GitHub CLI", icon: "/icons8-github-50.png", link: "https://cli.github.com/" },
+  { name: "Homebrew", icon: "/Homebrew.png", link: "https://brew.sh/" },
+  { name: "Git Worktrees", icon: "/icons8-git-144.png" },
   { name: "Gemini CLI", icon: "/gemini-cli-icon.png", link: "https://geminicli.com/" },
   { name: "Opencode", icon: "/opencode-logo-dark.png", link: "https://opencode.ai/" },
   { name: "Codex", icon: "/codex-color.webp", link: "https://chatgpt.com/codex/cloud" },
@@ -107,18 +111,18 @@ export default function UsesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
-      {/* Side Scales Borders */}
-      <div className="fixed top-0 bottom-0 left-0 w-6 sm:w-10 z-20 border-r border-neutral-800/60 pointer-events-none hidden sm:block">
-        <Scales orientation="diagonal" size={8} className="w-full opacity-30" />
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black relative">
+      {/* Side Scales Borders with Padding Offset & Framing */}
+      <div className="fixed top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+        <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
       </div>
-      <div className="fixed top-0 bottom-0 right-0 w-6 sm:w-10 z-20 border-l border-neutral-800/60 pointer-events-none hidden sm:block">
-        <Scales orientation="diagonal" size={8} className="w-full opacity-30" />
+      <div className="fixed top-0 bottom-0 right-3 sm:right-6 md:right-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+        <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
       </div>
 
-      {/* Main Container */}
-      <main className="relative pt-28 sm:pt-36 pb-20 px-4 sm:px-12 max-w-7xl mx-auto">
-        {/* Header matching Image 1 */}
+      {/* Main Content Container with Side Padding */}
+      <main className="relative pt-28 sm:pt-36 pb-20 px-6 sm:px-16 md:px-24 max-w-7xl mx-auto">
+        {/* Header matching design sample */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-24">
           <p className="text-xs font-mono uppercase tracking-[0.35em] text-neutral-400 font-semibold mb-3">
             THE GEAR
@@ -154,35 +158,20 @@ export default function UsesPage() {
                 </h3>
               </div>
 
-              {/* Hardware Card - Identical to Image 1 */}
+              {/* Hardware Card - Using /uses/macbook.webp */}
               <div className="w-full flex-1">
                 <div className="bg-neutral-950/90 border border-neutral-800/90 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-2xl group">
-                  {/* Subtle Background Glow */}
+                  {/* Subtle Ambient Radial Glow */}
                   <div className="absolute inset-0 bg-radial from-neutral-800/20 via-black to-black pointer-events-none" />
 
                   {/* MacBook Display Box */}
-                  <div className="relative w-full aspect-[16/10] max-h-[420px] mx-auto rounded-2xl overflow-hidden bg-neutral-900/60 border border-neutral-800/80 flex items-center justify-center p-4 sm:p-8">
-                    {/* Dark gradient backdrop behind MacBook */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-sky-950/30 via-neutral-900 to-neutral-950" />
-                    
-                    {/* MacBook Air Mockup */}
-                    <div className="relative w-full h-full max-w-[620px] flex flex-col items-center justify-center z-10">
-                      {/* Screen */}
-                      <div className="relative w-[85%] aspect-[16/10] bg-neutral-950 rounded-t-xl border-2 border-neutral-700 shadow-2xl overflow-hidden">
-                        {/* Display Wallpaper */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-sky-900 via-neutral-950 to-blue-950 opacity-90" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-28 h-28 rounded-full bg-sky-500/10 blur-xl animate-pulse" />
-                          <span className="font-serif italic text-white/40 text-lg">macOS Sequoia</span>
-                        </div>
-                        {/* Notch */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-2.5 bg-black rounded-b-md" />
-                      </div>
-                      {/* Base Keyboard Deck */}
-                      <div className="relative w-[96%] h-3 bg-gradient-to-b from-neutral-700 to-neutral-800 rounded-b-xl border-x border-b border-neutral-600 shadow-xl">
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-neutral-500/50 rounded-full" />
-                      </div>
-                    </div>
+                  <div className="relative w-full aspect-[16/10] max-h-[440px] mx-auto rounded-2xl overflow-hidden bg-neutral-900/80 border border-neutral-800/80 flex items-center justify-center p-2 sm:p-4">
+                    <Image
+                      src="/uses/macbook.webp"
+                      alt="MacBook Air M4"
+                      fill
+                      className="object-contain group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
 
                   {/* Specs & Hardware Meta Bar */}
