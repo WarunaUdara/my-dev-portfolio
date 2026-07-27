@@ -74,13 +74,13 @@ export const Education = () => {
               className={`relative rounded-3xl bg-neutral-950/80 border border-neutral-800/90 hover:border-neutral-600 p-7 sm:p-9 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col sm:flex-row items-start gap-6 md:gap-8`}
             >
               {/* Institution Logo Badge */}
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-neutral-900/90 border border-neutral-800 p-2 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-lg group-hover:border-neutral-600 transition-colors">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-neutral-900/90 border border-neutral-800 p-2 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-lg group-hover:border-neutral-600 transition-colors">
                 <Image
                   src={edu.logo}
                   alt={edu.institution}
                   width={56}
                   height={56}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain rounded-full"
                 />
               </div>
 
