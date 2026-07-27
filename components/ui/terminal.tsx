@@ -102,9 +102,21 @@ function useAudio(enabled: boolean) {
 
   useEffect(() => {
     if (!enabled) return;
+
+    const unlockAudio = () => {
+      if (ctxRef.current && ctxRef.current.state === "suspended") {
+        ctxRef.current.resume().catch(() => {});
+      }
+    };
+
+    window.addEventListener("click", unlockAudio, { once: true });
+    window.addEventListener("keydown", unlockAudio, { once: true });
+    window.addEventListener("touchstart", unlockAudio, { once: true });
+
     const init = async () => {
       try {
-        ctxRef.current = new AudioContext();
+        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        ctxRef.current = new AudioCtx();
         const res = await fetch("/sounds/sound.ogg");
         if (!res.ok) return;
         bufferRef.current = await ctxRef.current.decodeAudioData(
@@ -114,19 +126,53 @@ function useAudio(enabled: boolean) {
       } catch {}
     };
     init();
+
     return () => {
+      window.removeEventListener("click", unlockAudio);
+      window.removeEventListener("keydown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
       ctxRef.current?.close();
     };
   }, [enabled]);
 
+  // Synthetic mechanical key click generator when audio buffer or autoplay is restricted
+  const playSynthClick = () => {
+    if (!ctxRef.current) return;
+    try {
+      if (ctxRef.current.state === "suspended") {
+        ctxRef.current.resume().catch(() => {});
+      }
+      const osc = ctxRef.current.createOscillator();
+      const gain = ctxRef.current.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(800 + Math.random() * 400, ctxRef.current.currentTime);
+      gain.gain.setValueAtTime(0.015, ctxRef.current.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctxRef.current.currentTime + 0.012);
+      osc.connect(gain);
+      gain.connect(ctxRef.current.destination);
+      osc.start();
+      osc.stop(ctxRef.current.currentTime + 0.012);
+    } catch {}
+  };
+
   const playSound = (sound: [number, number] | undefined) => {
-    if (!readyRef.current || !ctxRef.current || !bufferRef.current || !sound)
-      return;
-    if (ctxRef.current.state === "suspended") ctxRef.current.resume();
-    const src = ctxRef.current.createBufferSource();
-    src.buffer = bufferRef.current;
-    src.connect(ctxRef.current.destination);
-    src.start(0, sound[0] / 1000, sound[1] / 1000);
+    if (!ctxRef.current) return;
+    if (ctxRef.current.state === "suspended") {
+      ctxRef.current.resume().catch(() => {});
+    }
+
+    if (readyRef.current && bufferRef.current && sound) {
+      try {
+        const src = ctxRef.current.createBufferSource();
+        src.buffer = bufferRef.current;
+        src.connect(ctxRef.current.destination);
+        src.start(0, sound[0] / 1000, sound[1] / 1000);
+      } catch {
+        playSynthClick();
+      }
+    } else {
+      playSynthClick();
+    }
   };
 
   const down = (key: string) =>
