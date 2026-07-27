@@ -40,7 +40,7 @@ export function NavBar({ items, className }: NavBarProps) {
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Check if we're on a "More" menu page
-  const moreMenuPages = ['/uses', '/bucket-list', '/links', '/guestbook', '/under-construction']
+  const moreMenuPages = ['/uses', '/bucket-list', '/links', '/guestbook', '/under-construction', '/blog']
   const isOnMorePage = moreMenuPages.some(page => pathname.startsWith(page))
 
   useEffect(() => {
@@ -213,6 +213,23 @@ export function NavBar({ items, className }: NavBarProps) {
 
               {/* Modal Body */}
               <div className="p-4 space-y-3">
+                {/* Blog Card */}
+                <Link
+                  href="/blog"
+                  onClick={handleMenuItemClick}
+                  className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-5 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                      <IconArticle size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold text-base mb-1">Blog</h4>
+                      <p className="text-white/60 text-sm">Writings &amp; tech articles</p>
+                    </div>
+                  </div>
+                </Link>
+
                 {/* Guestbook Card */}
                 <Link
                   href="/guestbook"

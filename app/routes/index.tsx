@@ -8,7 +8,7 @@ import GitHubActivity from '../sections/GitHubActivity';
 import Explore from '../sections/Explore';
 import Footer from '../sections/Footer';
 import { NavBar } from '../ui/TubelightNavbar';
-import { IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react';
+import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText } from '@tabler/icons-react';
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -19,6 +19,7 @@ function HomePage() {
     { name: 'Home', url: '#hero', icon: IconHome },
     { name: 'About', url: '/about', icon: IconUser },
     { name: 'Work', url: '/work', icon: IconBriefcase },
+    { name: 'Blog', url: '/blog', icon: IconArticle },
     { name: 'More', url: '#more', icon: IconFileText },
   ];
 

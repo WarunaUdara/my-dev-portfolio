@@ -4,7 +4,7 @@ import Education from "../sections/Education";
 import Volunteering from "../sections/Volunteering";
 import Footer from "../sections/Footer";
 import { NavBar } from "../ui/TubelightNavbar";
-import { IconHome, IconUser, IconBriefcase, IconFileText } from "@tabler/icons-react";
+import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText } from "@tabler/icons-react";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -15,6 +15,7 @@ function AboutPage() {
     { name: "Home", url: "/", icon: IconHome },
     { name: "About", url: "/about", icon: IconUser },
     { name: "Work", url: "/work", icon: IconBriefcase },
+    { name: "Blog", url: "/blog", icon: IconArticle },
     { name: "More", url: "#more", icon: IconFileText },
   ];
 
