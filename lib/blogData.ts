@@ -12,17 +12,6 @@ export interface BlogPostMeta {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
-    slug: "mcp-server-tools-tanstack-ai",
-    title: "MCP Server Tools: Connecting TanStack AI to Model Context Protocol Servers",
-    date: "July 26, 2026",
-    description: "Connect TanStack AI to any Model Context Protocol server with createMCPClient to discover and execute its tools.",
-    category: "AI & DEVOPS",
-    readTime: "8 min read",
-    tags: ["TanStack AI", "MCP", "AI Agents", "Model Context Protocol", "TypeScript"],
-    coverImage: "/projects-beautyofcloud.png",
-    author: "Waruna Udara",
-  },
-  {
     slug: "building-turboship-buildathon",
     title: "Building Turboship: Agentic AI Deployment Harness for Multi-Cloud",
     date: "May 18, 2026",

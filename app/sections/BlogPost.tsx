@@ -9,10 +9,8 @@ import { IconArrowLeft, IconCalendar, IconClock, IconTag } from "@tabler/icons-r
 // Dynamic MDX Component Loader Map
 import TurboshipPost from "@/content/blog/building-turboship-buildathon.mdx";
 import React19Post from "@/content/blog/react-19-and-tanstack-router.mdx";
-import McpPost from "@/content/blog/mcp-server-tools-tanstack-ai.mdx";
 
 const MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {
-  "mcp-server-tools-tanstack-ai": McpPost,
   "building-turboship-buildathon": TurboshipPost,
   "react-19-and-tanstack-router": React19Post,
 };
