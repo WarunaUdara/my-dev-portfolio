@@ -32,7 +32,7 @@ export const SITE_META = {
   author: SITE_NAME,
   locale: "en_US",
   twitterHandle: SITE_HANDLE,
-  ogImage: `${SITE_URL}/og-default.png`,
+  ogImage: `${SITE_URL}/og-new.webp`,
 };
 
 export const PAGE_META: Record<string, { title: string; description: string; keywords?: string[] }> = {

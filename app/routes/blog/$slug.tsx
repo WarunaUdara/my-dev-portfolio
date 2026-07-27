@@ -30,7 +30,7 @@ function BlogPostRoutePage() {
   const canonicalUrl = `${SITE_URL}/blog/${slug}`;
   const ogImage = post?.coverImage
     ? `${SITE_URL}${post.coverImage}`
-    : `${SITE_URL}/og-default.png`;
+    : `${SITE_URL}/og-new.webp`;
 
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden">
