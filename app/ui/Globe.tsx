@@ -122,7 +122,7 @@ export function Globe({
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [0.18, 0.18, 0.18],
+      baseColor: [1, 1, 1],
       markerColor: [0.4, 0.6, 1.0],
       glowColor: [1, 1, 1],
       markers: markers.map((m) => ({
@@ -171,7 +171,7 @@ export function Globe({
     >
       <canvas
         ref={canvasRef}
-        className="h-full w-full opacity-0 transition-opacity duration-700 [contain:layout_paint_size] cursor-grab active:cursor-grabbing"
+        className="h-full w-full transition-opacity duration-700 [contain:layout_paint_size] cursor-grab active:cursor-grabbing"
         onPointerDown={(e) => {
           pointerInteracting.current = e.clientX;
           if (canvasRef.current) canvasRef.current.style.cursor = "grabbing";
