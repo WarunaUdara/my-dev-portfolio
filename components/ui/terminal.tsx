@@ -97,8 +97,6 @@ const KEY_SOUNDS_UP: Record<string, [number, number]> = {
 
 function useAudio(enabled: boolean) {
   const ctxRef = useRef<AudioContext | null>(null);
-  const bufferRef = useRef<AudioBuffer | null>(null);
-  const readyRef = useRef(false);
 
   useEffect(() => {
     if (!enabled) return;
@@ -113,19 +111,10 @@ function useAudio(enabled: boolean) {
     window.addEventListener("keydown", unlockAudio, { once: true });
     window.addEventListener("touchstart", unlockAudio, { once: true });
 
-    const init = async () => {
-      try {
-        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-        ctxRef.current = new AudioCtx();
-        const res = await fetch("/sounds/sound.ogg");
-        if (!res.ok) return;
-        bufferRef.current = await ctxRef.current.decodeAudioData(
-          await res.arrayBuffer(),
-        );
-        readyRef.current = true;
-      } catch {}
-    };
-    init();
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      ctxRef.current = new AudioCtx();
+    } catch {}
 
     return () => {
       window.removeEventListener("click", unlockAudio);
@@ -135,7 +124,7 @@ function useAudio(enabled: boolean) {
     };
   }, [enabled]);
 
-  // Synthetic mechanical key click generator when audio buffer or autoplay is restricted
+  // Synthetic mechanical key click generator without external ogg file dependencies
   const playSynthClick = () => {
     if (!ctxRef.current) return;
     try {
@@ -155,30 +144,8 @@ function useAudio(enabled: boolean) {
     } catch {}
   };
 
-  const playSound = (sound: [number, number] | undefined) => {
-    if (!ctxRef.current) return;
-    if (ctxRef.current.state === "suspended") {
-      ctxRef.current.resume().catch(() => {});
-    }
-
-    if (readyRef.current && bufferRef.current && sound) {
-      try {
-        const src = ctxRef.current.createBufferSource();
-        src.buffer = bufferRef.current;
-        src.connect(ctxRef.current.destination);
-        src.start(0, sound[0] / 1000, sound[1] / 1000);
-      } catch {
-        playSynthClick();
-      }
-    } else {
-      playSynthClick();
-    }
-  };
-
-  const down = (key: string) =>
-    playSound(KEY_SOUNDS_DOWN[key.toUpperCase()] || KEY_SOUNDS_DOWN[key]);
-  const up = (key: string) =>
-    playSound(KEY_SOUNDS_UP[key.toUpperCase()] || KEY_SOUNDS_UP[key]);
+  const down = () => playSynthClick();
+  const up = () => {};
 
   return { down, up };
 }
