@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import AuroraText from "@/components/ui/aurora-text";
 import SplitType from "split-type";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -88,9 +89,9 @@ const RevealingQuote = () => {
           </p>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif mb-2">
             What{" "}
-            <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">
+            <AuroraText className="italic font-serif">
               Drives Me
-            </span>
+            </AuroraText>
           </h2>
         </div>
         <div
