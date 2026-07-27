@@ -6,12 +6,16 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   fill?: boolean;
   priority?: boolean;
   unoptimized?: boolean;
+  quality?: number;
 }
 
 export default function Image({
   src,
   alt,
   fill,
+  priority,
+  unoptimized,
+  quality,
   className = '',
   style,
   width,
@@ -37,7 +41,7 @@ export default function Image({
       height={fill ? undefined : height}
       className={className}
       style={combinedStyle}
-      loading={props.priority ? 'eager' : 'lazy'}
+      loading={priority ? 'eager' : 'lazy'}
       {...props}
     />
   );

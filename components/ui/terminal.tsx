@@ -144,8 +144,8 @@ function useAudio(enabled: boolean) {
     } catch {}
   };
 
-  const down = () => playSynthClick();
-  const up = () => {};
+  const down = (_key?: string) => playSynthClick();
+  const up = (_key?: string) => {};
 
   return { down, up };
 }
