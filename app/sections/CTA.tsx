@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Grainient from "@/components/ReactBits/Grainient";
 import CircularText from "@/components/ReactBits/CircularText";
 import AuroraText from "@/components/ui/aurora-text";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { IconArrowUpRight, IconSparkles } from "@tabler/icons-react";
 import Image from "next/image";
 
@@ -108,12 +109,10 @@ export default function CTA() {
                 href="https://www.linkedin.com/in/waruna-udara/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/90 hover:bg-white text-black font-sans font-medium text-sm sm:text-base transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4)] hover:scale-105"
               >
-                <span>Get In Touch</span>
-                <div className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
-                  <IconArrowUpRight className="w-4 h-4" />
-                </div>
+                <InteractiveHoverButton icon={<IconArrowUpRight className="h-4 w-4" />}>
+                  Get In Touch
+                </InteractiveHoverButton>
               </a>
             </div>
 

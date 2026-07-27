@@ -6,7 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Aurora from "../ui/Aurora";
 import FloatingSparkles from "../ui/FloatingSparkles";
 import { BentoDemo } from "./BentoDemo";
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { IconCopy, IconCheck, IconArrowUpRight } from "@tabler/icons-react";
 
 // Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -262,29 +263,25 @@ export default function Hero() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 w-full hero-cta">
-                
                 <a href="https://www.linkedin.com/in/waruna-udara/" target="_blank" rel="noopener noreferrer">
-                  <InteractiveHoverButton> Let&apos;s Connect </InteractiveHoverButton>
+                  <InteractiveHoverButton icon={<IconArrowUpRight className="h-4 w-4" />}>
+                    Let&apos;s Connect
+                  </InteractiveHoverButton>
                 </a>
 
-                <button className="max-w-full sm:w-auto px-4 py-3 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2 text-sm sm:text-base group"
+                <button
+                  className="group relative inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-neutral-950/80 border border-neutral-800/80 backdrop-blur-xl text-neutral-300 hover:text-white hover:border-neutral-600 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.03)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95 text-xs sm:text-sm font-sans font-medium"
                   onClick={handleCopyEmail}
                   type="button"
                 >
-                  <svg
-                    className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <span className="truncate">warunaudarasam2003@gmail.com</span>
+                  <div className="w-6 h-6 rounded-full bg-neutral-900 border border-neutral-700/80 flex items-center justify-center text-neutral-400 group-hover:text-white group-hover:border-neutral-500 transition-all">
+                    {copied ? (
+                      <IconCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <IconCopy className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+                    )}
+                  </div>
+                  <span>{copied ? "Copied to Clipboard!" : "warunaudarasam2003@gmail.com"}</span>
                 </button>
               </div>
             </div>
