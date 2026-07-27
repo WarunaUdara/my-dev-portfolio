@@ -51,9 +51,9 @@ const features = [
           </h3>
         </div>
 
-        {/* Globe Container - Zoomed and shifted down matching original Image 1 layout */}
-        <div className="absolute inset-0 flex items-center justify-center scale-135 translate-y-14 pt-28 pointer-events-auto">
-          <Globe className="w-full max-w-[500px]" />
+        {/* Globe Container - Centered and visible within Bento card */}
+        <div className="absolute inset-0 flex items-center justify-center scale-115 translate-y-8 pt-10 pointer-events-auto">
+          <Globe className="w-full max-w-[460px]" />
         </div>
         
         {/* Location Info Footer */}

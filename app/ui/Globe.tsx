@@ -57,8 +57,7 @@ export function Globe({
     Array<{ id: string; label: string; px: number; py: number; opacity: number }>
   >([]);
 
-  // Cobe projects the globe with a visual radius of ~43.5% of canvas size.
-  // Longitude is applied as -(lon + phi) internally.
+  // Project marker lat/lon to canvas (x, y) pixel coordinates
   const projectMarkers = useCallback(
     (phi: number, theta: number, containerWidth: number) => {
       const R = containerWidth * 0.435;
@@ -70,24 +69,19 @@ export function Globe({
         const latRad = (lat * Math.PI) / 180;
         const lonRad = (lon * Math.PI) / 180;
 
-        // Cobe internal: longitude offset is -(lon + phi)
         const adjustedLon = lonRad + phi;
 
-        // Spherical to Cartesian
         const sx = Math.cos(latRad) * Math.sin(adjustedLon);
         const sy = Math.sin(latRad);
         const sz = Math.cos(latRad) * Math.cos(adjustedLon);
 
-        // Theta rotation around X-axis (tilt)
         const rx = sx;
         const ry = sy * Math.cos(theta) - sz * Math.sin(theta);
         const rz = sy * Math.sin(theta) + sz * Math.cos(theta);
 
-        // Orthographic projection
         const px = cx + rx * R;
         const py = cy - ry * R;
 
-        // Visibility: front face only, with smooth fade
         const opacity = rz > 0.1 ? Math.min(1, (rz - 0.1) * 5) : 0;
 
         return { id: m.id, label: m.label, px, py, opacity };
@@ -112,19 +106,20 @@ export function Globe({
 
     if (!canvasRef.current || width === 0) return;
 
+    // Initialize Cobe 2.0 Globe instance
     const globe = createGlobe(canvasRef.current, {
       devicePixelRatio: 2,
       width: width * 2,
       height: width * 2,
       phi: phiRef.current,
       theta: thetaVal,
-      dark: 1,
+      dark: 0,
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [0.1, 0.12, 0.25],
+      baseColor: [1, 1, 1],
       markerColor: [0.35, 0.65, 1.0],
-      glowColor: [0.2, 0.4, 0.9],
+      glowColor: [1, 1, 1],
       markers: markers.map((m) => ({
         location: m.location,
         size: m.size || 0.035,
@@ -133,32 +128,42 @@ export function Globe({
       arcs: arcs.map((a) => ({
         from: a.from,
         to: a.to,
-        color: a.color || [0.3, 0.5, 1.0],
+        color: a.color || [0.35, 0.65, 1.0],
       })),
-      arcColor: [0.3, 0.5, 1.0],
+      arcColor: [0.35, 0.65, 1.0],
       arcWidth: 0.5,
       arcHeight: 0.35,
-      onRender: (state) => {
-        if (!pointerInteracting.current) {
-          phiRef.current += speed;
-        }
-        const currentPhi = phiRef.current + pointerInteractionMovement.current;
-        state.phi = currentPhi;
-        state.theta = thetaVal;
-        state.width = width * 2;
-        state.height = width * 2;
-
-        projectMarkers(currentPhi, thetaVal, width);
-      },
     });
 
-    setTimeout(() => {
-      if (canvasRef.current) {
-        canvasRef.current.style.opacity = "1";
+    let animationFrameId: number;
+
+    // Cobe 2.0 animation loop using globe.update({ phi })
+    const animate = () => {
+      if (!pointerInteracting.current) {
+        phiRef.current += speed;
       }
-    }, 100);
+      const currentPhi = phiRef.current + pointerInteractionMovement.current;
+
+      globe.update({
+        phi: currentPhi,
+        theta: thetaVal,
+        width: width * 2,
+        height: width * 2,
+      });
+
+      projectMarkers(currentPhi, thetaVal, width);
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    if (canvasRef.current) {
+      canvasRef.current.style.opacity = "1";
+    }
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       globe.destroy();
       window.removeEventListener("resize", onResize);
     };
@@ -171,7 +176,7 @@ export function Globe({
     >
       <canvas
         ref={canvasRef}
-        className="h-full w-full opacity-0 transition-opacity duration-700 [contain:layout_paint_size] cursor-grab active:cursor-grabbing"
+        className="h-full w-full opacity-100 transition-opacity duration-500 [contain:layout_paint_size] cursor-grab active:cursor-grabbing"
         onPointerDown={(e) => {
           pointerInteracting.current = e.clientX;
           if (canvasRef.current) canvasRef.current.style.cursor = "grabbing";
@@ -216,7 +221,7 @@ export function Globe({
             top: `${pos.py}px`,
             transform: "translate(-50%, -100%)",
             opacity: pos.opacity,
-            transition: "opacity 0.25s ease",
+            transition: "opacity 0.2s ease",
             zIndex: pos.opacity > 0.5 ? 25 : 10,
           }}
         >
@@ -236,3 +241,5 @@ export function Globe({
     </div>
   );
 }
+
+export default Globe;
