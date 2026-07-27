@@ -9,6 +9,8 @@ import ScrollFrost from "@/components/canvasui/ScrollFrost";
 import { NavBar } from "@/app/ui/TubelightNavbar";
 import Footer from "@/app/sections/Footer";
 import { IconHome, IconUser, IconBriefcase, IconFileText } from "@tabler/icons-react";
+import SEOHead from "@/components/ui/SEOHead";
+import { PAGE_META, PERSON_SCHEMA, SITE_URL } from "@/lib/seo";
 
 interface ToolItem {
   name: string;
@@ -115,7 +117,14 @@ export default function UsesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black relative">
+    <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden">
+      <SEOHead
+        title={PAGE_META.uses.title}
+        description={PAGE_META.uses.description}
+        keywords={PAGE_META.uses.keywords}
+        canonicalUrl={`${SITE_URL}/uses`}
+        schemas={[PERSON_SCHEMA]}
+      />
       {/* Side Scales Borders with Padding Offset & Framing */}
       <div className="fixed top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
         <Scales orientation="diagonal" size={8} className="w-full opacity-60" />

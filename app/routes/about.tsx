@@ -5,6 +5,8 @@ import Volunteering from "../sections/Volunteering";
 import Footer from "../sections/Footer";
 import { NavBar } from "../ui/TubelightNavbar";
 import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText } from "@tabler/icons-react";
+import SEOHead from '@/components/ui/SEOHead';
+import { PAGE_META, PERSON_SCHEMA, SITE_URL } from '@/lib/seo';
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -21,6 +23,14 @@ function AboutPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground scroll-smooth">
+      <SEOHead
+        title={PAGE_META.about.title}
+        description={PAGE_META.about.description}
+        keywords={PAGE_META.about.keywords}
+        ogType="profile"
+        canonicalUrl={`${SITE_URL}/about`}
+        schemas={[PERSON_SCHEMA]}
+      />
       <div className="pt-12">
         <About isAboutPage={true} />
         <Education />

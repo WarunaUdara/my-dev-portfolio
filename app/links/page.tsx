@@ -3,6 +3,8 @@ import Links from "../sections/Links";
 import Footer from "../sections/Footer";
 import { NavBar } from "../ui/TubelightNavbar";
 import { IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react';
+import SEOHead from "@/components/ui/SEOHead";
+import { PAGE_META, PERSON_SCHEMA, SITE_URL } from "@/lib/seo";
 
 export default function LinksPage() {
   const navItems = [
@@ -14,6 +16,13 @@ export default function LinksPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead
+        title={PAGE_META.links.title}
+        description={PAGE_META.links.description}
+        keywords={PAGE_META.links.keywords}
+        canonicalUrl={`${SITE_URL}/links`}
+        schemas={[PERSON_SCHEMA]}
+      />
       <NavBar items={navItems} />
       <div className="pt-20">
         <Links />

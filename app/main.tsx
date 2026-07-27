@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { HelmetProvider } from 'react-helmet-async';
 import { routeTree } from './routeTree.gen';
 
 const router = createRouter({
@@ -16,13 +17,14 @@ declare module '@tanstack/react-router' {
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
-  // Always mount or reuse root for React 19 rendering
   const root = (rootElement as any)._reactRoot || ReactDOM.createRoot(rootElement);
   (rootElement as any)._reactRoot = root;
-  
+
   root.render(
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <HelmetProvider>
+        <RouterProvider router={router} />
+      </HelmetProvider>
     </React.StrictMode>
   );
 }

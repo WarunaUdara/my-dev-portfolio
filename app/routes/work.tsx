@@ -6,6 +6,8 @@ import { NavBar } from "../ui/TubelightNavbar";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
 import Scales from "@/components/ui/scales";
 import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText } from "@tabler/icons-react";
+import SEOHead from '@/components/ui/SEOHead';
+import { PAGE_META, PERSON_SCHEMA, SITE_URL } from '@/lib/seo';
 
 export const Route = createFileRoute("/work")({
   component: WorkPage,
@@ -22,6 +24,13 @@ function WorkPage() {
 
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden">
+      <SEOHead
+        title={PAGE_META.work.title}
+        description={PAGE_META.work.description}
+        keywords={PAGE_META.work.keywords}
+        canonicalUrl={`${SITE_URL}/work`}
+        schemas={[PERSON_SCHEMA]}
+      />
       {/* 2-Sided Scales Ruler Strips (Matching Uses Page Layout) */}
       <div className="fixed top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
         <Scales orientation="diagonal" size={8} className="w-full opacity-60" />

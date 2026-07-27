@@ -26,6 +26,8 @@ import { IconBrandGithub, IconBrandGoogle, IconPin, IconTrash, IconX, IconSend, 
 import Image from '@/components/ui/Image';
 import AuroraText from "@/components/ui/aurora-text";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
+import SEOHead from "@/components/ui/SEOHead";
+import { PAGE_META, PERSON_SCHEMA, SITE_URL } from "@/lib/seo";
 
 interface Message {
   id: string;
@@ -242,8 +244,14 @@ export default function GuestbookPage() {
   return (
     <>
       <NavBar items={navItems} />
-      
-      <main className="relative min-h-screen bg-black text-white pt-24 pb-20 px-4 sm:px-6 overflow-hidden">
+      <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden">
+        <SEOHead
+          title={PAGE_META.guestbook.title}
+          description={PAGE_META.guestbook.description}
+          keywords={PAGE_META.guestbook.keywords}
+          canonicalUrl={`${SITE_URL}/guestbook`}
+          schemas={[PERSON_SCHEMA]}
+        />
         <ScrollFrost height="h-[500px]" />
         <div className="container mx-auto max-w-2xl relative z-10">
           {/* Header */}
@@ -410,7 +418,7 @@ export default function GuestbookPage() {
             )}
           </div>
         </div>
-      </main>
+      </div>
 
       {/* Auth Modal */}
       {showAuthModal && (
