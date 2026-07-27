@@ -165,14 +165,52 @@ export default function UsesPage() {
                 </h3>
               </div>
 
-              {/* Hardware Card - Using /uses/macbook.webp */}
-              <div className="w-full flex-1">
-                <div className="bg-neutral-950/90 border border-neutral-800/90 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-2xl group">
-                  {/* Subtle Ambient Radial Glow */}
-                  <div className="absolute inset-0 bg-radial from-neutral-800/20 via-black to-black pointer-events-none" />
+              {/* Hardware Cards Container */}
+              <div className="w-full flex-1 space-y-6">
+                {/* Hardware Card 1 - MacBook Air M4 */}
+                <div className="bg-neutral-950/90 border border-neutral-800/90 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl group">
+                  <div className="absolute inset-0 bg-radial from-sky-950/20 via-black to-black pointer-events-none" />
 
-                  {/* MacBook Display Box */}
-                  <div className="relative w-full aspect-[16/10] max-h-[440px] mx-auto rounded-2xl overflow-hidden bg-neutral-900/80 border border-neutral-800/80 flex items-center justify-center p-2 sm:p-4">
+                  {/* Header & Specs Bar */}
+                  <div className="space-y-4 mb-6">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                      <div>
+                        <h4 className="text-white font-sans font-bold text-xl sm:text-2xl">
+                          MacBook Air M4
+                        </h4>
+                        <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-1">
+                          Apple M4 Chip · 16GB Unified Memory · 512GB SSD · Sky Blue
+                        </p>
+                      </div>
+
+                      <span className="px-4 py-1.5 rounded-full bg-neutral-900 border border-sky-500/40 text-xs font-mono font-semibold text-sky-400 tracking-wider uppercase shadow-[0_0_15px_rgba(56,189,248,0.25)]">
+                        SKY BLUE
+                      </span>
+                    </div>
+
+                    {/* Prominent Spec Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                      <div className="bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 text-center">
+                        <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">PROCESSOR</span>
+                        <span className="text-sm font-mono font-bold text-white">Apple M4 Chip</span>
+                      </div>
+                      <div className="bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 text-center">
+                        <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">RAM / MEMORY</span>
+                        <span className="text-sm font-mono font-bold text-white">16GB Unified</span>
+                      </div>
+                      <div className="bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 text-center">
+                        <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">STORAGE</span>
+                        <span className="text-sm font-mono font-bold text-white">512GB SSD</span>
+                      </div>
+                      <div className="bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 text-center">
+                        <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">COLOR</span>
+                        <span className="text-sm font-mono font-bold text-sky-400">Sky Blue</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* MacBook Image Showcase */}
+                  <div className="relative w-full aspect-[16/10] max-h-[360px] mx-auto rounded-2xl overflow-hidden bg-neutral-900/60 border border-neutral-800/80 flex items-center justify-center p-4">
                     <Image
                       src="/uses/macbook.webp"
                       alt="MacBook Air M4"
@@ -180,77 +218,43 @@ export default function UsesPage() {
                       className="object-contain group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-
-                  {/* Specs & Hardware Meta Bar */}
-                  <div className="mt-6 pt-5 border-t border-neutral-900 space-y-4">
-                    <div className="flex flex-wrap items-center justify-between gap-4">
-                      <div>
-                        <h4 className="text-white font-sans font-bold text-lg sm:text-xl">
-                          MacBook Air M4
-                        </h4>
-                        <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-0.5">
-                          Apple M4 Chip · 16GB Unified Memory · 512GB Superfast SSD
-                        </p>
-                      </div>
-
-                      <span className="px-3.5 py-1.5 rounded-full bg-neutral-900 border border-sky-500/30 text-xs font-mono font-semibold text-sky-400 tracking-wider uppercase shadow-[0_0_12px_rgba(56,189,248,0.2)]">
-                        SKY BLUE
-                      </span>
-                    </div>
-
-                    {/* Detailed Tech Spec Badges */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-                      <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 text-center">
-                        <span className="text-[10px] font-mono text-neutral-500 uppercase block mb-0.5">CHIP</span>
-                        <span className="text-xs font-mono font-bold text-white">Apple M4</span>
-                      </div>
-                      <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 text-center">
-                        <span className="text-[10px] font-mono text-neutral-500 uppercase block mb-0.5">MEMORY</span>
-                        <span className="text-xs font-mono font-bold text-white">16GB Unified</span>
-                      </div>
-                      <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 text-center">
-                        <span className="text-[10px] font-mono text-neutral-500 uppercase block mb-0.5">STORAGE</span>
-                        <span className="text-xs font-mono font-bold text-white">512GB SSD</span>
-                      </div>
-                      <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 text-center">
-                        <span className="text-[10px] font-mono text-neutral-500 uppercase block mb-0.5">FINISH</span>
-                        <span className="text-xs font-mono font-bold text-sky-400">Sky Blue</span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
-                {/* Hardware Card 2 - Lenovo L24i-40 Monitor */}
-                <div className="bg-neutral-950/90 border border-neutral-800/90 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl group mt-6">
-                  <div className="absolute inset-0 bg-radial from-blue-900/10 via-black to-black pointer-events-none" />
-
-                  <div className="relative w-full aspect-[16/9] max-h-[260px] mx-auto rounded-2xl overflow-hidden bg-neutral-900/70 border border-neutral-800/80 flex items-center justify-center p-4">
-                    <div className="relative w-full h-full max-w-[420px] flex flex-col items-center justify-center">
-                      <div className="relative w-full aspect-[16/9] bg-neutral-950 rounded-lg border-2 border-neutral-700 shadow-2xl overflow-hidden flex items-center justify-center">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-sky-950/40 via-neutral-900 to-indigo-950 opacity-90" />
-                        <div className="relative z-10 text-center">
-                          <span className="font-mono text-xs text-sky-400 font-semibold block mb-1">100Hz · IPS FHD</span>
-                          <span className="font-serif italic text-white/80 text-base sm:text-lg">Lenovo L24i-40</span>
-                        </div>
-                      </div>
-                      <div className="w-12 h-6 bg-neutral-700 rounded-b-md" />
-                      <div className="w-32 h-2 bg-neutral-600 rounded-full" />
-                    </div>
-                  </div>
-
-                  <div className="mt-5 pt-4 border-t border-neutral-900 flex flex-wrap items-center justify-between gap-4">
+                {/* Hardware Card 2 - Lenovo L24i-40 Monitor (Pure Text Content) */}
+                <div className="bg-neutral-950/90 border border-neutral-800/90 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                     <div>
-                      <h4 className="text-white font-sans font-bold text-base sm:text-lg">
+                      <h4 className="text-white font-sans font-bold text-lg sm:text-xl">
                         Lenovo 24&quot; FHD Monitor
                       </h4>
-                      <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-0.5">
-                        100Hz Refresh Rate · L24i-40 Model · 1920×1080
+                      <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-1">
+                        100Hz Refresh Rate · Model: L24i-40 · 1920×1080 IPS Display
                       </p>
                     </div>
 
-                    <span className="px-3.5 py-1 rounded-full bg-neutral-900 border border-neutral-700/80 text-[10px] sm:text-xs font-mono font-semibold text-emerald-400 tracking-wider uppercase">
+                    <span className="px-3.5 py-1.5 rounded-full bg-neutral-900 border border-emerald-500/40 text-xs font-mono font-semibold text-emerald-400 tracking-wider uppercase shadow-[0_0_12px_rgba(52,211,153,0.2)]">
                       100Hz DISPLAY
                     </span>
+                  </div>
+
+                  {/* Monitor Spec Badges */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                    <div className="bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 text-center">
+                      <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">SCREEN SIZE</span>
+                      <span className="text-sm font-mono font-bold text-white">24 Inch FHD</span>
+                    </div>
+                    <div className="bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 text-center">
+                      <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">REFRESH RATE</span>
+                      <span className="text-sm font-mono font-bold text-emerald-400">100Hz</span>
+                    </div>
+                    <div className="bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 text-center">
+                      <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">MODEL</span>
+                      <span className="text-sm font-mono font-bold text-white">L24i-40</span>
+                    </div>
+                    <div className="bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 text-center">
+                      <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-1">RESOLUTION</span>
+                      <span className="text-sm font-mono font-bold text-white">1920×1080</span>
+                    </div>
                   </div>
                 </div>
               </div>

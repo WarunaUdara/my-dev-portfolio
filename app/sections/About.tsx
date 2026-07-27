@@ -35,7 +35,7 @@ const About = ({ isAboutPage = false }: AboutProps) => {
             {/* Description Paragraphs */}
             <div className="space-y-6 text-gray-200 text-base sm:text-lg leading-relaxed">
               <p>
-                Driven by a deep curiosity for modern software systems, cloud architecture, and intuitive user design. Over the past 4+ years, I&apos;ve engineered robust web platforms, automated cloud infrastructures, and led tech communities.
+                Driven by a deep curiosity for modern software systems, cloud architecture, and intuitive user design. Over the past 3+ years, I&apos;ve engineered robust web platforms, automated cloud infrastructures, and led tech communities.
               </p>
               <p>
                 Whether orchestrating containerized microservices, diving into frontend design systems, or exploring artificial intelligence, I build software that is performant, scalable, and delightful.
