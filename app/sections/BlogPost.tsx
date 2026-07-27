@@ -4,15 +4,86 @@ import React from "react";
 import Image from "@/components/ui/Image";
 import Link from "@/components/ui/Link";
 import { getBlogPostBySlug } from "@/lib/blogData";
-import { IconArrowLeft, IconCalendar, IconClock, IconUser, IconTag } from "@tabler/icons-react";
+import { IconArrowLeft, IconCalendar, IconClock, IconTag } from "@tabler/icons-react";
 
 // Dynamic MDX Component Loader Map
 import TurboshipPost from "@/content/blog/building-turboship-buildathon.mdx";
 import React19Post from "@/content/blog/react-19-and-tanstack-router.mdx";
 
-const MDX_COMPONENTS: Record<string, React.ComponentType> = {
+const MDX_COMPONENTS: Record<string, React.ComponentType<{ components?: Record<string, unknown> }>> = {
   "building-turboship-buildathon": TurboshipPost,
   "react-19-and-tanstack-router": React19Post,
+};
+
+// ADHD-Friendly & Reading Psychology Custom MDX Design System
+const mdxCustomComponents = {
+  h1: ({ children }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight mt-12 mb-6 pb-3 border-b border-neutral-800/80 leading-snug">
+      {children}
+    </h1>
+  ),
+  h2: ({ children }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h2 className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight mt-10 mb-4 pt-4 border-t border-neutral-800/50 flex items-center gap-2">
+      {children}
+    </h2>
+  ),
+  h3: ({ children }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h3 className="text-lg font-mono font-semibold text-sky-400 mt-8 mb-3 tracking-wide">
+      {children}
+    </h3>
+  ),
+  p: ({ children }: React.HTMLAttributes<HTMLParagraphElement>) => (
+    <p className="text-neutral-300 font-sans text-base sm:text-[17px] leading-[1.85] tracking-wide mb-6 max-w-prose">
+      {children}
+    </p>
+  ),
+  ul: ({ children }: React.HTMLAttributes<HTMLUListElement>) => (
+    <ul className="space-y-3 my-6 pl-4 border-l-2 border-emerald-500/40 list-none text-neutral-300 text-base">
+      {children}
+    </ul>
+  ),
+  ol: ({ children }: React.HTMLAttributes<HTMLOListElement>) => (
+    <ol className="space-y-3 my-6 pl-4 border-l-2 border-sky-500/40 list-decimal text-neutral-300 text-base">
+      {children}
+    </ol>
+  ),
+  li: ({ children }: React.HTMLAttributes<HTMLLIElement>) => (
+    <li className="flex items-start gap-2.5 leading-relaxed">
+      <span className="text-emerald-400 font-bold mt-1">❯</span>
+      <span>{children}</span>
+    </li>
+  ),
+  blockquote: ({ children }: React.HTMLAttributes<HTMLQuoteElement>) => (
+    <blockquote className="my-8 p-5 rounded-2xl bg-neutral-950 border border-neutral-800/90 text-neutral-200 font-serif italic text-lg leading-relaxed shadow-inner">
+      {children}
+    </blockquote>
+  ),
+  pre: ({ children }: React.HTMLAttributes<HTMLPreElement>) => (
+    <div className="my-8 rounded-2xl bg-neutral-950 border border-neutral-800/90 overflow-hidden shadow-2xl">
+      <div className="flex items-center justify-between px-4 py-2 bg-neutral-900/90 border-b border-neutral-800 text-xs font-mono text-neutral-400">
+        <div className="flex items-center gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
+        </div>
+        <span className="text-[10px] tracking-wider uppercase text-neutral-400">Code Snippet</span>
+      </div>
+      <pre className="p-5 font-mono text-xs sm:text-sm text-emerald-400 overflow-x-auto leading-relaxed no-visible-scrollbar">
+        {children}
+      </pre>
+    </div>
+  ),
+  code: ({ children, className }: React.HTMLAttributes<HTMLElement>) => {
+    if (className?.includes("language-")) {
+      return <code>{children}</code>;
+    }
+    return (
+      <code className="px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-emerald-400 font-mono text-xs font-semibold">
+        {children}
+      </code>
+    );
+  },
+  hr: () => <hr className="my-10 border-neutral-800/80" />,
 };
 
 export const BlogPost = ({ slug }: { slug: string }) => {
@@ -36,7 +107,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      <div className="container mx-auto max-w-4xl relative z-10 space-y-12">
+      <div className="container mx-auto max-w-3xl relative z-10 space-y-10">
         {/* Back Link */}
         <div>
           <Link
@@ -56,7 +127,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           </span>
 
           {/* Post Title */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-bold text-white leading-tight tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white leading-tight tracking-tight">
             {meta.title}
           </h1>
 
@@ -94,9 +165,9 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           </div>
         )}
 
-        {/* Rendered MDX Content */}
-        <div className="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-white prose-p:text-neutral-300 prose-p:leading-relaxed prose-code:text-emerald-400 prose-code:font-mono prose-code:bg-neutral-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-neutral-950 prose-pre:border prose-pre:border-neutral-800 prose-a:text-sky-300">
-          <MDXContent />
+        {/* Rendered MDX Content with ADHD-Friendly Typography & Component System */}
+        <div className="space-y-6 text-neutral-300 font-sans">
+          <MDXContent components={mdxCustomComponents} />
         </div>
 
         {/* Footer Tags */}
