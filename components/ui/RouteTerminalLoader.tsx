@@ -15,7 +15,7 @@ const ROUTE_LOGS: Record<string, RouteConfig> = {
     cmd: "git checkout origin/work --force",
     output: [
       "Switched to branch 'work' (HEAD detached at 8d50fc8)",
-      "✔ Preloaded 3 case study hero mockups & SVG tech icons.",
+      "✔ Preloaded case study hero mockups & SVG tech icons.",
       "⚡ 0 lints, 0 syntax errors, 100% pure craftsmanship."
     ],
     preloads: ["/projects-algoarena.png", "/projects-portfolio.png", "/projects-beautyofcloud.png"]
@@ -24,7 +24,7 @@ const ROUTE_LOGS: Record<string, RouteConfig> = {
     cmd: "git checkout feature/about-waruna",
     output: [
       "Switched to branch 'feature/about-waruna'",
-      "✔ Loaded BICT (Hons) Network Tech & 3 institution logos.",
+      "✔ Loaded BICT (Hons) Network Tech & institution logos.",
       "☕ Overclocking brain... Caffeine levels nominal."
     ],
     preloads: ["/me/waruna-speaking.png", "/me/usj-logo.png", "/me/icet-logo.png", "/me/school-logo.png"]
@@ -92,29 +92,27 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
     });
   };
 
+  const triggerTransition = (targetPath: string) => {
+    const matchingKey = Object.keys(ROUTE_LOGS).find((key) => key !== "/" && targetPath.startsWith(key)) || "/";
+    const config = ROUTE_LOGS[matchingKey] || ROUTE_LOGS["/"];
+    setCurrentConfig(config);
+    preloadRouteImages(config.preloads);
+    setIsTransitioning(true);
+
+    if (timerRef.current) clearTimeout(timerRef.current);
+    // Well-paced 1.35 second duration so user can comfortably read terminal command & sarcastic output
+    timerRef.current = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 1350);
+  };
+
   useEffect(() => {
     const handleLocationChange = () => {
       const newPath = window.location.pathname;
       if (newPath === prevPathRef.current) return;
-
       prevPathRef.current = newPath;
       setPathname(newPath);
-
-      // Find matching log config
-      const matchingKey = Object.keys(ROUTE_LOGS).find((key) => key !== "/" && newPath.startsWith(key)) || "/";
-      const config = ROUTE_LOGS[matchingKey] || ROUTE_LOGS["/"];
-      setCurrentConfig(config);
-
-      // Trigger preloading
-      preloadRouteImages(config.preloads);
-
-      // Trigger fast transition overlay
-      setIsTransitioning(true);
-
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => {
-        setIsTransitioning(false);
-      }, 520); // 520ms snappy transition delay
+      triggerTransition(newPath);
     };
 
     window.addEventListener("popstate", handleLocationChange);
@@ -128,16 +126,7 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
 
       const targetPath = href.split("?")[0].split("#")[0];
       if (targetPath && targetPath !== window.location.pathname) {
-        const matchingKey = Object.keys(ROUTE_LOGS).find((key) => key !== "/" && targetPath.startsWith(key)) || "/";
-        const config = ROUTE_LOGS[matchingKey] || ROUTE_LOGS["/"];
-        setCurrentConfig(config);
-        preloadRouteImages(config.preloads);
-        setIsTransitioning(true);
-
-        if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => {
-          setIsTransitioning(false);
-        }, 520);
+        triggerTransition(targetPath);
       }
     };
 
@@ -158,12 +147,13 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
             key="route-terminal-overlay"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97, filter: "blur(8px)" }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl pointer-events-none"
+            exit={{ opacity: 0, scale: 0.97, filter: "blur(10px)" }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            onClick={() => setIsTransitioning(false)}
+            className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl cursor-pointer"
           >
             {/* Terminal Window Box */}
-            <div className="w-full max-w-lg rounded-2xl bg-neutral-950/95 border border-white/15 p-5 shadow-[0_0_50px_rgba(0,0,0,0.9)] space-y-4">
+            <div className="w-full max-w-lg rounded-2xl bg-neutral-950/95 border border-white/15 p-5 sm:p-6 shadow-[0_0_50px_rgba(0,0,0,0.9)] space-y-4">
               {/* Window Controls & Branch Header */}
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2">
@@ -182,21 +172,26 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
               </div>
 
               {/* Terminal Command Prompt */}
-              <div className="font-mono text-xs sm:text-sm space-y-2">
-                <div className="flex items-center gap-2 text-neutral-200 font-semibold">
+              <div className="font-mono text-xs sm:text-sm space-y-3">
+                <motion.div
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-center gap-2 text-white font-semibold"
+                >
                   <span className="text-emerald-400">❯</span>
                   <span>{currentConfig.cmd}</span>
-                </div>
+                </motion.div>
 
-                {/* Sarcastic Execution Logs */}
-                <div className="space-y-1.5 pt-1 text-neutral-300 text-[11px] sm:text-xs">
+                {/* Sarcastic Execution Logs (Well-Paced Staggered Reveal) */}
+                <div className="space-y-2 pt-1 text-neutral-300 text-[11px] sm:text-xs">
                   {currentConfig.output.map((line, idx) => (
                     <motion.div
                       key={idx}
-                      initial={{ opacity: 0, x: -6 }}
+                      initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.08, duration: 0.15 }}
-                      className="flex items-start gap-2 leading-relaxed"
+                      transition={{ delay: 0.15 + idx * 0.22, duration: 0.25 }}
+                      className="flex items-start gap-2.5 leading-relaxed"
                     >
                       {line.startsWith("✔") ? (
                         <IconCheck className="w-3.5 h-3.5 text-emerald-400 mt-0.5 flex-shrink-0" />
@@ -212,12 +207,12 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
               </div>
 
               {/* Progress Bar / Pulsing Terminal Indicator */}
-              <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-neutral-400">
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-neutral-400">
                 <span className="animate-pulse flex items-center gap-1.5 text-neutral-300">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   Preloading route assets...
                 </span>
-                <span className="text-neutral-500">HTTP/2 200 OK</span>
+                <span className="text-neutral-500">HTTP/2 200 OK (Click to skip)</span>
               </div>
             </div>
           </motion.div>
