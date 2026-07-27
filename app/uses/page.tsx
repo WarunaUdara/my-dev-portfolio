@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "@/components/ui/Image";
 import Scales from "@/components/ui/scales";
+import AuroraText from "@/components/ui/aurora-text";
 import { NavBar } from "@/app/ui/TubelightNavbar";
 import Footer from "@/app/sections/Footer";
 import { IconHome, IconUser, IconBriefcase, IconFileText } from "@tabler/icons-react";
@@ -124,9 +125,13 @@ export default function UsesPage() {
           </p>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">
             What Powers{" "}
-            <span className="italic bg-gradient-to-r from-pink-500 via-purple-400 to-orange-400 bg-clip-text text-transparent">
+            <AuroraText
+              className="italic font-serif font-semibold"
+              colors={["#a717de", "#ff0cbd", "#3c34f3", "#ff6926"]}
+              speed={1.2}
+            >
               My Work
-            </span>
+            </AuroraText>
           </h1>
         </div>
 
