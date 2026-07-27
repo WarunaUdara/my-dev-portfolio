@@ -87,7 +87,7 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                 {/* Orbiting Circles Layer 2 (Outer Orbit, Reverse) */}
                 <OrbitingCircles radius={250} duration={38} reverse iconSize={44}>
                   <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/opentofu.webp" alt="OpenTofu" width={30} height={30} className="object-contain" />
+                    <Image src="/icons8-java-144.png" alt="Java" width={30} height={30} className="object-contain" />
                   </div>
                   <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
                     <Image src="/icons8-azure-96.png" alt="Azure" width={30} height={30} className="object-contain" />

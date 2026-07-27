@@ -250,24 +250,9 @@ export default function Hero() {
               </h1>
 
               {/* Subheading with Silver Gradient */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-xl hero-subheading">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <span className="bg-gradient-to-b from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent">
-                    Hello, I&apos;m Waruna Udara
-                  </span>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/20 overflow-hidden flex-shrink-0">
-                    {/* Add your profile image here */}
-                    <Image
-                      src="/waruna-udara.jpg"
-                      alt="Waruna Udara"
-                      width={48}
-                      height={48}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
+              <div className="flex items-center justify-center text-lg sm:text-xl md:text-xl hero-subheading">
                 <span className="bg-gradient-to-b from-gray-300 via-gray-400 to-gray-500 bg-clip-text text-transparent">
-                  a Software Developer
+                  Hello, I&apos;m Waruna Udara, a Software Developer
                 </span>
               </div>
 
