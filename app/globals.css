@@ -66,8 +66,26 @@
   --border: var(--color-4);
   --input: var(--color-4);
   /* Font families */
-  --font-inter: 'Inter', sans-serif;
+  --font-google-sans: 'Google Sans Flex', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', monospace;
   --font-instrument-serif: 'Instrument Serif', serif;
+}
+
+.google-sans-flex, .font-google-sans {
+  font-family: "Google Sans Flex", "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0,
+    "wdth" 100,
+    "GRAD" 0,
+    "ROND" 0;
+}
+
+.jetbrains-mono, .font-jetbrains-mono {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 @theme inline {
@@ -90,7 +108,8 @@
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
 
   /* Font families */
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-google-sans);
+  --font-mono: var(--font-jetbrains-mono);
   --font-serif: var(--font-instrument-serif);
   --animate-marquee: marquee var(--duration) infinite linear;
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
