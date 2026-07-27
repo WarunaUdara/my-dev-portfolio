@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { IconGitBranch, IconTerminal, IconCheck, IconBolt } from "@tabler/icons-react";
+import { IconTerminal, IconCheck, IconBolt } from "@tabler/icons-react";
 
 interface RouteConfig {
   cmd: string;
@@ -76,6 +76,37 @@ const ROUTE_LOGS: Record<string, RouteConfig> = {
   }
 };
 
+declare global {
+  interface Window {
+    __globalAudioCtx?: AudioContext;
+  }
+}
+
+// Synthetic mechanical key click generator across all pages
+const playClickSound = () => {
+  if (typeof window === "undefined") return;
+  try {
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!window.__globalAudioCtx) {
+      window.__globalAudioCtx = new AudioCtx();
+    }
+    const ctx = window.__globalAudioCtx;
+    if (ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
+    }
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(700 + Math.random() * 500, ctx.currentTime);
+    gain.gain.setValueAtTime(0.015, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.012);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.012);
+  } catch {}
+};
+
 export default function RouteTerminalLoader({ children }: { children: React.ReactNode }) {
   const [pathname, setPathname] = useState(() => (typeof window !== "undefined" ? window.location.pathname : "/"));
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -83,7 +114,7 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
   const prevPathRef = useRef(pathname);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Preload images with load completion promise & fallback
+  // Preload images utility
   const preloadRouteImages = (urls: string[]): Promise<void> => {
     if (typeof window === "undefined" || !urls.length) return Promise.resolve();
     
@@ -106,7 +137,7 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
         }
       });
 
-      // Safety timeout after 1000ms max
+      // Safety timeout
       setTimeout(resolve, 1000);
     });
   };
@@ -117,19 +148,28 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
     setCurrentConfig(config);
     setIsTransitioning(true);
 
+    playClickSound();
+
     if (timerRef.current) clearTimeout(timerRef.current);
 
-    // Minimum display time (450ms) for snappy, constant feedback without artificial overhead
     const minDisplayPromise = new Promise((resolve) => setTimeout(resolve, 450));
     const preloadPromise = preloadRouteImages(config.preloads);
 
-    // Dynamic resolution: Dismisses as soon as assets are ready (450ms - 1000ms max)
     Promise.all([minDisplayPromise, preloadPromise]).then(() => {
       setIsTransitioning(false);
     });
   };
 
   useEffect(() => {
+    // Unlock AudioContext on first global click or touch gesture on ANY page
+    const unlockAudioOnGesture = () => {
+      if (typeof window !== "undefined" && window.__globalAudioCtx && window.__globalAudioCtx.state === "suspended") {
+        window.__globalAudioCtx.resume().catch(() => {});
+      }
+    };
+    window.addEventListener("click", unlockAudioOnGesture);
+    window.addEventListener("touchstart", unlockAudioOnGesture);
+
     const handleLocationChange = () => {
       const newPath = window.location.pathname;
       if (newPath === prevPathRef.current) return;
@@ -156,6 +196,8 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
     document.addEventListener("click", handleGlobalLinkClick, true);
 
     return () => {
+      window.removeEventListener("click", unlockAudioOnGesture);
+      window.removeEventListener("touchstart", unlockAudioOnGesture);
       window.removeEventListener("popstate", handleLocationChange);
       document.removeEventListener("click", handleGlobalLinkClick, true);
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -175,23 +217,17 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
             onClick={() => setIsTransitioning(false)}
             className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl cursor-pointer"
           >
-            {/* Terminal Window Box */}
+            {/* Minimal Clean Terminal Window Box */}
             <div className="w-full max-w-lg rounded-2xl bg-neutral-950/95 border border-white/15 p-5 sm:p-6 shadow-[0_0_60px_rgba(0,0,0,0.95)] space-y-4">
-              {/* Window Controls & Branch Header */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  <span className="ml-2 text-xs font-mono text-neutral-400 flex items-center gap-1.5">
-                    <IconTerminal className="w-3.5 h-3.5 text-neutral-300" />
-                    waruna@macbook-air: ~
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-neutral-900 border border-white/10 text-[10px] font-mono text-neutral-300">
-                  <IconGitBranch className="w-3 h-3 text-emerald-400" />
-                  <span>git-router</span>
-                </div>
+              {/* Window Controls & Clean Title Bar */}
+              <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                <span className="ml-2 text-xs font-mono text-neutral-400 flex items-center gap-1.5">
+                  <IconTerminal className="w-3.5 h-3.5 text-neutral-300" />
+                  waruna@macbook-air: ~
+                </span>
               </div>
 
               {/* Terminal Command Prompt */}
@@ -200,13 +236,14 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.15 }}
+                  onAnimationStart={playClickSound}
                   className="flex items-center gap-2 text-white font-semibold"
                 >
                   <span className="text-emerald-400">❯</span>
                   <span>{currentConfig.cmd}</span>
                 </motion.div>
 
-                {/* Sarcastic Execution Logs (Dynamic Staggered Reveal) */}
+                {/* Sarcastic Execution Logs */}
                 <div className="space-y-2 pt-1 text-neutral-300 text-[11px] sm:text-xs">
                   {currentConfig.output.map((line, idx) => (
                     <motion.div
@@ -214,6 +251,7 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.08 + idx * 0.12, duration: 0.18 }}
+                      onAnimationStart={playClickSound}
                       className="flex items-start gap-2.5 leading-relaxed"
                     >
                       {line.startsWith("✔") ? (
@@ -227,15 +265,6 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
                     </motion.div>
                   ))}
                 </div>
-              </div>
-
-              {/* Progress Bar / Pulsing Terminal Indicator */}
-              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-neutral-400">
-                <span className="animate-pulse flex items-center gap-1.5 text-neutral-300">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  Preloading route assets...
-                </span>
-                <span className="text-neutral-500">HTTP/2 200 OK</span>
               </div>
             </div>
           </motion.div>
