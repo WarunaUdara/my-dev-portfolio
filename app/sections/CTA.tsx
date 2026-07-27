@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Grainient from "@/components/ReactBits/Grainient";
 import CircularText from "@/components/ReactBits/CircularText";
+import AuroraText from "@/components/ui/aurora-text";
 import { IconArrowUpRight, IconSparkles } from "@tabler/icons-react";
 
 export default function CTA() {
@@ -68,9 +69,9 @@ export default function CTA() {
                 </span>
                 <br />
                 LET&apos;S MAKE IT{" "}
-                <span className="font-serif italic font-extrabold bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">
+                <AuroraText className="font-serif italic font-extrabold">
                   HAPPEN!
-                </span>
+                </AuroraText>
               </h2>
 
               {/* Draggable Rotating Disc Badge - Springs back to exact position on release */}

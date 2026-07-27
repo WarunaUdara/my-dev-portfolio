@@ -2,6 +2,7 @@ import React from 'react';
 import Image from '@/components/ui/Image';
 import { IconBrandLinkedin, IconBrandGithub } from '@tabler/icons-react';
 import Frost from '@/components/canvasui/Frost';
+import AuroraText from '@/components/ui/aurora-text';
 
 const About = () => {
   return (
@@ -55,9 +56,9 @@ const About = () => {
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight text-center lg:text-left">
               <span className="block">Full-Stack Developer and</span>
               <span>a little bit of{' '}</span>
-              <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">
+              <AuroraText className="italic font-serif">
                 everything
-              </span>
+              </AuroraText>
             </h2>
 
             {/* Description Paragraphs */}

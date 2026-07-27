@@ -6,14 +6,8 @@
   0% {
     background-position: 0% 50%;
   }
-  25% {
-    background-position: 50% 100%;
-  }
   50% {
     background-position: 100% 50%;
-  }
-  75% {
-    background-position: 50% 0%;
   }
   100% {
     background-position: 0% 50%;
@@ -21,7 +15,7 @@
 }
 
 .animate-aurora {
-  animation: aurora 8s ease-in-out infinite alternate;
+  animation: aurora 12s ease-in-out infinite;
 }
 
 /* CSS Variables for theming - Dark Mode Only */

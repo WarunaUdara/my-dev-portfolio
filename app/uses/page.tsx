@@ -130,7 +130,7 @@ export default function UsesPage() {
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">
             What Powers{" "}
             <AuroraText
-              className="italic font-serif font-semibold"
+              className="italic font-serif "
               colors={["#a717de", "#ff0cbd", "#3c34f3", "#ff6926"]}
               speed={1.2}
             >

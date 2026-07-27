@@ -1,8 +1,10 @@
 'use client';
 
+import React from "react";
 import { useQuery } from '@tanstack/react-query';
 import GitHubCalendar from 'react-github-calendar';
 import { IconStar, IconGitFork, IconBook } from '@tabler/icons-react';
+import AuroraText from "@/components/ui/aurora-text";
 
 interface GitHubStats {
   followers: number;
@@ -41,7 +43,7 @@ const GitHubActivity = () => {
             DEVELOPER INSIGHTS
           </p>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif">
-            GitHub <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">Activity</span>
+            GitHub <AuroraText className="italic font-serif">Activity</AuroraText>
           </h2>
         </div>
 

@@ -24,6 +24,7 @@ import { MessageSkeleton } from '@/components/MessageSkeleton';
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input';
 import { IconBrandGithub, IconBrandGoogle, IconPin, IconTrash, IconX, IconSend, IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react';
 import Image from '@/components/ui/Image';
+import AuroraText from "@/components/ui/aurora-text";
 
 interface Message {
   id: string;
@@ -249,9 +250,9 @@ export default function GuestbookPage() {
               THE GUESTBOOK
             </p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif mb-4 leading-tight">
-              <span className="bg-gradient-to-r from-[var(--color-8)] via-[var(--color-9)] to-[var(--color-8)] bg-clip-text text-transparent italic">
-                Got a message?{'  '}
-              </span>{'  '}
+              <AuroraText className="italic font-serif">
+                Got a message?
+              </AuroraText>{" "}
               I&apos;d <br /> love to hear from you!
             </h1>
             

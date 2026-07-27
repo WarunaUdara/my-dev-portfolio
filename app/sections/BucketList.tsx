@@ -1,6 +1,7 @@
 "use client";
-import React from 'react';
+import React, { useState } from "react";
 import { cn } from '@/lib/utils';
+import AuroraText from "@/components/ui/aurora-text";
 
 interface BucketItem {
   id: number;
@@ -77,8 +78,10 @@ const BucketList = () => {
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif mb-4">
             The Things I&apos;ll Do
           </h2>
-          <h3 className="text-4xl sm:text-5xl lg:text-6xl font-serif italic bg-gradient-to-r from-[var(--color-8)] via-[var(--color-9)] to-[var(--color-8)] bg-clip-text text-transparent">
-            Before I&apos;m Done
+          <h3 className="text-4xl sm:text-5xl lg:text-6xl font-serif">
+            <AuroraText className="italic font-serif">
+              Before I&apos;m Done
+            </AuroraText>
           </h3>
 
           {/* Progress Bar */}

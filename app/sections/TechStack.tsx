@@ -1,5 +1,8 @@
+"use client";
+
 import React from 'react';
 import Image from '@/components/ui/Image';
+import AuroraText from "@/components/ui/aurora-text";
 import CurvedLoop from '../ui/CurvedLoop';
 
 const TechStack = () => {
@@ -66,7 +69,7 @@ const techStack = [
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif leading-tight mb-2">
-            My <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">Tech-Stack</span>
+            My <AuroraText className="italic font-serif">Tech-Stack</AuroraText>
           </h2>
           <h2 className="text-sm text-gray-400 uppercase tracking-wider">
             Technologies I&apos;ve been working with and I constantly try to improve

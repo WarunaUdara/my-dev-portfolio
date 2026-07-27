@@ -2,6 +2,7 @@
 import Image from "@/components/ui/Image";
 import { Globe } from "@/app/ui/Globe"
 import { IconMapPin } from "@tabler/icons-react";
+import AuroraText from "@/components/ui/aurora-text";
 
 import { cn } from "@/lib/utils";
 
@@ -93,9 +94,9 @@ const features = [
         <div className="absolute top-6 left-6 right-6 z-20">
           <h3 className="text-2xl sm:text-3xl font-serif leading-tight">
             Passionate about{" "}
-            <span className="italic bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] bg-clip-text text-transparent">
+            <AuroraText className="italic font-serif">
               cutting-edge technologies
-            </span>
+            </AuroraText>
           </h3>
         </div>
 

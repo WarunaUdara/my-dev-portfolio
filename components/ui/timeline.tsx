@@ -6,6 +6,7 @@ import {
   motion,
 } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import AuroraText from "./aurora-text";
 
 export interface TimelineEntry {
   title: string;
@@ -43,9 +44,9 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
         </p>
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight text-white mb-6">
           Volunteering{" "}
-          <span className="italic bg-gradient-to-t from-[#f8fafc] via-[#cbd5e1] to-[#64748b] bg-clip-text text-transparent">
+          <AuroraText className="italic font-serif">
             Experience
-          </span>
+          </AuroraText>
         </h2>
         <p className="text-neutral-400 text-sm md:text-base max-w-xl">
           Active leadership, technical management, and community initiative positions I&apos;ve held across societies and tech organizations.
