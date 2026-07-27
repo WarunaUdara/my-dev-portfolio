@@ -8,6 +8,7 @@ import FloatingSparkles from "../ui/FloatingSparkles";
 import { BentoDemo } from "./BentoDemo";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { IconCopy, IconCheck, IconArrowUpRight } from "@tabler/icons-react";
+import { cn } from "@/lib/utils";
 
 // Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
