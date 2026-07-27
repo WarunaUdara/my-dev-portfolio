@@ -15,6 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Hero() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [copied, setCopied] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -174,9 +175,13 @@ export default function Hero() {
       // Modern clipboard API (works in HTTPS)
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(email);
+        setCopied(true);
         setToastMessage("Copied to clipboard!");
         setShowToast(true);
-        setTimeout(() => setShowToast(false), 4000);
+        setTimeout(() => {
+          setShowToast(false);
+          setCopied(false);
+        }, 3000);
       } else {
         // Fallback for older browsers or non-HTTPS
         const textArea = document.createElement("textarea");
@@ -192,9 +197,13 @@ export default function Hero() {
         textArea.remove();
         
         if (successful) {
+          setCopied(true);
           setToastMessage("Copied to clipboard!");
           setShowToast(true);
-          setTimeout(() => setShowToast(false), 4000);
+          setTimeout(() => {
+            setShowToast(false);
+            setCopied(false);
+          }, 3000);
         } else {
           throw new Error('Fallback copy failed');
         }
