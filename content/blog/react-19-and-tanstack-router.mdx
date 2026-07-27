@@ -1,0 +1,47 @@
+---
+title: "Architecting Modern React 19 Applications with TanStack Router & Vite"
+date: "2026-04-10"
+description: "Why TanStack Router and Vite form the most resilient, type-safe client architecture for modern web applications."
+category: "WEB ARCHITECTURE"
+readTime: "4 min read"
+tags: ["React 19", "TanStack Router", "Vite", "TypeScript"]
+coverImage: "/projects-portfolio.png"
+author: "Waruna Udara"
+---
+
+# Architecting Modern React 19 Applications with TanStack Router
+
+Modern single-page application (SPA) architecture has evolved rapidly. With React 19 and Vite 8, developers now have access to unprecedented compilation speed and type safety without the complexity of traditional SSR frameworks when building client-first applications.
+
+In this article, we explore why **TanStack Router** paired with **Vite** is our go-to stack for building high-performance developer portfolios and enterprise web applications.
+
+---
+
+## 🔒 100% Type-Safe Routing Out of the Box
+
+Unlike traditional string-based routers, TanStack Router generates type definitions for every route path, search parameter, and loader function.
+
+```tsx
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/blog/$slug')({
+  component: BlogPostPage,
+});
+
+function BlogPostPage() {
+  const { slug } = Route.useParams();
+  return <div>Reading post: {slug}</div>;
+}
+```
+
+If you rename a route file or pass invalid URL parameters, TypeScript immediately catches the error at compile time.
+
+---
+
+## ⚡ Zero-Delay Client Transitions & Preloading
+
+TanStack Router includes built-in intent preloading. Hovering or focusing a navigation link automatically triggers route code-splitting downloads in the background before the user even clicks!
+
+* **Preload on Hover**: Downloads route chunk in < 20ms.
+* **Smart Caching**: Preserves route data in memory.
+* **Clean State Transitions**: Seamlessly integrates with custom terminal transition loaders and glassmorphic UI overlays.

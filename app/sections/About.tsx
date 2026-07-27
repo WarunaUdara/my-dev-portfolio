@@ -116,18 +116,18 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                 </div>
               </div>
             ) : (
-              /* Landing Page Standard Image Frame */
-              <div className="relative w-full max-w-md mx-auto lg:max-w-full">
-                <div className="absolute inset-0 bg-gradient-to-br from-neutral-700 via-neutral-800 to-neutral-950 rounded-3xl transform rotate-3 border border-neutral-700/50"></div>
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+              /* Landing Page Clean Dark Container with Image Inside & Overflow Hidden */
+              <div className="relative w-full max-w-md mx-auto lg:max-w-full rounded-3xl bg-neutral-950 border border-neutral-800/90 shadow-2xl overflow-hidden group">
+                <div className="relative w-full aspect-[4/5] flex items-end justify-center pt-6">
                   <Image
-                    src="/WarunaUdaraSampath.jpg"
+                    src="/warunaudara.webp"
                     alt="Waruna Udara Sampath"
-                    width={500}
-                    height={600}
-                    className="w-full h-auto object-cover"
+                    fill
+                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     priority
                   />
+                  {/* Subtle bottom fade so cut edge dissolves smoothly into container bottom */}
+                  <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-neutral-950 to-transparent pointer-events-none" />
                 </div>
               </div>
             )}

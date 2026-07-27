@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "@/components/ui/Link"
 import Image from "@/components/ui/Image"
-import { IconChevronDown, IconLink, IconPhoto, IconX } from "@tabler/icons-react"
+import { IconChevronDown, IconLink, IconPhoto, IconX, IconArticle } from "@tabler/icons-react"
 import { cn } from "@/lib/utils"
 
 interface NavItem {
@@ -59,6 +59,8 @@ export function NavBar({ items, className }: NavBarProps) {
       setActiveTab('Work')
     } else if (pathname.startsWith('/about')) {
       setActiveTab('About')
+    } else if (pathname.startsWith('/blog')) {
+      setActiveTab('Blog')
     } else if (isOnMorePage) {
       setActiveTab('More')
     } else if (pathname === '/' || pathname.startsWith('/#')) {
@@ -396,21 +398,38 @@ export function NavBar({ items, className }: NavBarProps) {
                             </div>
                           </Link>
 
-                          {/* Column 3 - Links and Uses stacked */}
-                          <div className="space-y-3">
+                          {/* Column 3 - Blog, Links and Uses stacked */}
+                          <div className="space-y-2">
+                            {/* Blog Card */}
+                            <Link
+                              href="/blog"
+                              onClick={handleMenuItemClick}
+                              className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-3 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                                  <IconArticle size={16} className="text-white" />
+                                </div>
+                                <div>
+                                  <h4 className="text-white font-semibold text-xs mb-0.5">Blog</h4>
+                                  <p className="text-white/60 text-[10px] leading-tight">Writings &amp; tech articles</p>
+                                </div>
+                              </div>
+                            </Link>
+
                             {/* Links Card */}
                             <Link
                               href="/links"
                               onClick={handleMenuItemClick}
-                              className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-5 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
+                              className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-3 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
                             >
-                              <div className="flex items-start gap-4">
-                                <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                  <IconLink size={22} className="text-white" />
+                              <div className="flex items-start gap-3">
+                                <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                                  <IconLink size={16} className="text-white" />
                                 </div>
                                 <div>
-                                  <h4 className="text-white font-semibold text-base mb-1.5">Links</h4>
-                                  <p className="text-white/60 text-xs leading-relaxed">All my links are here</p>
+                                  <h4 className="text-white font-semibold text-xs mb-0.5">Links</h4>
+                                  <p className="text-white/60 text-[10px] leading-tight">All my links are here</p>
                                 </div>
                               </div>
                             </Link>
@@ -419,15 +438,15 @@ export function NavBar({ items, className }: NavBarProps) {
                             <Link
                               href="/uses"
                               onClick={handleMenuItemClick}
-                              className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-5 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
+                              className="group relative block rounded-2xl bg-zinc-900/80 border border-white/10 p-3 hover:border-white/30 hover:bg-zinc-800/80 transition-all"
                             >
-                              <div className="flex items-start gap-4">
-                                <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                  <IconPhoto size={22} className="text-white" />
+                              <div className="flex items-start gap-3">
+                                <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                                  <IconPhoto size={16} className="text-white" />
                                 </div>
                                 <div>
-                                  <h4 className="text-white font-semibold text-base mb-1.5">Uses</h4>
-                                  <p className="text-white/60 text-xs leading-relaxed">A peek into my digital workspace</p>
+                                  <h4 className="text-white font-semibold text-xs mb-0.5">Uses</h4>
+                                  <p className="text-white/60 text-[10px] leading-tight">A peek into my workspace</p>
                                 </div>
                               </div>
                             </Link>

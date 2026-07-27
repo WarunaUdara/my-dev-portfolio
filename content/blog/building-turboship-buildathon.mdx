@@ -1,0 +1,56 @@
+---
+title: "Building Turboship: Agentic AI Deployment Harness for Multi-Cloud"
+date: "2026-05-18"
+description: "How we engineered an AI-powered Internal Developer Platform during the Cursor Sri Lanka 24H Buildathon, securing 2nd Place."
+category: "AI & DEVOPS"
+readTime: "6 min read"
+tags: ["AI Agents", "n8n", "Next.js", "AWS", "Docker", "Trivy"]
+coverImage: "/projects-algoarena.png"
+author: "Waruna Udara"
+---
+
+# Building Turboship: Agentic AI Deployment Harness
+
+During the **Cursor Sri Lanka 24H Buildathon**, our team set out to solve a real-world developer bottleneck: the friction between containerizing a application and provisioning secure multi-cloud production infrastructure.
+
+The result of our 24-hour sprint was **Turboship**, an AI-powered Internal Developer Platform (IDP) control plane that achieved **🥈 2nd Place (n8n Track)** and **🏅 14th Place Overall** out of 100+ competing teams.
+
+---
+
+## 💡 The Problem We Set Out to Solve
+
+Deploying containerized microservices to cloud providers like AWS ECS or Azure Container Apps usually requires writing verbose Infrastructure-as-Code (Terraform, Bicep, CDK), configuring IAM policies, managing secrets, and running security vulnerability scans manually.
+
+For small teams and fast-moving developers, this overhead slows down ship velocity.
+
+```bash
+# Traditional manual deployment flow
+docker build -t username/app:latest .
+docker push username/app:latest
+aws ecs create-cluster --cluster-name production
+aws ecs register-task-definition --cli-input-json file://task-def.json
+aws ecs create-service --cluster-name production --service-name app-service
+```
+
+---
+
+## ⚡ The Turboship Architecture
+
+Turboship automates the entire control plane using an **agentic AI orchestration pipeline**. Users simply submit a public Docker Hub image URL, and Turboship's AI workflow takes over.
+
+### Architecture Highlights:
+1. **Runtime Requirements Analysis**: GPT-5.5 inspects image metadata and recommends optimal vCPU/RAM allocations.
+2. **Automated Vulnerability Scanning**: Integrated **Trivy** vulnerability scanner checks image layers for CVEs before deployment.
+3. **Multi-Cloud Provisioning**: Executes secure AWS SigV4 signed requests to deploy directly to **AWS ECS Fargate** and **Azure Container Apps**.
+4. **Human-in-the-Loop Safeguards**: Displays proposed infrastructure costs and security findings for developer approval before executing cloud mutations.
+
+---
+
+## 🛠️ Tech Stack & Key Takeaways
+
+* **Frontend Control Plane**: Next.js 15 & Tailwind CSS with WebGL status monitors.
+* **Agentic Orchestration Engine**: n8n workflows integrated with OpenAI GPT-5.5.
+* **Security & Vulnerability Analysis**: Trivy scanner CLI & AWS SigV4 request signatures.
+* **Cloud Targets**: AWS ECS Fargate & Azure Container Apps.
+
+Building Turboship in 24 hours proved the power of coupling AI agents with structured workflow orchestration engines like n8n.
