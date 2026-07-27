@@ -1,5 +1,6 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Providers } from '../providers';
+import TerminalLoader from '@/components/ui/TerminalLoader';
 import '../globals.css';
 
 export const Route = createRootRoute({
@@ -46,9 +47,11 @@ function RootLayout() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="min-h-screen bg-background text-foreground antialiased selection:bg-blue-500 selection:text-white">
-        <Outlet />
-      </main>
+      <TerminalLoader>
+        <main className="min-h-screen bg-background text-foreground antialiased selection:bg-blue-500 selection:text-white">
+          <Outlet />
+        </main>
+      </TerminalLoader>
     </Providers>
   );
 }
