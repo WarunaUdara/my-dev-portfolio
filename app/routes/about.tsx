@@ -20,7 +20,7 @@ function AboutPage() {
   return (
     <div className="min-h-screen bg-background text-foreground scroll-smooth">
       <div className="pt-12">
-        <About />
+        <About isAboutPage={true} />
         <Volunteering />
       </div>
       <Footer />
