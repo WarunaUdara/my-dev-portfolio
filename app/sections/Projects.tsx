@@ -1,305 +1,297 @@
 "use client";
+import React, { useEffect, useRef, useState } from 'react';
+import Image from '@/components/ui/Image';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Lens } from '../ui/lens';
+import AuroraText from '@/components/ui/aurora-text';
 
-import React from "react";
-import Image from "@/components/ui/Image";
-import AuroraText from "@/components/ui/aurora-text";
-import { IconTrophy, IconMedal, IconCode, IconExternalLink } from "@tabler/icons-react";
+gsap.registerPlugin(ScrollTrigger);
 
-export interface ProjectItem {
-  id: string;
-  category: string;
-  date: string;
+interface ProjectData {
   title: string;
-  tagline: string;
+  detailsTitle: string;
+  pillarText: string;
+  descriptionPoints: string[];
+  techStack: Array<{ name: string; icon: string }>;
   imageSrc: string;
   gradient: string;
   link: string;
-  techStack: Array<{ name: string; icon?: string }>;
 }
 
-export interface HackathonItem {
-  id: string;
-  event: string;
-  projectTitle: string;
-  subtitle: string;
-  date: string;
-  awards: string[];
-  description: string[];
-  techStack: string[];
-  gradient: string;
-  link?: string;
-}
+const Projects = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-export const WORK_PROJECTS: ProjectItem[] = [
-  {
-    id: "01",
-    category: "WEB APP",
-    date: "Q2 2026",
-    title: "AlgoArena",
-    tagline: "Real-time competitive coding & hackathon management platform built for speed",
-    imageSrc: "/projects-algoarena.png",
-    gradient: "bg-gradient-to-br from-pink-600 via-pink-700 to-rose-900",
-    link: "https://algoarena.live",
-    techStack: [
-      { name: "NEXT.JS 14" },
-      { name: "TYPESCRIPT" },
-      { name: "TAILWIND CSS" },
-      { name: "FIREBASE" },
-      { name: "GSAP" },
-      { name: "VERCEL" },
-    ],
-  },
-  {
-    id: "02",
-    category: "DEV PORTFOLIO",
-    date: "Q4 2024",
-    title: "Personal Portfolio",
-    tagline: "Ultra-fast Next.js portfolio featuring WebGL glassmorphism and custom audio interactive features",
-    imageSrc: "/projects-portfolio.png",
-    gradient: "bg-gradient-to-br from-indigo-600 via-blue-700 to-purple-900",
-    link: "https://warunadev.vercel.app",
-    techStack: [
-      { name: "NEXT.JS 15" },
-      { name: "REACT 19" },
-      { name: "TYPESCRIPT" },
-      { name: "TAILWIND CSS" },
-      { name: "THREE.JS" },
-      { name: "BUN" },
-      { name: "VERCEL" },
-    ],
-  },
-  {
-    id: "03",
-    category: "IDEATHON PLATFORM",
-    date: "Q1 2025",
-    title: "Beauty Of Cloud",
-    tagline: "Inter-university cloud computing ideathon platform engineered with MongoDB Atlas",
-    imageSrc: "/projects-beautyofcloud.png",
-    gradient: "bg-gradient-to-br from-slate-700 via-neutral-800 to-slate-900",
-    link: "https://beautyof.cloud",
-    techStack: [
-      { name: "NEXT.JS" },
-      { name: "MONGODB" },
-      { name: "TYPESCRIPT" },
-      { name: "TAILWIND CSS" },
-      { name: "SANITY CMS" },
-      { name: "VERCEL" },
-    ],
-  },
-];
+  const projects: ProjectData[] = [
+    {
+      title: "Algorena",
+      detailsTitle: "AlgoArena",
+      pillarText: "Hackathon Platform",
+      descriptionPoints: [
+        "Built with Next.js 14 using Server Components and Firebase Authentication.",
+        "Real-time team formation and submission tracking with Firestore.",
+        "Responsive UI with Tailwind CSS and smooth animations."
+      ],
+      techStack: [
+        { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+        { name: "React", icon: "/icons8-react-24.png" },
+        { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" },
+        { name: "TypeScript", icon: "/ts.png" },
+        { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
+      ],
+      imageSrc: "/projects-algoarena.png",
+      gradient: "bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900",
+      link: "https://algoarena.live"
+    },
+    {
+      title: "Personal Portfolio",
+      detailsTitle: "Personal Portfolio",
+      pillarText: "Developer Portfolio",
+      descriptionPoints: [
+        "Developed with Next.js 15, React 19, and TypeScript for type safety.",
+        "GSAP animations with ScrollTrigger for interactive experiences.",
+        "Deployed on Vercel, Static assets are deployed to a global Content Delivery Network (CDN) for low latency and instant delivery worldwide, which optimizes performance and SEO."
+      ],
+      techStack: [
+        { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+        { name: "React", icon: "/icons8-react-24.png" },
+        { name: "TypeScript", icon: "/ts.png" },
+        { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
+        { name: "Vercel", icon: "/vercel.png" },
+        { name: "Bun", icon: "/Bun.png" },
+        { name: "GSAP", icon: "/gsap-logo_svgstack_com_28451764740258.png" },
+        { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" }
+      ],
+      imageSrc: "/projects-portfolio.png",
+      gradient: "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-900",
+      link: "https://warunadev.vercel.app"
+    },
+    {
+      title: "Beauty Of Cloud",
+      detailsTitle: "Beauty Of Cloud",
+      pillarText: "Inter-University Cloud Computing Ideathon",
+      descriptionPoints: [
+        "IEEE CS Chapter USJ flagship event promoting cloud technologies.",
+        "Next.js with MongoDB Atlas for scalable data management.",
+        "Tailwind CSS for responsive design across all devices."
+      ],
+      techStack: [
+        { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+        { name: "React", icon: "/icons8-react-24.png" },
+        { name: "MongoDB", icon: "/icons8-mongo-db-96.png" },
+        { name: "Vercel", icon: "/vercel.png" },
+        { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
+      ],
+      imageSrc: "/projects-beautyofcloud.png",
+      gradient: "bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900",
+      link: "https://beautyof.cloud"
+    }
+  ];
 
-export const HACKATHONS: HackathonItem[] = [
-  {
-    id: "H01",
-    event: "Cursor Sri Lanka 24H Buildathon",
-    projectTitle: "Turboship",
-    subtitle: "Agentic AI Deployment Harness for Multi-Cloud Platforms",
-    date: "May 2026",
-    awards: ["🥈 2nd Place (n8n Track)", "🏅 14th Place Overall"],
-    description: [
-      "Turboship is an AI-powered Internal Developer Platform (IDP) control plane built during the Cursor Sri Lanka 24H Buildathon.",
-      "Streamlines container deployment from Docker Hub with AI orchestration, AWS SigV4 security, Trivy vulnerability scanning, and automated multi-cloud provisioning to AWS ECS Fargate & Azure Container Apps."
-    ],
-    techStack: ["NEXT.JS", "N8N", "OPENAI GPT-5.5", "SUPABASE", "AWS SIGV4", "TRIVY", "VERCEL"],
-    gradient: "from-amber-500/10 via-neutral-900/90 to-neutral-950",
-  },
-  {
-    id: "H02",
-    event: "CryptX 1.0 Hackathon",
-    projectTitle: "NomadSpace",
-    subtitle: "University of Sri Jayewardenepura Hackathon",
-    date: "2024",
-    awards: ["🏅 Top 15 Finalist (out of 100+ teams)"],
-    description: [
-      "Had a great experience at the CryptX 1.0 hackathon at the University of Sri Jayewardenepura!",
-      "Presented an innovative platform solution connecting local vendors and digital nomads with co-working spaces in the Sri Lankan tourism industry, advancing to the Top 15 out of 100+ competing teams."
-    ],
-    techStack: ["REACT", "NEXT.JS", "WEB3", "TOURISM TECH", "TAILWIND CSS"],
-    gradient: "from-purple-500/10 via-neutral-900/90 to-neutral-950",
-  },
-];
+  useEffect(() => {
+    if (!sectionRef.current || !descriptionRef.current) return;
 
-export const Projects = () => {
+    const section = sectionRef.current;
+    const description = descriptionRef.current;
+
+    const ctx = gsap.context(() => {
+      // Pin description on desktop
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        pin: description,
+        pinSpacing: false,
+      });
+
+      // Track active card
+      cardsRef.current.forEach((card, index) => {
+        if (!card) return;
+
+        ScrollTrigger.create({
+          trigger: card,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: () => setActiveIndex(index),
+          onEnterBack: () => setActiveIndex(index),
+        });
+      });
+    }, section);
+
+    return () => {
+      ctx.revert();
+    };
+  }, []);
+
   return (
-    <section id="work" className="relative min-h-screen bg-black text-white py-24 px-4 sm:px-6 md:px-12 scroll-mt-20 overflow-hidden">
-      {/* Background Architectural Blueprint Line */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+    <section
+      ref={sectionRef}
+      id="projects"
+      className="relative bg-black text-white overflow-hidden py-20 scroll-mt-20"
+    >
+      {/* Section Title */}
+      <div className="container mx-auto px-6 mb-12 text-center">
+        <p className="text-xs sm:text-sm text-gray-400 uppercase tracking-[0.3em] mb-4">
+          MY WORK
+        </p>
+        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight">
+          Featured{' '}
+          <AuroraText className="italic font-serif">
+            Projects
+          </AuroraText>
+        </h2>
+      </div>
 
-      <div className="container mx-auto max-w-7xl relative z-10 space-y-28 sm:space-y-36">
-        {/* SECTION 1: CURATED WORK */}
-        <div>
-          <div className="text-center mb-16 sm:mb-20">
-            <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-neutral-400 uppercase mb-3">
-              CASE STUDIES
-            </p>
-            <h2 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">
-              Curated <AuroraText className="italic font-serif">Work</AuroraText>
-            </h2>
-          </div>
-
-          {/* Side-by-Side 2-Column Staggered Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-start">
-            {WORK_PROJECTS.map((project, idx) => {
-              const isEven = idx % 2 === 1;
-              return (
-                <div
-                  key={project.id}
-                  className={`flex flex-col space-y-4 group ${
-                    isEven ? "md:mt-16" : ""
-                  }`}
+      {/* Main Content - Two Column Layout */}
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16">
+          {/* Left: Scrolling Cards - Takes more space */}
+          <div className="space-y-24">
+            {projects.map((project, index) => (
+              <div
+                key={index}
+                ref={(el) => { cardsRef.current[index] = el; }}
+                className="relative group"
+              >
+                {/* Card - Landscape orientation - Clickable */}
+                <a 
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`relative rounded-[32px] overflow-hidden ${project.gradient} border-2 border-white/20 transition-all duration-300 hover:translate-y-[-8px] block cursor-pointer`}
                 >
-                  {/* Meta Bar */}
-                  <div className="flex items-center justify-between text-xs font-mono text-neutral-400 border-b border-neutral-800 pb-3">
-                    <div className="flex items-center gap-3">
-                      <span className="text-neutral-500">{project.id}</span>
-                      <span className="w-8 h-[1px] bg-neutral-700" />
-                      <span className="tracking-widest uppercase text-neutral-300">
-                        {project.category}
-                      </span>
-                    </div>
-                    <span className="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-400">
-                      {project.date}
-                    </span>
+                  {/* Arrow icon - Top right corner */}
+                  <div className="absolute top-6 right-6 md:top-8 md:right-8 z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </div>
 
-                  {/* Project Title */}
-                  <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-wide group-hover:text-sky-300 transition-colors">
-                    {project.title}
-                  </h3>
+                  {/* Description text at top left */}
+                  <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10 max-w-[70%]">
+                    <p className="text-white text-base md:text-lg leading-relaxed">
+                      {project.pillarText}
+                    </p>
+                  </div>
 
-                  {/* Colorful Hero Card Box */}
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`relative rounded-3xl p-6 sm:p-8 ${project.gradient} border border-white/15 shadow-2xl overflow-hidden block transition-transform duration-500 hover:-translate-y-2 cursor-pointer group/card`}
-                  >
-                    {/* Top Tagline & Arrow */}
-                    <div className="flex items-start justify-between gap-4 mb-6">
-                      <p className="text-white/90 text-sm sm:text-base font-sans font-medium leading-relaxed max-w-sm">
-                        {project.tagline}
-                      </p>
-                      <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white flex-shrink-0 group-hover/card:bg-white group-hover/card:text-black group-hover/card:rotate-45 transition-all duration-300">
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  {/* Image - Landscape aspect ratio, sticks to bottom */}
+                  <div className="relative w-full pt-24 md:pt-28 lg:pt-28">
+                    <div className="relative w-full aspect-[16/9] lg:aspect-[16/9]">
+                      {/* Desktop: padding on all sides with Lens effect */}
+                      <div className="hidden lg:block absolute inset-0 px-6 pb-6">
+                        <Lens zoomFactor={1.8} lensSize={200}>
+                          <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                            <Image
+                              src={project.imageSrc}
+                              alt={project.title}
+                              fill
+                              className="object-contain object-bottom"
+                              sizes="(max-width: 1024px) 100vw, 60vw"
+                              priority={index === 0}
+                              quality={85}
+                            />
+                          </div>
+                        </Lens>
+                      </div>
+                      
+                      {/* Mobile: small padding on sides only, no bottom padding, no lens */}
+                      <div className="lg:hidden absolute inset-0 px-3 pt-0 pb-0">
+                        <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                          <Image
+                            src={project.imageSrc}
+                            alt={project.title}
+                            fill
+                            className="object-contain object-bottom"
+                            sizes="100vw"
+                            priority={index === 0}
+                            quality={85}
                           />
-                        </svg>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                </a>
 
-                    {/* Embedded Screenshot Container */}
-                    <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-neutral-950 border border-white/20 shadow-2xl mt-4">
-                      <Image
-                        src={project.imageSrc}
-                        alt={project.title}
-                        fill
-                        className="object-cover object-top group-hover/card:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                  </a>
+                {/* Mobile: Description below each card */}
+                <div className="lg:hidden mt-8 px-2">
+                  {/* Title */}
+                  <h3 className="text-2xl font-serif font-bold text-white mb-6 leading-tight">
+                    {project.detailsTitle}
+                  </h3>
+
+                  {/* Description Points */}
+                  <ul className="space-y-3 mb-6">
+                    {project.descriptionPoints.map((point, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-gray-300">
+                        <span className="text-[var(--color-8)] text-xl mt-0.5 flex-shrink-0 font-light">+</span>
+                        <span className="text-sm leading-relaxed">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
 
                   {/* Tech Stack Badges */}
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {project.techStack.map((tech, i) => (
+                  <div className="flex flex-wrap gap-2">
+                    {project.techStack.map((tech, idx) => (
                       <span
-                        key={i}
-                        className="px-3 py-1 bg-neutral-950 border border-neutral-800 rounded-lg text-[11px] font-mono font-medium text-neutral-300 tracking-wider hover:border-neutral-700 transition-colors"
+                        key={idx}
+                        className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-gray-300 font-medium flex items-center gap-2"
                       >
+                        <Image src={tech.icon} alt={tech.name} width={14} height={14} className="w-3.5 h-3.5 object-contain" />
                         {tech.name}
                       </span>
                     ))}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* SECTION 2: HACKATHONS & BUILDATHONS */}
-        <div className="border-t border-neutral-800/80 pt-20">
-          <div className="text-center mb-16 sm:mb-20">
-            <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-neutral-400 uppercase mb-3">
-              COMPETITIONS &amp; BUILDATHONS
-            </p>
-            <h2 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">
-              Hackathons <AuroraText className="italic font-serif">&amp; Buildathons</AuroraText>
-            </h2>
+              </div>
+            ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
-            {HACKATHONS.map((h) => (
-              <div
-                key={h.id}
-                className={`relative rounded-3xl bg-gradient-to-b ${h.gradient} border border-neutral-800 hover:border-neutral-600 p-7 sm:p-9 shadow-2xl transition-all duration-300 hover:-translate-y-1 group flex flex-col justify-between space-y-6`}
-              >
-                <div className="space-y-4">
-                  {/* Event & Date Header */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-neutral-400">
-                    <span className="flex items-center gap-2 text-amber-400 font-semibold tracking-wider uppercase">
-                      <IconTrophy className="w-4 h-4" />
-                      {h.event}
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300">
-                      {h.date}
-                    </span>
-                  </div>
+          {/* Right: Description - Desktop: Pinned, Mobile: Hidden */}
+          <div className="hidden lg:block relative">
+            <div 
+              ref={descriptionRef}
+              className="h-screen flex items-center justify-center"
+            >
+              <div className="w-full pb-80">
+                {/* Title */}
+                <h3 className="text-2xl lg:text-3xl xl:text-4xl font-serif font-bold text-white mb-8 leading-tight">
+                  {projects[activeIndex].detailsTitle}
+                </h3>
 
-                  {/* Title & Subtitle */}
-                  <div>
-                    <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-wide group-hover:text-amber-300 transition-colors">
-                      {h.projectTitle}
-                    </h3>
-                    <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-1">
-                      {h.subtitle}
-                    </p>
-                  </div>
-
-                  {/* Awards Badges */}
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    {h.awards.map((award, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full text-xs font-mono font-semibold text-amber-300 flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.15)]"
-                      >
-                        <IconMedal className="w-3.5 h-3.5" />
-                        {award}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Description Points */}
-                  <div className="space-y-2 pt-2 text-neutral-300 text-sm leading-relaxed font-sans">
-                    {h.description.map((point, i) => (
-                      <p key={i}>{point}</p>
-                    ))}
-                  </div>
-                </div>
+                {/* Description Points */}
+                <ul className="space-y-3 mb-10">
+                  {projects[activeIndex].descriptionPoints.map((point, idx) => (
+                    <li key={idx} className="flex items-start gap-4 text-gray-300">
+                      <span className="text-[var(--color-8)] text-2xl mt-0.5 flex-shrink-0 font-light">+</span>
+                      <span className="text-base leading-relaxed">{point}</span>
+                    </li>
+                  ))}
+                </ul>
 
                 {/* Tech Stack Badges */}
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-neutral-800/80">
-                  {h.techStack.map((tech, i) => (
+                <div className="flex flex-wrap gap-2.5">
+                  {projects[activeIndex].techStack.map((tech, idx) => (
                     <span
-                      key={i}
-                      className="px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded-md text-[10px] font-mono text-neutral-300 tracking-wider"
+                      key={idx}
+                      className="px-3.5 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-full text-xs text-gray-300 font-medium transition-all duration-300 flex items-center gap-2"
                     >
-                      {tech}
+                      <Image src={tech.icon} alt={tech.name} width={16} height={16} className="w-4 h-4 object-contain" />
+                      {tech.name}
                     </span>
                   ))}
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Background Decorations */}
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[var(--color-8)]/5 rounded-full blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[var(--color-9)]/5 rounded-full blur-3xl pointer-events-none animate-pulse" />
     </section>
   );
 };

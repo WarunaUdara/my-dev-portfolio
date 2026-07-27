@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Projects from "../sections/Projects";
+import Hackathons from "../sections/Hackathons";
 import Footer from "../sections/Footer";
 import { NavBar } from "../ui/TubelightNavbar";
 import { IconHome, IconUser, IconBriefcase, IconFileText } from "@tabler/icons-react";
@@ -20,6 +21,7 @@ function WorkPage() {
     <div className="min-h-screen bg-black text-white scroll-smooth">
       <div className="pt-12">
         <Projects />
+        <Hackathons />
       </div>
       <Footer />
       <NavBar items={navItems} />
