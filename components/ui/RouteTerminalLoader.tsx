@@ -83,12 +83,31 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
   const prevPathRef = useRef(pathname);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Preload images utility
-  const preloadRouteImages = (urls: string[]) => {
-    if (typeof window === "undefined") return;
-    urls.forEach((url) => {
-      const img = new window.Image();
-      img.src = url;
+  // Preload images with load completion promise & fallback
+  const preloadRouteImages = (urls: string[]): Promise<void> => {
+    if (typeof window === "undefined" || !urls.length) return Promise.resolve();
+    
+    return new Promise((resolve) => {
+      let loadedCount = 0;
+      const total = urls.length;
+
+      const checkDone = () => {
+        loadedCount++;
+        if (loadedCount >= total) resolve();
+      };
+
+      urls.forEach((url) => {
+        const img = new window.Image();
+        img.onload = checkDone;
+        img.onerror = checkDone;
+        img.src = url;
+        if (img.complete) {
+          checkDone();
+        }
+      });
+
+      // Safety timeout after 1000ms max
+      setTimeout(resolve, 1000);
     });
   };
 
@@ -96,14 +115,18 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
     const matchingKey = Object.keys(ROUTE_LOGS).find((key) => key !== "/" && targetPath.startsWith(key)) || "/";
     const config = ROUTE_LOGS[matchingKey] || ROUTE_LOGS["/"];
     setCurrentConfig(config);
-    preloadRouteImages(config.preloads);
     setIsTransitioning(true);
 
     if (timerRef.current) clearTimeout(timerRef.current);
-    // Well-paced 2.2 second duration so user can comfortably read terminal command & sarcastic output while assets finish preloading
-    timerRef.current = setTimeout(() => {
+
+    // Minimum display time (450ms) for snappy, constant feedback without artificial overhead
+    const minDisplayPromise = new Promise((resolve) => setTimeout(resolve, 450));
+    const preloadPromise = preloadRouteImages(config.preloads);
+
+    // Dynamic resolution: Dismisses as soon as assets are ready (450ms - 1000ms max)
+    Promise.all([minDisplayPromise, preloadPromise]).then(() => {
       setIsTransitioning(false);
-    }, 2200);
+    });
   };
 
   useEffect(() => {
@@ -147,8 +170,8 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
             key="route-terminal-overlay"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97, filter: "blur(12px)" }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, scale: 0.97, filter: "blur(10px)" }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             onClick={() => setIsTransitioning(false)}
             className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl cursor-pointer"
           >
@@ -176,21 +199,21 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
                 <motion.div
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1, duration: 0.2 }}
+                  transition={{ duration: 0.15 }}
                   className="flex items-center gap-2 text-white font-semibold"
                 >
                   <span className="text-emerald-400">❯</span>
                   <span>{currentConfig.cmd}</span>
                 </motion.div>
 
-                {/* Sarcastic Execution Logs (Well-Paced Staggered Reveal) */}
+                {/* Sarcastic Execution Logs (Dynamic Staggered Reveal) */}
                 <div className="space-y-2 pt-1 text-neutral-300 text-[11px] sm:text-xs">
                   {currentConfig.output.map((line, idx) => (
                     <motion.div
                       key={idx}
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.35 + idx * 0.38, duration: 0.3 }}
+                      transition={{ delay: 0.08 + idx * 0.12, duration: 0.18 }}
                       className="flex items-start gap-2.5 leading-relaxed"
                     >
                       {line.startsWith("✔") ? (
@@ -212,7 +235,7 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   Preloading route assets...
                 </span>
-                <span className="text-neutral-500">HTTP/2 200 OK (Click to skip)</span>
+                <span className="text-neutral-500">HTTP/2 200 OK</span>
               </div>
             </div>
           </motion.div>
