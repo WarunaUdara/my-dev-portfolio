@@ -116,20 +116,20 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                 </div>
               </div>
             ) : (
-              <div className="relative w-full max-w-sm lg:max-w-md mx-auto aspect-[3/4] group overflow-hidden flex items-end justify-center">
+              <div className="relative w-full max-w-sm lg:max-w-md mx-auto aspect-[3/4] group overflow-hidden flex items-start justify-center -mt-6 sm:-mt-10 lg:-mt-14">
                 <Image
                   src="/warunaudara.webp"
                   alt="Waruna Udara Sampath"
                   fill
-                  className="object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
+                  className="object-contain object-top transition-transform duration-500 group-hover:scale-105"
                   style={{
-                    WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 98%)",
-                    maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 98%)",
+                    WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 98%)",
+                    maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 98%)",
                   }}
                   priority
                 />
                 {/* Fading Shadow Gradient to remove sharp bottom cut */}
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
               </div>
             )}
           </div>
