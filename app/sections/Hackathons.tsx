@@ -13,7 +13,7 @@ export interface HackathonItem {
   date: string;
   awards: string[];
   description: string[];
-  skills: string[];
+  skills: Array<{ name: string; icon?: string }>;
   gradient: string;
 }
 
@@ -27,11 +27,20 @@ export const HACKATHONS: HackathonItem[] = [
     awards: ["🥈 2nd Place (n8n Track)", "🏅 14th Overall"],
     description: [
       "Turboship is an AI-powered Internal Developer Platform (IDP) control plane built during the Cursor Sri Lanka 24H Buildathon, where it achieved 🥈 2nd Place (n8n Track) and 🏅 14th Overall.",
-      "The platform streamlines container deployment by allowing users to submit a public Docker Hub image, while an AI-driven orchestration workflow analyzes runtime requirements, performs vulnerability scanning, and automates cloud provisioning.",
-      "Built with Next.js, n8n, OpenAI GPT-5.5, Supabase, and Vercel, Turboship integrates secure AWS SigV4 provisioning and supports real deployments to AWS ECS Fargate and Azure Container Apps with Trivy vulnerability scanning."
+      "The platform streamlines container deployment by allowing users to submit a public Docker Hub image, while an AI-driven orchestration workflow analyzes runtime requirements, performs vulnerability scanning with Trivy, and automates cloud provisioning.",
+      "Built with Next.js, n8n, OpenAI GPT-5.5, Supabase, and Vercel, Turboship integrates secure AWS SigV4 provisioning and supports real deployments to AWS ECS Fargate and Azure Container Apps."
     ],
-    skills: ["DevOps", "Platform Engineering", "AI Agents", "Cloud Architecture", "Next.js", "n8n", "AWS"],
-    gradient: "from-amber-500/10 via-neutral-900/90 to-neutral-950",
+    skills: [
+      { name: "DevOps" },
+      { name: "Platform Engineering" },
+      { name: "AI Agents" },
+      { name: "Cloud Architecture" },
+      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+      { name: "n8n" },
+      { name: "AWS" },
+      { name: "Vercel", icon: "/vercel.png" },
+    ],
+    gradient: "from-neutral-900/90 via-neutral-950 to-black",
   },
   {
     id: "H02",
@@ -44,22 +53,25 @@ export const HACKATHONS: HackathonItem[] = [
       "Had a great experience at the CryptX 1.0 hackathon at the University of Sri Jayewardenepura!",
       "We presented our solution connecting vendors and digital nomads with working spaces in the tourism industry and we made it to the Top 15 out of 100+ teams."
     ],
-    skills: ["React", "Next.js", "Web3", "Tourism Tech", "Tailwind CSS"],
-    gradient: "from-purple-500/10 via-neutral-900/90 to-neutral-950",
+    skills: [
+      { name: "React", icon: "/icons8-react-24.png" },
+      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+      { name: "Web3" },
+      { name: "Tourism Tech" },
+      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
+    ],
+    gradient: "from-neutral-900/90 via-neutral-950 to-black",
   },
 ];
 
 export const Hackathons = () => {
   return (
-    <section id="hackathons" className="relative bg-black text-white py-24 px-4 sm:px-6 md:px-12 scroll-mt-20 overflow-hidden border-t border-neutral-800/80">
-      {/* Background Architectural Blueprint Line */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-
+    <section id="hackathons" className="relative bg-black text-white py-24 px-4 sm:px-6 md:px-12 scroll-mt-20 overflow-hidden border-t border-dashed border-neutral-800/80">
       <div className="container mx-auto max-w-7xl relative z-10">
         {/* Section Heading */}
         <div className="text-center mb-16 sm:mb-20">
           <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-neutral-400 uppercase mb-3 flex items-center justify-center gap-2">
-            <IconSparkles className="w-4 h-4 text-amber-400" />
+            <IconSparkles className="w-4 h-4 text-neutral-300" />
             COMPETITIONS &amp; BUILDATHONS
           </p>
           <h2 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">
@@ -72,23 +84,23 @@ export const Hackathons = () => {
           {HACKATHONS.map((h) => (
             <div
               key={h.id}
-              className={`relative rounded-3xl bg-gradient-to-b ${h.gradient} border border-neutral-800 hover:border-neutral-600 p-7 sm:p-9 shadow-2xl transition-all duration-300 hover:-translate-y-1 group flex flex-col justify-between space-y-6`}
+              className={`relative rounded-3xl bg-neutral-950/90 border border-neutral-800/90 hover:border-neutral-600 p-7 sm:p-9 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col justify-between space-y-6`}
             >
               <div className="space-y-4">
                 {/* Event & Date Header */}
-                <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-neutral-400">
-                  <span className="flex items-center gap-2 text-amber-400 font-semibold tracking-wider uppercase">
-                    <IconTrophy className="w-4 h-4" />
+                <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-neutral-400 border-b border-dashed border-neutral-800 pb-3">
+                  <span className="flex items-center gap-2 text-neutral-300 font-semibold tracking-wider uppercase">
+                    <IconTrophy className="w-4 h-4 text-neutral-300" />
                     {h.event}
                   </span>
-                  <span className="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300">
+                  <span className="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 font-mono">
                     {h.date}
                   </span>
                 </div>
 
                 {/* Title & Subtitle */}
                 <div>
-                  <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-wide group-hover:text-amber-300 transition-colors">
+                  <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-wide group-hover:text-neutral-200 transition-colors">
                     {h.projectTitle}
                   </h3>
                   <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-1">
@@ -101,9 +113,9 @@ export const Hackathons = () => {
                   {h.awards.map((award, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full text-xs font-mono font-semibold text-amber-300 flex items-center gap-1.5 shadow-[0_0_12px_rgba(245,158,11,0.15)]"
+                      className="px-3 py-1.5 bg-neutral-900 border border-neutral-700/80 rounded-full text-xs font-mono font-semibold text-neutral-200 flex items-center gap-1.5 shadow-[0_0_12px_rgba(255,255,255,0.05)]"
                     >
-                      <IconMedal className="w-3.5 h-3.5" />
+                      <IconMedal className="w-3.5 h-3.5 text-neutral-300" />
                       {award}
                     </span>
                   ))}
@@ -118,14 +130,17 @@ export const Hackathons = () => {
               </div>
 
               {/* Skills / Tech Stack Badges */}
-              <div className="flex flex-wrap gap-2 pt-4 border-t border-neutral-800/80">
+              <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-dashed border-neutral-800/80">
                 <span className="text-[11px] font-mono text-neutral-500 uppercase self-center mr-1">Skills:</span>
                 {h.skills.map((skill, i) => (
                   <span
                     key={i}
-                    className="px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded-md text-[11px] font-mono text-neutral-300 tracking-wider"
+                    className="px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded-lg text-[11px] font-mono text-neutral-300 tracking-wider flex items-center gap-1.5"
                   >
-                    {skill}
+                    {skill.icon ? (
+                      <Image src={skill.icon} alt={skill.name} width={13} height={13} className="w-3.5 h-3.5 object-contain" />
+                    ) : null}
+                    {skill.name}
                   </span>
                 ))}
               </div>

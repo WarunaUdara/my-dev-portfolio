@@ -20,16 +20,19 @@ function WorkPage() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground scroll-smooth overflow-x-hidden">
-      {/* Dynamic ScrollFrost Background */}
-      <ScrollFrost className="fixed inset-0 pointer-events-none z-0" />
-
-      {/* Blueprint Scales Overlay (Same as Uses page) */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-40">
-        <Scales />
+    <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden">
+      {/* 2-Sided Scales Ruler Strips (Matching Uses Page Layout) */}
+      <div className="fixed top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+        <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
+      </div>
+      <div className="fixed top-0 bottom-0 right-3 sm:right-6 md:right-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+        <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
       </div>
 
-      <div className="relative z-10 pt-16 sm:pt-20 px-4 sm:px-6 md:px-12 container mx-auto max-w-7xl space-y-24 sm:space-y-32 pb-24">
+      {/* Dynamic ScrollFrost Background */}
+      <ScrollFrost height="h-[600px]" />
+
+      <div className="relative z-10 pt-28 sm:pt-36 pb-20 px-6 sm:px-16 md:px-24 max-w-7xl mx-auto space-y-24 sm:space-y-32">
         <WorkProjects />
         <Hackathons />
       </div>

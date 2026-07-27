@@ -4,6 +4,11 @@ import React from "react";
 import Image from "@/components/ui/Image";
 import AuroraText from "@/components/ui/aurora-text";
 
+export interface TechStackItem {
+  name: string;
+  icon?: string;
+}
+
 export interface WorkProjectItem {
   id: string;
   category: string;
@@ -13,7 +18,7 @@ export interface WorkProjectItem {
   imageSrc: string;
   gradient: string;
   link: string;
-  techStack: Array<{ name: string }>;
+  techStack: TechStackItem[];
 }
 
 export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
@@ -27,12 +32,13 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     gradient: "bg-gradient-to-br from-pink-600 via-pink-700 to-rose-900",
     link: "https://algoarena.live",
     techStack: [
-      { name: "NEXT.JS 14" },
-      { name: "TYPESCRIPT" },
-      { name: "TAILWIND CSS" },
-      { name: "FIREBASE" },
-      { name: "GSAP" },
-      { name: "VERCEL" },
+      { name: "NEXT.JS 14", icon: "/icons8-nextjs-144.png" },
+      { name: "REACT", icon: "/icons8-react-24.png" },
+      { name: "TYPESCRIPT", icon: "/ts.png" },
+      { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },
+      { name: "FIREBASE", icon: "/google-firebase-logo-icon-hd.png" },
+      { name: "GSAP", icon: "/gsap-logo_svgstack_com_28451764740258.png" },
+      { name: "VERCEL", icon: "/vercel.png" },
     ],
   },
   {
@@ -45,13 +51,12 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     gradient: "bg-gradient-to-br from-indigo-600 via-blue-700 to-purple-900",
     link: "https://warunadev.vercel.app",
     techStack: [
-      { name: "NEXT.JS 15" },
-      { name: "REACT 19" },
-      { name: "TYPESCRIPT" },
-      { name: "TAILWIND CSS" },
-      { name: "THREE.JS" },
-      { name: "BUN" },
-      { name: "VERCEL" },
+      { name: "NEXT.JS 15", icon: "/icons8-nextjs-144.png" },
+      { name: "REACT 19", icon: "/icons8-react-24.png" },
+      { name: "TYPESCRIPT", icon: "/ts.png" },
+      { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },
+      { name: "BUN", icon: "/Bun.png" },
+      { name: "VERCEL", icon: "/vercel.png" },
     ],
   },
   {
@@ -64,12 +69,12 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     gradient: "bg-gradient-to-br from-slate-700 via-neutral-800 to-slate-900",
     link: "https://beautyof.cloud",
     techStack: [
-      { name: "NEXT.JS" },
-      { name: "MONGODB" },
-      { name: "TYPESCRIPT" },
-      { name: "TAILWIND CSS" },
-      { name: "SANITY CMS" },
-      { name: "VERCEL" },
+      { name: "NEXT.JS", icon: "/icons8-nextjs-144.png" },
+      { name: "REACT", icon: "/icons8-react-24.png" },
+      { name: "MONGODB", icon: "/icons8-mongo-db-96.png" },
+      { name: "TYPESCRIPT", icon: "/ts.png" },
+      { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },
+      { name: "VERCEL", icon: "/vercel.png" },
     ],
   },
 ];
@@ -107,15 +112,10 @@ export const WorkProjects = () => {
           return (
             <div
               key={project.id}
-              className={`relative flex flex-col space-y-4 group p-6 rounded-3xl bg-neutral-950/70 border border-dashed border-neutral-800/90 backdrop-blur-xl shadow-2xl ${
+              className={`relative flex flex-col space-y-4 group p-6 rounded-3xl bg-neutral-950/80 border border-dashed border-neutral-800/90 backdrop-blur-xl shadow-2xl ${
                 isEven ? "md:mt-20" : ""
               }`}
             >
-              {/* Corner Intersection Node */}
-              <div className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-neutral-950 border border-neutral-400 shadow-[0_0_8px_rgba(255,255,255,0.5)] flex items-center justify-center z-20">
-                <div className="w-1 h-1 rounded-full bg-white" />
-              </div>
-
               {/* Meta Bar */}
               <div className="flex items-center justify-between text-xs font-mono text-neutral-400 border-b border-dashed border-neutral-800/80 pb-3">
                 <div className="flex items-center gap-3">
@@ -175,13 +175,22 @@ export const WorkProjects = () => {
                 </div>
               </a>
 
-              {/* Tech Stack Badges */}
+              {/* Tech Stack Badges with Logo Icons */}
               <div className="flex flex-wrap gap-2 pt-2">
                 {project.techStack.map((tech, i) => (
                   <span
                     key={i}
-                    className="px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded-lg text-[10px] font-mono font-medium text-neutral-300 tracking-wider hover:border-neutral-700 transition-colors"
+                    className="px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded-lg text-[10px] font-mono font-medium text-neutral-300 tracking-wider flex items-center gap-1.5 hover:border-neutral-700 transition-colors"
                   >
+                    {tech.icon ? (
+                      <Image
+                        src={tech.icon}
+                        alt={tech.name}
+                        width={13}
+                        height={13}
+                        className="w-3.5 h-3.5 object-contain"
+                      />
+                    ) : null}
                     {tech.name}
                   </span>
                 ))}
