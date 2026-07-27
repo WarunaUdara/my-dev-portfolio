@@ -3,26 +3,12 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Link from "@/components/ui/Link";
-import { IconArrowUpRight, IconMenu2, IconX } from "@tabler/icons-react";
-
-export type CardNavLink = {
-  label: string;
-  href: string;
-  ariaLabel: string;
-  isExternal?: boolean;
-};
-
-export type CardNavItem = {
-  label: string;
-  bgColor: string;
-  textColor: string;
-  links: CardNavLink[];
-};
+import Image from "@/components/ui/Image";
+import { IconArrowUpRight, IconLink, IconPhoto, IconMapPin } from "@tabler/icons-react";
 
 export interface CardNavProps {
   logo?: string;
   logoAlt?: string;
-  items?: CardNavItem[];
   className?: string;
   ease?: string;
   baseColor?: string;
@@ -31,43 +17,9 @@ export interface CardNavProps {
   buttonTextColor?: string;
 }
 
-const DEFAULT_ITEMS: CardNavItem[] = [
-  {
-    label: "Navigation",
-    bgColor: "#121215",
-    textColor: "#ffffff",
-    links: [
-      { label: "Home", href: "/", ariaLabel: "Home Page" },
-      { label: "About Me", href: "/about", ariaLabel: "About Me Page" },
-      { label: "Projects", href: "/#projects", ariaLabel: "Featured Projects" },
-    ],
-  },
-  {
-    label: "Explore",
-    bgColor: "#18181c",
-    textColor: "#ffffff",
-    links: [
-      { label: "Guestbook", href: "/guestbook", ariaLabel: "Guestbook Page" },
-      { label: "Bucket List", href: "/bucket-list", ariaLabel: "Bucket List Page" },
-      { label: "Uses / Tools", href: "/uses", ariaLabel: "Uses Page" },
-    ],
-  },
-  {
-    label: "Connect",
-    bgColor: "#202026",
-    textColor: "#ffffff",
-    links: [
-      { label: "LinkedIn", href: "https://www.linkedin.com/in/waruna-udara/", ariaLabel: "LinkedIn Profile", isExternal: true },
-      { label: "GitHub", href: "https://github.com/WarunaUdara", ariaLabel: "GitHub Profile", isExternal: true },
-      { label: "Links", href: "/links", ariaLabel: "All Links" },
-    ],
-  },
-];
-
 export const CardNav: React.FC<CardNavProps> = ({
   logo = "/logo.svg",
   logoAlt = "Waruna Udara",
-  items = DEFAULT_ITEMS,
   className = "",
   ease = "power3.out",
   baseColor = "#09090b",
@@ -83,7 +35,7 @@ export const CardNav: React.FC<CardNavProps> = ({
 
   const calculateHeight = () => {
     const navEl = navRef.current;
-    if (!navEl) return 260;
+    if (!navEl) return 300;
 
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
     if (isMobile) {
@@ -111,7 +63,7 @@ export const CardNav: React.FC<CardNavProps> = ({
         return topBar + contentHeight + padding;
       }
     }
-    return 260;
+    return 300;
   };
 
   const createTimeline = () => {
@@ -146,7 +98,7 @@ export const CardNav: React.FC<CardNavProps> = ({
       tl?.kill();
       tlRef.current = null;
     };
-  }, [ease, items]);
+  }, [ease]);
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -202,7 +154,7 @@ export const CardNav: React.FC<CardNavProps> = ({
 
   return (
     <div
-      className={`card-nav-container fixed left-1/2 -translate-x-1/2 w-[92%] max-w-[840px] z-[999] top-[1.2em] md:top-[1.8em] ${className}`}
+      className={`card-nav-container fixed left-1/2 -translate-x-1/2 w-[92%] max-w-[840px] z-[9999] top-[1.2em] md:top-[1.8em] ${className}`}
       onMouseEnter={openMenu}
       onMouseLeave={closeMenu}
     >
@@ -230,12 +182,12 @@ export const CardNav: React.FC<CardNavProps> = ({
           >
             <div className="flex flex-col gap-[5px]">
               <div
-                className={`w-[24px] h-[2px] bg-current transition-all duration-300 ease-out origin-center ${
+                className={`w-[22px] h-[2px] bg-current transition-all duration-300 ease-out origin-center ${
                   isHamburgerOpen ? "translate-y-[7px] rotate-45" : ""
                 } group-hover:opacity-80`}
               />
               <div
-                className={`w-[24px] h-[2px] bg-current transition-all duration-300 ease-out origin-center ${
+                className={`w-[22px] h-[2px] bg-current transition-all duration-300 ease-out origin-center ${
                   isHamburgerOpen ? "-translate-y-[0px] -rotate-45" : ""
                 } group-hover:opacity-80`}
               />
@@ -245,9 +197,11 @@ export const CardNav: React.FC<CardNavProps> = ({
             </span>
           </div>
 
-          {/* Logo */}
-          <Link href="/" className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none">
-            <img src={logo} alt={logoAlt} className="logo h-[26px] object-contain" />
+          {/* Logo Brand Title */}
+          <Link href="/" className="logo-container flex items-center gap-2 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none">
+            <span className="font-serif font-bold text-lg sm:text-xl text-white tracking-wide">
+              Waruna Udara
+            </span>
           </Link>
 
           {/* CTA Button */}
@@ -255,46 +209,122 @@ export const CardNav: React.FC<CardNavProps> = ({
             href="https://www.linkedin.com/in/waruna-udara/"
             target="_blank"
             rel="noopener noreferrer"
-            className="card-nav-cta-button hidden md:inline-flex rounded-xl px-4 items-center justify-center h-[42px] font-sans text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all duration-300 hover:scale-105"
+            className="card-nav-cta-button hidden md:inline-flex rounded-xl px-4 items-center justify-center h-[40px] font-sans text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all duration-300 hover:scale-105"
             style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
           >
             Connect
           </a>
         </div>
 
-        {/* Expanded Cards Content */}
+        {/* Expanded Cards Content with Exact Original Images & Links */}
         <div
-          className={`card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-2 flex flex-col items-stretch gap-2 justify-start z-[1] ${
+          className={`card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-3 flex flex-col items-stretch gap-3 justify-start z-[1] ${
             isExpanded ? "visible pointer-events-auto" : "invisible pointer-events-none"
-          } md:flex-row md:items-end md:gap-[10px]`}
+          } md:flex-row md:items-end md:gap-[12px]`}
           aria-hidden={!isExpanded}
         >
-          {(items || []).slice(0, 3).map((item, idx) => (
-            <div
-              key={`${item.label}-${idx}`}
-              className="nav-card select-none relative flex flex-col gap-2 p-[16px_20px] rounded-xl border border-neutral-800/60 min-w-0 flex-[1_1_auto] h-auto min-h-[60px] md:h-full md:min-h-0 md:flex-[1_1_0%]"
-              ref={setCardRef(idx)}
-              style={{ backgroundColor: item.bgColor, color: item.textColor }}
-            >
-              <div className="nav-card-label font-serif italic text-lg sm:text-xl font-bold tracking-wide border-b border-neutral-800/80 pb-1">
-                {item.label}
+          {/* Card 1: Guestbook Image Card */}
+          <div
+            ref={setCardRef(0)}
+            className="nav-card relative overflow-hidden rounded-xl border border-neutral-800 flex-[1_1_auto] md:flex-[1_1_0%] h-52 md:h-full group cursor-pointer"
+          >
+            <Link href="/guestbook" onClick={closeMenu} className="absolute inset-0 block">
+              <Image
+                src="/guestbook.webp"
+                alt="Guestbook"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <h3 className="text-white font-serif text-xl font-bold mb-1 flex items-center justify-between">
+                  <span>Guestbook</span>
+                  <IconArrowUpRight className="w-4 h-4 opacity-80" />
+                </h3>
+                <p className="text-neutral-300 text-xs font-sans">Let me know you were here</p>
               </div>
-              <div className="nav-card-links mt-auto flex flex-col gap-1.5 pt-2">
-                {item.links?.map((lnk, i) => (
-                  <Link
-                    key={`${lnk.label}-${i}`}
-                    className="nav-card-link inline-flex items-center justify-between no-underline cursor-pointer transition-colors duration-200 hover:text-blue-400 text-xs sm:text-sm font-sans"
-                    href={lnk.href}
-                    aria-label={lnk.ariaLabel}
-                    onClick={closeMenu}
-                  >
-                    <span>{lnk.label}</span>
-                    <IconArrowUpRight className="w-3.5 h-3.5 shrink-0 opacity-70" aria-hidden="true" />
-                  </Link>
-                ))}
+            </Link>
+          </div>
+
+          {/* Card 2: Bucket List Image Card */}
+          <div
+            ref={setCardRef(1)}
+            className="nav-card relative overflow-hidden rounded-xl border border-neutral-800 flex-[1_1_auto] md:flex-[1_1_0%] h-52 md:h-full group cursor-pointer"
+          >
+            <Link href="/bucket-list" onClick={closeMenu} className="absolute inset-0 block">
+              <Image
+                src="/bucket-list.webp"
+                alt="Bucket List"
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <h3 className="text-white font-serif text-xl font-bold mb-1 flex items-center justify-between">
+                  <span>Bucket List</span>
+                  <IconArrowUpRight className="w-4 h-4 opacity-80" />
+                </h3>
+                <p className="text-neutral-300 text-xs font-sans">Things to do at least once</p>
+              </div>
+            </Link>
+          </div>
+
+          {/* Card 3: Quick Navigation Links Card */}
+          <div
+            ref={setCardRef(2)}
+            className="nav-card relative flex flex-col justify-between p-4 rounded-xl bg-neutral-900/90 border border-neutral-800/80 flex-[1_1_auto] md:flex-[1_1_0%] h-auto md:h-full text-white"
+          >
+            <div>
+              <div className="text-xs uppercase tracking-widest text-neutral-400 font-mono mb-2">
+                Quick Navigation
+              </div>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/"
+                  onClick={closeMenu}
+                  className="inline-flex items-center justify-between text-sm font-medium hover:text-blue-400 transition-colors"
+                >
+                  <span>Home</span>
+                  <IconArrowUpRight className="w-3.5 h-3.5 opacity-70" />
+                </Link>
+                <Link
+                  href="/about"
+                  onClick={closeMenu}
+                  className="inline-flex items-center justify-between text-sm font-medium hover:text-blue-400 transition-colors"
+                >
+                  <span>About Me</span>
+                  <IconArrowUpRight className="w-3.5 h-3.5 opacity-70" />
+                </Link>
+                <Link
+                  href="/#projects"
+                  onClick={closeMenu}
+                  className="inline-flex items-center justify-between text-sm font-medium hover:text-blue-400 transition-colors"
+                >
+                  <span>Projects</span>
+                  <IconArrowUpRight className="w-3.5 h-3.5 opacity-70" />
+                </Link>
               </div>
             </div>
-          ))}
+
+            <div className="pt-3 border-t border-neutral-800/80 mt-2 flex flex-col gap-1.5">
+              <Link
+                href="/uses"
+                onClick={closeMenu}
+                className="inline-flex items-center gap-2 text-xs text-neutral-300 hover:text-white transition-colors"
+              >
+                <IconPhoto className="w-3.5 h-3.5 text-neutral-400" />
+                <span>Uses &amp; Setup</span>
+              </Link>
+              <Link
+                href="/links"
+                onClick={closeMenu}
+                className="inline-flex items-center gap-2 text-xs text-neutral-300 hover:text-white transition-colors"
+              >
+                <IconLink className="w-3.5 h-3.5 text-neutral-400" />
+                <span>All Links</span>
+              </Link>
+            </div>
+          </div>
         </div>
       </nav>
     </div>
