@@ -116,19 +116,20 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                 </div>
               </div>
             ) : (
-              /* Landing Page Clean Dark Container with Image Inside & Overflow Hidden */
-              <div className="relative w-full max-w-md mx-auto lg:max-w-full rounded-3xl bg-neutral-950 border border-neutral-800/90 shadow-2xl overflow-hidden group">
-                <div className="relative w-full aspect-[4/5] flex items-end justify-center pt-6">
-                  <Image
-                    src="/warunaudara.webp"
-                    alt="Waruna Udara Sampath"
-                    fill
-                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                    priority
-                  />
-                  {/* Subtle bottom fade so cut edge dissolves smoothly into container bottom */}
-                  <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-neutral-950 to-transparent pointer-events-none" />
-                </div>
+              <div className="relative w-full max-w-sm lg:max-w-md mx-auto aspect-[3/4] group overflow-hidden flex items-end justify-center">
+                <Image
+                  src="/warunaudara.webp"
+                  alt="Waruna Udara Sampath"
+                  fill
+                  className="object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
+                  style={{
+                    WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 98%)",
+                    maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 98%)",
+                  }}
+                  priority
+                />
+                {/* Fading Shadow Gradient to remove sharp bottom cut */}
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
               </div>
             )}
           </div>
