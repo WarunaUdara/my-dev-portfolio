@@ -7,16 +7,23 @@ import TechStack from '../sections/TechStack';
 import GitHubActivity from '../sections/GitHubActivity';
 import Explore from '../sections/Explore';
 import Footer from '../sections/Footer';
-import CardNav from '@/components/ReactBits/CardNav';
+import { NavBar } from '../ui/TubelightNavbar';
+import { IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react';
 
 export const Route = createFileRoute('/')({
   component: HomePage,
 });
 
 function HomePage() {
+  const navItems = [
+    { name: 'Home', url: '#hero', icon: IconHome },
+    { name: 'About', url: '/about', icon: IconUser },
+    { name: 'Projects', url: '#projects', icon: IconBriefcase },
+    { name: 'More', url: '#more', icon: IconFileText },
+  ];
+
   return (
     <div className="min-h-screen bg-background text-foreground scroll-smooth">
-      <CardNav />
       <Hero />
       <About />
       <RevealingQuote />
@@ -25,6 +32,7 @@ function HomePage() {
       <GitHubActivity />
       <Explore />
       <Footer />
+      <NavBar items={navItems} />
     </div>
   );
 }
