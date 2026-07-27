@@ -140,9 +140,9 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-6">
-            <p className="text-sm text-gray-600">© 2025 Waruna Udara</p>
+            <p className="text-sm text-gray-600">© 2026 Waruna Udara</p>
             <span className="text-gray-800">•</span>
-            <p className="text-sm text-gray-600">Built with Next.js</p>
+            <p className="text-sm text-gray-600">Built with Tanstack</p>
           </div>
 
           {/* Social Icons */}
