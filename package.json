@@ -64,5 +64,10 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.1",
     "typescript": "^5"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "1.1.5",
+    "@rolldown/binding-linux-x64-musl": "1.1.5",
+    "@rolldown/binding-darwin-arm64": "1.1.5"
   }
 }
