@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useId } from "react";
 import createGlobe from "cobe";
 import { cn } from "@/lib/utils";
 
@@ -53,44 +53,16 @@ export function Globe({
   const phiRef = useRef(0.8);
   const thetaVal = 0.2;
 
-  const [labelPositions, setLabelPositions] = useState<
-    Array<{ id: string; label: string; px: number; py: number; opacity: number }>
-  >([]);
+  // Unique, CSS-safe prefix so multiple <Globe /> instances on the same
+  // page never collide on COBE's anchor names (--cobe-<id> must be unique
+  // document-wide, since anchor positioning works across the whole DOM).
+  const rawId = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const uid = `g${rawId}`;
 
-  // Project marker lat/lon to canvas (x, y) pixel coordinates
-  const projectMarkers = useCallback(
-    (phi: number, theta: number, containerWidth: number) => {
-      const R = containerWidth * 0.435;
-      const cx = containerWidth / 2;
-      const cy = containerWidth / 2;
-
-      const positions = markers.map((m) => {
-        const [lat, lon] = m.location;
-        const latRad = (lat * Math.PI) / 180;
-        const lonRad = (lon * Math.PI) / 180;
-
-        const adjustedLon = lonRad + phi;
-
-        const sx = Math.cos(latRad) * Math.sin(adjustedLon);
-        const sy = Math.sin(latRad);
-        const sz = Math.cos(latRad) * Math.cos(adjustedLon);
-
-        const rx = sx;
-        const ry = sy * Math.cos(theta) - sz * Math.sin(theta);
-        const rz = sy * Math.sin(theta) + sz * Math.cos(theta);
-
-        const px = cx + rx * R;
-        const py = cy - ry * R;
-
-        const opacity = rz > 0.1 ? Math.min(1, (rz - 0.1) * 5) : 0;
-
-        return { id: m.id, label: m.label, px, py, opacity };
-      });
-
-      setLabelPositions(positions);
-    },
-    [markers]
-  );
+  // Markers with instance-prefixed ids. These ids are what COBE turns into
+  // --cobe-{id} (anchor point) and --cobe-visible-{id} (0/1 visibility),
+  // computed internally by COBE from its real projection — not by us.
+  const prefixedMarkers = markers.map((m) => ({ ...m, id: `${uid}-${m.id}` }));
 
   useEffect(() => {
     let width = 0;
@@ -106,7 +78,8 @@ export function Globe({
 
     if (!canvasRef.current || width === 0) return;
 
-    // Initialize Cobe 2.0 Globe instance
+    const localPrefixedMarkers = markers.map((m) => ({ ...m, id: `${uid}-${m.id}` }));
+
     const globe = createGlobe(canvasRef.current, {
       devicePixelRatio: 2,
       width: width * 2,
@@ -120,7 +93,7 @@ export function Globe({
       baseColor: [0.15, 0.15, 0.2],
       markerColor: [0.35, 0.65, 1.0],
       glowColor: [0.95, 0.95, 1.0],
-      markers: markers.map((m) => ({
+      markers: localPrefixedMarkers.map((m) => ({
         location: m.location,
         size: m.size || 0.035,
         id: m.id,
@@ -137,7 +110,6 @@ export function Globe({
 
     let animationFrameId: number;
 
-    // Cobe 2.0 animation loop using globe.update({ phi })
     const animate = () => {
       if (!pointerInteracting.current) {
         phiRef.current += speed;
@@ -150,8 +122,6 @@ export function Globe({
         width: width * 2,
         height: width * 2,
       });
-
-      projectMarkers(currentPhi, thetaVal, width);
 
       animationFrameId = requestAnimationFrame(animate);
     };
@@ -167,13 +137,49 @@ export function Globe({
       globe.destroy();
       window.removeEventListener("resize", onResize);
     };
-  }, [markers, arcs, speed, projectMarkers]);
+  }, [markers, arcs, speed, uid]);
+
+  // Per-marker CSS: bind each label to the exact anchor COBE exposes for
+  // it, and mirror COBE's own visibility variable so a label only shows
+  // when its dot is actually facing the camera.
+  const anchorCss = prefixedMarkers
+    .map(
+      (m) => `
+        [data-cobe-label="${m.id}"] {
+          position-anchor: --cobe-${m.id};
+          --cobe-opacity: var(--cobe-visible-${m.id}, 0);
+        }
+      `
+    )
+    .join("\n");
 
   return (
     <div
       ref={containerRef}
       className={cn("relative mx-auto aspect-square w-full max-w-[600px]", className)}
     >
+      <style>{`
+        ${anchorCss}
+
+        @supports (anchor-name: --test) {
+          .cobe-marker-label {
+            position: absolute;
+            bottom: anchor(top);
+            left: anchor(center);
+            transform: translateX(-50%);
+            display: flex;
+            opacity: var(--cobe-opacity, 0);
+            transition: opacity 0.25s ease;
+          }
+        }
+
+        @supports not (anchor-name: --test) {
+          .cobe-marker-label {
+            display: none;
+          }
+        }
+      `}</style>
+
       <canvas
         ref={canvasRef}
         className="h-full w-full opacity-100 transition-opacity duration-500 [contain:layout_paint_size] cursor-grab active:cursor-grabbing"
@@ -211,30 +217,22 @@ export function Globe({
         }}
       />
 
-      {/* Anchored marker labels — small, sharp-edged boxes */}
-      {labelPositions.map((pos) => (
+      {/* Labels bind to COBE's own --cobe-{id} anchor + --cobe-visible-{id}
+          visibility var via CSS Anchor Positioning — no manual projection
+          math, so they can't drift from the actual marker dot. */}
+      {prefixedMarkers.map((m) => (
         <div
-          key={pos.id}
-          className="absolute pointer-events-none flex flex-col items-center"
-          style={{
-            left: `${pos.px}px`,
-            top: `${pos.py}px`,
-            transform: "translate(-50%, -100%)",
-            opacity: pos.opacity,
-            transition: "opacity 0.2s ease",
-            zIndex: pos.opacity > 0.5 ? 25 : 10,
-          }}
+          key={m.id}
+          data-cobe-label={m.id}
+          className="cobe-marker-label pointer-events-none flex-col items-center z-20"
         >
-          {/* Sharp-edge label box */}
           <div
             className="bg-white/95 text-[#0a0a0a] font-mono leading-none tracking-wider px-1.5 py-[3px] shadow-md border border-white/80 flex items-center gap-1"
             style={{ fontSize: "9px", fontWeight: 700 }}
           >
             <span className="inline-block w-[5px] h-[5px] bg-blue-500 flex-shrink-0"></span>
-            {pos.label}
+            {m.label}
           </div>
-
-          {/* Thin connector line */}
           <div className="w-[1px] h-[6px] bg-white/70"></div>
         </div>
       ))}
