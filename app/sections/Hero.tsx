@@ -279,18 +279,30 @@ export default function Hero() {
                 </a>
 
                 <button
-                  className="group relative inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-neutral-950/80 border border-neutral-800/80 backdrop-blur-xl text-neutral-300 hover:text-white hover:border-neutral-600 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.03)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95 text-xs sm:text-sm font-sans font-medium"
+                  className={cn(
+                    "group relative inline-flex items-center gap-3 px-6 py-3.5 rounded-full border backdrop-blur-xl transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:scale-105 active:scale-95 text-xs sm:text-sm font-sans font-medium",
+                    copied
+                      ? "bg-emerald-950/40 border-emerald-500/50 text-emerald-300"
+                      : "bg-neutral-950/90 border-neutral-800 hover:border-neutral-500 text-neutral-200 hover:text-white"
+                  )}
                   onClick={handleCopyEmail}
                   type="button"
                 >
-                  <div className="w-6 h-6 rounded-full bg-neutral-900 border border-neutral-700/80 flex items-center justify-center text-neutral-400 group-hover:text-white group-hover:border-neutral-500 transition-all">
+                  <div
+                    className={cn(
+                      "w-6 h-6 rounded-full border flex items-center justify-center transition-all",
+                      copied
+                        ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
+                        : "bg-neutral-900 border-neutral-700/80 text-neutral-400 group-hover:text-white group-hover:border-neutral-500"
+                    )}
+                  >
                     {copied ? (
                       <IconCheck className="w-3.5 h-3.5 text-emerald-400" />
                     ) : (
                       <IconCopy className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
                     )}
                   </div>
-                  <span>{copied ? "Copied to Clipboard!" : "warunaudarasam2003@gmail.com"}</span>
+                  <span className="font-mono tracking-tight">{copied ? "Copied to Clipboard!" : "warunaudarasam2003@gmail.com"}</span>
                 </button>
               </div>
             </div>
@@ -340,23 +352,23 @@ export default function Hero() {
           
         </section>
 
-        {/* Toast Notification - Outside hero to prevent layout shift */}
+        {/* Toast Notification - High Contrast Silver, Black & White Glassmorphism */}
         {showToast && (
           <div className="fixed top-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 z-[100] pointer-events-auto px-4 sm:px-0">
-            <div className="bg-[var(--color-2)] border border-[var(--color-5)] rounded-xl shadow-2xl p-4 flex items-center gap-3 w-full sm:min-w-[320px] max-w-[90vw] sm:max-w-none animate-in slide-in-from-top-2 fade-in duration-300">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[var(--color-8)] to-[var(--color-9)] flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-neutral-950/95 border border-white/20 backdrop-blur-2xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_30px_rgba(255,255,255,0.1)] p-4 flex items-center gap-4 w-full sm:min-w-[340px] max-w-[90vw] sm:max-w-none animate-in slide-in-from-top-3 fade-in duration-300">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 flex items-center justify-center shadow-[0_0_15px_rgba(52,211,153,0.3)]">
+                <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white font-semibold text-sm">{toastMessage}</p>
+                <p className="text-white font-sans font-semibold text-sm drop-shadow">{toastMessage}</p>
               </div>
               <a
                 href="mailto:warunaudarasam2003@gmail.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-shrink-0 px-3 py-1.5 bg-[var(--color-8)] hover:bg-[var(--color-9)] text-white text-xs rounded-lg transition-colors font-medium whitespace-nowrap"
+                className="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-white via-neutral-100 to-neutral-300 hover:from-white hover:to-white text-black font-semibold text-xs rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] transition-all duration-300 hover:scale-105 active:scale-95 whitespace-nowrap"
               >
                 Send Email
               </a>
