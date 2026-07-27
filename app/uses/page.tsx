@@ -10,73 +10,62 @@ import { IconHome, IconUser, IconBriefcase, IconFileText } from "@tabler/icons-r
 
 interface ToolItem {
   name: string;
-  category?: string;
-  icon?: string;
-  svgIcon?: React.ReactNode;
+  icon: string;
+  link?: string;
 }
 
 const CRAFT_TOOLS: ToolItem[] = [
-  { name: "Zed", icon: "/icons8-vs-code-96.png" },
-  { name: "Claude Code", icon: "/notebooklm.png" },
-  { name: "Ghostty", icon: "/ghostty.webp" },
-  { name: "Arc", icon: "/chat-wise.png" },
-  { name: "Linear", icon: "/notion-logo-icon.png" },
-  { name: "Figma", icon: "/icons8-figma-96.png" },
-  { name: "Docker", icon: "/icons8-docker-144.png" },
-  { name: "VS Code", icon: "/icons8-vs-code-96.png" },
-  { name: "IntelliJ IDEA", icon: "/icons8-intellij-idea-96.png" },
-  { name: "Postman", icon: "/icons8-postman-inc-96.png" },
-  { name: "DBeaver", icon: "/icons8-dbeaver.png" },
+  { name: "VS Code", icon: "/icons8-vs-code-96.png", link: "https://code.visualstudio.com/" },
+  { name: "IntelliJ IDEA", icon: "/icons8-intellij-idea-96.png", link: "https://www.jetbrains.com/idea/" },
+  { name: "Postman", icon: "/icons8-postman-inc-96.png", link: "https://www.postman.com/" },
+  { name: "DBeaver", icon: "/icons8-dbeaver.png", link: "https://dbeaver.io/" },
+  { name: "Figma", icon: "/icons8-figma-96.png", link: "https://www.figma.com/" },
+  { name: "Framer", icon: "/framer-logo.png", link: "https://www.framer.com/" },
 ];
 
 const CLI_TOOLS: ToolItem[] = [
-  { name: "Zsh", icon: "/icons8-git-144.png" },
-  { name: "tmux", icon: "/icons8-github-50.png" },
-  { name: "LazyGit", icon: "/icons8-git-144.png" },
-  { name: "Neovim", icon: "/opencode-logo-dark.png" },
-  { name: "Gemini CLI", icon: "/gemini-cli-icon.png" },
-  { name: "Starship", icon: "/codex-color.webp" },
-  { name: "GitHub CLI", icon: "/icons8-github-50.png" },
-  { name: "Homebrew", icon: "/Bun.png" },
+  { name: "Ghostty", icon: "/ghostty.webp", link: "https://ghostty.org/" },
+  { name: "Gemini CLI", icon: "/gemini-cli-icon.png", link: "https://geminicli.com/" },
+  { name: "Opencode", icon: "/opencode-logo-dark.png", link: "https://opencode.ai/" },
+  { name: "Codex", icon: "/codex-color.webp", link: "https://chatgpt.com/codex/cloud" },
 ];
 
 const DAILY_APPS: ToolItem[] = [
-  { name: "Raycast", icon: "/opal.png" },
-  { name: "Notion", icon: "/notion-logo-icon.png" },
-  { name: "CleanShot X", icon: "/chat-wise.png" },
-  { name: "1Password", icon: "/google-firebase-logo-icon-hd.png" },
-  { name: "Spotify", icon: "/spotify-logo.png" },
-  { name: "Obsidian", icon: "/obsidian-icon.png" },
-  { name: "Opal", icon: "/opal.png" },
-  { name: "Notion Calendar", icon: "/notion-calendar.png" },
+  { name: "Notion", icon: "/notion-logo-icon.png", link: "https://www.notion.so/" },
+  { name: "Notion Calendar", icon: "/notion-calendar.png", link: "https://www.notion.so/product/calendar" },
+  { name: "Google Calendar", icon: "https://img.icons8.com/?size=100&id=DEJypxE54F9v&format=png&color=000000", link: "https://calendar.google.com/" },
+  { name: "Obsidian", icon: "/obsidian-icon.png", link: "https://obsidian.md/" },
+  { name: "NotebookLM", icon: "/notebooklm.png", link: "https://notebooklm.google/" },
+  { name: "ChatWise", icon: "/chat-wise.png", link: "https://chatwise.app/" },
+  { name: "ClickUp", icon: "https://img.icons8.com/?size=100&id=znqq179L1K9g&format=png&color=000000", link: "https://clickup.com/" },
+  { name: "Microsoft ToDo", icon: "https://img.icons8.com/?size=100&id=HpPqCqynotVp&format=png&color=000000", link: "https://todo.microsoft.com/" },
+  { name: "Spotify", icon: "/spotify-logo.png", link: "https://www.spotify.com/" },
+  { name: "Opal", icon: "/opal.png", link: "https://www.opal.so/" },
 ];
 
 function ToolBadgeGrid({ items }: { items: ToolItem[] }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
       {items.map((tool) => (
-        <div
+        <a
           key={tool.name}
-          className="group flex flex-col items-center justify-center p-4 sm:p-5 rounded-2xl bg-neutral-950/80 border border-neutral-800/80 hover:border-neutral-700 hover:bg-neutral-900/90 transition-all duration-300 shadow-md"
+          href={tool.link || "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl bg-neutral-950/80 border border-neutral-800/80 hover:border-neutral-700 hover:bg-neutral-900/90 transition-all duration-300 shadow-sm"
         >
-          <div className="relative w-12 h-12 sm:w-14 sm:h-14 mb-3 flex items-center justify-center">
-            {tool.icon ? (
-              <Image
-                src={tool.icon}
-                alt={tool.name}
-                fill
-                className="object-contain group-hover:scale-110 transition-transform duration-300"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-xl bg-neutral-800 flex items-center justify-center text-white font-bold text-sm">
-                {tool.name.substring(0, 2)}
-              </div>
-            )}
+          <div className="relative w-7 h-7 sm:w-8 sm:h-8 mb-2 flex items-center justify-center">
+            <Image
+              src={tool.icon}
+              alt={tool.name}
+              fill
+              className="object-contain group-hover:scale-110 transition-transform duration-300"
+            />
           </div>
-          <span className="text-xs sm:text-sm font-sans font-medium text-neutral-300 group-hover:text-white transition-colors text-center">
+          <span className="text-xs font-sans font-medium text-neutral-300 group-hover:text-white transition-colors text-center truncate w-full">
             {tool.name}
           </span>
-        </div>
+        </a>
       ))}
     </div>
   );
