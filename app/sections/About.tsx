@@ -100,23 +100,19 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                   </div>
                 </OrbitingCircles>
 
-                {/* Prominent Waruna Speaking Portrait - Frameless with Multi-Directional Gradient Fades */}
+                {/* Prominent Waruna Speaking Portrait - Direct Image Masking for PNG Transparency */}
                 <div className="relative z-20 w-80 sm:w-96 md:w-[420px] h-[480px] sm:h-[520px] flex items-end justify-center">
                   <Image
                     src="/me/waruna-speaking.png"
                     alt="Waruna Udara Speaking"
                     fill
                     className="object-cover object-top"
+                    style={{
+                      WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 98%)",
+                      maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 98%)",
+                    }}
                     priority
                   />
-                  {/* Bottom Fade Overlay: Eliminates bottom crop cut */}
-                  <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/85 via-black/40 to-transparent pointer-events-none z-30" />
-                  
-                  {/* Right Side Fade Overlay: Eliminates right edge cut */}
-                  <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black via-black/80 via-black/30 to-transparent pointer-events-none z-30" />
-                  
-                  {/* Left Side Subtle Fade */}
-                  <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-black/50 to-transparent pointer-events-none z-30" />
                 </div>
               </div>
             ) : (
