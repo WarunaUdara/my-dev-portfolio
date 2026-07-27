@@ -3,16 +3,16 @@
 import React from "react";
 import Image from "@/components/ui/Image";
 import AuroraText from "@/components/ui/aurora-text";
-import { IconSchool, IconAward, IconBook, IconBuildingBank } from "@tabler/icons-react";
+import { IconSchool, IconAward } from "@tabler/icons-react";
 
 export interface EducationItem {
   id: string;
   institution: string;
+  logo: string;
   degree: string;
   period: string;
   description?: string;
   achievements?: string[];
-  skills?: string[];
   gradient: string;
 }
 
@@ -20,30 +20,30 @@ export const EDUCATION_DATA: EducationItem[] = [
   {
     id: "EDU01",
     institution: "University of Sri Jayewardenepura",
-    degree: "Bachelor of Information and Communication Technology (Hons), Information Technology",
+    logo: "/me/usj-logo.png",
+    degree: "Bachelor of Information and Communication Technology (Hons), Network Technology",
     period: "May 2024 – Dec 2028",
     description: "Undergraduate | BICT (Hons) Specialized in Network Technology",
-    skills: ["Web Application Development", "Java Software Development", "DevOps", "Network Technology"],
     gradient: "from-neutral-900/90 via-neutral-950 to-black",
   },
   {
     id: "EDU02",
     institution: "Institute of Computer Engineering Technology (iCET)",
+    logo: "/me/icet-logo.png",
     degree: "Diploma in Software Engineering",
     period: "Nov 2023 – Jun 2024",
-    skills: ["Web Application Development", "Maven", "Java", "Software Engineering"],
     gradient: "from-neutral-900/90 via-neutral-950 to-black",
   },
   {
     id: "EDU03",
     institution: "Ananda Sastralaya National School",
+    logo: "/me/school-logo.png",
     degree: "Engineering Technology",
     period: "Feb 2008 – Mar 2022",
     achievements: [
       "G.C.E. Advanced Level (Technology Stream) – Achieved AAA passes in Engineering Technology, Science for Technology, and Information & Communication Technology (ICT).",
       "Secured District Rank 09 and Island Rank 121."
     ],
-    skills: ["Engineering Technology", "Science for Technology", "ICT"],
     gradient: "from-neutral-900/90 via-neutral-950 to-black",
   },
 ];
@@ -66,18 +66,28 @@ export const Education = () => {
           </h2>
         </div>
 
-        {/* Education Timeline / Cards Stack */}
+        {/* Education Cards Stack */}
         <div className="space-y-8">
           {EDUCATION_DATA.map((edu) => (
             <div
               key={edu.id}
-              className={`relative rounded-3xl bg-neutral-950/80 border border-neutral-800/90 hover:border-neutral-600 p-7 sm:p-9 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col md:flex-row justify-between gap-6 md:gap-10`}
+              className={`relative rounded-3xl bg-neutral-950/80 border border-neutral-800/90 hover:border-neutral-600 p-7 sm:p-9 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col sm:flex-row items-start gap-6 md:gap-8`}
             >
-              {/* Institution & Period Header */}
-              <div className="flex-1 space-y-4">
+              {/* Institution Logo Badge */}
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-neutral-900/90 border border-neutral-800 p-2 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-lg group-hover:border-neutral-600 transition-colors">
+                <Image
+                  src={edu.logo}
+                  alt={edu.institution}
+                  width={56}
+                  height={56}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+
+              {/* Institution & Period Content */}
+              <div className="flex-1 space-y-4 w-full">
                 <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-neutral-400 border-b border-dashed border-neutral-800 pb-3">
-                  <span className="flex items-center gap-2 text-neutral-200 font-semibold text-base sm:text-lg font-serif">
-                    <IconBuildingBank className="w-5 h-5 text-neutral-400" />
+                  <span className="text-neutral-200 font-semibold text-base sm:text-lg font-serif">
                     {edu.institution}
                   </span>
                   <span className="px-3.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 font-mono">
@@ -112,21 +122,6 @@ export const Education = () => {
                         </li>
                       ))}
                     </ul>
-                  </div>
-                )}
-
-                {/* Skills Badges */}
-                {edu.skills && edu.skills.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-dashed border-neutral-800/80">
-                    <span className="text-[11px] font-mono text-neutral-500 uppercase self-center mr-1">Skills:</span>
-                    {edu.skills.map((skill, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2.5 py-1 bg-neutral-900 border border-neutral-800 rounded-lg text-[11px] font-mono text-neutral-300 tracking-wider"
-                      >
-                        {skill}
-                      </span>
-                    ))}
                   </div>
                 )}
               </div>
