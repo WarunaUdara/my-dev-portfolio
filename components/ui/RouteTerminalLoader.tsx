@@ -100,10 +100,10 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
     setIsTransitioning(true);
 
     if (timerRef.current) clearTimeout(timerRef.current);
-    // Well-paced 1.35 second duration so user can comfortably read terminal command & sarcastic output
+    // Well-paced 2.2 second duration so user can comfortably read terminal command & sarcastic output while assets finish preloading
     timerRef.current = setTimeout(() => {
       setIsTransitioning(false);
-    }, 1350);
+    }, 2200);
   };
 
   useEffect(() => {
@@ -147,13 +147,13 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
             key="route-terminal-overlay"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97, filter: "blur(10px)" }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, scale: 0.97, filter: "blur(12px)" }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             onClick={() => setIsTransitioning(false)}
-            className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl cursor-pointer"
+            className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl cursor-pointer"
           >
             {/* Terminal Window Box */}
-            <div className="w-full max-w-lg rounded-2xl bg-neutral-950/95 border border-white/15 p-5 sm:p-6 shadow-[0_0_50px_rgba(0,0,0,0.9)] space-y-4">
+            <div className="w-full max-w-lg rounded-2xl bg-neutral-950/95 border border-white/15 p-5 sm:p-6 shadow-[0_0_60px_rgba(0,0,0,0.95)] space-y-4">
               {/* Window Controls & Branch Header */}
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div className="flex items-center gap-2">
@@ -176,7 +176,7 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
                 <motion.div
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ delay: 0.1, duration: 0.2 }}
                   className="flex items-center gap-2 text-white font-semibold"
                 >
                   <span className="text-emerald-400">❯</span>
@@ -190,7 +190,7 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
                       key={idx}
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.15 + idx * 0.22, duration: 0.25 }}
+                      transition={{ delay: 0.35 + idx * 0.38, duration: 0.3 }}
                       className="flex items-start gap-2.5 leading-relaxed"
                     >
                       {line.startsWith("✔") ? (
