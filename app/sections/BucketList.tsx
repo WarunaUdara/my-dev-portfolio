@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { cn } from '@/lib/utils';
 import AuroraText from "@/components/ui/aurora-text";
+import ScrollFrost from "@/components/canvasui/ScrollFrost";
 
 interface BucketItem {
   id: number;
@@ -68,8 +69,9 @@ const BucketList = () => {
   const progress = (completedCount / totalCount) * 100;
 
   return (
-    <section className="relative bg-black text-white py-20 px-4 sm:px-6">
-      <div className="container mx-auto max-w-5xl">
+    <section className="relative bg-black text-white py-20 px-4 sm:px-6 overflow-hidden">
+      <ScrollFrost height="h-[500px]" />
+      <div className="container mx-auto max-w-5xl relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
           <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-gray-400 mb-4">

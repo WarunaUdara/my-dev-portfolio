@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "@/components/ui/Image";
 import Scales from "@/components/ui/scales";
 import AuroraText from "@/components/ui/aurora-text";
+import ScrollFrost from "@/components/canvasui/ScrollFrost";
 import { NavBar } from "@/app/ui/TubelightNavbar";
 import Footer from "@/app/sections/Footer";
 import { IconHome, IconUser, IconBriefcase, IconFileText } from "@tabler/icons-react";
@@ -120,8 +121,11 @@ export default function UsesPage() {
         <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
       </div>
 
+      {/* Frost Background Canvas */}
+      <ScrollFrost height="h-[600px]" />
+
       {/* Main Content Container with Side Padding */}
-      <main className="relative pt-28 sm:pt-36 pb-20 px-6 sm:px-16 md:px-24 max-w-7xl mx-auto">
+      <main className="relative pt-28 sm:pt-36 pb-20 px-6 sm:px-16 md:px-24 max-w-7xl mx-auto z-10">
         {/* Header matching design sample */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-24">
           <p className="text-xs font-mono uppercase tracking-[0.35em] text-neutral-400 font-semibold mb-3">
@@ -268,7 +272,7 @@ export default function UsesPage() {
                 height: lineHeightTransform,
                 opacity: lineOpacityTransform,
               }}
-              className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-t from-[#64748b] via-[#cbd5e1] to-transparent rounded-full"
+              className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-b from-[#a717de] via-[#ff0cbd] via-[#3c34f3] to-[#ff6926] rounded-full shadow-[0_0_12px_rgba(255,12,189,0.8)]"
             />
           </div>
         </div>

@@ -1,5 +1,7 @@
 import React from 'react'
 import { IconBrandGithub, IconBrandLinkedin, IconMail, IconBrandX, IconSend, IconBook, IconFileText, IconBrandInstagram } from '@tabler/icons-react'
+import ScrollFrost from '@/components/canvasui/ScrollFrost'
+import AuroraText from '@/components/ui/aurora-text'
 
 const Links = () => {
   const links = [
@@ -37,7 +39,7 @@ const Links = () => {
       title: 'Email',
       url: 'mailto:warunaudarasam2003@gmail.com',
       icon: <IconMail className="w-5 h-5" />,
-      description: 'Connect on BlueSky'
+      description: 'Connect on Email'
     },
     {
       title: 'Resume',
@@ -57,16 +59,16 @@ const Links = () => {
       icon: <IconBook className="w-5 h-5" />,
       description: 'Visit my Cloud native community profile'
     }
-    
   ]
 
   return (
-    <section className="relative bg-black text-white py-20 px-4 sm:px-6 min-h-screen flex items-center">
-      <div className="container mx-auto max-w-xl">
+    <section className="relative bg-black text-white py-20 px-4 sm:px-6 min-h-screen flex items-center overflow-hidden">
+      <ScrollFrost height="h-[500px]" />
+      <div className="container mx-auto max-w-xl relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-serif font-bold mb-3">
-            All My Links
+            All My <AuroraText className="italic font-serif">Links</AuroraText>
           </h2>
           <p className="text-gray-400 text-sm">
             Connect with me on various platforms

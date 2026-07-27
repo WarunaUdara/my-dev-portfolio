@@ -6,6 +6,7 @@ import Grainient from "@/components/ReactBits/Grainient";
 import CircularText from "@/components/ReactBits/CircularText";
 import AuroraText from "@/components/ui/aurora-text";
 import { IconArrowUpRight, IconSparkles } from "@tabler/icons-react";
+import Image from "next/image";
 
 export default function CTA() {
   return (
@@ -13,7 +14,7 @@ export default function CTA() {
       <div className="container mx-auto max-w-6xl">
         {/* Card Container matching the reference design sample */}
         <div className="relative w-full overflow-hidden rounded-3xl border border-neutral-800/80 bg-neutral-950/90 py-16 px-6 sm:px-12 shadow-2xl">
-          
+
           {/* Background WebGL Grainient Shader within card bounds */}
           <div className="absolute inset-0 z-0 opacity-65">
             <Grainient
@@ -48,16 +49,19 @@ export default function CTA() {
 
           {/* Main Content inside Card */}
           <div className="relative z-20 flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
-            
+
             {/* Emblem Wings / Dev Badge Icon */}
             <div className="relative group">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-neutral-800 to-black p-0.5 shadow-2xl border border-neutral-700/80 flex items-center justify-center">
-                <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                  <span className="font-sans text-base font-extrabold tracking-tighter bg-gradient-to-t from-[#cbd5e1] to-white bg-clip-text text-transparent">
-                    WU
-                  </span>
-                </div>
+              <div className="relative h-10 w-12">
+                <Image
+                  src="/logo.svg"
+                  alt="Logo"
+                  fill
+                  className="object-contain object-center"
+                  priority
+                />
               </div>
+              
             </div>
 
             {/* Headline Block */}
@@ -69,8 +73,8 @@ export default function CTA() {
                 </span>
                 <br />
                 LET&apos;S MAKE IT{" "}
-                <AuroraText className="font-serif italic font-extrabold">
-                  HAPPEN!
+                <AuroraText className="font-serif italic ">
+                  HAPPEN! &nbsp;
                 </AuroraText>
               </h2>
 

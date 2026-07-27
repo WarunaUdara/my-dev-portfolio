@@ -25,6 +25,7 @@ import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-van
 import { IconBrandGithub, IconBrandGoogle, IconPin, IconTrash, IconX, IconSend, IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react';
 import Image from '@/components/ui/Image';
 import AuroraText from "@/components/ui/aurora-text";
+import ScrollFrost from "@/components/canvasui/ScrollFrost";
 
 interface Message {
   id: string;
@@ -242,8 +243,9 @@ export default function GuestbookPage() {
     <>
       <NavBar items={navItems} />
       
-      <main className="min-h-screen bg-black text-white pt-24 pb-20 px-4 sm:px-6">
-        <div className="container mx-auto max-w-2xl">
+      <main className="relative min-h-screen bg-black text-white pt-24 pb-20 px-4 sm:px-6 overflow-hidden">
+        <ScrollFrost height="h-[500px]" />
+        <div className="container mx-auto max-w-2xl relative z-10">
           {/* Header */}
           <div className="text-center mb-12">
             <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-gray-500 mb-6">

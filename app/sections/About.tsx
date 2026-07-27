@@ -1,48 +1,14 @@
 import React from 'react';
 import Image from '@/components/ui/Image';
 import { IconBrandLinkedin, IconBrandGithub } from '@tabler/icons-react';
-import Frost from '@/components/canvasui/Frost';
+import ScrollFrost from '@/components/canvasui/ScrollFrost';
 import AuroraText from '@/components/ui/aurora-text';
 
 const About = () => {
   return (
     <section id="about" className="relative min-h-screen bg-black text-white py-20 px-4 sm:px-6 scroll-mt-20 overflow-hidden">
-      {/* Background Frost Layer with Extended Height & Dual Fade Masks */}
-      <div className="absolute top-0 left-0 right-0 h-[68%] overflow-hidden pointer-events-auto z-0">
-        <Frost
-          frost={0.06}
-          strength={0.65}
-          contrast={2.8}
-          crispness={1.2}
-          highlight={0.4}
-          haze={0.4}
-          tintStrength={0.25}
-          refraction={1}
-          detail={2}
-          textureScale={2}
-          meltRadius={0.25}
-          meltNoise={0.25}
-          meltStrength={0.75}
-          refreeze={2}
-          opacity={0.5}
-          shimmer={0.15}
-          meltEdges
-          tintThin={[0.75, 0.8, 0.9]}
-          tintThick={[0.9, 0.93, 1.0]}
-          className="w-full h-full"
-        >
-          <div className="w-full h-full bg-gradient-to-b from-black/80 via-neutral-900/50 to-black/90"></div>
-        </Frost>
-        
-        {/* Top Fade Gradient: Smooth dark fade from section top */}
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black via-black/60 to-transparent pointer-events-none z-10"></div>
-
-        {/* Bottom Fade Gradient: Ultra-smooth multi-stage dark shadow extending over a larger height */}
-        <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-b from-transparent via-black/20 via-black/60 via-black/90 to-black pointer-events-none z-10"></div>
-        
-        {/* Subtle Ambient Radial Vignette */}
-        <div className="absolute inset-0 bg-radial from-transparent via-black/20 to-black/70 pointer-events-none z-10"></div>
-      </div>
+      {/* Background Frost Layer with Scroll Trigger */}
+      <ScrollFrost height="h-[68%]" />
 
       <div className="container mx-auto max-w-6xl relative z-10">
         {/* Section Label */}
