@@ -18,7 +18,12 @@ function WorkPage() {
   ];
 
   return (
-    <ParticleScroll point={0.68} band={420} density={2} className="min-h-screen bg-black text-white">
+    <ParticleScroll
+      point={0.68}
+      band={420}
+      density={2}
+      className="h-screen w-full overflow-hidden bg-black text-white"
+    >
       <div className="pt-12">
         <Projects />
       </div>
