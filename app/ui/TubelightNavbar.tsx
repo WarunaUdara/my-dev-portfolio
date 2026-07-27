@@ -22,11 +22,17 @@ export function NavBar({ items, className }: NavBarProps) {
   const [pathname, setPathname] = useState(typeof window !== 'undefined' ? window.location.pathname : '/');
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setPathname(window.location.pathname);
-    }
+    const updatePathname = () => {
+      if (typeof window !== 'undefined') {
+        setPathname(window.location.pathname);
+      }
+    };
+    updatePathname();
+    window.addEventListener('popstate', updatePathname);
+    return () => window.removeEventListener('popstate', updatePathname);
   }, []);
-  const [activeTab, setActiveTab] = useState(items[0].name)
+
+  const [activeTab, setActiveTab] = useState(items[0]?.name || 'Home')
   const [isMobile, setIsMobile] = useState(false)
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [showMobileModal, setShowMobileModal] = useState(false)
@@ -49,18 +55,26 @@ export function NavBar({ items, className }: NavBarProps) {
 
   // Set active tab based on current route
   useEffect(() => {
-    if (pathname === '/about') {
+    if (pathname.startsWith('/work')) {
+      setActiveTab('Work')
+    } else if (pathname.startsWith('/about')) {
       setActiveTab('About')
-    } else if (pathname === '/' || pathname.startsWith('/#')) {
-      const hash = pathname.split('#')[1]
-      if (hash) {
-        const item = items.find(i => i.url === `#${hash}`)
-        if (item) setActiveTab(item.name)
-      } else {
-        setActiveTab(items[0].name)
-      }
     } else if (isOnMorePage) {
       setActiveTab('More')
+    } else if (pathname === '/' || pathname.startsWith('/#')) {
+      const hash = typeof window !== 'undefined' ? window.location.hash : ''
+      if (hash) {
+        const item = items.find(i => i.url === hash)
+        if (item) setActiveTab(item.name)
+        else setActiveTab(items[0]?.name || 'Home')
+      } else {
+        setActiveTab(items[0]?.name || 'Home')
+      }
+    } else {
+      const matchedItem = items.find(i => i.url === pathname)
+      if (matchedItem) {
+        setActiveTab(matchedItem.name)
+      }
     }
   }, [pathname, items, isOnMorePage])
 
