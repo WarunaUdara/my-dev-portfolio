@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "waruna-portfolio": {
+      "command": "node",
+      "args": ["./node_modules/.bin/tsx", "mcp/server.ts"],
+      "description": "Waruna Udara Sampath Portfolio Model Context Protocol (MCP) Server"
+    }
+  }
+}
