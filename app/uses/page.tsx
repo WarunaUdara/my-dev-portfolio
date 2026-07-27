@@ -182,19 +182,41 @@ export default function UsesPage() {
                   </div>
 
                   {/* Specs & Hardware Meta Bar */}
-                  <div className="mt-6 pt-4 border-t border-neutral-900 flex flex-wrap items-center justify-between gap-4">
-                    <div>
-                      <h4 className="text-white font-sans font-bold text-base sm:text-lg">
-                        MacBook Air M4
-                      </h4>
-                      <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-0.5">
-                        16GB Unified Memory · 512GB SSD
-                      </p>
+                  <div className="mt-6 pt-5 border-t border-neutral-900 space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                      <div>
+                        <h4 className="text-white font-sans font-bold text-lg sm:text-xl">
+                          MacBook Air M4
+                        </h4>
+                        <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-0.5">
+                          Apple M4 Chip · 16GB Unified Memory · 512GB Superfast SSD
+                        </p>
+                      </div>
+
+                      <span className="px-3.5 py-1.5 rounded-full bg-neutral-900 border border-sky-500/30 text-xs font-mono font-semibold text-sky-400 tracking-wider uppercase shadow-[0_0_12px_rgba(56,189,248,0.2)]">
+                        SKY BLUE
+                      </span>
                     </div>
 
-                    <span className="px-3.5 py-1 rounded-full bg-neutral-900 border border-neutral-700/80 text-[10px] sm:text-xs font-mono font-semibold text-sky-400 tracking-wider uppercase">
-                      SKY BLUE
-                    </span>
+                    {/* Detailed Tech Spec Badges */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+                      <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 text-center">
+                        <span className="text-[10px] font-mono text-neutral-500 uppercase block mb-0.5">CHIP</span>
+                        <span className="text-xs font-mono font-bold text-white">Apple M4</span>
+                      </div>
+                      <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 text-center">
+                        <span className="text-[10px] font-mono text-neutral-500 uppercase block mb-0.5">MEMORY</span>
+                        <span className="text-xs font-mono font-bold text-white">16GB Unified</span>
+                      </div>
+                      <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 text-center">
+                        <span className="text-[10px] font-mono text-neutral-500 uppercase block mb-0.5">STORAGE</span>
+                        <span className="text-xs font-mono font-bold text-white">512GB SSD</span>
+                      </div>
+                      <div className="bg-neutral-900/80 border border-neutral-800/80 rounded-xl p-3 text-center">
+                        <span className="text-[10px] font-mono text-neutral-500 uppercase block mb-0.5">FINISH</span>
+                        <span className="text-xs font-mono font-bold text-sky-400">Sky Blue</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
