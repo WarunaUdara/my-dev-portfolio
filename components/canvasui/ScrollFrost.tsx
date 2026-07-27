@@ -14,16 +14,14 @@ export function ScrollFrost({
   ...props
 }: ScrollFrostProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        setIsVisible(entry.isIntersecting);
       },
-      { rootMargin: "150px 0px" } // Triggers on scroll approach
+      { rootMargin: "300px 0px" }
     );
 
     if (containerRef.current) {
@@ -36,17 +34,17 @@ export function ScrollFrost({
   return (
     <div
       ref={containerRef}
-      className={`absolute top-0 inset-x-0 ${height} overflow-hidden pointer-events-none opacity-40 z-0 ${className}`}
+      className={`absolute top-0 inset-x-0 ${height} overflow-hidden pointer-events-auto z-0 ${className}`}
     >
       {isVisible && (
         <Frost
-          frost={0.05}
-          strength={0.7}
-          contrast={3}
-          crispness={1}
-          highlight={0.3}
-          haze={0.5}
-          tintStrength={0.3}
+          frost={0.06}
+          strength={0.65}
+          contrast={2.8}
+          crispness={1.2}
+          highlight={0.4}
+          haze={0.4}
+          tintStrength={0.25}
           refraction={1}
           detail={2}
           textureScale={2}
@@ -54,16 +52,20 @@ export function ScrollFrost({
           meltNoise={0.25}
           meltStrength={0.75}
           refreeze={2}
-          opacity={0.6}
-          shimmer={0}
+          opacity={0.5}
+          shimmer={0.15}
           meltEdges
-          tintThin={[0.8196, 0.8588, 1]}
-          tintThick={[0.9176, 0.9608, 1]}
+          tintThin={[0.75, 0.8, 0.9]}
+          tintThick={[0.9, 0.93, 1.0]}
+          className="w-full h-full"
           {...props}
-        />
+        >
+          <div className="w-full h-full bg-gradient-to-b from-black/80 via-neutral-900/50 to-black/90" />
+        </Frost>
       )}
-      <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-black via-black/80 to-transparent" />
-      <div className="absolute bottom-0 inset-x-0 h-72 bg-gradient-to-t from-black via-black/90 to-transparent" />
+      <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-black via-black/60 to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 inset-x-0 h-72 bg-gradient-to-b from-transparent via-black/20 via-black/60 via-black/90 to-black pointer-events-none z-10" />
+      <div className="absolute inset-0 bg-radial from-transparent via-black/20 to-black/70 pointer-events-none z-10" />
     </div>
   );
 }
