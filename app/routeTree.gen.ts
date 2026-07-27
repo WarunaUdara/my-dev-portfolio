@@ -15,6 +15,7 @@ import { Route as BucketListRouteImport } from './routes/bucket-list'
 import { Route as GuestbookRouteImport } from './routes/guestbook'
 import { Route as LinksRouteImport } from './routes/links'
 import { Route as UsesRouteImport } from './routes/uses'
+import { Route as WorkRouteImport } from './routes/work'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const IndexRoute = IndexRouteImport.update({
@@ -47,6 +48,11 @@ const UsesRoute = UsesRouteImport.update({
   path: '/uses',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkRoute = WorkRouteImport.update({
+  id: '/work',
+  path: '/work',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/guestbook': typeof GuestbookRoute
   '/links': typeof LinksRoute
   '/uses': typeof UsesRoute
+  '/work': typeof WorkRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/guestbook': typeof GuestbookRoute
   '/links': typeof LinksRoute
   '/uses': typeof UsesRoute
+  '/work': typeof WorkRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/guestbook': typeof GuestbookRoute
   '/links': typeof LinksRoute
   '/uses': typeof UsesRoute
+  '/work': typeof WorkRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/guestbook'
     | '/links'
     | '/uses'
+    | '/work'
     | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/guestbook'
     | '/links'
     | '/uses'
+    | '/work'
     | '/api/chat'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/guestbook'
     | '/links'
     | '/uses'
+    | '/work'
     | '/api/chat'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   GuestbookRoute: typeof GuestbookRoute
   LinksRoute: typeof LinksRoute
   UsesRoute: typeof UsesRoute
+  WorkRoute: typeof WorkRoute
   ApiChatRoute: typeof ApiChatRoute
 }
 
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/work': {
+      id: '/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuestbookRoute: GuestbookRoute,
   LinksRoute: LinksRoute,
   UsesRoute: UsesRoute,
+  WorkRoute: WorkRoute,
   ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport

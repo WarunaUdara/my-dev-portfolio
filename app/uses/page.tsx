@@ -168,17 +168,15 @@ export default function UsesPage() {
               {/* Hardware Cards Container */}
               <div className="w-full flex-1 space-y-6">
                 {/* Hardware Card 1 - MacBook Air M4 */}
-                <div className="bg-neutral-950/90 border border-neutral-800/90 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl group">
-                  <div className="absolute inset-0 bg-radial from-sky-950/20 via-black to-black pointer-events-none" />
-
+                <div className="bg-neutral-950 border border-neutral-800/90 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl group z-10">
                   {/* Header & Specs Bar */}
-                  <div className="space-y-4 mb-6">
+                  <div className="space-y-4 mb-6 relative z-20">
                     <div className="flex flex-wrap items-center justify-between gap-4">
                       <div>
-                        <h4 className="text-white font-sans font-bold text-xl sm:text-2xl">
+                        <h4 className="text-white font-sans font-bold text-xl sm:text-2xl drop-shadow">
                           MacBook Air M4
                         </h4>
-                        <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-1">
+                        <p className="text-neutral-300 text-xs sm:text-sm font-mono mt-1 font-medium">
                           Apple M4 Chip · 16GB Unified Memory · 512GB SSD · Sky Blue
                         </p>
                       </div>
@@ -220,21 +218,17 @@ export default function UsesPage() {
                   </div>
                 </div>
 
-                {/* Hardware Card 2 - Lenovo L24i-40 Monitor (Pure Text Content) */}
-                <div className="bg-neutral-950/90 border border-neutral-800/90 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+                {/* Hardware Card 2 - Lenovo L24i-40 Monitor (Clean Text Content) */}
+                <div className="bg-neutral-950 border border-neutral-800/90 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                     <div>
                       <h4 className="text-white font-sans font-bold text-lg sm:text-xl">
                         Lenovo 24&quot; FHD Monitor
                       </h4>
-                      <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-1">
-                        100Hz Refresh Rate · Model: L24i-40 · 1920×1080 IPS Display
+                      <p className="text-neutral-300 text-xs sm:text-sm font-mono mt-1">
+                        Model: L24i-40 · 1920×1080 Resolution
                       </p>
                     </div>
-
-                    <span className="px-3.5 py-1.5 rounded-full bg-neutral-900 border border-emerald-500/40 text-xs font-mono font-semibold text-emerald-400 tracking-wider uppercase shadow-[0_0_12px_rgba(52,211,153,0.2)]">
-                      100Hz DISPLAY
-                    </span>
                   </div>
 
                   {/* Monitor Spec Badges */}

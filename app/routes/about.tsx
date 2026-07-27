@@ -13,7 +13,7 @@ function AboutPage() {
   const navItems = [
     { name: 'Home', url: '/', icon: IconHome },
     { name: 'About', url: '/about', icon: IconUser },
-    { name: 'Projects', url: '/#projects', icon: IconBriefcase },
+    { name: 'Work', url: '/work', icon: IconBriefcase },
     { name: 'More', url: '#more', icon: IconFileText },
   ];
 
