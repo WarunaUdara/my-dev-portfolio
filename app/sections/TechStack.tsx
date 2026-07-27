@@ -13,52 +13,56 @@ const techStack = [
   { name: 'Python', icon: '/icons8-python-144.png' },
   { name: 'JavaScript', icon: '/icons8-javascript-144.png' },
   { name: 'TypeScript', icon: '/ts.png' },
+  { name: 'Go', icon: '/golang.webp' },
   { name: 'Rust', icon: '/rust-logo.png' },
-  
 
-  // 2. Web Fundamentals
+  // 2. Web Fundamentals & API
   { name: 'HTML5', icon: '/icons8-html5-144.png' },
   { name: 'CSS3', icon: '/icons8-css3-144.png' },
+  { name: 'GraphQL', icon: '/graphql.png' },
+  { name: 'Swagger', icon: '/icons8-swagger-144.png' },
+  { name: 'Node.js', icon: '/icons8-nodejs-144.png' },
+  { name: 'Spring Boot', icon: '/icons8-spring-boot-48.png' },
 
   // 3. Frontend Frameworks & UI
   { name: 'React', icon: '/icons8-react-24.png' },
   { name: 'Next.js', icon: '/icons8-nextjs-144.png' },
+  { name: 'TanStack', icon: '/tanstack.png' },
   { name: 'Angular', icon: '/icons8-angular-96.png' },
   { name: 'Tailwind CSS', icon: '/icons8-tailwind-css-144.png' },
   { name: 'Bootstrap', icon: '/icons8-bootstrap-144.png' },
 
-  // 4. Backend & API
-  { name: 'Node.js', icon: '/icons8-nodejs-144.png' },
-  { name: 'Spring Boot', icon: '/icons8-spring-boot-48.png' },
-  { name: 'Hibernate', icon: '/hibernate.png' },
-  { name: 'Swagger', icon: '/icons8-swagger-144.png' },
-  { name: 'Kafka', icon: '/icons8-apache-kafka-64.png' },
-  { name: 'Bun', icon: '/Bun.png' },
-
-  // 5. Databases & Persistence
+  // 4. Databases & Search
   { name: 'MySQL', icon: '/icons8-mysql-144.png' },
   { name: 'PostgreSQL', icon: '/icons8-postgresql-96.png' },
   { name: 'MongoDB', icon: '/icons8-mongo-db-96.png' },
+  { name: 'Elasticsearch', icon: '/elasticsearch.webp' },
   { name: 'Oracle', icon: '/icons8-oracle-96.png' },
   { name: 'Flyway', icon: '/flyway-seeklogo.png' },
-  { name: 'Dbeaver', icon: '/icons8-dbeaver.png' },
+  { name: 'DBeaver', icon: '/icons8-dbeaver.png' },
 
-  // 6. DevOps / Cloud / Infra
+  // 5. DevOps, Security & Cloud Infra
   { name: 'Docker', icon: '/icons8-docker-144.png' },
   { name: 'Kubernetes', icon: '/icons8-kubernetes-48.png' },
+  { name: 'Argo CD', icon: '/argo-cd.webp', link: 'https://argo-cd.readthedocs.io/en/stable/' },
+  { name: 'OpenTofu', icon: '/opentofu.webp', link: 'https://opentofu.org/' },
   { name: 'Terraform', icon: '/icons8-terraform-48.png' },
+  { name: 'Kyverno', icon: '/kyverno.webp' },
+  { name: 'Trivy', icon: '/trivy.webp', link: 'https://trivy.dev/' },
+  { name: 'Prometheus', icon: '/prometheus.webp' },
+  { name: 'Grafana', icon: '/icons8-grafana-24.png' },
   { name: 'AWS', icon: '/aws.png' },
   { name: 'Azure', icon: '/icons8-azure-96.png' },
+  { name: 'Vercel', icon: '/vercel.webp' },
   { name: 'Linux', icon: '/Linux.png' },
-  { name: 'Vercel', icon: '/vercel.png' },
-  { name: 'Grafana', icon: '/icons8-grafana-24.png' },
+  { name: 'ngrok', icon: '/ngrok.svg' },
 
-  // 7. Tools & Collaboration
+  // 6. Messaging & Messaging Platforms
+  { name: 'Kafka', icon: '/icons8-apache-kafka-64.png' },
+  { name: 'Bun', icon: '/Bun.png' },
   { name: 'Git', icon: '/icons8-git-144.png' },
   { name: 'GitHub', icon: '/icons8-github-50.png' },
   { name: 'GitLab', icon: '/icons8-gitlab-96.png' },
-
-  // 8. Additional Platforms
   { name: 'Firebase', icon: '/google-firebase-logo-icon-hd.png' }
 ];
 

@@ -24,6 +24,7 @@ const CRAFT_TOOLS: ToolItem[] = [
   { name: "DBeaver", icon: "/icons8-dbeaver.png", link: "https://dbeaver.io/" },
   { name: "Figma", icon: "/icons8-figma-96.png", link: "https://www.figma.com/" },
   { name: "Framer", icon: "/framer-logo.png", link: "https://www.framer.com/" },
+  { name: "Anti gravity", icon: "/uses/google-antigravity.webp", link: "https://antigravity.google/" },
 ];
 
 const CLI_TOOLS: ToolItem[] = [
@@ -34,6 +35,7 @@ const CLI_TOOLS: ToolItem[] = [
   { name: "Gemini CLI", icon: "/gemini-cli-icon.png", link: "https://geminicli.com/" },
   { name: "Opencode", icon: "/opencode-logo-dark.png", link: "https://opencode.ai/" },
   { name: "Codex", icon: "/codex-color.webp", link: "https://chatgpt.com/codex/cloud" },
+  { name: "Mole", icon: "/uses/mole-cleaner.png", link: "https://mole.fit/" },
 ];
 
 const DAILY_APPS: ToolItem[] = [
@@ -47,6 +49,7 @@ const DAILY_APPS: ToolItem[] = [
   { name: "Microsoft ToDo", icon: "https://img.icons8.com/?size=100&id=HpPqCqynotVp&format=png&color=000000", link: "https://todo.microsoft.com/" },
   { name: "Spotify", icon: "/spotify-logo.png", link: "https://www.spotify.com/" },
   { name: "Opal", icon: "/opal.png", link: "https://www.opal.so/" },
+  { name: "Hermes", icon: "/uses/hermes-icon.webp", link: "https://hermes-agent.nousresearch.com/" },
 ];
 
 function ToolBadgeGrid({ items }: { items: ToolItem[] }) {
@@ -191,6 +194,40 @@ export default function UsesPage() {
 
                     <span className="px-3.5 py-1 rounded-full bg-neutral-900 border border-neutral-700/80 text-[10px] sm:text-xs font-mono font-semibold text-sky-400 tracking-wider uppercase">
                       SKY BLUE
+                    </span>
+                  </div>
+                </div>
+
+                {/* Hardware Card 2 - Lenovo L24i-40 Monitor */}
+                <div className="bg-neutral-950/90 border border-neutral-800/90 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl group mt-6">
+                  <div className="absolute inset-0 bg-radial from-blue-900/10 via-black to-black pointer-events-none" />
+
+                  <div className="relative w-full aspect-[16/9] max-h-[260px] mx-auto rounded-2xl overflow-hidden bg-neutral-900/70 border border-neutral-800/80 flex items-center justify-center p-4">
+                    <div className="relative w-full h-full max-w-[420px] flex flex-col items-center justify-center">
+                      <div className="relative w-full aspect-[16/9] bg-neutral-950 rounded-lg border-2 border-neutral-700 shadow-2xl overflow-hidden flex items-center justify-center">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-sky-950/40 via-neutral-900 to-indigo-950 opacity-90" />
+                        <div className="relative z-10 text-center">
+                          <span className="font-mono text-xs text-sky-400 font-semibold block mb-1">100Hz · IPS FHD</span>
+                          <span className="font-serif italic text-white/80 text-base sm:text-lg">Lenovo L24i-40</span>
+                        </div>
+                      </div>
+                      <div className="w-12 h-6 bg-neutral-700 rounded-b-md" />
+                      <div className="w-32 h-2 bg-neutral-600 rounded-full" />
+                    </div>
+                  </div>
+
+                  <div className="mt-5 pt-4 border-t border-neutral-900 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <h4 className="text-white font-sans font-bold text-base sm:text-lg">
+                        Lenovo 24&quot; FHD Monitor
+                      </h4>
+                      <p className="text-neutral-400 text-xs sm:text-sm font-mono mt-0.5">
+                        100Hz Refresh Rate · L24i-40 Model · 1920×1080
+                      </p>
+                    </div>
+
+                    <span className="px-3.5 py-1 rounded-full bg-neutral-900 border border-neutral-700/80 text-[10px] sm:text-xs font-mono font-semibold text-emerald-400 tracking-wider uppercase">
+                      100Hz DISPLAY
                     </span>
                   </div>
                 </div>
