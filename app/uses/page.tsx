@@ -88,8 +88,8 @@ export default function UsesPage() {
   const navItems = [
     { name: "Home", url: "/", icon: IconHome },
     { name: "About", url: "/about", icon: IconUser },
-    { name: "Projects", url: "/#projects", icon: IconBriefcase },
-    { name: "More", url: "/uses", icon: IconFileText },
+    { name: "Work", url: "/work", icon: IconBriefcase },
+    { name: "More", url: "#more", icon: IconFileText },
   ];
 
   useEffect(() => {

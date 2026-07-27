@@ -6,10 +6,10 @@ import { IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-r
 
 export default function LinksPage() {
   const navItems = [
-    { name: 'Home', url: '/', icon: IconHome },
-    { name: 'About', url: '/#about', icon: IconUser },
-    { name: 'Projects', url: '/#projects', icon: IconBriefcase },
-    { name: 'More', url: '#', icon: IconFileText }
+    { name: "Home", url: "/", icon: IconHome },
+    { name: "About", url: "/about", icon: IconUser },
+    { name: "Work", url: "/work", icon: IconBriefcase },
+    { name: "More", url: "#more", icon: IconFileText },
   ];
 
   return (

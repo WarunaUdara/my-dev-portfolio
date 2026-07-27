@@ -16,11 +16,11 @@ import Explore from "./sections/Explore";
 
 export default function Home() {
   const navItems = [
-    { name: 'Home', url: '#hero', icon: IconHome  },
-    { name: 'About', url: '#about', icon: IconUser },
-    { name: 'Projects', url: '#projects', icon: IconBriefcase },
-    { name: 'More', url: '#', icon: IconFileText }
-  ]
+    { name: "Home", url: "/", icon: IconHome },
+    { name: "About", url: "/about", icon: IconUser },
+    { name: "Work", url: "/work", icon: IconBriefcase },
+    { name: "More", url: "#more", icon: IconFileText },
+  ];
   return (
     <div className="min-h-screen bg-background text-foreground scroll-smooth">
       

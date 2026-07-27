@@ -61,11 +61,11 @@ const Footer = () => {
                 
                 <li>
                   <Link
-                    href="#projects"
+                    href="/work"
                     className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
                   >
                     <span className="relative">
-                      Projects
+                      Work
                       <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
                     </span>
                     <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />

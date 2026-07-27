@@ -69,10 +69,10 @@ export default function GuestbookPage() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
-    { name: 'Home', url: '/', icon: IconHome },
-    { name: 'About', url: '/#about', icon: IconUser },
-    { name: 'Projects', url: '/#projects', icon: IconBriefcase },
-    { name: 'More', url: '#', icon: IconFileText }
+    { name: "Home", url: "/", icon: IconHome },
+    { name: "About", url: "/about", icon: IconUser },
+    { name: "Work", url: "/work", icon: IconBriefcase },
+    { name: "More", url: "#more", icon: IconFileText },
   ];
 
   // Initial load with real-time updates
@@ -255,7 +255,7 @@ export default function GuestbookPage() {
               <AuroraText className="italic font-serif">
                 Got a message?
               </AuroraText>{" "}
-              I&apos;d <br /> love to hear from you!
+              <br />I&apos;d love to hear from you!
             </h1>
             
             <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
