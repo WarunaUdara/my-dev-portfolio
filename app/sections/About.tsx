@@ -100,16 +100,17 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                   </div>
                 </OrbitingCircles>
 
-                {/* Central Waruna Speaking Portrait */}
-                <div className="relative z-20 w-72 h-88 sm:w-80 sm:h-96 rounded-3xl overflow-hidden shadow-2xl border-2 border-neutral-700/80 group">
+                {/* Central Waruna Speaking Portrait - Frameless with Bottom Fade */}
+                <div className="relative z-20 w-72 sm:w-80 h-[380px] sm:h-[420px] overflow-hidden group">
                   <Image
                     src="/me/waruna-speaking.png"
                     alt="Waruna Udara Speaking"
                     fill
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  {/* Smooth Bottom Gradient Fade to disappear sharp bottom crop cut */}
+                  <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black via-black/80 via-black/30 to-transparent pointer-events-none z-30" />
                 </div>
               </div>
             ) : (
