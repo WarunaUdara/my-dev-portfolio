@@ -425,7 +425,7 @@ export function Terminal({
     if (phase === "done") {
       const t = setTimeout(() => {
         if (onComplete) onComplete();
-      }, 600);
+      }, 180);
       return () => clearTimeout(t);
     }
   }, [phase, onComplete]);

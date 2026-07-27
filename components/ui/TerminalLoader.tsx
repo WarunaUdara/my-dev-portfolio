@@ -9,25 +9,27 @@ export interface TerminalLoaderProps {
 }
 
 export function TerminalLoader({ children }: TerminalLoaderProps) {
-  const [showLoader, setShowLoader] = useState(true);
-  const [hasLoaded, setHasLoaded] = useState(false);
-
-  useEffect(() => {
+  // Synchronously check sessionStorage so client routing NEVER re-triggers loader
+  const [showLoader, setShowLoader] = useState(() => {
     if (typeof window !== "undefined") {
-      const seen = sessionStorage.getItem("hasSeenLoader");
-      if (seen) {
-        setShowLoader(false);
-        setHasLoaded(true);
-      }
+      return !sessionStorage.getItem("hasSeenLoader");
     }
-  }, []);
+    return false;
+  });
+
+  const [hasLoaded, setHasLoaded] = useState(() => {
+    if (typeof window !== "undefined") {
+      return Boolean(sessionStorage.getItem("hasSeenLoader"));
+    }
+    return true;
+  });
 
   const handleComplete = () => {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("hasSeenLoader", "true");
     }
     setShowLoader(false);
-    setTimeout(() => setHasLoaded(true), 1000);
+    setHasLoaded(true);
   };
 
   return (
@@ -37,49 +39,44 @@ export function TerminalLoader({ children }: TerminalLoaderProps) {
           <motion.div
             key="terminal-loader"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.96, filter: "blur(10px)" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black p-4 text-white overflow-hidden"
+            exit={{ opacity: 0, scale: 0.95, filter: "blur(12px)" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black p-4 text-white overflow-hidden"
           >
-            {/* Ambient Background Glow */}
-            <div className="absolute inset-0 bg-radial from-neutral-900/50 via-black to-black pointer-events-none" />
+            {/* Ambient Background Radial Glow */}
+            <div className="absolute inset-0 bg-radial from-neutral-900/60 via-black to-black pointer-events-none" />
 
-            {/* Skip Button */}
+            {/* Fast Skip Button */}
             <button
               onClick={handleComplete}
-              className="absolute top-6 right-6 z-50 text-xs font-mono tracking-widest text-neutral-400 hover:text-white uppercase px-3 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/80 transition-all duration-300 hover:scale-105"
+              className="absolute top-6 right-6 z-[10000] text-[11px] font-mono tracking-widest text-neutral-400 hover:text-white uppercase px-3 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/90 transition-all duration-200 hover:scale-105"
             >
-              Skip Intro ➜
+              Skip ➜
             </button>
 
-            {/* Terminal Window */}
-            <div className="relative z-10 w-full max-w-2xl">
+            {/* Fast, Fun, Sarcastic Terminal Window */}
+            <div className="relative z-10 w-full max-w-xl">
               <Terminal
                 username="Waruna-MacBook-Air"
+                typingSpeed={18}
+                initialDelay={150}
+                delayBetweenCommands={180}
                 onComplete={handleComplete}
                 commands={[
-                  "git clone https://github.com/WarunaUdara/my-dev-portfolio.git",
-                  "cd my-dev-portfolio && bun install",
-                  "bun run dev --host",
+                  "sudo brew install coffee --double-espresso",
+                  "git commit -m 'fixed 1 bug, created 42 new features'",
+                  "bun run launch-waruna-portfolio --no-sleep",
                 ]}
                 outputs={{
                   0: [
-                    "Cloning into 'my-dev-portfolio'...",
-                    "remote: Enumerating objects: 100%, done.",
-                    "remote: Compressing objects: 100%, done.",
-                    "Receiving objects: 100%, done.",
+                    "☕ Espresso injected. Caffeine: 100%. Brain overclocked.",
                   ],
                   1: [
-                    "bun install v1.3.12",
-                    "+ @tanstack/react-router",
-                    "+ vite",
-                    "installed 42 packages in 180ms",
+                    "[main 0xdeadbeef] 4,200 lines added, 0 tests written.",
+                    "✔ Pushed directly to production without testing.",
                   ],
                   2: [
-                    "  VITE v8.1.5 ready in 240ms",
-                    "  ➜ Local:   http://localhost:5173/",
-                    "  ➜ Network: https://warunadev.vercel.app/",
-                    "✔ Portfolio Environment Ready. Initializing site...",
+                    "🚀 VITE v8.1.5 ready in 12ms. Launching portfolio...",
                   ],
                 }}
               />
@@ -88,11 +85,12 @@ export function TerminalLoader({ children }: TerminalLoaderProps) {
         )}
       </AnimatePresence>
 
-      {/* Main Website Content with Smooth Entrance Animation */}
+      {/* Main Website Content & Navbar: Hidden while loading, smoothly revealed on complete */}
       <motion.div
-        initial={hasLoaded ? { opacity: 1 } : { opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: showLoader ? 0.2 : 0, ease: [0.16, 1, 0.3, 1] }}
+        initial={hasLoaded ? { opacity: 1 } : { opacity: 0 }}
+        animate={{ opacity: showLoader ? 0 : 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        style={{ pointerEvents: showLoader ? "none" : "auto" }}
         className="w-full h-full"
       >
         {children}
