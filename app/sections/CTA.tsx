@@ -7,23 +7,23 @@ import CircularText from "@/components/ReactBits/CircularText";
 import AuroraText from "@/components/ui/aurora-text";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { IconArrowUpRight, IconSparkles } from "@tabler/icons-react";
-import Image from "next/image";
+import Image from "@/components/ui/Image";
 
 export default function CTA() {
   return (
     <section className="relative w-full bg-black text-white py-12 px-4 sm:px-6">
       <div className="container mx-auto max-w-6xl">
-        {/* Card Container matching the reference design sample */}
-        <div className="relative w-full overflow-hidden rounded-3xl border border-neutral-800/80 bg-neutral-950/90 py-16 px-6 sm:px-12 shadow-2xl">
+        {/* Card Container with Completely Transparent Background */}
+        <div className="relative w-full overflow-hidden rounded-3xl border border-white/10 bg-transparent py-16 px-6 sm:px-12 shadow-2xl">
 
-          {/* Background WebGL Grainient Shader within card bounds */}
-          <div className="absolute inset-0 z-0 opacity-65">
+          {/* Full Silver, Dark & White WebGL Grainient Shader */}
+          <div className="absolute inset-0 z-0 opacity-100 pointer-events-none">
             <Grainient
-              color1="#383838"
+              color1="#d4d4d4"
               color2="#050505"
-              color3="#1c1c1c"
-              timeSpeed={0.2}
-              colorBalance={0.1}
+              color3="#262626"
+              timeSpeed={0.25}
+              colorBalance={0.15}
               warpStrength={1.2}
               warpFrequency={4.0}
               warpSpeed={1.8}
@@ -32,23 +32,19 @@ export default function CTA() {
               blendSoftness={0.08}
               rotationAmount={350.0}
               noiseScale={2.2}
-              grainAmount={0.12}
+              grainAmount={0.1}
               grainScale={2.0}
               grainAnimated={true}
-              contrast={1.4}
+              contrast={1.3}
               gamma={1.0}
-              saturation={0.8}
+              saturation={0.0}
               centerX={0.0}
               centerY={0.0}
               zoom={0.85}
             />
           </div>
 
-          {/* Card Border Inner Shadow Overlays */}
-          <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/80 to-transparent pointer-events-none z-10"></div>
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent pointer-events-none z-10"></div>
-
-          {/* Main Content inside Card */}
+          {/* Main Content inside Card (Clean & Transparent) */}
           <div className="relative z-20 flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
 
             {/* Emblem Wings / Dev Badge Icon */}
@@ -62,42 +58,41 @@ export default function CTA() {
                   priority
                 />
               </div>
-              
             </div>
 
             {/* Headline Block */}
             <div className="relative w-full px-2">
-              <h2 className="text-3xl sm:text-5xl md:text-6xl font-sans tracking-tight uppercase font-light leading-tight sm:leading-tight">
+              <h2 className="text-3xl sm:text-5xl md:text-6xl font-sans tracking-tight uppercase font-light leading-tight sm:leading-tight text-white drop-shadow-md">
                 FROM CONCEPT TO{" "}
                 <span className="font-serif italic font-extrabold text-white">
                   CREATION
                 </span>
                 <br />
                 LET&apos;S MAKE IT{" "}
-                <AuroraText className="font-serif italic ">
+                <AuroraText className="font-serif italic">
                   HAPPEN! &nbsp;
                 </AuroraText>
               </h2>
 
-              {/* Draggable Rotating Disc Badge - Springs back to exact position on release */}
+              {/* Draggable Rotating Disc Badge - Repositioned Down to Avoid Overlapping "CREATION" */}
               <motion.div
                 drag
                 dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                 dragElastic={0.6}
                 dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
                 whileDrag={{ scale: 1.15, cursor: "grabbing" }}
-                className="hidden sm:flex absolute -top-4 -right-2 md:right-4 sm:-top-6 z-30 pointer-events-auto cursor-grab"
+                className="hidden lg:flex absolute top-14 -right-4 lg:right-2 z-30 pointer-events-auto cursor-grab"
               >
                 <div className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32">
                   <CircularText
                     text="OPEN TO WORK • OPEN TO WORK • "
                     spinDuration={16}
                     onHover="speedUp"
-                    className="w-28 h-28 sm:w-32 sm:h-32"
+                    className="w-28 h-28 sm:w-32 sm:h-32 text-white"
                   />
-                  {/* Inner Disc Icon */}
+                  {/* Inner Disc Icon - Metallic Silver */}
                   <div className="absolute inset-0 m-auto w-10 h-10 rounded-full bg-black/90 border border-neutral-700/80 flex items-center justify-center shadow-lg pointer-events-none">
-                    <IconSparkles className="w-4 h-4 text-blue-400 animate-pulse" />
+                    <IconSparkles className="w-4 h-4 text-neutral-200 animate-pulse" />
                   </div>
                 </div>
               </motion.div>
@@ -116,12 +111,12 @@ export default function CTA() {
               </a>
             </div>
 
-            {/* Subtitle / Availability Statements using Project Fonts */}
-            <div className="space-y-3 pt-6 max-w-2xl border-t border-neutral-800/80 w-full">
-              <h3 className="text-xl sm:text-2xl font-serif font-medium text-white">
+            {/* Subtitle / Availability Statements */}
+            <div className="space-y-3 pt-6 max-w-2xl border-t border-white/10 w-full">
+              <h3 className="text-xl sm:text-2xl font-serif font-medium text-white drop-shadow-sm">
                 I&apos;m available for full-time roles &amp; freelance projects.
               </h3>
-              <p className="text-gray-400 font-sans text-xs sm:text-sm leading-relaxed max-w-lg mx-auto">
+              <p className="text-neutral-300 font-sans text-xs sm:text-sm leading-relaxed max-w-lg mx-auto">
                 I thrive on crafting dynamic web applications and delivering seamless user experiences.
               </p>
             </div>
