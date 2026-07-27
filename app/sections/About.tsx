@@ -66,51 +66,57 @@ const About = ({ isAboutPage = false }: AboutProps) => {
           {/* Right Image Showcase */}
           <div className="relative lg:order-last order-first flex items-center justify-center">
             {isAboutPage ? (
-              /* About Page Exclusive: Orbiting Circles + Waruna Speaking Portrait (No overflow clipping, aligned orbits) */
-              <div className="relative flex h-[550px] w-full max-w-[550px] items-center justify-center">
+              /* About Page Exclusive: Heroic Waruna Portrait + Subtle Orbiting DevOps Circles */
+              <div className="relative flex h-[580px] w-full max-w-[580px] items-center justify-center">
                 {/* Orbiting Circles Layer 1 (Inner Orbit) */}
-                <OrbitingCircles radius={180} duration={25} iconSize={44}>
-                  <div className="w-11 h-11 rounded-xl bg-neutral-900/90 border border-neutral-700/80 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/icons8-kubernetes-48.png" alt="Kubernetes" width={32} height={32} className="object-contain" />
+                <OrbitingCircles radius={170} duration={28} iconSize={40}>
+                  <div className="w-10 h-10 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
+                    <Image src="/icons8-kubernetes-48.png" alt="Kubernetes" width={28} height={28} className="object-contain" />
                   </div>
-                  <div className="w-11 h-11 rounded-xl bg-neutral-900/90 border border-neutral-700/80 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/icons8-terraform-48.png" alt="Terraform" width={32} height={32} className="object-contain" />
+                  <div className="w-10 h-10 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
+                    <Image src="/icons8-terraform-48.png" alt="Terraform" width={28} height={28} className="object-contain" />
                   </div>
-                  <div className="w-11 h-11 rounded-xl bg-neutral-900/90 border border-neutral-700/80 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/aws.png" alt="AWS" width={32} height={32} className="object-contain" />
+                  <div className="w-10 h-10 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
+                    <Image src="/aws.png" alt="AWS" width={28} height={28} className="object-contain" />
                   </div>
-                  <div className="w-11 h-11 rounded-xl bg-neutral-900/90 border border-neutral-700/80 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/icons8-docker-144.png" alt="Docker" width={32} height={32} className="object-contain" />
+                  <div className="w-10 h-10 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
+                    <Image src="/icons8-docker-144.png" alt="Docker" width={28} height={28} className="object-contain" />
                   </div>
                 </OrbitingCircles>
 
                 {/* Orbiting Circles Layer 2 (Outer Orbit, Reverse) */}
-                <OrbitingCircles radius={260} duration={35} reverse iconSize={48}>
-                  <div className="w-12 h-12 rounded-xl bg-neutral-900/90 border border-neutral-700/80 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/opentofu.webp" alt="OpenTofu" width={34} height={34} className="object-contain" />
+                <OrbitingCircles radius={250} duration={38} reverse iconSize={44}>
+                  <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
+                    <Image src="/opentofu.webp" alt="OpenTofu" width={30} height={30} className="object-contain" />
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-neutral-900/90 border border-neutral-700/80 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/icons8-azure-96.png" alt="Azure" width={34} height={34} className="object-contain" />
+                  <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
+                    <Image src="/icons8-azure-96.png" alt="Azure" width={30} height={30} className="object-contain" />
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-neutral-900/90 border border-neutral-700/80 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/Linux.png" alt="Linux" width={34} height={34} className="object-contain" />
+                  <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
+                    <Image src="/Linux.png" alt="Linux" width={30} height={30} className="object-contain" />
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-neutral-900/90 border border-neutral-700/80 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/argo-cd.webp" alt="Argo CD" width={34} height={34} className="object-contain" />
+                  <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
+                    <Image src="/argo-cd.webp" alt="Argo CD" width={30} height={30} className="object-contain" />
                   </div>
                 </OrbitingCircles>
 
-                {/* Central Waruna Speaking Portrait - Aligned to Orbit Center with Soft Bottom Fade */}
-                <div className="relative z-20 w-72 sm:w-80 h-[400px] sm:h-[440px] group flex items-end justify-center">
+                {/* Prominent Waruna Speaking Portrait - Frameless with Multi-Directional Gradient Fades */}
+                <div className="relative z-20 w-80 sm:w-96 md:w-[420px] h-[480px] sm:h-[520px] flex items-end justify-center">
                   <Image
                     src="/me/waruna-speaking.png"
                     alt="Waruna Udara Speaking"
                     fill
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover object-top"
                     priority
                   />
-                  {/* Smooth Bottom Gradient Fade */}
-                  <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black via-black/80 via-black/30 to-transparent pointer-events-none z-30" />
+                  {/* Bottom Fade Overlay: Eliminates bottom crop cut */}
+                  <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/85 via-black/40 to-transparent pointer-events-none z-30" />
+                  
+                  {/* Right Side Fade Overlay: Eliminates right edge cut */}
+                  <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black via-black/80 via-black/30 to-transparent pointer-events-none z-30" />
+                  
+                  {/* Left Side Subtle Fade */}
+                  <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-black/50 to-transparent pointer-events-none z-30" />
                 </div>
               </div>
             ) : (
