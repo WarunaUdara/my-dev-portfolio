@@ -1,0 +1,476 @@
+Learn how to validate, mutate, and generate Kubernetes resources using plain YAML, no new languages required.
+
+Kubernetes does not stop you from making mistakes.
+
+You can deploy a container that runs as the root user, giving it administrator-level access to the machine it runs on. You can run a pod with no CPU or memory limits, letting it consume an entire node and slow down every other workload. You can create namespaces with no labels, making your cluster impossible to manage at scale.
+
+Kubernetes accepts all of this without a single warning. That is not a bug. Kubernetes is built to be flexible. But that flexibility means the responsibility of setting boundaries falls entirely on you.
+
+That is what a policy engine does. And Kyverno is the simplest one built for Kubernetes today.
+
+This guide covers what Kyverno is, why it is the right choice for most teams, how it works inside Kubernetes, and how to write your first three policies from scratch. Every command is verified against the official Kyverno documentation (v1.17.1, released February 2026).
+
+## What Is Kyverno?
+
+Kyverno is a policy engine built specifically for Kubernetes. The name comes from the Greek word for “govern.”
+
+Its defining feature: Kyverno policies are Kubernetes resources written in plain YAML. You do not need to learn a new language or a new syntax. If you can read a Deployment manifest, you can read a Kyverno policy.
+
+Kyverno is a CNCF Incubating project under the Cloud Native Computing Foundation (CNCF), the same organization that oversees Kubernetes, Prometheus, and Argo.
+
+It does three things that cover the vast majority of real-world policy needs:
+
+- **Validate** — check a resource against your rules, and reject it if it does not comply
+- **Mutate** — automatically add or correct fields in a resource before it is stored
+- **Generate** — automatically create a new resource when another resource is created
+
+Each of these is covered with a working example below.
+
+📖 Official documentation: [kyverno.io/docs](https://kyverno.io/docs/)
+
+## Why Kyverno and Not OPA Gatekeeper?
+
+If you have researched Kubernetes policy engines, you have likely seen two names: Kyverno and Open Policy Agent (OPA) Gatekeeper. Both are CNCF projects. Both solve the same core problem. The difference is how you write policies.
+
+OPA Gatekeeper uses a language called Rego, a purpose-built query language for policy logic. It is powerful and works across platforms beyond Kubernetes. But Rego has a genuine learning curve, and most platform teams need dedicated time to become productive with it.
+
+Kyverno uses YAML, the same format your team already uses for everything in the cluster.
+
+For a team working primarily in Kubernetes, Kyverno is the faster choice to get running and the easier one to maintain. Your team can read, review, and update policies without learning anything new. That matters when a policy needs to change quickly.
+
+OPA Gatekeeper is the better choice if you need policy enforcement that spans multiple platforms beyond Kubernetes. If your scope is Kubernetes, Kyverno is the more practical option.
+
+## How Kyverno Works
+
+The short version: Kyverno intercepts your `kubectl apply` before the resource is saved. If it breaks a rule, it never gets created.
+
+Every time you run `kubectl apply`, the request travels to the Kubernetes API server. Before that request is written to the cluster's database (etcd), the API server passes it through admission controllers — a chain of plugins that can inspect, modify, or reject the request.
+
+Kyverno registers itself as two of these:
+
+1. **A MutatingAdmissionWebhook** — receives the request first and can change it. This is how mutation works.
+2. **A ValidatingAdmissionWebhook** — receives the request after mutation and can approve or reject it. This is how validation works.
+
+This happens before the resource exists. A pod that violates a policy is not created and then flagged — it is never created at all. The error comes back to your terminal immediately, with the exact message you wrote in your policy.
+
+## Installing Kyverno
+
+Helm is the recommended installation method. Run these three commands:
+
+```bash
+# Step 1 — Add the Kyverno Helm repository
+helm repo add kyverno https://kyverno.github.io/kyverno/
+helm repo update
+
+# Step 2 - Install Kyverno into its own namespace
+helm install kyverno kyverno/kyverno \
+  -n kyverno \
+  --create-namespace
+
+# Step 3 - Verify the installation
+kubectl get pods -n kyverno
+```
+
+You should see four pods running:
+
+```text
+kyverno-admission-controller-xxx      1/1   Running
+kyverno-background-controller-xxx     1/1   Running
+kyverno-cleanup-controller-xxx        1/1   Running
+kyverno-reports-controller-xxx        1/1   Running
+```
+
+⚠️ **Important**: Always install Kyverno in a dedicated namespace. Never place it in `kube-system` or alongside other workloads. Kyverno automatically excludes its own namespace from policy enforcement, any workload sharing that namespace is excluded too.
+
+📖 Full installation guide: [kyverno.io/docs/installation/methods](https://kyverno.io/docs/installation/methods/)
+
+## ClusterPolicy vs Policy
+
+Before writing a policy, you need to choose its scope.
+
+Policies can be defined as cluster-wide resources using `ClusterPolicy` or as namespaced resources using `Policy`. Namespaced policies will only apply to resources within the namespace in which they are defined, while cluster-wide policies apply to matching resources across all namespaces. Otherwise there is no difference between the two types.
+
+Use `ClusterPolicy` for rules that every team must follow, like no root containers or required labels.
+
+Use `Policy` when a single team needs their own rules inside their own namespace.
+
+All examples in this guide use `ClusterPolicy`.
+
+**Note on ClusterPolicy**: Kyverno 1.17 officially marks `ClusterPolicy` as deprecated. While it remains fully functional in this release, the Kyverno team recommends new policies be based on the new CEL APIs going forward. However, `ClusterPolicy` is still the right starting point for learning Kyverno. Once you understand the basics here, you can explore the newer `ValidatingPolicy` and `MutatingPolicy` types in the official docs.
+
+## Validate Policies: Check Resources Before They Are Created
+
+A validate policy checks whether a resource follows your rules. If it does not, Kubernetes rejects the request and shows your error message to the developer.
+
+### Two modes: Audit and Enforce
+
+Every validate rule has a `failureAction` field.
+
+- **Audit** — the resource is allowed through, but the violation is recorded in a Policy Report. Nothing breaks. You can see what is non-compliant before you start blocking anything.
+- **Enforce** — the resource is rejected immediately. The developer sees your error message in their terminal.
+
+Start with Audit. Then switch to Enforce once you are confident.
+
+This is the most important habit when using Kyverno. If you apply a new policy in Enforce mode without checking your cluster first, you may accidentally block applications that are already running.
+
+### Example 1: Require a Label on Every Pod
+
+Labels are how Kubernetes resources find each other. A Service finds its Pods using labels. A NetworkPolicy selects targets using labels. Without consistent labels, your cluster becomes harder to manage.
+
+The `failureAction` tells Kyverno if the resource being validated should be allowed but reported (Audit) or blocked (Enforce). The `pattern` object defines what pattern will be checked in the resource.
+
+This policy checks that every Pod has an `app.kubernetes.io/name` label:
+
+```yaml
+# require-labels.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-labels
+spec:
+  rules:
+    - name: check-for-labels
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        failureAction: Audit
+        message: "Every Pod must have an 'app.kubernetes.io/name' label."
+        pattern:
+          metadata:
+            labels:
+              app.kubernetes.io/name: "?*"
+```
+
+Apply it:
+
+```bash
+kubectl apply -f require-labels.yaml
+```
+
+What the fields mean:
+
+- `match.any` — which resources this rule applies to. Here, all Pods.
+- `validate.failureAction` — set to Audit so violations are logged but not blocked.
+- `validate.message` — the error message shown to the developer when the rule fails.
+- `validate.pattern` — the shape the resource must match. `"?*"` means any non-empty string.
+
+Test with a pod that has no label:
+
+```bash
+kubectl run test-pod --image=nginx:1.27 --restart=Never
+```
+
+In Audit mode the pod is created. Check the violation report:
+
+```bash
+kubectl get policyreport -A
+```
+
+Now change `failureAction` to Enforce in the YAML, apply it again, and try the same command. The pod is rejected immediately.
+
+A pod that passes the policy:
+
+```bash
+kubectl run labeled-pod \
+  --image=nginx:1.27 \
+  --restart=Never \
+  --labels="app.kubernetes.io/name=web"
+```
+
+### Example 2: Block Containers That Run as Root
+
+In Linux, user ID 0 is root. A container running as root has full administrator access on the host machine it runs on. If that container is compromised, the attacker can cause much more damage than they should be able to.
+
+This policy blocks any Pod that does not explicitly set `runAsNonRoot: true`:
+
+```yaml
+# disallow-root.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-root
+spec:
+  rules:
+    - name: check-runasnonroot
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        failureAction: Enforce
+        message: "Containers must not run as root. Set spec.securityContext.runAsNonRoot: true."
+        pattern:
+          spec:
+            securityContext:
+              runAsNonRoot: true
+```
+
+Apply and test:
+
+```bash
+kubectl apply -f disallow-root.yaml
+
+# This will be rejected
+kubectl run root-pod --image=nginx:1.27 --restart=Never
+
+# This will be allowed
+kubectl run safe-pod \
+  --image=nginx:1.27 \
+  --restart=Never \
+  --overrides='{"spec":{"securityContext":{"runAsNonRoot":true,"runAsUser":1000}}}'
+```
+
+### Example 3: Block the latest Image Tag
+
+The `latest` tag means "whatever the registry currently considers latest." It changes without notice, which makes deployments unpredictable and rollbacks unreliable. This policy blocks any container using the `latest` tag:
+
+```yaml
+# disallow-latest-tag.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-latest-tag
+spec:
+  rules:
+    - name: check-image-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        failureAction: Enforce
+        message: "The 'latest' tag is not allowed. Use an explicit version tag like nginx:1.27."
+        pattern:
+          spec:
+            containers:
+              - image: "!*:latest"
+```
+
+Apply and test:
+
+```bash
+kubectl apply -f disallow-latest-tag.yaml
+
+# Rejected
+kubectl run bad-pod --image=nginx:latest --restart=Never
+
+# Allowed
+kubectl run good-pod --image=nginx:1.27 --restart=Never
+```
+
+📖 Browse hundreds of ready-to-use policies: [kyverno.io/policies](https://kyverno.io/policies)
+
+## Mutate Policies: Fix Resources Automatically
+
+A mutate policy changes a resource before it is saved. The developer submits it, Kyverno adjusts it in the background, and the corrected version is what gets stored.
+
+This is friendlier than validation. Instead of rejecting a pod and sending a developer back to fix their YAML, Kyverno quietly adds what is missing and lets the work continue.
+
+### The noisy neighbor problem
+
+One of the most common production issues in Kubernetes is the “noisy neighbor.” A pod with no resource limits gradually takes all the CPU or memory on a node, slowing down every other application sharing that machine. The developer did not do this deliberately. They just forgot to set limits.
+
+A validate policy would reject their pod. A mutate policy adds safe defaults and lets the pod through.
+
+```yaml
+# add-default-resource-limits.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-default-resource-limits
+spec:
+  rules:
+    - name: set-resource-limits
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      mutate:
+        patchStrategicMerge:
+          spec:
+            containers:
+              - (name): "*"
+                resources:
+                  limits:
+                    +(memory): "256Mi"
+                    +(cpu): "500m"
+                  requests:
+                    +(memory): "128Mi"
+                    +(cpu): "250m"
+```
+
+Apply and check the result:
+
+```bash
+kubectl apply -f add-default-resource-limits.yaml
+
+# Create a pod with no resource limits
+kubectl run test-pod --image=nginx:1.27 --restart=Never
+
+# See what Kyverno added automatically
+kubectl get pod test-pod -o jsonpath='{.spec.containers[0].resources}'
+```
+
+Two pieces of Kyverno syntax used here:
+
+- `(name): "*"` — the parentheses make this a conditional anchor. It matches every container by name and applies the mutation to each one.
+- `+(memory)` — the plus sign means "only add this field if it does not already exist." Pods that already have resource limits set by the developer are not changed.
+
+## Generate Policies: Create Resources Automatically
+
+A generate policy creates a new Kubernetes resource automatically when you create another resource. It turns manual steps into automatic ones.
+
+### Example: Create a NetworkPolicy for every new Namespace
+
+The safest default for network traffic between pods is to block everything and only allow what you explicitly permit. But creating a NetworkPolicy in every new namespace is easy to forget.
+
+This policy does it automatically:
+
+```yaml
+# generate-default-networkpolicy.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-default-networkpolicy
+spec:
+  rules:
+    - name: create-deny-all-networkpolicy
+      match:
+        any:
+          - resources:
+              kinds:
+                - Namespace
+      generate:
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        name: deny-all-ingress
+        namespace: "{{request.object.metadata.name}}"
+        synchronize: true
+        data:
+          spec:
+            podSelector: {}
+            policyTypes:
+              - Ingress
+```
+
+Apply and test:
+
+```bash
+kubectl apply -f generate-default-networkpolicy.yaml
+
+# Create a new namespace
+kubectl create namespace my-team
+
+# Kyverno created this automatically
+kubectl get networkpolicy -n my-team
+```
+
+The `synchronize: true` field means if the generated resource is ever deleted manually, Kyverno will recreate it. It is an ongoing guarantee, not a one-time action.
+
+## Testing Policies Before You Apply Them
+
+The Kyverno CLI lets you test a policy against a YAML file on your own machine. Nothing touches the cluster. This is the safest way to develop policies and the foundation of a “shift left” approach, catching policy violations on your laptop or in a CI pipeline, before anything reaches the cluster.
+
+### Install the CLI
+
+macOS:
+
+```bash
+brew install kyverno
+```
+
+Linux (via Krew):
+
+```bash
+kubectl krew install kyverno
+```
+
+Check it is working:
+
+```bash
+kubectl kyverno version
+```
+
+📖 CLI documentation: [kyverno.io/docs/kyverno-cli](https://kyverno.io/docs/kyverno-cli)
+
+### Test a validation policy
+
+Create a test pod manifest:
+
+```yaml
+# test-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27
+```
+
+Run the test:
+
+```bash
+kubectl kyverno apply require-labels.yaml --resource test-pod.yaml
+```
+
+You will see:
+
+```text
+policy require-labels -> resource default/Pod/test-pod
+  FAILED: Every Pod must have an 'app.kubernetes.io/name' label.
+pass: 0, fail: 1, warn: 0, error: 0, skip: 0
+```
+
+### Test a mutation policy
+
+```bash
+kubectl kyverno apply add-default-resource-limits.yaml --resource test-pod.yaml
+```
+
+This prints the mutated resource so you can see exactly what Kyverno would add.
+
+## Best Practices
+
+- **Start with Audit, move to Enforce.** Apply every new policy in Audit mode first. Check the policy report. Fix non-compliant resources. Then switch to Enforce.
+- **Use +(field) for mutation defaults.** The plus sign only fills a field when it is absent. Without it, your mutation will overwrite values that developers have already set deliberately.
+- **Store policies in Git.** Treat your ClusterPolicy files like application code. Review changes in pull requests. Apply them through a GitOps pipeline so your cluster’s rules are always in a known, tracked state.
+- **Test with the CLI in CI.** Add `kubectl kyverno apply` to your pipeline after generating manifests. If any manifest fails a policy, the pipeline stops. Policy violations are caught in code review, not after deployment.
+
+## Summary
+
+Kubernetes is flexible by design. Kyverno adds the rules your team needs, without requiring a new language.
+
+The three policy types cover most real-world needs:
+
+- **Validate** rejects resources that break your rules before they are ever created
+- **Mutate** quietly fills in missing fields so developers do not have to remember everything
+- **Generate** replaces manual steps with automatic guarantees
+
+The safest way to roll out any new policy is: write it, test it with the CLI, apply it in Audit mode, check the policy report, fix any issues, then switch to Enforce.
+
+Start with the require-labels example. It is simple, it immediately improves how your cluster is managed, and it teaches you the full Kyverno YAML structure in one small policy.
+
+📖 Policy library: [kyverno.io/policies](https://kyverno.io/policies)
+
+If this guide helped you get Kyverno running, consider sharing it with your team. If you are curious about the next step, whether writing policies for multi-environment clusters or exploring the new CEL-based policy types in Kyverno, let me know in the comments. I will cover it in the next article.
+
+## References
+
+- Kyverno documentation: [kyverno.io/docs/introduction/](https://kyverno.io/docs/introduction/)
+- How Kyverno works: [kyverno.io/docs/introduction/how-kyverno-works](https://kyverno.io/docs/introduction/how-kyverno-works)
+- Quick start guide: [kyverno.io/docs/introduction/quick-start](https://kyverno.io/docs/introduction/quick-start)
+- Validate rules reference: [kyverno.io/docs/policy-types/cluster-policy/validate](https://kyverno.io/docs/policy-types/cluster-policy/validate)
+- Mutate rules reference: [kyverno.io/docs/policy-types/cluster-policy/mutate](https://kyverno.io/docs/policy-types/cluster-policy/mutate)
+- Generate rules reference: [kyverno.io/docs/policy-types/cluster-policy/generate](https://kyverno.io/docs/policy-types/cluster-policy/generate)
+- Installation methods: [kyverno.io/docs/installation/methods](https://kyverno.io/docs/installation/methods)
+- Kyverno CLI: [kyverno.io/docs/kyverno-cli](https://kyverno.io/docs/kyverno-cli)
+- Kyverno policy library: [kyverno.io/policies](https://kyverno.io/policies)
+- Kyverno version referenced: v1.17.0, released February 2026

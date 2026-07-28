@@ -12,6 +12,16 @@ export interface BlogPostMeta {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "kyverno-tutorial-kubernetes-policy-engine",
+    title: "Kyverno Tutorial: How to Use a Policy Engine on Kubernetes",
+    date: "Feb 20, 2026",
+    description: "Learn how to validate, mutate, and generate Kubernetes resources using plain YAML, no new languages required.",
+    category: "DEVOPS & SECURITY",
+    readTime: "10 min read",
+    tags: ["Kubernetes", "Kyverno", "Kubernetes Security", "DevOps", "Platform Engineering"],
+    author: "Waruna Udara Sampath",
+  },
+  {
     slug: "building-turboship-buildathon",
     title: "Building Turboship: Agentic AI Deployment Harness for Multi-Cloud",
     date: "May 18, 2026",
