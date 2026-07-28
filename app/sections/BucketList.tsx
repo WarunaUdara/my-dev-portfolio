@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 import AuroraText from "@/components/ui/aurora-text";
+import HandDrawnCheckbox from "@/components/ui/HandDrawnCheckbox";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
 
 interface BucketItem {
@@ -107,48 +108,19 @@ const BucketList = () => {
             <div
               key={item.id}
               className={cn(
-                "group relative p-4 sm:p-5 rounded-xl border transition-all duration-300 animate-in fade-in slide-in-from-bottom-4",
+                "group relative p-4 sm:p-5 rounded-2xl border transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 shadow-xl backdrop-blur-xl",
                 item.completed 
-                  ? "bg-zinc-900/50 border-[var(--color-8)]/50" 
-                  : "bg-zinc-900/50 border-white/10 hover:border-white/30 hover:bg-zinc-800/50"
+                  ? "bg-zinc-950/70 border-sky-500/30" 
+                  : "bg-zinc-950/80 border-neutral-800 hover:border-neutral-600 hover:bg-zinc-900/80"
               )}
               style={{
                 animationDelay: `${index * 50}ms`,
                 animationFillMode: 'both',
               }}
             >
-              {/* Glow effect on hover */}
-              {/* <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[var(--color-8)]/0 to-[var(--color-9)]/0 group-hover:from-[var(--color-8)]/5 group-hover:to-[var(--color-9)]/5 transition-all duration-300 pointer-events-none"></div> */}
-
               <div className="relative flex items-start gap-4">
-                {/* Custom Checkbox - Display Only */}
-                <div
-                  className={cn(
-                    "flex-shrink-0 mt-0.5 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 transition-all duration-300 relative overflow-hidden",
-                    item.completed
-                      ? "bg-gradient-to-br from-[var(--color-8)] to-[var(--color-9)] border-[var(--color-8)]"
-                      : "border-[var(--color-6)]"
-                  )}
-                >
-                  {/* Checkmark */}
-                  <svg
-                    className={cn(
-                      "absolute inset-0 w-full h-full p-0.5 text-white transition-all duration-300",
-                      item.completed ? "opacity-100 scale-100" : "opacity-0 scale-50"
-                    )}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
+                {/* Hand-Drawn Custom Checkbox Component */}
+                <HandDrawnCheckbox checked={item.completed} size={28} className="mt-0.5" />
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
