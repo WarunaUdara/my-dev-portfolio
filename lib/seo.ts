@@ -122,9 +122,9 @@ export const PERSON_SCHEMA = {
   familyName: "Sampath",
   url: SITE_URL,
   image: `${SITE_URL}/warunaudara.webp`,
-  jobTitle: "Full-Stack Developer & Cloud Engineer",
+  jobTitle: "Full-Stack Developer & Aspiring Cloud/DevOps Engineer (Platform Engineering)",
   description:
-    "Full-Stack Developer and Cloud/DevOps Specialist from Sri Lanka. 3+ years building web platforms, microservices, and cloud-native applications.",
+    "Full-Stack Developer and Aspiring Cloud/DevOps Engineer from Sri Lanka focused on Platform Engineering, Kubernetes, cloud infrastructure, and modern web platforms.",
   nationality: {
     "@type": "Country",
     name: "Sri Lanka",
@@ -135,6 +135,10 @@ export const PERSON_SCHEMA = {
     url: "https://www.sjp.ac.lk",
   },
   knowsAbout: [
+    "Full-Stack Development",
+    "Platform Engineering",
+    "DevOps",
+    "Cloud Native Infrastructure",
     "Java",
     "Spring Boot",
     "React",
@@ -144,9 +148,8 @@ export const PERSON_SCHEMA = {
     "AWS",
     "Azure",
     "Next.js",
-    "DevOps",
-    "Cloud Engineering",
     "Microservices",
+    "Agentic AI",
   ],
   sameAs: [
     "https://github.com/WarunaUdara",
@@ -162,7 +165,7 @@ export const WEBSITE_SCHEMA = {
   url: SITE_URL,
   name: "Waruna Udara Sampath — Portfolio",
   description:
-    "Personal portfolio and blog of Waruna Udara Sampath, Full-Stack Developer & Cloud Engineer from Sri Lanka.",
+    "Personal portfolio and blog of Waruna Udara Sampath, Full-Stack Developer & Aspiring Cloud/DevOps Engineer focused on Platform Engineering.",
   publisher: { "@id": `${SITE_URL}/#person` },
   potentialAction: {
     "@type": "SearchAction",
@@ -216,6 +219,34 @@ export function getBlogPostSchema(post: {
   };
 }
 
+/** Generate JSON-LD BreadcrumbList schema for Medium-surpassing rich Google search snippets */
+export function getBlogBreadcrumbSchema(post: { slug: string; title: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": SITE_URL
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": `${SITE_URL}/blog`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": post.title,
+        "item": `${SITE_URL}/blog/${post.slug}`
+      }
+    ]
+  };
+}
+
 /** Generate JSON-LD Blog schema for blog listing */
 export const BLOG_SCHEMA = {
   "@context": "https://schema.org",
@@ -224,7 +255,7 @@ export const BLOG_SCHEMA = {
   url: `${SITE_URL}/blog`,
   name: "Waruna Udara — Blog",
   description:
-    "Technical articles on full-stack engineering, cloud architecture, DevOps, AI, and the React ecosystem.",
+    "Technical articles on full-stack engineering, cloud architecture, DevOps, Platform Engineering, AI, and the React ecosystem.",
   author: { "@id": `${SITE_URL}/#person` },
   publisher: { "@id": `${SITE_URL}/#person` },
 };

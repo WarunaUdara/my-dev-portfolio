@@ -6,7 +6,7 @@ import ScrollFrost from "@/components/canvasui/ScrollFrost";
 import Scales from "@/components/ui/scales";
 import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText } from "@tabler/icons-react";
 import SEOHead from "@/components/ui/SEOHead";
-import { getBlogPostSchema, PERSON_SCHEMA, BLOG_SCHEMA, SITE_URL } from "@/lib/seo";
+import { getBlogPostSchema, getBlogBreadcrumbSchema, PERSON_SCHEMA, BLOG_SCHEMA, SITE_URL } from "@/lib/seo";
 import { getBlogPostBySlug } from "@/lib/blogData";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -27,6 +27,7 @@ function BlogPostRoutePage() {
 
   // Dynamic SEO data from blog post metadata
   const postSchema = post ? getBlogPostSchema(post) : null;
+  const breadcrumbSchema = post ? getBlogBreadcrumbSchema(post) : null;
   const canonicalUrl = `${SITE_URL}/blog/${slug}`;
   const ogImage = post?.coverImage
     ? `${SITE_URL}${post.coverImage}`
@@ -34,7 +35,7 @@ function BlogPostRoutePage() {
 
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-x-hidden">
-      {/* Dynamic per-post SEO Head with BlogPosting JSON-LD */}
+      {/* Dynamic per-post SEO Head with BlogPosting & BreadcrumbList JSON-LD */}
       {post && (
         <SEOHead
           title={`${post.title} — Waruna Udara`}
@@ -49,7 +50,7 @@ function BlogPostRoutePage() {
             tags: post.tags,
             author: post.author,
           }}
-          schemas={[postSchema!, BLOG_SCHEMA, PERSON_SCHEMA]}
+          schemas={[postSchema!, breadcrumbSchema!, BLOG_SCHEMA, PERSON_SCHEMA]}
         />
       )}
 
