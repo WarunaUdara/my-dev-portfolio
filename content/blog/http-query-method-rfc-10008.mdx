@@ -1,0 +1,114 @@
+For over two decades, web developers and API architects have built RESTful services around a fundamental binary choice: use `GET` to fetch data and `POST` to send or mutate data. 
+
+For simple web applications, this boundary was sufficient. But as modern enterprise software evolved to demand complex multi-attribute filtering, nested JSON search payloads, dynamic analytics aggregation, and fine-grained pagination, `GET` began breaking under its own constraints — while abusing `POST` created architectural anti-patterns.
+
+Enter the **HTTP QUERY method (RFC 10008)**: a standardized HTTP verb designed explicitly to execute safe, idempotent, and cacheable queries with rich request bodies.
+
+---
+
+## The Dilemma: Why GET and POST Fail for Complex Search
+
+### The Problem with GET
+By HTTP specification, `GET` requests carry their intent inside the Request-URI and query parameters:
+
+```http
+GET /api/v1/products?category=electronics&page=2&sort=price
+```
+
+This works cleanly for simple lookups. However, when building complex enterprise search engines (such as product filters, log aggregators, or telemetry dashboards), query strings become chaotic:
+
+```http
+GET /api/v1/products?filter%5Bcategory%5D%5B%5D=electronics&filter%5Bcategory%5D%5B%5D=gaming&filter%5Bprice%5D%5Bmin%5D=100&filter%5Bprice%5D%5Bmax%5D=1000&sort%5B0%5D%5Bfield%5D=rating&sort%5B0%5D%5Bdirection%5D=desc
+```
+
+This approach presents severe production risks:
+- **URL Truncation**: Browsers, reverse proxies (Nginx, HAProxy), and Cloudflare edge nodes enforce strict URL length limits (often 2KB–8KB).
+- **Encoding Hell**: Nested arrays and objects require heavy URL encoding, destroying readability and developer experience.
+- **Security & Privacy Leakage**: Search terms, tokens, or PII passed in URL parameters are routinely recorded in plain text inside access logs, CDN logs, and browser histories.
+
+### The Problem with POST as a Search Fallback
+To circumvent URL limits, developers started wrapping search queries inside `POST` bodies:
+
+```http
+POST /api/v1/products/search
+Content-Type: application/json
+
+{
+  "categories": ["electronics", "gaming"],
+  "price": { "min": 100, "max": 1000 },
+  "sort": [{ "field": "rating", "direction": "desc" }]
+}
+```
+
+While this solves payload size issues, it violates HTTP semantics:
+- **`POST` is Non-Safe and Non-Idempotent**: HTTP clients and proxies assume `POST` modifies server-side state. Dropped connections cannot be safely retried automatically by resilient network clients.
+- **Broken Caching**: Edge CDNs, HTTP caches, and browser caches ignore `POST` responses by default.
+- **Semantic Anti-Pattern**: Creating endpoint hacks like `POST /products/search` or `POST /products/filter` misrepresents a pure read operation as a mutation.
+
+---
+
+## The Solution: HTTP QUERY (RFC 10008)
+
+Published as a Proposed Standard by the IETF HTTP Working Group (authored by Julian Reschke, James M. Snell, and Mike Bishop), **RFC 10008** introduces the `QUERY` method.
+
+`QUERY` combines the **safety and idempotency of `GET`** with the **structured payload capabilities of `POST`**:
+
+```http
+QUERY /api/v1/products HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+Accept: application/json
+
+{
+  "categories": ["electronics", "gaming"],
+  "price": { "min": 100, "max": 1000 },
+  "features": ["Bluetooth", "5G", "OLED"],
+  "sort": [{ "field": "rating", "direction": "desc" }]
+}
+```
+
+### Protocol Comparison Matrix
+
+| Property | `GET` | `POST` | `QUERY` (RFC 10008) |
+|---|---|---|---|
+| **Safe (Read-Only)** | ✅ Yes | ❌ No | ✅ Yes |
+| **Idempotent** | ✅ Yes | ❌ No | ✅ Yes |
+| **Request Body Allowed** | ❌ Undefined / Avoid | ✅ Yes | ✅ Defined & Required |
+| **Edge Cacheable** | ✅ Yes (Default) | ❌ No | ✅ Yes (With Cache Headers) |
+| **Automatic Client Retries** | ✅ Safe | ❌ Unsafe | ✅ Safe |
+
+---
+
+## Protocol Semantics & Header Standards
+
+1. **Mandatory `Content-Type`**: The server requires a valid `Content-Type` header (e.g., `application/json`, `application/graphql`, or `application/sql`). If missing, the server returns `400 Bad Request` or `415 Unsupported Media Type`.
+2. **`Content-Location` Header Response**: Servers can return a `Content-Location` header in the response pointing to a persistent resource URL.
+3. **HTTP Status Codes**:
+   - `200 OK`: Query executed successfully.
+   - `400 Bad Request`: Missing or malformed query payload.
+   - `415 Unsupported Media Type`: Query format not recognized by backend.
+   - `422 Unprocessable Entity`: Query syntax valid, but logical parameters invalid.
+
+---
+
+## Ecosystem Support & Practical Implementation
+
+### Client & Framework Adoption
+Language ecosystems and frameworks are rolling out native `QUERY` support:
+- **.NET 10 (LTS)**: Native support via `HttpMethod.Query` in `HttpClient` and `HttpMethods.IsQuery` in ASP.NET Core Kestrel.
+- **Node.js & Go**: HTTP client drivers allow registering `QUERY` as a custom verb across backend microservices.
+- **API Gateways & CDNs**: Cloudflare and Akamai are building edge caching rules for RFC 10008 `QUERY` responses.
+
+---
+
+## Strategic Adoption Strategy
+
+1. **Service-to-Service (gRPC / Internal REST Microservices)**: Adopt `QUERY` for microservices communicating internally where both client and server are controlled by your platform team.
+2. **Public REST APIs**: Provide `QUERY` endpoints while offering a `POST /search` fallback for legacy web clients until browser `fetch()` APIs universally expose the verb.
+3. **Platform Engineering & Monitoring**: Use `QUERY` for log aggregation, Elasticsearch queries, metrics telemetry, and complex reporting endpoints.
+
+---
+
+## Conclusion
+
+The HTTP `QUERY` method represents a crucial evolution in Web and Platform Engineering. By granting developers a safe, idempotent method equipped with a structured request body, RFC 10008 finally solves a two-decade-old API design trade-off.

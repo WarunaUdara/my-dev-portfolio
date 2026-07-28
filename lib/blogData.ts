@@ -12,6 +12,16 @@ export interface BlogPostMeta {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "http-query-method-rfc-10008",
+    title: "HTTP QUERY Method (RFC 10008): Solving GET & POST API Limitations",
+    date: "Jul 4, 2026",
+    description: "An architectural breakdown of the new HTTP QUERY method (RFC 10008), how it eliminates GET URL limits and POST semantic anti-patterns in modern web APIs.",
+    category: "API ARCHITECTURE",
+    readTime: "5 min read",
+    tags: ["HTTP QUERY", "RFC 10008", "API Architecture", "REST API", "DevOps", "Backend Engineering"],
+    author: "Waruna Udara Sampath",
+  },
+  {
     slug: "kyverno-tutorial-kubernetes-policy-engine",
     title: "Kyverno Tutorial: How to Use a Policy Engine on Kubernetes",
     date: "Feb 20, 2026",
