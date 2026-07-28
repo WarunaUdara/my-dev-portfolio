@@ -102,66 +102,84 @@ const features = [
 
         {/* Animated Cards Container - Positioned Lower */}
         <div className="absolute inset-0 flex items-end justify-center pb-4 pt-24">
-          {/* Card 1 - Bottom Left (Gradient Card) */}
-          <div className="absolute bottom-12 left-8 w-32 h-44 rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:rotate-[-12deg] group-hover:translate-x-[-15px] group-hover:translate-y-[-8px] group-hover:scale-105">
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-9)] via-[var(--color-8)] to-[var(--color-7)] opacity-90"></div>
-            <div className="absolute inset-0 p-4 flex flex-col justify-between">
-              <div className="space-y-2">
-                <div className="w-10 h-1.5 bg-white/40 rounded-full"></div>
-                <div className="w-16 h-1.5 bg-white/40 rounded-full"></div>
-                <div className="w-12 h-1.5 bg-white/40 rounded-full"></div>
+          {/* Card 1 - Left Tech Stack Card (Cloud & DevOps) */}
+          <div className="absolute bottom-10 left-6 sm:left-8 w-36 sm:w-40 h-44 rounded-2xl overflow-hidden shadow-2xl border border-neutral-800/90 bg-neutral-950/90 backdrop-blur-xl transition-all duration-700 group-hover:rotate-[-10deg] group-hover:translate-x-[-12px] group-hover:translate-y-[-6px] group-hover:scale-105">
+            <div className="p-3.5 flex flex-col justify-between h-full space-y-2">
+              <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-sky-400 font-semibold">Cloud &amp; Infra</span>
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
-              <div className="w-8 h-8 bg-white/30 rounded-full"></div>
+              <div className="space-y-1.5 text-[11px] font-mono text-neutral-300">
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-neutral-900 border border-neutral-800">
+                  <span className="text-sky-300 font-bold">#</span> Docker &amp; K8s
+                </div>
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-neutral-900 border border-neutral-800">
+                  <span className="text-amber-400 font-bold">#</span> AWS Cloud
+                </div>
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-neutral-900 border border-neutral-800 text-[10px]">
+                  <span className="text-purple-400 font-bold">#</span> Kyverno Policy
+                </div>
+              </div>
+              <div className="text-[9px] font-mono text-neutral-500 text-right pt-1">v2.4.0</div>
             </div>
           </div>
 
           {/* Card 2 - Center Bottom (Website Mockup) */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:translate-y-[20px] group-hover:scale-105 z-10">
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-72 h-48 rounded-xl overflow-hidden shadow-2xl border border-neutral-800/80 bg-neutral-950 transition-all duration-700 group-hover:translate-y-[20px] group-hover:scale-105 z-10">
             {/* Browser Chrome */}
-            <div className="absolute top-0 left-0 right-0 h-8 bg-gray-900 flex items-center px-3 gap-2">
+            <div className="absolute top-0 left-0 right-0 h-8 bg-neutral-900/90 border-b border-neutral-800 flex items-center px-3 gap-2">
               <div className="flex gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
               </div>
               <div className="flex-1 ml-2">
-                <div className="w-32 h-4 bg-gray-800 rounded flex items-center px-2 transition-all duration-500 group-hover:w-40">
-                  <div className="w-2 h-2 rounded-full bg-gray-600"></div>
+                <div className="w-32 h-4 bg-neutral-800/80 rounded flex items-center px-2 transition-all duration-500 group-hover:w-40">
+                  <div className="w-2 h-2 rounded-full bg-neutral-500" />
                 </div>
               </div>
             </div>
 
             {/* Website Content */}
-            <div className="absolute top-8 left-0 right-0 bottom-0 bg-gradient-to-br from-gray-950 to-black p-4 flex flex-col items-center justify-center">
-              <div className="text-center space-y-2 mb-4">
-                <h3 className="text-white text-sm font-semibold transition-all duration-500 group-hover:text-base">
+            <div className="absolute top-8 left-0 right-0 bottom-0 bg-gradient-to-br from-neutral-950 via-black to-neutral-950 p-4 flex flex-col items-center justify-center">
+              <div className="text-center space-y-1.5 mb-3">
+                <h3 className="text-white text-xs sm:text-sm font-semibold tracking-wide">
                   Building elegant solutions
                 </h3>
-                <p className="text-gray-300 text-sm font-semibold transition-all duration-500 group-hover:text-sm">
+                <p className="text-neutral-400 text-[11px] sm:text-xs">
                   that are secure and scalable
                 </p>
               </div>
-              <div className="flex gap-3">
-                <button className="px-4 py-1.5 bg-[var(--color-8)] hover:bg-[var(--color-9)] text-white text-xs rounded-full font-medium transition-all duration-500 group-hover:px-5 group-hover:py-2">
+              <div className="flex gap-2.5">
+                <button className="px-3.5 py-1 bg-white hover:bg-neutral-200 text-black text-[11px] rounded-full font-semibold transition-all">
                   Get Started
                 </button>
-                <button className="px-4 py-1.5 bg-transparent border border-[var(--color-5)] hover:border-[var(--color-7)] text-white text-xs rounded-full font-medium transition-all duration-500 group-hover:px-5 group-hover:py-2">
+                <button className="px-3.5 py-1 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-white text-[11px] rounded-full font-medium transition-all">
                   Read More
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Card 3 - Bottom Right (Gradient Card) */}
-          <div className="absolute bottom-12 right-8 w-32 h-44 rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 group-hover:rotate-[12deg] group-hover:translate-x-[15px] group-hover:translate-y-[8px] group-hover:scale-105">
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-8)] via-[var(--color-9)] to-[var(--color-7)] opacity-90"></div>
-            <div className="absolute inset-0 p-4 flex flex-col justify-between">
-              <div className="space-y-2">
-                <div className="w-14 h-1.5 bg-white/40 rounded-full"></div>
-                <div className="w-10 h-1.5 bg-white/40 rounded-full"></div>
-                <div className="w-16 h-1.5 bg-white/40 rounded-full"></div>
+          {/* Card 3 - Right Tech Stack Card (Full-Stack & Microservices) */}
+          <div className="absolute bottom-10 right-6 sm:right-8 w-36 sm:w-40 h-44 rounded-2xl overflow-hidden shadow-2xl border border-neutral-800/90 bg-neutral-950/90 backdrop-blur-xl transition-all duration-700 group-hover:rotate-[10deg] group-hover:translate-x-[12px] group-hover:translate-y-[6px] group-hover:scale-105">
+            <div className="p-3.5 flex flex-col justify-between h-full space-y-2">
+              <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-purple-400 font-semibold">Full Stack</span>
+                <div className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
               </div>
-              <div className="w-8 h-8 bg-white/30 rounded-full"></div>
+              <div className="space-y-1.5 text-[11px] font-mono text-neutral-300">
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-neutral-900 border border-neutral-800">
+                  <span className="text-emerald-400 font-bold">#</span> Spring Boot
+                </div>
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-neutral-900 border border-neutral-800">
+                  <span className="text-sky-400 font-bold">#</span> React &amp; Next
+                </div>
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-neutral-900 border border-neutral-800 text-[10px]">
+                  <span className="text-yellow-400 font-bold">#</span> TypeScript
+                </div>
+              </div>
+              <div className="text-[9px] font-mono text-neutral-500 text-right pt-1">Production</div>
             </div>
           </div>
         </div>
@@ -198,27 +216,27 @@ const features = [
           <div className="relative group-hover:scale-110 transition-transform duration-500">
             
             {/* Document Icon */}
-            <div className="relative w-24 h-28 bg-gradient-to-br from-gray-900 to-gray-950 rounded-lg shadow-2xl border border-gray-700 overflow-hidden">
-              {/* Document Header */}
-              <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] opacity-80"></div>
+            <div className="relative w-24 h-28 bg-gradient-to-br from-neutral-900 via-neutral-950 to-black rounded-xl shadow-2xl border border-neutral-800 overflow-hidden">
+              {/* Document Header Bar - Dark Metallic */}
+              <div className="absolute top-0 left-0 right-0 h-7 bg-neutral-800/90 border-b border-neutral-700/60 flex items-center px-2.5 justify-between">
+                <span className="text-[9px] font-mono font-bold text-neutral-300">CV.PDF</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              </div>
               
               {/* Document Lines */}
-              <div className="absolute top-10 left-3 right-3 space-y-2">
-                <div className="h-1.5 bg-[var(--color-6)] rounded-full w-3/4 opacity-60"></div>
-                <div className="h-1.5 bg-[var(--color-6)] rounded-full w-full opacity-50"></div>
-                <div className="h-1.5 bg-[var(--color-6)] rounded-full w-5/6 opacity-40"></div>
-                <div className="h-1.5 bg-[var(--color-6)] rounded-full w-2/3 opacity-30"></div>
+              <div className="absolute top-9 left-3 right-3 space-y-2">
+                <div className="h-1.5 bg-neutral-700 rounded-full w-3/4 opacity-80" />
+                <div className="h-1.5 bg-neutral-700 rounded-full w-full opacity-60" />
+                <div className="h-1.5 bg-neutral-700 rounded-full w-5/6 opacity-50" />
+                <div className="h-1.5 bg-neutral-700 rounded-full w-2/3 opacity-40" />
               </div>
               
               {/* Download Arrow */}
-              <div className="absolute bottom-2 right-2 w-6 h-6 bg-[var(--color-8)] rounded-full flex items-center justify-center group-hover:bg-[var(--color-9)] transition-colors duration-300">
-                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="absolute bottom-2 right-2 w-6 h-6 bg-white text-black rounded-full flex items-center justify-center shadow-md group-hover:bg-neutral-200 transition-colors duration-300">
+                <svg className="w-3.5 h-3.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
               </div>
-              
-              {/* Folded Corner */}
-              <div className="absolute top-0 right-0 w-0 h-0 border-l-[20px] border-l-transparent border-t-[20px] border-t-[var(--color-7)] opacity-40"></div>
             </div>
           </div>
         </div>

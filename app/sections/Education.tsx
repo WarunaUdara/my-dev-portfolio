@@ -29,7 +29,7 @@ export const EDUCATION_DATA: EducationItem[] = [
   {
     id: "EDU02",
     institution: "Institute of Computer Engineering Technology (iCET)",
-    logo: "/me/icet-logo.png",
+    logo: "/me/icet-image.png",
     degree: "Diploma in Software Engineering",
     period: "Nov 2023 – Jun 2024",
     gradient: "from-neutral-900/90 via-neutral-950 to-black",
