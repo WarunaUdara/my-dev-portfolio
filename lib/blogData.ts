@@ -39,7 +39,6 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     category: "AI & DEVOPS",
     readTime: "6 min read",
     tags: ["AI Agents", "n8n", "Next.js", "AWS", "Docker", "Trivy"],
-    coverImage: "/projects-algoarena.png",
     author: "Waruna Udara",
   },
   {
