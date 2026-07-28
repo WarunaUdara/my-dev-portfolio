@@ -1,15 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Grainient from "@/components/ReactBits/Grainient";
 import CircularText from "@/components/ReactBits/CircularText";
 import AuroraText from "@/components/ui/aurora-text";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
-import { IconArrowUpRight, IconSparkles } from "@tabler/icons-react";
+import { IconArrowUpRight, IconSparkles, IconVideo } from "@tabler/icons-react";
 import Image from "@/components/ui/Image";
+import BookCallModal from "@/components/ui/BookCallModal";
 
 export default function CTA() {
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   return (
     <section className="relative w-full bg-black text-white py-12 px-4 sm:px-6">
       <div className="container mx-auto max-w-6xl">
@@ -101,8 +103,8 @@ export default function CTA() {
               </motion.div>
             </div>
 
-            {/* Center Get In Touch CTA Button */}
-            <div className="pt-2">
+            {/* Center Buttons: Get In Touch + Book a Call */}
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
               <a
                 href="https://www.linkedin.com/in/waruna-udara/"
                 target="_blank"
@@ -112,7 +114,20 @@ export default function CTA() {
                   Get In Touch
                 </InteractiveHoverButton>
               </a>
+
+              <button
+                onClick={() => setIsBookModalOpen(true)}
+                className="px-6 py-3 rounded-full bg-white hover:bg-neutral-200 text-black font-semibold text-sm transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.25)] flex items-center gap-2 hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <IconVideo className="w-4 h-4 text-black" />
+                <span>Book 30-min Call</span>
+              </button>
             </div>
+
+            <BookCallModal
+              isOpen={isBookModalOpen}
+              onClose={() => setIsBookModalOpen(false)}
+            />
 
             {/* Subtitle / Availability Statements */}
             <div className="space-y-3 pt-6 max-w-2xl border-t border-white/10 w-full">
