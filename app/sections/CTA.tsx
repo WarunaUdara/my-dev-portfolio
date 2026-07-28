@@ -17,32 +17,35 @@ export default function CTA() {
         <div className="relative w-full overflow-hidden rounded-3xl border border-white/10 bg-transparent py-16 px-6 sm:px-12 shadow-2xl">
 
           {/* Full Silver, Dark & White WebGL Grainient Shader */}
-          <div className="absolute inset-0 z-0 opacity-100 pointer-events-none">
+          <div className="absolute inset-0 z-0 opacity-85 pointer-events-none">
             <Grainient
-              color1="#d4d4d4"
+              color1="#525252"
               color2="#050505"
-              color3="#262626"
-              timeSpeed={0.25}
-              colorBalance={0.15}
+              color3="#1c1c1c"
+              timeSpeed={0.2}
+              colorBalance={0.05}
               warpStrength={1.2}
-              warpFrequency={4.0}
-              warpSpeed={1.8}
-              warpAmplitude={40.0}
+              warpFrequency={3.5}
+              warpSpeed={1.5}
+              warpAmplitude={30.0}
               blendAngle={15.0}
-              blendSoftness={0.08}
+              blendSoftness={0.1}
               rotationAmount={350.0}
               noiseScale={2.2}
-              grainAmount={0.1}
+              grainAmount={0.08}
               grainScale={2.0}
               grainAnimated={true}
-              contrast={1.3}
+              contrast={1.1}
               gamma={1.0}
               saturation={0.0}
               centerX={0.0}
               centerY={0.0}
-              zoom={0.85}
+              zoom={0.9}
             />
           </div>
+
+          {/* Dark Contrast Vignette to protect White Headline & Text Legibility */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/60 via-black/40 to-black/80 pointer-events-none" />
 
           {/* Main Content inside Card (Clean & Transparent) */}
           <div className="relative z-20 flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
