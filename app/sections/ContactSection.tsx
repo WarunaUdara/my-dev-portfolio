@@ -105,15 +105,15 @@ export default function ContactSection() {
           </div>
 
           {/* Google Meet Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-neutral-900/90 border border-neutral-800 text-xs font-mono text-neutral-300 shadow-md">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-neutral-900/90 border border-neutral-800 text-xs font-mono text-neutral-200 shadow-lg">
             <Image
               src="/icons8-google-meet-48.png"
               alt="Google Meet"
-              width={20}
-              height={20}
+              width={22}
+              height={22}
               className="object-contain"
             />
-            <span>Google Meet 1-on-1 Call</span>
+            <span className="font-semibold text-white">Google Meet 1-on-1 Call</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight tracking-tight">
@@ -124,12 +124,12 @@ export default function ContactSection() {
           </p>
         </div>
 
-        {/* Stable Fixed-Height Cal.com Embed Container (Crops out bottom Cal.com link & prevents scroll stuttering) */}
-        <div className="w-full max-w-4xl mx-auto h-[565px] max-h-[565px] overflow-hidden rounded-2xl border border-neutral-800/80 bg-[#090a0f] shadow-2xl relative z-10">
+        {/* Height-cropped container (485px height strictly hides Cal.com bottom branding) */}
+        <div className="w-full max-w-4xl mx-auto h-[485px] max-h-[485px] overflow-hidden rounded-2xl border border-neutral-800/80 bg-[#101010] shadow-2xl relative z-10">
           <Cal
             namespace="30min"
             calLink="waruna-udara"
-            style={{ width: "100%", height: "575px", overflow: "hidden" }}
+            style={{ width: "100%", height: "560px", overflow: "hidden" }}
             config={{ layout: "month_view", theme: "dark" }}
           />
         </div>
