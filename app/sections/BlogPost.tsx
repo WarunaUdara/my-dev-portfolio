@@ -6,6 +6,8 @@ import Link from "@/components/ui/Link";
 import { getBlogPostBySlug } from "@/lib/blogData";
 import { IconArrowLeft, IconCalendar, IconClock, IconTag } from "@tabler/icons-react";
 
+import CodeBlock from "@/components/ui/CodeBlock";
+
 // Dynamic MDX Component Loader Map
 import HttpQueryPost from "@/content/blog/http-query-method-rfc-10008.mdx";
 import KyvernoPost from "@/content/blog/kyverno-tutorial-kubernetes-policy-engine.mdx";
@@ -62,27 +64,29 @@ const mdxCustomComponents = {
       {children}
     </blockquote>
   ),
-  pre: ({ children }: React.HTMLAttributes<HTMLPreElement>) => (
-    <div className="my-8 rounded-2xl bg-neutral-950 border border-neutral-800/90 overflow-hidden shadow-2xl">
-      <div className="flex items-center justify-between px-4 py-2 bg-neutral-900/90 border-b border-neutral-800 text-xs font-mono text-neutral-400">
-        <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-        </div>
-        <span className="text-[10px] tracking-wider uppercase text-neutral-400">Code Snippet</span>
-      </div>
-      <pre className="p-5 font-mono text-xs sm:text-sm text-emerald-400 overflow-x-auto leading-relaxed no-visible-scrollbar">
-        {children}
-      </pre>
-    </div>
-  ),
+  pre: (props: any) => {
+    const childrenArray = React.Children.toArray(props.children);
+    const codeChild = childrenArray[0] as React.ReactElement<any>;
+
+    if (codeChild && codeChild.props) {
+      const rawCode = typeof codeChild.props.children === "string"
+        ? codeChild.props.children
+        : Array.isArray(codeChild.props.children)
+          ? codeChild.props.children.join("")
+          : String(codeChild.props.children || "");
+
+      const langClassName = codeChild.props.className || "";
+      return <CodeBlock code={rawCode} language={langClassName} />;
+    }
+
+    return <CodeBlock code={String(props.children || "")} />;
+  },
   code: ({ children, className }: React.HTMLAttributes<HTMLElement>) => {
     if (className?.includes("language-")) {
-      return <code>{children}</code>;
+      return <code className={className}>{children}</code>;
     }
     return (
-      <code className="px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-emerald-400 font-mono text-xs font-semibold">
+      <code className="px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800/80 text-sky-300 font-mono text-xs font-semibold">
         {children}
       </code>
     );
