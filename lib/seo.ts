@@ -11,10 +11,12 @@ export const SITE_META = {
   name: SITE_NAME,
   alternateName: ["Waruna Udara", "Waruna Sampath", "WarunaUdara"],
   url: SITE_URL,
-  title: "Waruna Udara Sampath (Waruna Udara) — Full-Stack Developer & Cloud Engineer",
+  title: "Waruna Udara Sampath — Full-Stack & Cloud Engineer",
   shortTitle: "Waruna Udara",
   description:
-    "Full-Stack Developer & Cloud/DevOps Specialist from Sri Lanka. Waruna Udara (Waruna Udara Sampath) builds robust web platforms with React, Java Spring Boot, Kubernetes, AWS, and modern AI integrations. BICT (Hons) undergraduate at University of Sri Jayewardenepura.",
+    "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Building web platforms & platform engineering solutions with React, Java & AWS.",
+  ogDescription:
+    "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Crafting cloud-native web & platform solutions.",
   keywords: [
     "Waruna Udara",
     "Waruna Udara Sampath",
@@ -25,6 +27,7 @@ export const SITE_META = {
     "React Developer Sri Lanka",
     "Cloud Engineer",
     "DevOps Engineer",
+    "Platform Engineer",
     "Kubernetes",
     "AWS",
     "TypeScript Developer",
@@ -38,31 +41,37 @@ export const SITE_META = {
   ogImage: `${SITE_URL}/og-new.webp`,
 };
 
-export const PAGE_META: Record<string, { title: string; description: string; keywords?: string[] }> = {
+export const PAGE_META: Record<string, { title: string; description: string; ogDescription?: string; keywords?: string[] }> = {
   home: {
-    title: "Waruna Udara Sampath (Waruna Udara) — Full-Stack Developer & Cloud Engineer",
+    title: "Waruna Udara Sampath — Full-Stack & Cloud Engineer",
     description:
-      "Waruna Udara Sampath (Waruna Udara) — Full-Stack Developer & Cloud/DevOps Specialist from Sri Lanka. Building robust web platforms with React, Java Spring Boot, Kubernetes, and AWS.",
+      "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Building web platforms & platform engineering solutions with React, Java & AWS.",
+    ogDescription:
+      "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Crafting cloud-native web & platform solutions.",
     keywords: [
       "Waruna Udara",
       "Waruna Udara Sampath",
       "Waruna Sampath",
       "Full Stack Developer",
+      "Cloud Engineer",
+      "Platform Engineer",
       "Sri Lanka developer",
-      "Java developer",
-      "React developer",
     ],
   },
   about: {
-    title: "About — Waruna Udara Sampath (Waruna Udara)",
+    title: "About — Waruna Udara Sampath",
     description:
-      "Learn about Waruna Udara Sampath (Waruna Udara) — Full-Stack & Cloud Engineer with experience in Java, React, Docker, Kubernetes, and AWS.",
+      "Learn about Waruna Udara Sampath (Waruna Udara) — Full-Stack Developer & Aspiring Cloud/DevOps Engineer focused on Platform Engineering.",
+    ogDescription:
+      "Background & expertise of Waruna Udara Sampath — Full-Stack & Cloud/DevOps Engineer from Sri Lanka.",
     keywords: ["Waruna Udara", "Waruna Udara Sampath", "about Waruna Udara", "software engineer background", "cloud developer Sri Lanka"],
   },
   work: {
-    title: "Work & Projects — Waruna Udara Sampath (Waruna Udara)",
+    title: "Work & Projects — Waruna Udara Sampath",
     description:
-      "Explore projects by Waruna Udara Sampath (Waruna Udara) including Turboship, AlgoArena, Beauty of Cloud, and cloud-native software builds.",
+      "Explore projects by Waruna Udara Sampath including Turboship (AI Agent Platform), AlgoArena, and cloud-native software engineering builds.",
+    ogDescription:
+      "Explore cloud-native & web software projects by Waruna Udara Sampath including Turboship & AlgoArena.",
     keywords: [
       "Waruna Udara",
       "Waruna Udara Sampath",
@@ -73,9 +82,11 @@ export const PAGE_META: Record<string, { title: string; description: string; key
     ],
   },
   blog: {
-    title: "Blog — Waruna Udara Sampath (Waruna Udara)",
+    title: "Blog — Waruna Udara Sampath",
     description:
-      "Technical articles on full-stack engineering, cloud architecture, DevOps, AI tooling, and React ecosystem written by Waruna Udara Sampath (Waruna Udara).",
+      "Technical articles on full-stack engineering, cloud architecture, DevOps, Platform Engineering, AI, and modern web development.",
+    ogDescription:
+      "Technical articles on full-stack engineering, cloud architecture, DevOps, and Platform Engineering.",
     keywords: [
       "Waruna Udara",
       "Waruna Udara Sampath",
@@ -86,27 +97,35 @@ export const PAGE_META: Record<string, { title: string; description: string; key
     ],
   },
   guestbook: {
-    title: "Guestbook — Waruna Udara Sampath (Waruna Udara)",
+    title: "Guestbook — Waruna Udara Sampath",
     description:
       "Sign the guestbook and leave your mark! Say hello to Waruna Udara Sampath (Waruna Udara).",
+    ogDescription:
+      "Sign the guestbook and say hello to Waruna Udara Sampath!",
     keywords: ["guestbook", "Waruna Udara guestbook", "Waruna Udara", "Waruna Udara Sampath"],
   },
   uses: {
-    title: "Uses — Waruna Udara Sampath (Waruna Udara)",
+    title: "Uses — Waruna Udara Sampath",
     description:
-      "A peek into the tools, gear, and software that powers Waruna Udara Sampath's (Waruna Udara) development workflow.",
+      "A peek into the tools, gear, and software that powers Waruna Udara Sampath's development and platform engineering workflow.",
+    ogDescription:
+      "Tools, gear & software powering Waruna Udara Sampath's development workflow.",
     keywords: ["developer setup", "uses page", "dev tools", "Waruna Udara", "Waruna Udara Sampath"],
   },
   links: {
-    title: "Links — Waruna Udara Sampath (Waruna Udara)",
+    title: "Links — Waruna Udara Sampath",
     description:
-      "All social, project, and contact links for Waruna Udara Sampath (Waruna Udara) — GitHub, LinkedIn, and more.",
+      "All official social, project, and contact links for Waruna Udara Sampath (Waruna Udara) — GitHub, LinkedIn, and more.",
+    ogDescription:
+      "All social, project & contact links for Waruna Udara Sampath.",
     keywords: ["Waruna Udara links", "contact", "GitHub", "LinkedIn", "Waruna Udara", "Waruna Udara Sampath"],
   },
   bucketList: {
-    title: "Bucket List — Waruna Udara Sampath (Waruna Udara)",
+    title: "Bucket List — Waruna Udara Sampath",
     description:
-      "Things Waruna Udara Sampath (Waruna Udara) wants to do at least once in life — personal goals, travel dreams, and life milestones.",
+      "Personal goals, travel dreams, and tech milestones Waruna Udara Sampath wants to achieve.",
+    ogDescription:
+      "Personal goals & life milestones of Waruna Udara Sampath.",
     keywords: ["bucket list", "life goals", "Waruna Udara personal", "Waruna Udara", "Waruna Udara Sampath"],
   },
 };

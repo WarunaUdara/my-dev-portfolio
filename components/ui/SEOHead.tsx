@@ -7,6 +7,7 @@ import { SITE_META, SITE_URL } from "@/lib/seo";
 interface SEOHeadProps {
   title?: string;
   description?: string;
+  ogDescription?: string;
   keywords?: string[];
   ogImage?: string;
   ogType?: "website" | "article" | "profile";
@@ -25,6 +26,7 @@ interface SEOHeadProps {
 export default function SEOHead({
   title,
   description,
+  ogDescription,
   keywords,
   ogImage,
   ogType = "website",
@@ -35,6 +37,7 @@ export default function SEOHead({
 }: SEOHeadProps) {
   const resolvedTitle = title ?? SITE_META.title;
   const resolvedDescription = description ?? SITE_META.description;
+  const resolvedOgDescription = ogDescription ?? SITE_META.ogDescription ?? resolvedDescription;
   const resolvedKeywords = keywords ?? SITE_META.keywords;
   const resolvedOgImage = ogImage ?? SITE_META.ogImage;
   const resolvedCanonical = canonicalUrl ?? (typeof window !== "undefined" ? window.location.href : SITE_URL);
@@ -52,7 +55,7 @@ export default function SEOHead({
       {/* ── Open Graph ── */}
       <meta property="og:site_name" content={SITE_META.name} />
       <meta property="og:title" content={resolvedTitle} />
-      <meta property="og:description" content={resolvedDescription} />
+      <meta property="og:description" content={resolvedOgDescription} />
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={resolvedCanonical} />
       <meta property="og:image" content={resolvedOgImage} />
@@ -66,7 +69,7 @@ export default function SEOHead({
       <meta name="twitter:site" content={SITE_META.twitterHandle} />
       <meta name="twitter:creator" content={SITE_META.twitterHandle} />
       <meta name="twitter:title" content={resolvedTitle} />
-      <meta name="twitter:description" content={resolvedDescription} />
+      <meta name="twitter:description" content={resolvedOgDescription} />
       <meta name="twitter:image" content={resolvedOgImage} />
       <meta name="twitter:image:alt" content={resolvedTitle} />
 
