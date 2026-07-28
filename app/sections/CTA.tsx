@@ -103,31 +103,14 @@ export default function CTA() {
               </motion.div>
             </div>
 
-            {/* Center Buttons: Get In Touch + Book a Call */}
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="https://www.linkedin.com/in/waruna-udara/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+            {/* Center Get In Touch CTA Button */}
+            <div className="pt-2">
+              <a href="/contact">
                 <InteractiveHoverButton icon={<IconArrowUpRight className="h-4 w-4" />}>
                   Get In Touch
                 </InteractiveHoverButton>
               </a>
-
-              <button
-                onClick={() => setIsBookModalOpen(true)}
-                className="px-6 py-3 rounded-full bg-white hover:bg-neutral-200 text-black font-semibold text-sm transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.25)] flex items-center gap-2 hover:scale-105 active:scale-95 cursor-pointer"
-              >
-                <IconVideo className="w-4 h-4 text-black" />
-                <span>Book 30-min Call</span>
-              </button>
             </div>
-
-            <BookCallModal
-              isOpen={isBookModalOpen}
-              onClose={() => setIsBookModalOpen(false)}
-            />
 
             {/* Subtitle / Availability Statements */}
             <div className="space-y-3 pt-6 max-w-2xl border-t border-white/10 w-full">

@@ -22,7 +22,7 @@ import Footer from '@/app/sections/Footer';
 import Toast from '@/components/Toast';
 import { MessageSkeleton } from '@/components/MessageSkeleton';
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input';
-import { IconBrandGithub, IconBrandGoogle, IconPin, IconTrash, IconX, IconSend, IconHome, IconUser, IconBriefcase, IconFileText } from '@tabler/icons-react';
+import { IconBrandGithub, IconBrandGoogle, IconPin, IconTrash, IconX, IconSend, IconHome, IconUser, IconBriefcase, IconFileText, IconArticle, IconPhoneCall } from '@tabler/icons-react';
 import Image from '@/components/ui/Image';
 import AuroraText from "@/components/ui/aurora-text";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
@@ -74,7 +74,9 @@ export default function GuestbookPage() {
     { name: "Home", url: "/", icon: IconHome },
     { name: "About", url: "/about", icon: IconUser },
     { name: "Work", url: "/work", icon: IconBriefcase },
+    { name: "Blog", url: "/blog", icon: IconArticle },
     { name: "More", url: "#more", icon: IconFileText },
+    { name: "Book a Call", url: "/contact", icon: IconPhoneCall },
   ];
 
   // Initial load with real-time updates

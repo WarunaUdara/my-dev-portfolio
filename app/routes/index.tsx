@@ -8,7 +8,7 @@ import GitHubActivity from '../sections/GitHubActivity';
 import Explore from '../sections/Explore';
 import Footer from '../sections/Footer';
 import { NavBar } from '../ui/TubelightNavbar';
-import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText } from '@tabler/icons-react';
+import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText, IconPhoneCall } from '@tabler/icons-react';
 import SEOHead from '@/components/ui/SEOHead';
 import { PAGE_META, PERSON_SCHEMA, WEBSITE_SCHEMA, PROFILE_PAGE_SCHEMA, SITE_URL } from '@/lib/seo';
 
@@ -23,6 +23,7 @@ function HomePage() {
     { name: 'Work', url: '/work', icon: IconBriefcase },
     { name: 'Blog', url: '/blog', icon: IconArticle },
     { name: 'More', url: '#more', icon: IconFileText },
+    { name: 'Book a Call', url: '/contact', icon: IconPhoneCall },
   ];
 
   return (

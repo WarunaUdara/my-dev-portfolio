@@ -61,6 +61,8 @@ export function NavBar({ items, className }: NavBarProps) {
       setActiveTab('About')
     } else if (pathname.startsWith('/blog')) {
       setActiveTab('Blog')
+    } else if (pathname.startsWith('/contact')) {
+      setActiveTab('Book a Call')
     } else if (isOnMorePage) {
       setActiveTab('More')
     } else if (pathname === '/' || pathname.startsWith('/#')) {
@@ -314,11 +316,12 @@ export function NavBar({ items, className }: NavBarProps) {
           className,
         )}
       >
-        <div className="flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1.5 px-1.5 rounded-full shadow-lg pointer-events-auto">
+        <div className="flex items-center gap-1 sm:gap-1.5 bg-background/5 border border-border backdrop-blur-lg py-1.5 px-2 rounded-full shadow-lg pointer-events-auto">
           {items.map((item) => {
             const Icon = item.icon
             const isActive = activeTab === item.name
             const isMoreMenu = item.name === 'More'
+            const isBookCall = item.name === 'Book a Call'
 
             return (
               <div 
@@ -331,9 +334,13 @@ export function NavBar({ items, className }: NavBarProps) {
                   href={item.url}
                   onClick={(e) => handleNavClick(e, item)}
                   className={cn(
-                    "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors flex items-center gap-1",
-                    "text-foreground/80 hover:text-primary",
-                    isActive && "bg-muted text-primary",
+                    "relative cursor-pointer text-xs sm:text-sm font-semibold px-3.5 sm:px-4 md:px-5 py-2 rounded-full transition-all flex items-center gap-1",
+                    isBookCall
+                      ? isActive
+                        ? "bg-white text-black font-bold shadow-[0_0_22px_rgba(255,255,255,0.5)] border border-white"
+                        : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-[0_0_12px_rgba(255,255,255,0.12)]"
+                      : "text-foreground/80 hover:text-primary",
+                    !isBookCall && isActive && "bg-muted text-primary",
                   )}
                 >
                   <span className="hidden md:inline relative z-10">{item.name}</span>
@@ -343,7 +350,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   {isMoreMenu && (
                     <IconChevronDown size={16} className="hidden md:inline" />
                   )}
-                  {isActive && (
+                  {isActive && !isBookCall && (
                     <motion.div
                       layoutId="lamp"
                       className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"

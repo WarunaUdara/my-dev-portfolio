@@ -96,6 +96,21 @@ export const PAGE_META: Record<string, { title: string; description: string; ogD
       "cloud engineering articles",
     ],
   },
+  contact: {
+    title: "Book a Call — Waruna Udara Sampath",
+    description:
+      "Schedule a 1-on-1 30-minute Google Meet consultation with Waruna Udara Sampath (Waruna Udara). Discuss software engineering, cloud platform, or freelance projects.",
+    ogDescription:
+      "Schedule a 1-on-1 30-minute Google Meet consultation with Waruna Udara Sampath (Waruna Udara).",
+    keywords: [
+      "Waruna Udara",
+      "Waruna Udara Sampath",
+      "book a call",
+      "Google Meet call",
+      "schedule meeting",
+      "full stack consultation",
+    ],
+  },
   guestbook: {
     title: "Guestbook — Waruna Udara Sampath",
     description:

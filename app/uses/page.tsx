@@ -8,7 +8,7 @@ import AuroraText from "@/components/ui/aurora-text";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
 import { NavBar } from "@/app/ui/TubelightNavbar";
 import Footer from "@/app/sections/Footer";
-import { IconHome, IconUser, IconBriefcase, IconFileText } from "@tabler/icons-react";
+import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText, IconPhoneCall } from "@tabler/icons-react";
 import SEOHead from "@/components/ui/SEOHead";
 import { PAGE_META, PERSON_SCHEMA, SITE_URL } from "@/lib/seo";
 
@@ -91,7 +91,9 @@ export default function UsesPage() {
     { name: "Home", url: "/", icon: IconHome },
     { name: "About", url: "/about", icon: IconUser },
     { name: "Work", url: "/work", icon: IconBriefcase },
+    { name: "Blog", url: "/blog", icon: IconArticle },
     { name: "More", url: "#more", icon: IconFileText },
+    { name: "Book a Call", url: "/contact", icon: IconPhoneCall },
   ];
 
   useEffect(() => {

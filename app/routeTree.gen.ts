@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BucketListRouteImport } from './routes/bucket-list'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as GuestbookRouteImport } from './routes/guestbook'
 import { Route as LinksRouteImport } from './routes/links'
 import { Route as UsesRouteImport } from './routes/uses'
@@ -33,6 +34,11 @@ const AboutRoute = AboutRouteImport.update({
 const BucketListRoute = BucketListRouteImport.update({
   id: '/bucket-list',
   path: '/bucket-list',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuestbookRoute = GuestbookRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/bucket-list': typeof BucketListRoute
+  '/contact': typeof ContactRoute
   '/guestbook': typeof GuestbookRoute
   '/links': typeof LinksRoute
   '/uses': typeof UsesRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/bucket-list': typeof BucketListRoute
+  '/contact': typeof ContactRoute
   '/guestbook': typeof GuestbookRoute
   '/links': typeof LinksRoute
   '/uses': typeof UsesRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/bucket-list': typeof BucketListRoute
+  '/contact': typeof ContactRoute
   '/guestbook': typeof GuestbookRoute
   '/links': typeof LinksRoute
   '/uses': typeof UsesRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/bucket-list'
+    | '/contact'
     | '/guestbook'
     | '/links'
     | '/uses'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/bucket-list'
+    | '/contact'
     | '/guestbook'
     | '/links'
     | '/uses'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/bucket-list'
+    | '/contact'
     | '/guestbook'
     | '/links'
     | '/uses'
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BucketListRoute: typeof BucketListRoute
+  ContactRoute: typeof ContactRoute
   GuestbookRoute: typeof GuestbookRoute
   LinksRoute: typeof LinksRoute
   UsesRoute: typeof UsesRoute
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/bucket-list'
       fullPath: '/bucket-list'
       preLoaderRoute: typeof BucketListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guestbook': {
@@ -239,6 +259,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BucketListRoute: BucketListRoute,
+  ContactRoute: ContactRoute,
   GuestbookRoute: GuestbookRoute,
   LinksRoute: LinksRoute,
   UsesRoute: UsesRoute,

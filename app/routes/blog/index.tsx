@@ -4,7 +4,7 @@ import Footer from "../../sections/Footer";
 import { NavBar } from "../../ui/TubelightNavbar";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
 import Scales from "@/components/ui/scales";
-import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText } from "@tabler/icons-react";
+import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText, IconPhoneCall } from "@tabler/icons-react";
 import SEOHead from '@/components/ui/SEOHead';
 import { PAGE_META, BLOG_SCHEMA, PERSON_SCHEMA, SITE_URL } from '@/lib/seo';
 
@@ -19,6 +19,7 @@ function BlogListPage() {
     { name: "Work", url: "/work", icon: IconBriefcase },
     { name: "Blog", url: "/blog", icon: IconArticle },
     { name: "More", url: "#more", icon: IconFileText },
+    { name: "Book a Call", url: "/contact", icon: IconPhoneCall },
   ];
 
   return (
