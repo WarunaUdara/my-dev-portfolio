@@ -110,8 +110,8 @@ const BucketList = () => {
               className={cn(
                 "group relative p-4 sm:p-5 rounded-2xl border transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 shadow-xl backdrop-blur-xl",
                 item.completed 
-                  ? "bg-zinc-950/70 border-sky-500/30" 
-                  : "bg-zinc-950/80 border-neutral-800 hover:border-neutral-600 hover:bg-zinc-900/80"
+                  ? "bg-zinc-950/80 border-white/20 shadow-md" 
+                  : "bg-zinc-950/80 border-neutral-800 hover:border-neutral-500 hover:bg-zinc-900/80"
               )}
               style={{
                 animationDelay: `${index * 50}ms`,
@@ -128,8 +128,8 @@ const BucketList = () => {
                     className={cn(
                       "text-base sm:text-lg font-medium transition-all duration-300",
                       item.completed
-                        ? "text-gray-400 line-through"
-                        : "text-white group-hover:text-[var(--color-9)]"
+                        ? "text-neutral-400 line-through"
+                        : "text-white group-hover:text-neutral-200"
                     )}
                   >
                     {item.text}
@@ -139,12 +139,12 @@ const BucketList = () => {
                   {(item.date || item.note || item.link) && (
                     <div className="mt-2 text-xs sm:text-sm">
                       {item.date && (
-                        <span className="text-[var(--color-8)] font-medium">
+                        <span className="text-neutral-300 font-mono font-medium">
                           {item.date}
                         </span>
                       )}
                       {item.note && (
-                        <p className="mt-1 text-gray-400 leading-relaxed">
+                        <p className="mt-1 text-neutral-400 leading-relaxed">
                           {item.note}
                         </p>
                       )}
@@ -153,7 +153,7 @@ const BucketList = () => {
                           href={item.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[var(--color-8)] hover:text-[var(--color-9)] transition-colors inline-flex items-center gap-1 mt-1"
+                          className="text-neutral-300 hover:text-white transition-colors inline-flex items-center gap-1 mt-1 underline underline-offset-4"
                         >
                           <span className="truncate max-w-[200px]">{item.link}</span>
                           <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
