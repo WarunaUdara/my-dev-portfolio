@@ -14,9 +14,9 @@ export const SITE_META = {
   title: "Waruna Udara Sampath — Full-Stack & Cloud Engineer",
   shortTitle: "Waruna Udara",
   description:
-    "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Building web platforms & platform engineering solutions with React, Java & AWS.",
+    "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Building web platforms & platform engineering solutions with modern technologies.",
   ogDescription:
-    "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Crafting cloud-native web & platform solutions.",
+    "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Building web platforms & platform engineering solutions with modern technologies.",
   keywords: [
     "Waruna Udara",
     "Waruna Udara Sampath",
@@ -45,9 +45,9 @@ export const PAGE_META: Record<string, { title: string; description: string; ogD
   home: {
     title: "Waruna Udara Sampath — Full-Stack & Cloud Engineer",
     description:
-      "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Building web platforms & platform engineering solutions with React, Java & AWS.",
+      "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Building web platforms & platform engineering solutions with modern technologies.",
     ogDescription:
-      "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Crafting cloud-native web & platform solutions.",
+      "Full-Stack Developer & Aspiring Cloud/DevOps Engineer from Sri Lanka. Building web platforms & platform engineering solutions with modern technologies.",
     keywords: [
       "Waruna Udara",
       "Waruna Udara Sampath",
