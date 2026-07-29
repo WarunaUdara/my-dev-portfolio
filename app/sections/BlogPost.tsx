@@ -22,7 +22,7 @@ const MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {
   "react-19-and-tanstack-router": React19Post,
 };
 
-// ADHD-Friendly & Reading Psychology Custom MDX Design System
+// Medium-Style Standardized MDX Typography & Components
 const mdxCustomComponents = {
   h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1 {...props} className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight mt-12 mb-6 pb-3 border-b border-neutral-800/80 leading-snug scroll-mt-28">
@@ -30,7 +30,7 @@ const mdxCustomComponents = {
     </h1>
   ),
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 {...props} className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight mt-10 mb-4 pt-4 border-t border-neutral-800/50 flex items-center gap-2 scroll-mt-28">
+    <h2 {...props} className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight mt-12 mb-4 pt-6 border-t border-neutral-800/60 flex items-center gap-2 scroll-mt-28">
       {children}
     </h2>
   ),
@@ -40,17 +40,17 @@ const mdxCustomComponents = {
     </h3>
   ),
   p: ({ children }: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p className="text-neutral-300 font-sans text-base sm:text-[17px] leading-[1.85] tracking-wide mb-6 max-w-prose">
+    <p className="text-neutral-200 font-sans text-base sm:text-[18px] leading-[1.85] tracking-normal mb-6 max-w-prose">
       {children}
     </p>
   ),
   ul: ({ children }: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className="space-y-3 my-6 pl-4 border-l-2 border-emerald-500/40 list-none text-neutral-300 text-base">
+    <ul className="space-y-3 my-6 pl-5 border-l-2 border-emerald-500/50 list-none text-neutral-200 text-base sm:text-[17px]">
       {children}
     </ul>
   ),
   ol: ({ children }: React.HTMLAttributes<HTMLOListElement>) => (
-    <ol className="space-y-3 my-6 pl-4 border-l-2 border-sky-500/40 list-decimal text-neutral-300 text-base">
+    <ol className="space-y-3 my-6 pl-5 border-l-2 border-sky-500/50 list-decimal text-neutral-200 text-base sm:text-[17px]">
       {children}
     </ol>
   ),
@@ -61,7 +61,7 @@ const mdxCustomComponents = {
     </li>
   ),
   blockquote: ({ children }: React.HTMLAttributes<HTMLQuoteElement>) => (
-    <blockquote className="my-8 p-5 rounded-2xl bg-neutral-950 border border-neutral-800/90 text-neutral-200 font-serif italic text-lg leading-relaxed shadow-inner">
+    <blockquote className="my-8 p-6 rounded-2xl bg-neutral-950/90 border-l-4 border-sky-400 text-neutral-200 font-serif italic text-lg leading-relaxed shadow-lg">
       {children}
     </blockquote>
   ),
@@ -87,13 +87,21 @@ const mdxCustomComponents = {
       return <code className={className}>{children}</code>;
     }
     return (
-      <code className="px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800/80 text-sky-300 font-mono text-xs font-semibold">
+      <code className="px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-sky-300 font-mono text-xs font-semibold">
         {children}
       </code>
     );
   },
   hr: () => <hr className="my-10 border-neutral-800/80" />,
 };
+
+// Format long headings into concise short topics (max 4 words) for TOC
+function formatShortTopic(fullText: string): string {
+  const clean = fullText.replace(/^#+\s*/, "").replace(/[^\w\s-]/g, "").trim();
+  const words = clean.split(/\s+/);
+  if (words.length <= 4) return clean;
+  return words.slice(0, 4).join(" ");
+}
 
 export const BlogPost = ({ slug }: { slug: string }) => {
   const meta = getBlogPostBySlug(slug);
@@ -102,8 +110,9 @@ export const BlogPost = ({ slug }: { slug: string }) => {
   const articleContentRef = useRef<HTMLDivElement>(null);
   const [headings, setHeadings] = useState<{ id: string; text: string }[]>([]);
   const [activeHeadingIndex, setActiveHeadingIndex] = useState<number>(0);
+  const [showSidebar, setShowSidebar] = useState<boolean>(false);
 
-  // Automatically extract article section headings & track scroll position
+  // Automatically extract article section headings & observe active topic & article bounds
   useEffect(() => {
     if (!articleContentRef.current) return;
     const elements = Array.from(
@@ -115,22 +124,33 @@ export const BlogPost = ({ slug }: { slug: string }) => {
     elements.forEach((el, index) => {
       const id = el.id || `section-topic-${index}`;
       el.id = id;
-      const text = el.textContent?.replace(/^#+\s*/, "").trim() || `Section ${index + 1}`;
-      itemsList.push({ id, text });
+      const fullText = el.textContent || `Section ${index + 1}`;
+      const shortText = formatShortTopic(fullText);
+      itemsList.push({ id, text: shortText });
     });
 
     setHeadings(itemsList);
 
     if (elements.length === 0) return;
 
-    // Window scroll listener for frame-accurate TOC tracking
+    // Window scroll listener: Synchronizes active TOC topic and hides sidebar when outside article bounds
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 180; // 180px header offset
-      let currentActiveIndex = 0;
+      if (!articleContentRef.current) return;
 
+      const articleRect = articleContentRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Show sidebar only while reading the article body (hides when reaching CTA / Footer)
+      const inArticleBody = articleRect.top < viewportHeight * 0.6 && articleRect.bottom > 200;
+      setShowSidebar(inArticleBody);
+
+      if (!inArticleBody) return;
+
+      // Find active topic heading closest to top viewport (offset 220px)
+      let currentActiveIndex = 0;
       for (let i = 0; i < elements.length; i++) {
-        const el = elements[i];
-        if (el.offsetTop <= scrollPosition) {
+        const rect = elements[i].getBoundingClientRect();
+        if (rect.top <= 220) {
           currentActiveIndex = i;
         } else {
           break;
@@ -141,7 +161,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    handleScroll(); // Initial check
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [slug]);
@@ -174,10 +194,10 @@ export const BlogPost = ({ slug }: { slug: string }) => {
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      {/* Floating Right Sticky LineSidebar (TOC) for Desktop Readers */}
-      {headings.length > 0 && (
-        <aside className="hidden xl:block fixed top-32 right-6 lg:right-10 z-40 max-w-[280px]">
-          <div className="p-5 rounded-3xl bg-neutral-950/90 border border-neutral-800/90 backdrop-blur-xl shadow-2xl space-y-3">
+      {/* Floating Right Sticky LineSidebar (TOC) - Strictly Visible inside Article Bounds */}
+      {headings.length > 0 && showSidebar && (
+        <aside className="hidden xl:block fixed top-32 right-6 lg:right-10 z-40 max-w-[280px] pointer-events-auto transition-opacity duration-300">
+          <div className="p-5 rounded-3xl bg-neutral-950/90 border border-neutral-800/90 backdrop-blur-xl shadow-2xl space-y-3 pointer-events-auto">
             <div className="flex items-center justify-between border-b border-neutral-800/80 pb-2.5">
               <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold">
                 TOPICS
