@@ -51,20 +51,20 @@ export const EDUCATION_DATA: EducationItem[] = [
     achievements: [
       <>
         G.C.E. Advanced Level (Technology Stream) – Achieved{" "}
-        <span className="font-mono font-bold text-white px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300">
+        <strong className="font-mono font-bold text-white underline underline-offset-4 decoration-neutral-600">
           AAA
-        </span>{" "}
+        </strong>{" "}
         passes in Engineering Technology, Science for Technology, and Information &amp; Communication Technology (ICT).
       </>,
       <>
         Secured{" "}
-        <span className="font-mono font-bold text-white px-2 py-0.5 rounded bg-sky-500/20 border border-sky-500/40 text-sky-300">
+        <strong className="font-mono font-bold text-white underline underline-offset-4 decoration-neutral-600">
           District Rank 09
-        </span>{" "}
+        </strong>{" "}
         and{" "}
-        <span className="font-mono font-bold text-white px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300">
+        <strong className="font-mono font-bold text-white underline underline-offset-4 decoration-neutral-600">
           Island Rank 121
-        </span>
+        </strong>
         .
       </>,
     ],
@@ -111,7 +111,7 @@ export const Education = () => {
               {/* Institution & Period Content */}
               <div className="flex-1 space-y-4 w-full">
                 <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-neutral-400 border-b border-dashed border-neutral-800 pb-3">
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2.5">
                     <span className="text-neutral-200 font-semibold text-base sm:text-lg font-serif">
                       {edu.institution}
                     </span>
@@ -120,10 +120,10 @@ export const Education = () => {
                         href={edu.faculty.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-950/80 border border-sky-500/40 text-sky-300 text-xs font-mono font-medium hover:bg-sky-900/80 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 text-xs font-mono font-medium hover:text-white hover:border-neutral-600 transition-colors"
                       >
                         <span>{edu.faculty.name}</span>
-                        <IconExternalLink className="w-3 h-3 text-sky-400" />
+                        <IconExternalLink className="w-3 h-3 text-neutral-400" />
                       </a>
                     )}
                   </div>
@@ -148,7 +148,7 @@ export const Education = () => {
                 {edu.achievements && edu.achievements.length > 0 && (
                   <div className="space-y-2.5 pt-2 border-t border-dashed border-neutral-800/80">
                     <span className="text-xs font-mono font-semibold text-neutral-300 tracking-wider uppercase flex items-center gap-2">
-                      <IconAward className="w-4 h-4 text-amber-400" />
+                      <IconAward className="w-4 h-4 text-neutral-300" />
                       Academic Achievements
                     </span>
                     <ul className="space-y-2 text-neutral-300 text-sm font-sans leading-relaxed">
