@@ -41,15 +41,15 @@ export const LineSidebar = ({
   showIndex = true,
   showMarker = true,
   proximityRadius = 100,
-  maxShift = 30,
+  maxShift = 24,
   falloff = 'smooth',
-  markerLength = 60,
+  markerLength = 48,
   markerGap = 0,
   tickScale = 0.5,
   scaleTick = true,
-  itemGap = 20,
-  fontSize = 1.0,
-  smoothing = 100,
+  itemGap = 16,
+  fontSize = 0.9,
+  smoothing = 80,
   defaultActive = 0,
   activeItemIndex = null,
   onItemClick,
@@ -74,8 +74,7 @@ export const LineSidebar = ({
     }
   }, [activeItemIndex]);
 
-  // Auto-scroll the active <li> into view — works because the parent container
-  // (not this component) owns the overflow scroll container
+  // Auto-scroll active item into view within overflow container
   useEffect(() => {
     if (activeIndex !== null && itemRefs.current[activeIndex]) {
       itemRefs.current[activeIndex]?.scrollIntoView({
@@ -88,7 +87,7 @@ export const LineSidebar = ({
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
 
-  // Single rAF loop — frame-rate independent exponential smoothing
+  // Frame-rate independent exponential animation loop
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -119,19 +118,17 @@ export const LineSidebar = ({
     rafRef.current = requestAnimationFrame(runFrame);
   }, [runFrame]);
 
+  // Screen-relative direct pointer calculation — immune to scroll offsets or parent containers!
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLUListElement>) => {
-      const list = listRef.current;
-      if (!list) return;
-      const rect = list.getBoundingClientRect();
-      const pointerY = e.clientY - rect.top;
       const ease = FALLOFF_CURVES[falloff] ?? FALLOFF_CURVES.linear;
       const itemEls = itemRefs.current;
       for (let i = 0; i < itemEls.length; i++) {
         const el = itemEls[i];
         if (!el) continue;
-        const center = el.offsetTop + el.offsetHeight / 2;
-        const distance = Math.abs(pointerY - center);
+        const elRect = el.getBoundingClientRect();
+        const center = elRect.top + elRect.height / 2;
+        const distance = Math.abs(e.clientY - center);
         targetsRef.current[i] = ease(Math.max(0, 1 - distance / proximityRadius));
       }
       startLoop();
@@ -163,9 +160,8 @@ export const LineSidebar = ({
     []
   );
 
-  // Tick separators between items (left-positioned, unchanged from original)
   const tickClass = showMarker
-    ? `after:absolute after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-50 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
+    ? `after:absolute after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-40 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
         scaleTick
           ? 'after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]'
           : 'after:-translate-y-1/2'
@@ -194,7 +190,7 @@ export const LineSidebar = ({
         ref={listRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className="m-0 flex list-none flex-col py-4 [gap:var(--item-gap)]"
+        className="m-0 flex list-none flex-col py-3 [gap:var(--item-gap)]"
       >
         {items.map((label, index) => (
           <li
@@ -212,13 +208,13 @@ export const LineSidebar = ({
                 className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
               />
             )}
-            <span className="relative inline-flex items-baseline leading-[1.2] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))] will-change-transform">
+            <span className="relative inline-flex items-baseline leading-[1.3] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))] will-change-transform font-sans">
               {showIndex && (
                 <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
                   {String(index + 1).padStart(2, '0')}
                 </span>
               )}
-              <span className="line-clamp-1 font-sans">{label}</span>
+              <span className="truncate max-w-[210px] block" title={label}>{label}</span>
             </span>
           </li>
         ))}

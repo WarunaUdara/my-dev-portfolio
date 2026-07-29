@@ -95,14 +95,12 @@ const mdxCustomComponents = {
   hr: () => <hr className="my-10 border-neutral-800/80" />,
 };
 
-// Format heading text into a short, curiosity-preserving TOC label
-// Keeps jargon & key terms but trims to ~5 words max
+// Format heading text into clean TOC label preserving technical terms
 function formatShortTopic(fullText: string): string {
   const clean = fullText.replace(/^#+\s*/, "").trim();
   const words = clean.split(/\s+/);
-  if (words.length <= 5) return clean;
-  // Keep first 5 words — preserves technical jargon and curiosity
-  return words.slice(0, 5).join(" ");
+  if (words.length <= 6) return clean;
+  return words.slice(0, 6).join(" ");
 }
 
 export const BlogPost = ({ slug }: { slug: string }) => {
@@ -114,7 +112,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
   const [activeHeadingIndex, setActiveHeadingIndex] = useState<number>(0);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
 
-  // Automatically extract article section headings & observe active topic & article bounds
+  // Extract article section headings & observe active topic & article bounds
   useEffect(() => {
     if (!articleContentRef.current) return;
     const elements = Array.from(
@@ -142,17 +140,19 @@ export const BlogPost = ({ slug }: { slug: string }) => {
       const articleRect = articleContentRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
 
-      // Show sidebar only while reading the article body (hides when reaching CTA / Footer)
+      // Show sidebar while reading article body (hides when scrolling down to CTA / Footer)
       const inArticleBody = articleRect.top < viewportHeight * 0.6 && articleRect.bottom > 200;
       setShowSidebar(inArticleBody);
 
       if (!inArticleBody) return;
 
-      // Find active topic heading closest to top viewport (offset 220px)
+      // Find active topic heading closest to upper focus area (offset = 35% of viewport height)
+      const focusThreshold = Math.min(360, viewportHeight * 0.4);
       let currentActiveIndex = 0;
+
       for (let i = 0; i < elements.length; i++) {
         const rect = elements[i].getBoundingClientRect();
-        if (rect.top <= 220) {
+        if (rect.top <= focusThreshold) {
           currentActiveIndex = i;
         } else {
           break;
@@ -198,20 +198,23 @@ export const BlogPost = ({ slug }: { slug: string }) => {
 
       {/* Floating Right Sticky LineSidebar TOC — visible only while reading article body */}
       {headings.length > 0 && showSidebar && (
-        <aside className="hidden xl:block fixed top-28 right-0 z-40 w-[240px] pointer-events-auto">
-          {/* Card with padding-left space reserved for the marker lines */}
-          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/80 backdrop-blur-xl shadow-2xl">
+        <aside className="hidden xl:block fixed top-28 right-4 lg:right-8 z-40 w-[310px] pointer-events-auto">
+          {/* Card with reserved space for marker lines */}
+          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-xl shadow-2xl overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-neutral-800/60">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 font-semibold">
-                TOPICS
+            <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-neutral-800/70 bg-neutral-900/40">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold flex items-center gap-2">
+                <IconList className="w-3.5 h-3.5 text-sky-400" />
+                <span>TOPICS</span>
               </span>
-              <IconList className="w-3.5 h-3.5 text-sky-500" />
+              <span className="text-[10px] font-mono text-neutral-500">
+                {activeHeadingIndex + 1}/{headings.length}
+              </span>
             </div>
 
-            {/* Scroll container — owns overflow. padding-left gives space for marker lines. */}
+            {/* Scroll container — owns overflow. pl-14 gives room for left marker lines. */}
             <div
-              className="overflow-y-auto overflow-x-visible max-h-[58vh] pl-16 pr-4"
+              className="overflow-y-auto overflow-x-visible max-h-[60vh] pl-14 pr-4 py-1"
               style={{ scrollbarWidth: 'none' }}
             >
               <LineSidebar
@@ -219,18 +222,18 @@ export const BlogPost = ({ slug }: { slug: string }) => {
                 activeItemIndex={activeHeadingIndex}
                 onItemClick={(idx) => handleSidebarItemClick(idx)}
                 accentColor="#38bdf8"
-                textColor="#6b7280"
+                textColor="#737373"
                 markerColor="#404040"
                 showIndex={false}
                 showMarker={true}
-                proximityRadius={80}
-                maxShift={14}
-                markerLength={40}
+                proximityRadius={70}
+                maxShift={12}
+                markerLength={36}
                 markerGap={0}
                 tickScale={0.5}
                 scaleTick={true}
-                itemGap={14}
-                fontSize={0.8}
+                itemGap={12}
+                fontSize={0.82}
                 smoothing={80}
               />
             </div>
