@@ -1,24 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
-import { motion, AnimatePresence } from "framer-motion";
 import Image from "@/components/ui/Image";
 import AuroraText from "@/components/ui/aurora-text";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
+import FigmaSplitLogo from "@/components/ui/FigmaSplitLogo";
 import { IconMail, IconBrandLinkedin, IconBrandGithub } from "@tabler/icons-react";
 
 export default function ContactSection() {
-  const [showLogo, setShowLogo] = useState(true);
-
-  // Smooth continuous transition between Logo and Profile Image
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShowLogo((prev) => !prev);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, []);
-
   // Initialize Cal API once
   useEffect(() => {
     let isMounted = true;
@@ -51,57 +41,12 @@ export default function ContactSection() {
       <ScrollFrost height="h-[600px]" />
 
       <div className="container mx-auto max-w-5xl relative z-10 space-y-12">
-        {/* Header Block with Animated Logo / Profile Transition */}
+        {/* Header Block with Animated Figma Split 'W' Logo */}
         <div className="text-center max-w-3xl mx-auto space-y-5 pt-4 flex flex-col items-center">
           
-          {/* Animated Avatar Badge (Transitioning Logo & Profile Image) */}
-          <div
-            className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full p-1 bg-gradient-to-tr from-neutral-800 via-white/20 to-neutral-800 shadow-[0_0_25px_rgba(255,255,255,0.15)] cursor-pointer group"
-            onClick={() => setShowLogo(!showLogo)}
-            title="Click to toggle Logo / Profile Photo"
-          >
-            <div className="relative w-full h-full rounded-full overflow-hidden bg-neutral-950 flex items-center justify-center border border-white/10">
-              <AnimatePresence mode="wait">
-                {showLogo ? (
-                  <motion.div
-                    key="logo"
-                    initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, rotate: 10 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="relative w-10 h-10 sm:w-12 sm:h-12"
-                  >
-                    <Image
-                      src="/logo.svg"
-                      alt="Waruna Udara Logo"
-                      fill
-                      className="object-contain"
-                      priority
-                    />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="profile"
-                    initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="relative w-full h-full"
-                  >
-                    <Image
-                      src="/waruna-udara.jpg"
-                      alt="Waruna Udara"
-                      fill
-                      className="object-cover object-top"
-                      priority
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Subtle Pulsing Halo Ring */}
-            <div className="absolute -inset-1 rounded-full bg-white/10 blur-sm -z-10 group-hover:bg-white/20 transition-all duration-300" />
+          {/* Animated Figma Split 'W' Logo (Replaced Image Animation) */}
+          <div className="relative py-2 flex items-center justify-center">
+            <FigmaSplitLogo size={84} />
           </div>
 
           {/* Google Meet Badge */}
@@ -124,12 +69,12 @@ export default function ContactSection() {
           </p>
         </div>
 
-        {/* Height-cropped container (485px height strictly hides Cal.com bottom branding) */}
-        <div className="w-full max-w-4xl mx-auto h-[485px] max-h-[485px] overflow-hidden rounded-2xl border border-neutral-800/80 bg-[#101010] shadow-2xl relative z-10">
+        {/* Responsive Cal.com Container (Fully responsive on mobile, cropped on desktop) */}
+        <div className="w-full max-w-4xl mx-auto min-h-[580px] h-[640px] sm:h-[485px] sm:max-h-[485px] overflow-y-auto sm:overflow-hidden rounded-2xl border border-neutral-800/80 bg-[#101010] shadow-2xl relative z-10">
           <Cal
             namespace="30min"
             calLink="waruna-udara"
-            style={{ width: "100%", height: "560px", overflow: "hidden" }}
+            style={{ width: "100%", height: "100%", minHeight: "560px" }}
             config={{ layout: "month_view", theme: "dark" }}
           />
         </div>

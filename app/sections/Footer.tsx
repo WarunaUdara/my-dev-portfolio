@@ -28,108 +28,114 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Links Container - Right Side */}
-          <div className="flex gap-16 md:gap-24">
-            {/* Quick Links */}
+          {/* Links Container - Right Side (3 Columns) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 md:gap-16">
+            {/* Column 1: Navigation */}
             <div>
-              <h3 className="text-sm font-semibold mb-6 text-gray-400 uppercase tracking-wider">Navigation</h3>
-              <ul className="space-y-3">
+              <h3 className="text-xs font-mono font-semibold mb-5 text-neutral-400 uppercase tracking-widest">
+                Navigation
+              </h3>
+              <ul className="space-y-2.5 text-sm font-sans">
                 <li>
-                  <Link
-                    href="#hero"
-                    className="group inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors relative"
-                  >
-                    <span className="relative">
-                      Home
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-[var(--color-8)] to-[var(--color-9)] group-hover:w-full transition-all duration-300"></span>
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <Link href="/" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Home</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/about"
-                    className="group inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors relative"
-                  >
-                    <span className="relative">
-                      About
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-gray-200 to-white group-hover:w-full transition-all duration-300"></span>
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <Link href="/about" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>About</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
                 </li>
-                
                 <li>
-                  <Link
-                    href="/work"
-                    className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
-                  >
-                    <span className="relative">
-                      Work
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <Link href="/work" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Work &amp; Projects</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/blog" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Developer Blog</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="group inline-flex items-center gap-1.5 text-white font-medium hover:text-sky-300 transition-colors">
+                    <span>Book a Call</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-100 text-sky-400" />
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Connect Section */}
+            {/* Column 2: Explore */}
             <div>
-              <h3 className="text-sm font-semibold mb-6 text-gray-400 uppercase tracking-wider">Connect</h3>
-              <ul className="space-y-3">
+              <h3 className="text-xs font-mono font-semibold mb-5 text-neutral-400 uppercase tracking-widest">
+                Explore
+              </h3>
+              <ul className="space-y-2.5 text-sm font-sans">
                 <li>
-                  <a
-                    href="https://www.linkedin.com/in/waruna-udara/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
-                  >
-                    <span className="relative">
-                      LinkedIn
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <Link href="/uses" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Uses &amp; Setup</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/guestbook" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Guestbook</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/bucket-list" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Bucket List</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/links" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>All Links</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+                <li>
+                  <a href="/waruna-udara-sampath-resume.pdf" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Download CV</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Connect */}
+            <div className="col-span-2 sm:col-span-1">
+              <h3 className="text-xs font-mono font-semibold mb-5 text-neutral-400 uppercase tracking-widest">
+                Connect
+              </h3>
+              <ul className="space-y-2.5 text-sm font-sans">
+                <li>
+                  <a href="https://www.linkedin.com/in/waruna-udara/" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>LinkedIn</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="https://github.com/WarunaUdara"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
-                  >
-                    <span className="relative">
-                      GitHub
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <a href="https://github.com/WarunaUdara" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>GitHub</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="https://www.instagram.com/waruna_udarax/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
-                  >
-                    <span className="relative">
-                      Instagram
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <a href="https://medium.com/@warunaudarasampath" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Medium Blog</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="mailto:warunaudara03@gmail.com"
-                    className="group inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors relative"
-                  >
-                    <span className="relative">
-                      Email
-                      <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-purple-400 to-pink-600 group-hover:w-full transition-all duration-300"></span>
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <a href="mailto:warunaudarasampath@gmail.com" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
+                    <span>Email Me</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </a>
                 </li>
               </ul>
