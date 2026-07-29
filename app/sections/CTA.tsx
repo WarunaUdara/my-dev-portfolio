@@ -21,24 +21,24 @@ export default function CTA() {
           <div className="absolute -bottom-20 -right-20 w-[450px] h-[450px] rounded-full bg-blue-600/35 blur-[110px] pointer-events-none z-0 animate-pulse" style={{ animationDelay: "1.5s" }} />
           <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full bg-sky-400/25 blur-[90px] pointer-events-none z-0" />
 
-          {/* WebGL Grainient Shader with Vibrant Blue/Cyan & Visible Grains */}
-          <div className="absolute inset-0 z-0 opacity-80 pointer-events-none mix-blend-screen">
+          {/* WebGL Grainient Shader with Slow Motion Speed & Large Tactile Glass Grain Dots */}
+          <div className="absolute inset-0 z-0 opacity-85 pointer-events-none mix-blend-screen">
             <Grainient
               color1="#0284c7"
               color2="#0369a1"
               color3="#0f172a"
-              timeSpeed={0.3}
+              timeSpeed={0.06}
               colorBalance={0.1}
-              warpStrength={1.5}
-              warpFrequency={3.0}
-              warpSpeed={1.8}
-              warpAmplitude={35.0}
+              warpStrength={1.2}
+              warpFrequency={2.5}
+              warpSpeed={0.4}
+              warpAmplitude={30.0}
               blendAngle={20.0}
               blendSoftness={0.15}
               rotationAmount={350.0}
-              noiseScale={3.0}
-              grainAmount={0.25}
-              grainScale={1.8}
+              noiseScale={2.5}
+              grainAmount={0.35}
+              grainScale={0.3}
               grainAnimated={true}
               contrast={1.25}
               gamma={1.0}
