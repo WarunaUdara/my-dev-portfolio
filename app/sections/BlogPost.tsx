@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "@/components/ui/Image";
 import Link from "@/components/ui/Link";
 import { getBlogPostBySlug } from "@/lib/blogData";
-import { IconArrowLeft, IconCalendar, IconClock, IconTag } from "@tabler/icons-react";
+import { IconArrowLeft, IconCalendar, IconClock, IconTag, IconList } from "@tabler/icons-react";
 
 import CodeBlock from "@/components/ui/CodeBlock";
+import { LineSidebar } from "@/components/ReactBits/LineSidebar";
 
 // Dynamic MDX Component Loader Map
 import HttpQueryPost from "@/content/blog/http-query-method-rfc-10008.mdx";
@@ -23,18 +24,18 @@ const MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {
 
 // ADHD-Friendly & Reading Psychology Custom MDX Design System
 const mdxCustomComponents = {
-  h1: ({ children }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight mt-12 mb-6 pb-3 border-b border-neutral-800/80 leading-snug">
+  h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h1 {...props} className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight mt-12 mb-6 pb-3 border-b border-neutral-800/80 leading-snug scroll-mt-24">
       {children}
     </h1>
   ),
-  h2: ({ children }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight mt-10 mb-4 pt-4 border-t border-neutral-800/50 flex items-center gap-2">
+  h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h2 {...props} className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight mt-10 mb-4 pt-4 border-t border-neutral-800/50 flex items-center gap-2 scroll-mt-24">
       {children}
     </h2>
   ),
-  h3: ({ children }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h3 className="text-lg font-mono font-semibold text-sky-400 mt-8 mb-3 tracking-wide">
+  h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h3 {...props} className="text-lg font-mono font-semibold text-sky-400 mt-8 mb-3 tracking-wide scroll-mt-24">
       {children}
     </h3>
   ),
@@ -98,6 +99,59 @@ export const BlogPost = ({ slug }: { slug: string }) => {
   const meta = getBlogPostBySlug(slug);
   const MDXContent = MDX_COMPONENTS[slug];
 
+  const articleContentRef = useRef<HTMLDivElement>(null);
+  const [headings, setHeadings] = useState<{ id: string; text: string }[]>([]);
+  const [activeHeadingIndex, setActiveHeadingIndex] = useState<number>(0);
+
+  // Automatically extract article section headings & observe scroll position
+  useEffect(() => {
+    if (!articleContentRef.current) return;
+    const elements = Array.from(
+      articleContentRef.current.querySelectorAll("h1, h2, h3")
+    ) as HTMLElement[];
+
+    const itemsList: { id: string; text: string }[] = [];
+
+    elements.forEach((el, index) => {
+      const id = el.id || `section-topic-${index}`;
+      el.id = id;
+      const text = el.textContent?.replace(/^#+\s*/, "").trim() || `Section ${index + 1}`;
+      itemsList.push({ id, text });
+    });
+
+    setHeadings(itemsList);
+
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = elements.indexOf(entry.target as HTMLElement);
+            if (idx !== -1) {
+              setActiveHeadingIndex(idx);
+            }
+          }
+        });
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0.1 }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [slug]);
+
+  const handleSidebarItemClick = (index: number) => {
+    const targetId = headings[index]?.id;
+    if (targetId) {
+      const el = document.getElementById(targetId);
+      if (el) {
+        const topOffset = el.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top: topOffset, behavior: "smooth" });
+      }
+    }
+  };
+
   if (!meta || !MDXContent) {
     return (
       <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 text-center">
@@ -115,9 +169,9 @@ export const BlogPost = ({ slug }: { slug: string }) => {
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      <div className="container mx-auto max-w-3xl relative z-10 space-y-10">
+      <div className="container mx-auto max-w-7xl relative z-10">
         {/* Back Link */}
-        <div>
+        <div className="mb-8">
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-white px-3.5 py-1.5 rounded-full bg-neutral-950 border border-neutral-800 hover:border-neutral-600 transition-all shadow-md"
@@ -127,66 +181,99 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           </Link>
         </div>
 
-        {/* Post Header */}
-        <div className="space-y-6 border-b border-neutral-800 pb-10">
-          {/* Category Tag */}
-          <span className="px-3.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-mono font-semibold text-neutral-300 tracking-wider uppercase">
-            {meta.category}
-          </span>
+        {/* Main Grid Layout with Sticky LineSidebar TOC */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 items-start">
+          {/* Article Main Column */}
+          <div className="xl:col-span-8 space-y-10">
+            {/* Post Header */}
+            <div className="space-y-6 border-b border-neutral-800 pb-10">
+              {/* Category Tag */}
+              <span className="px-3.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-mono font-semibold text-neutral-300 tracking-wider uppercase">
+                {meta.category}
+              </span>
 
-          {/* Post Title */}
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white leading-tight tracking-tight">
-            {meta.title}
-          </h1>
+              {/* Post Title */}
+              <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white leading-tight tracking-tight">
+                {meta.title}
+              </h1>
 
-          {/* Description */}
-          <p className="text-neutral-400 font-sans text-base sm:text-lg leading-relaxed">
-            {meta.description}
-          </p>
+              {/* Description */}
+              <p className="text-neutral-400 font-sans text-base sm:text-lg leading-relaxed">
+                {meta.description}
+              </p>
 
-          {/* Author & Meta Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 text-xs font-mono text-neutral-400 border-t border-dashed border-neutral-800/80">
-            <div className="flex items-center gap-2 text-neutral-200">
-              <div className="w-7 h-7 rounded-full bg-neutral-800 overflow-hidden relative">
-                <Image src="/WarunaUdaraSampath.jpg" alt={meta.author} fill className="object-cover" />
+              {/* Author & Meta Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-4 text-xs font-mono text-neutral-400 border-t border-dashed border-neutral-800/80">
+                <div className="flex items-center gap-2 text-neutral-200">
+                  <div className="w-7 h-7 rounded-full bg-neutral-800 overflow-hidden relative">
+                    <Image src="/WarunaUdaraSampath.jpg" alt={meta.author} fill className="object-cover" />
+                  </div>
+                  <span className="font-semibold">{meta.author}</span>
+                </div>
+
+                <div className="flex items-center gap-6">
+                  <span className="flex items-center gap-1.5">
+                    <IconCalendar className="w-4 h-4 text-neutral-400" />
+                    {meta.date}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <IconClock className="w-4 h-4 text-neutral-400" />
+                    {meta.readTime}
+                  </span>
+                </div>
               </div>
-              <span className="font-semibold">{meta.author}</span>
             </div>
 
-            <div className="flex items-center gap-6">
-              <span className="flex items-center gap-1.5">
-                <IconCalendar className="w-4 h-4 text-neutral-400" />
-                {meta.date}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <IconClock className="w-4 h-4 text-neutral-400" />
-                {meta.readTime}
-              </span>
+            {/* Cover Image */}
+            {meta.coverImage && (
+              <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden bg-neutral-950 border border-neutral-800 shadow-2xl">
+                <Image src={meta.coverImage} alt={meta.title} fill className="object-cover object-top" priority />
+              </div>
+            )}
+
+            {/* Rendered MDX Content */}
+            <div ref={articleContentRef} className="space-y-6 text-neutral-300 font-sans">
+              <MDXContent components={mdxCustomComponents} />
+            </div>
+
+            {/* Footer Tags */}
+            <div className="flex flex-wrap items-center gap-2 pt-8 border-t border-neutral-800">
+              <span className="text-xs font-mono text-neutral-500 uppercase mr-2">Article Tags:</span>
+              {meta.tags.map((tag) => (
+                <span key={tag} className="px-3 py-1 bg-neutral-950 border border-neutral-800 rounded-lg text-xs font-mono text-neutral-300 flex items-center gap-1">
+                  <IconTag className="w-3 h-3 text-neutral-400" />
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Cover Image */}
-        {meta.coverImage && (
-          <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden bg-neutral-950 border border-neutral-800 shadow-2xl">
-            <Image src={meta.coverImage} alt={meta.title} fill className="object-cover object-top" priority />
-          </div>
-        )}
+          {/* Sticky Table of Contents Sidebar with React Bits LineSidebar */}
+          {headings.length > 0 && (
+            <aside className="hidden xl:block xl:col-span-4 sticky top-28 self-start space-y-4">
+              <div className="p-6 rounded-3xl bg-neutral-950/90 border border-neutral-800/90 backdrop-blur-xl shadow-2xl space-y-4">
+                <div className="flex items-center gap-2 text-xs font-mono text-neutral-400 uppercase tracking-widest border-b border-neutral-800/80 pb-3 font-semibold">
+                  <IconList className="w-4 h-4 text-sky-400" />
+                  <span>Article Topics</span>
+                </div>
 
-        {/* Rendered MDX Content with ADHD-Friendly Typography & Component System */}
-        <div className="space-y-6 text-neutral-300 font-sans">
-          <MDXContent components={mdxCustomComponents} />
-        </div>
-
-        {/* Footer Tags */}
-        <div className="flex flex-wrap items-center gap-2 pt-8 border-t border-neutral-800">
-          <span className="text-xs font-mono text-neutral-500 uppercase mr-2">Article Tags:</span>
-          {meta.tags.map((tag) => (
-            <span key={tag} className="px-3 py-1 bg-neutral-950 border border-neutral-800 rounded-lg text-xs font-mono text-neutral-300 flex items-center gap-1">
-              <IconTag className="w-3 h-3 text-neutral-400" />
-              {tag}
-            </span>
-          ))}
+                <LineSidebar
+                  items={headings.map((h) => h.text)}
+                  activeItemIndex={activeHeadingIndex}
+                  onItemClick={(idx) => handleSidebarItemClick(idx)}
+                  accentColor="#38bdf8"
+                  textColor="#a3a3a3"
+                  markerColor="#404040"
+                  showIndex={true}
+                  showMarker={true}
+                  maxShift={20}
+                  markerLength={32}
+                  itemGap={12}
+                  fontSize={0.85}
+                />
+              </div>
+            </aside>
+          )}
         </div>
       </div>
     </article>

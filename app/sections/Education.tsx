@@ -3,16 +3,20 @@
 import React from "react";
 import Image from "@/components/ui/Image";
 import AuroraText from "@/components/ui/aurora-text";
-import { IconSchool, IconAward } from "@tabler/icons-react";
+import { IconSchool, IconAward, IconExternalLink } from "@tabler/icons-react";
 
 export interface EducationItem {
   id: string;
   institution: string;
+  faculty?: {
+    name: string;
+    link: string;
+  };
   logo: string;
   degree: string;
   period: string;
   description?: string;
-  achievements?: string[];
+  achievements?: React.ReactNode[];
   gradient: string;
 }
 
@@ -20,6 +24,10 @@ export const EDUCATION_DATA: EducationItem[] = [
   {
     id: "EDU01",
     institution: "University of Sri Jayewardenepura",
+    faculty: {
+      name: "Faculty of Technology",
+      link: "https://tech.sjp.ac.lk/",
+    },
     logo: "/me/usj-logo.png",
     degree: "Bachelor of Information and Communication Technology (Hons), Network Technology",
     period: "May 2024 – Dec 2028",
@@ -41,8 +49,24 @@ export const EDUCATION_DATA: EducationItem[] = [
     degree: "Engineering Technology",
     period: "Feb 2008 – Mar 2022",
     achievements: [
-      "G.C.E. Advanced Level (Technology Stream) – Achieved AAA passes in Engineering Technology, Science for Technology, and Information & Communication Technology (ICT).",
-      "Secured District Rank 09 and Island Rank 121."
+      <>
+        G.C.E. Advanced Level (Technology Stream) – Achieved{" "}
+        <span className="font-mono font-bold text-white px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300">
+          AAA
+        </span>{" "}
+        passes in Engineering Technology, Science for Technology, and Information &amp; Communication Technology (ICT).
+      </>,
+      <>
+        Secured{" "}
+        <span className="font-mono font-bold text-white px-2 py-0.5 rounded bg-sky-500/20 border border-sky-500/40 text-sky-300">
+          District Rank 09
+        </span>{" "}
+        and{" "}
+        <span className="font-mono font-bold text-white px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300">
+          Island Rank 121
+        </span>
+        .
+      </>,
     ],
     gradient: "from-neutral-900/90 via-neutral-950 to-black",
   },
@@ -71,7 +95,7 @@ export const Education = () => {
           {EDUCATION_DATA.map((edu) => (
             <div
               key={edu.id}
-              className={`relative rounded-3xl bg-neutral-950/80 border border-neutral-800/90 hover:border-neutral-600 p-7 sm:p-9 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col sm:flex-row items-start gap-6 md:gap-8`}
+              className="relative rounded-3xl bg-neutral-950/80 border border-neutral-800/90 hover:border-neutral-600 p-7 sm:p-9 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col sm:flex-row items-start gap-6 md:gap-8"
             >
               {/* Institution Logo Badge */}
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-neutral-900/90 border border-neutral-800 p-2 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-lg group-hover:border-neutral-600 transition-colors">
@@ -87,9 +111,22 @@ export const Education = () => {
               {/* Institution & Period Content */}
               <div className="flex-1 space-y-4 w-full">
                 <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-neutral-400 border-b border-dashed border-neutral-800 pb-3">
-                  <span className="text-neutral-200 font-semibold text-base sm:text-lg font-serif">
-                    {edu.institution}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-neutral-200 font-semibold text-base sm:text-lg font-serif">
+                      {edu.institution}
+                    </span>
+                    {edu.faculty && (
+                      <a
+                        href={edu.faculty.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-950/80 border border-sky-500/40 text-sky-300 text-xs font-mono font-medium hover:bg-sky-900/80 transition-colors"
+                      >
+                        <span>{edu.faculty.name}</span>
+                        <IconExternalLink className="w-3 h-3 text-sky-400" />
+                      </a>
+                    )}
+                  </div>
                   <span className="px-3.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 font-mono">
                     {edu.period}
                   </span>
@@ -111,7 +148,7 @@ export const Education = () => {
                 {edu.achievements && edu.achievements.length > 0 && (
                   <div className="space-y-2.5 pt-2 border-t border-dashed border-neutral-800/80">
                     <span className="text-xs font-mono font-semibold text-neutral-300 tracking-wider uppercase flex items-center gap-2">
-                      <IconAward className="w-4 h-4 text-neutral-300" />
+                      <IconAward className="w-4 h-4 text-amber-400" />
                       Academic Achievements
                     </span>
                     <ul className="space-y-2 text-neutral-300 text-sm font-sans leading-relaxed">
