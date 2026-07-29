@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "@/components/ui/Link";
 import { Linkedin, Github, Instagram, ArrowUpRight } from "lucide-react";
-import Image from "@/components/ui/Image";
 import CTA from "./CTA";
+import FigmaSplitLogo from "@/components/ui/FigmaSplitLogo";
 
 const Footer = () => {
   return (
@@ -13,16 +13,10 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="flex flex-col md:flex-row justify-between gap-16 mb-16">
           {/* Brand Section - Left Side */}
-          <div className="max-w-sm">
-            <div className="relative h-10 w-12 mb-4">
-            <Image 
-                src="/logo.svg" 
-                alt="Logo" 
-                fill
-                className="object-contain object-left"
-                priority
-              />
-              </div>
+          <div className="max-w-sm space-y-4">
+            <div className="flex items-center justify-start">
+              <FigmaSplitLogo size={42} />
+            </div>
             <p className="text-gray-300 text-sm leading-relaxed">
               Thank you for visiting my portfolio. If you have any questions or would like to collaborate, feel free to reach out.
             </p>

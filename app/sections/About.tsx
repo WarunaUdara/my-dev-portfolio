@@ -123,13 +123,11 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                   fill
                   className="object-contain object-top transition-transform duration-500 group-hover:scale-105"
                   style={{
-                    WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%)",
-                    maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%)",
+                    WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 98%)",
+                    maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 98%)",
                   }}
                   priority
                 />
-                {/* Subtle Fading Shadow at very bottom edge */}
-                <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black to-transparent pointer-events-none" />
               </div>
             )}
           </div>

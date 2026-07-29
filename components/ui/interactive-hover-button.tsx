@@ -9,14 +9,14 @@ interface InteractiveHoverButtonProps
   children: React.ReactNode;
   className?: string;
   icon?: React.ReactNode;
-  variant?: "primary" | "aurora";
+  variant?: "primary" | "silver" | "aurora";
 }
 
 export function InteractiveHoverButton({
   children,
   className,
   icon,
-  variant = "aurora",
+  variant = "silver",
   ...props
 }: InteractiveHoverButtonProps) {
   return (
@@ -28,23 +28,23 @@ export function InteractiveHoverButton({
       )}
       {...props}
     >
-      {/* Background Expand Fill Layer */}
+      {/* Smooth Background Fill Layer */}
       <span
         className={cn(
           "absolute inset-0 w-full h-full rounded-full transition-transform duration-500 ease-out origin-left scale-x-0 group-hover:scale-x-100",
           variant === "aurora"
-            ? "bg-gradient-to-r from-[#a717de] via-[#ff0cbd] via-[#3c34f3] to-[#ff6926]"
-            : "bg-white"
+            ? "bg-gradient-to-r from-purple-600 via-sky-500 to-emerald-400"
+            : "bg-gradient-to-r from-white via-neutral-100 to-neutral-200"
         )}
       />
 
       {/* Button Text */}
-      <span className="relative z-10 font-medium tracking-wide transition-colors duration-500 group-hover:text-white">
+      <span className="relative z-10 font-medium tracking-wide transition-colors duration-500 group-hover:text-black">
         {children}
       </span>
 
       {/* Icon Circle Pill */}
-      <div className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-500 group-hover:bg-white group-hover:text-black group-hover:rotate-45 group-hover:scale-110">
+      <div className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-500 group-hover:bg-black group-hover:text-white group-hover:rotate-45 group-hover:scale-110">
         {icon || <IconArrowRight className="h-4 w-4 transition-transform duration-300" />}
       </div>
     </button>

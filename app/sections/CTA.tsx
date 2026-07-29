@@ -10,6 +10,8 @@ import { IconArrowUpRight, IconSparkles, IconVideo } from "@tabler/icons-react";
 import Image from "@/components/ui/Image";
 import BookCallModal from "@/components/ui/BookCallModal";
 
+import FigmaSplitLogo from "@/components/ui/FigmaSplitLogo";
+
 export default function CTA() {
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   return (
@@ -52,17 +54,9 @@ export default function CTA() {
           {/* Main Content inside Card (Clean & Transparent) */}
           <div className="relative z-20 flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
 
-            {/* Emblem Wings / Dev Badge Icon */}
-            <div className="relative group">
-              <div className="relative h-10 w-12">
-                <Image
-                  src="/logo.svg"
-                  alt="Logo"
-                  fill
-                  className="object-contain object-center"
-                  priority
-                />
-              </div>
+            {/* Emblem / Animated Figma Split 'W' Logo */}
+            <div className="relative py-1 flex items-center justify-center">
+              <FigmaSplitLogo size={52} />
             </div>
 
             {/* Headline Block */}
