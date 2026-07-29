@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState, useCallback, useEffect, CSSProperties } from 'react';
 
 type Falloff = 'linear' | 'smooth' | 'sharp';
@@ -48,18 +50,18 @@ export const LineSidebar = ({
   markerColor = '#525252',
   showIndex = true,
   showMarker = true,
-  markerPosition = 'right', // Swapped to right side as requested
+  markerPosition = 'right',
   proximityRadius = 100,
-  maxShift = 20,
+  maxShift = 24,
   falloff = 'smooth',
-  markerLength = 36,
-  markerGap = 12,
+  markerLength = 40,
+  markerGap = 8,
   tickScale = 0.5,
   scaleTick = true,
-  itemGap = 14,
-  fontSize = 0.85,
+  itemGap = 16,
+  fontSize = 0.9,
   smoothing = 100,
-  defaultActive = null,
+  defaultActive = 0,
   activeItemIndex = null,
   onItemClick,
   className = ''
@@ -70,7 +72,10 @@ export const LineSidebar = ({
   const currentRef = useRef<number[]>([]);
   const rafRef = useRef<number | null>(null);
   const lastRef = useRef(0);
-  const [activeIndex, setActiveIndex] = useState<number | null>(activeItemIndex ?? defaultActive);
+
+  const [activeIndex, setActiveIndex] = useState<number | null>(
+    activeItemIndex ?? defaultActive
+  );
   const activeRef = useRef<number | null>(activeIndex);
   const smoothingRef = useRef(smoothing);
 
@@ -83,6 +88,7 @@ export const LineSidebar = ({
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
 
+  // Single rAF loop that eases every item's --effect toward its target
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -193,7 +199,7 @@ export const LineSidebar = ({
         ref={listRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className={`m-0 flex list-none flex-col py-4 [gap:var(--item-gap)] ${isRight ? 'items-end text-right' : 'items-start text-left'}`}
+        className={`m-0 flex list-none flex-col py-2 [gap:var(--item-gap)] ${isRight ? 'items-end text-right' : 'items-start text-left'}`}
       >
         {items.map((label, index) => (
           <li
@@ -223,7 +229,7 @@ export const LineSidebar = ({
               }`}
             >
               {showIndex && (
-                <span className={`${isRight ? 'ml-[0.6rem] order-last' : 'mr-[0.6rem]'} font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]`}>
+                <span className={`${isRight ? 'ml-[0.5rem] order-last' : 'mr-[0.5rem]'} font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]`}>
                   {String(index + 1).padStart(2, '0')}
                 </span>
               )}
