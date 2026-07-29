@@ -7,6 +7,16 @@ import AuroraText from "@/components/ui/aurora-text";
 import { BLOG_POSTS, BlogPostMeta } from "@/lib/blogData";
 import { IconSearch, IconCalendar, IconClock, IconArrowUpRight, IconTag } from "@tabler/icons-react";
 
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+
+const searchPlaceholders = [
+  "Search articles by title, tech stack, or topic...",
+  "Search Kubernetes & Kyverno policy engines...",
+  "Search HTTP QUERY method (RFC 10008)...",
+  "Search React 19 & TanStack Router...",
+  "Search Turboship Buildathon project...",
+];
+
 export const BlogList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -45,15 +55,13 @@ export const BlogList = () => {
 
         {/* Search & Tag Filter Bar */}
         <div className="max-w-3xl mx-auto space-y-6">
-          {/* Search Input Box */}
-          <div className="relative">
-            <IconSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
-            <input
-              type="text"
-              placeholder="Search articles by title, tech stack, or topic..."
+          {/* Animated PlaceholdersAndVanishInput Search Input (Matching Guestbook Component) */}
+          <div className="w-full">
+            <PlaceholdersAndVanishInput
+              placeholders={searchPlaceholders}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-neutral-950/80 border border-neutral-800 focus:border-neutral-500 rounded-2xl py-3.5 pl-12 pr-4 text-sm text-white placeholder-neutral-500 focus:outline-none transition-all shadow-inner"
+              onSubmit={(e) => e.preventDefault()}
             />
           </div>
 
