@@ -3,7 +3,6 @@
 import { useRef, useState, useCallback, useEffect, CSSProperties } from 'react';
 
 type Falloff = 'linear' | 'smooth' | 'sharp';
-type MarkerPosition = 'left' | 'right';
 
 export interface LineSidebarProps {
   items?: string[];
@@ -12,7 +11,6 @@ export interface LineSidebarProps {
   markerColor?: string;
   showIndex?: boolean;
   showMarker?: boolean;
-  markerPosition?: MarkerPosition;
   proximityRadius?: number;
   maxShift?: number;
   falloff?: Falloff;
@@ -35,81 +33,62 @@ const FALLOFF_CURVES: Record<Falloff, (p: number) => number> = {
   sharp: p => p * p * p
 };
 
-const DEFAULT_ITEMS = [
-  'Overview',
-  'Components',
-  'Animations',
-  'Backgrounds',
-  'Showcase'
-];
-
 export const LineSidebar = ({
-  items = DEFAULT_ITEMS,
+  items = [],
   accentColor = '#38bdf8',
   textColor = '#a3a3a3',
   markerColor = '#525252',
   showIndex = true,
   showMarker = true,
-  markerPosition = 'right',
   proximityRadius = 100,
-  maxShift = 24,
+  maxShift = 30,
   falloff = 'smooth',
-  markerLength = 40,
-  markerGap = 8,
+  markerLength = 60,
+  markerGap = 0,
   tickScale = 0.5,
   scaleTick = true,
-  itemGap = 16,
-  fontSize = 0.9,
+  itemGap = 20,
+  fontSize = 1.0,
   smoothing = 100,
   defaultActive = 0,
   activeItemIndex = null,
   onItemClick,
   className = ''
 }: LineSidebarProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const targetsRef = useRef<number[]>([]);
   const currentRef = useRef<number[]>([]);
   const rafRef = useRef<number | null>(null);
   const lastRef = useRef(0);
-
+  const activeRef = useRef<number | null>(defaultActive);
+  const smoothingRef = useRef(smoothing);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     activeItemIndex ?? defaultActive
   );
-  const activeRef = useRef<number | null>(activeIndex);
-  const smoothingRef = useRef(smoothing);
 
+  // Sync external activeItemIndex prop → internal state
   useEffect(() => {
     if (activeItemIndex !== null && activeItemIndex !== undefined) {
       setActiveIndex(activeItemIndex);
     }
   }, [activeItemIndex]);
 
-  activeRef.current = activeIndex;
-  smoothingRef.current = smoothing;
-
-  // Auto-scroll the active item into view within the scrollable topic list
+  // Auto-scroll the active <li> into view — works because the parent container
+  // (not this component) owns the overflow scroll container
   useEffect(() => {
     if (activeIndex !== null && itemRefs.current[activeIndex]) {
-      const activeEl = itemRefs.current[activeIndex];
-      const containerEl = containerRef.current;
-      if (activeEl && containerEl) {
-        const elTop = activeEl.offsetTop;
-        const elBottom = elTop + activeEl.offsetHeight;
-        const containerTop = containerEl.scrollTop;
-        const containerBottom = containerTop + containerEl.clientHeight;
-
-        if (elTop < containerTop) {
-          containerEl.scrollTo({ top: elTop - 12, behavior: 'smooth' });
-        } else if (elBottom > containerBottom) {
-          containerEl.scrollTo({ top: elBottom - containerEl.clientHeight + 12, behavior: 'smooth' });
-        }
-      }
+      itemRefs.current[activeIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
     }
   }, [activeIndex]);
 
-  // Single rAF loop that eases every item's --effect toward its target
+  activeRef.current = activeIndex;
+  smoothingRef.current = smoothing;
+
+  // Single rAF loop — frame-rate independent exponential smoothing
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -184,87 +163,67 @@ export const LineSidebar = ({
     []
   );
 
-  const isRight = markerPosition === 'right';
-
+  // Tick separators between items (left-positioned, unchanged from original)
   const tickClass = showMarker
-    ? `after:absolute ${
-        isRight
-          ? 'after:right-[calc(-1*var(--marker-length)-var(--marker-gap))] after:origin-right'
-          : 'after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:origin-left'
-      } after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-50 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
+    ? `after:absolute after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-50 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
         scaleTick
-          ? 'after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]'
+          ? 'after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]'
           : 'after:-translate-y-1/2'
       }`
     : '';
 
   return (
-    <div
-      ref={containerRef}
-      className="max-h-[55vh] overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-transparent pr-1"
+    <nav
+      className={`relative flex justify-start${showMarker ? ' [padding-left:calc(var(--marker-length)+var(--marker-gap))]' : ''}${className ? ` ${className}` : ''}`}
+      style={
+        {
+          '--accent-color': accentColor,
+          '--text-color': textColor,
+          '--marker-color': markerColor,
+          '--marker-length': `${markerLength}px`,
+          '--marker-gap': `${markerGap}px`,
+          '--tick-scale': tickScale,
+          '--max-shift': `${maxShift}px`,
+          '--item-gap': `${itemGap}px`,
+          '--font-size': `${fontSize}rem`,
+          '--smoothing': `${smoothing}ms`
+        } as CSSProperties
+      }
     >
-      <nav
-        className={`relative flex ${isRight ? 'justify-end [padding-right:calc(var(--marker-length)+var(--marker-gap))]' : 'justify-start [padding-left:calc(var(--marker-length)+var(--marker-gap))]'}${className ? ` ${className}` : ''}`}
-        style={
-          {
-            '--accent-color': accentColor,
-            '--text-color': textColor,
-            '--marker-color': markerColor,
-            '--marker-length': `${markerLength}px`,
-            '--marker-gap': `${markerGap}px`,
-            '--tick-scale': tickScale,
-            '--max-shift': `${maxShift}px`,
-            '--item-gap': `${itemGap}px`,
-            '--font-size': `${fontSize}rem`,
-            '--smoothing': `${smoothing}ms`
-          } as CSSProperties
-        }
+      <ul
+        ref={listRef}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+        className="m-0 flex list-none flex-col py-4 [gap:var(--item-gap)]"
       >
-        <ul
-          ref={listRef}
-          onPointerMove={handlePointerMove}
-          onPointerLeave={handlePointerLeave}
-          className={`m-0 flex list-none flex-col py-2 [gap:var(--item-gap)] ${isRight ? 'items-end text-right' : 'items-start text-left'}`}
-        >
-          {items.map((label, index) => (
-            <li
-              key={`${label}-${index}`}
-              ref={el => {
-                itemRefs.current[index] = el;
-              }}
-              aria-current={activeIndex === index ? 'true' : undefined}
-              onClick={() => handleClick(index, label)}
-              className={`relative cursor-pointer select-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
-            >
-              {showMarker && (
-                <span
-                  aria-hidden="true"
-                  className={`absolute ${
-                    isRight
-                      ? 'right-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-right'
-                      : 'left-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-left'
-                  } top-1/2 h-px w-[length:var(--marker-length)] [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]`}
-                />
-              )}
+        {items.map((label, index) => (
+          <li
+            key={`${label}-${index}`}
+            ref={el => {
+              itemRefs.current[index] = el;
+            }}
+            aria-current={activeIndex === index ? 'true' : undefined}
+            onClick={() => handleClick(index, label)}
+            className={`relative cursor-pointer select-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
+          >
+            {showMarker && (
               <span
-                className={`relative inline-flex items-baseline leading-[1.2] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] ${
-                  isRight
-                    ? '[transform:translateX(calc(-1*var(--effect,0)*var(--max-shift)))]'
-                    : '[transform:translateX(calc(var(--effect,0)*var(--max-shift)))]'
-                }`}
-              >
-                {showIndex && (
-                  <span className={`${isRight ? 'ml-[0.5rem] order-last' : 'mr-[0.5rem]'} font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]`}>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                )}
-                <span className="line-clamp-1 font-sans font-medium">{label}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </div>
+                aria-hidden="true"
+                className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
+              />
+            )}
+            <span className="relative inline-flex items-baseline leading-[1.2] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))] will-change-transform">
+              {showIndex && (
+                <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+              )}
+              <span className="line-clamp-1 font-sans">{label}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 

@@ -95,12 +95,14 @@ const mdxCustomComponents = {
   hr: () => <hr className="my-10 border-neutral-800/80" />,
 };
 
-// Format long headings into concise short topics (max 4 words) for TOC
+// Format heading text into a short, curiosity-preserving TOC label
+// Keeps jargon & key terms but trims to ~5 words max
 function formatShortTopic(fullText: string): string {
-  const clean = fullText.replace(/^#+\s*/, "").replace(/[^\w\s-]/g, "").trim();
+  const clean = fullText.replace(/^#+\s*/, "").trim();
   const words = clean.split(/\s+/);
-  if (words.length <= 4) return clean;
-  return words.slice(0, 4).join(" ");
+  if (words.length <= 5) return clean;
+  // Keep first 5 words — preserves technical jargon and curiosity
+  return words.slice(0, 5).join(" ");
 }
 
 export const BlogPost = ({ slug }: { slug: string }) => {
@@ -194,32 +196,44 @@ export const BlogPost = ({ slug }: { slug: string }) => {
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      {/* Floating Right Sticky LineSidebar (TOC) - Strictly Visible inside Article Bounds */}
+      {/* Floating Right Sticky LineSidebar TOC — visible only while reading article body */}
       {headings.length > 0 && showSidebar && (
-        <aside className="hidden xl:block fixed top-32 right-6 lg:right-10 z-40 max-w-[280px] pointer-events-auto transition-opacity duration-300">
-          <div className="p-5 rounded-3xl bg-neutral-950/90 border border-neutral-800/90 backdrop-blur-xl shadow-2xl space-y-3 pointer-events-auto">
-            <div className="flex items-center justify-between border-b border-neutral-800/80 pb-2.5">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold">
+        <aside className="hidden xl:block fixed top-28 right-0 z-40 w-[240px] pointer-events-auto">
+          {/* Card with padding-left space reserved for the marker lines */}
+          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/80 backdrop-blur-xl shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-neutral-800/60">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 font-semibold">
                 TOPICS
               </span>
-              <IconList className="w-4 h-4 text-sky-400" />
+              <IconList className="w-3.5 h-3.5 text-sky-500" />
             </div>
 
-            <LineSidebar
-              items={headings.map((h) => h.text)}
-              activeItemIndex={activeHeadingIndex}
-              onItemClick={(idx) => handleSidebarItemClick(idx)}
-              markerPosition="right"
-              accentColor="#38bdf8"
-              textColor="#a3a3a3"
-              markerColor="#525252"
-              showIndex={true}
-              showMarker={true}
-              maxShift={18}
-              markerLength={32}
-              itemGap={10}
-              fontSize={0.82}
-            />
+            {/* Scroll container — owns overflow. padding-left gives space for marker lines. */}
+            <div
+              className="overflow-y-auto overflow-x-visible max-h-[58vh] pl-16 pr-4"
+              style={{ scrollbarWidth: 'none' }}
+            >
+              <LineSidebar
+                items={headings.map((h) => h.text)}
+                activeItemIndex={activeHeadingIndex}
+                onItemClick={(idx) => handleSidebarItemClick(idx)}
+                accentColor="#38bdf8"
+                textColor="#6b7280"
+                markerColor="#404040"
+                showIndex={false}
+                showMarker={true}
+                proximityRadius={80}
+                maxShift={14}
+                markerLength={40}
+                markerGap={0}
+                tickScale={0.5}
+                scaleTick={true}
+                itemGap={14}
+                fontSize={0.8}
+                smoothing={80}
+              />
+            </div>
           </div>
         </aside>
       )}
