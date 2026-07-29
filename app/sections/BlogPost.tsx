@@ -103,7 +103,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
   const [headings, setHeadings] = useState<{ id: string; text: string }[]>([]);
   const [activeHeadingIndex, setActiveHeadingIndex] = useState<number>(0);
 
-  // Automatically extract article section headings & observe scroll position
+  // Automatically extract article section headings & observe scroll position reliably
   useEffect(() => {
     if (!articleContentRef.current) return;
     const elements = Array.from(
@@ -123,22 +123,27 @@ export const BlogPost = ({ slug }: { slug: string }) => {
 
     if (elements.length === 0) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = elements.indexOf(entry.target as HTMLElement);
-            if (idx !== -1) {
-              setActiveHeadingIndex(idx);
-            }
-          }
-        });
-      },
-      { rootMargin: "-80px 0px -60% 0px", threshold: 0.1 }
-    );
+    // Window scroll listener for frame-accurate TOC tracking
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 160; // 160px header offset
+      let currentActiveIndex = 0;
 
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+      for (let i = 0; i < elements.length; i++) {
+        const el = elements[i];
+        if (el.offsetTop <= scrollPosition) {
+          currentActiveIndex = i;
+        } else {
+          break;
+        }
+      }
+
+      setActiveHeadingIndex(currentActiveIndex);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Trigger initial position check
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [slug]);
 
   const handleSidebarItemClick = (index: number) => {
@@ -146,7 +151,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
     if (targetId) {
       const el = document.getElementById(targetId);
       if (el) {
-        const topOffset = el.getBoundingClientRect().top + window.scrollY - 100;
+        const topOffset = el.getBoundingClientRect().top + window.scrollY - 110;
         window.scrollTo({ top: topOffset, behavior: "smooth" });
       }
     }
@@ -261,6 +266,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
                   items={headings.map((h) => h.text)}
                   activeItemIndex={activeHeadingIndex}
                   onItemClick={(idx) => handleSidebarItemClick(idx)}
+                  markerPosition="right"
                   accentColor="#38bdf8"
                   textColor="#a3a3a3"
                   markerColor="#404040"

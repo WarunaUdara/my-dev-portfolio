@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback, useEffect, CSSProperties } from 'react';
 
 type Falloff = 'linear' | 'smooth' | 'sharp';
+type MarkerPosition = 'left' | 'right';
 
 export interface LineSidebarProps {
   items?: string[];
@@ -9,6 +10,7 @@ export interface LineSidebarProps {
   markerColor?: string;
   showIndex?: boolean;
   showMarker?: boolean;
+  markerPosition?: MarkerPosition;
   proximityRadius?: number;
   maxShift?: number;
   falloff?: Falloff;
@@ -46,15 +48,16 @@ export const LineSidebar = ({
   markerColor = '#525252',
   showIndex = true,
   showMarker = true,
+  markerPosition = 'right', // Swapped to right side as requested
   proximityRadius = 100,
-  maxShift = 24,
+  maxShift = 20,
   falloff = 'smooth',
-  markerLength = 40,
-  markerGap = 8,
+  markerLength = 36,
+  markerGap = 12,
   tickScale = 0.5,
   scaleTick = true,
-  itemGap = 16,
-  fontSize = 0.9,
+  itemGap = 14,
+  fontSize = 0.85,
   smoothing = 100,
   defaultActive = null,
   activeItemIndex = null,
@@ -154,17 +157,23 @@ export const LineSidebar = ({
     []
   );
 
+  const isRight = markerPosition === 'right';
+
   const tickClass = showMarker
-    ? `after:absolute after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-50 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
+    ? `after:absolute ${
+        isRight
+          ? 'after:right-[calc(-1*var(--marker-length)-var(--marker-gap))] after:origin-right'
+          : 'after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:origin-left'
+      } after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-50 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
         scaleTick
-          ? "after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]"
+          ? 'after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]'
           : 'after:-translate-y-1/2'
       }`
     : '';
 
   return (
     <nav
-      className={`relative flex justify-start${showMarker ? ' [padding-left:calc(var(--marker-length)+var(--marker-gap))]' : ''}${className ? ` ${className}` : ''}`}
+      className={`relative flex ${isRight ? 'justify-end [padding-right:calc(var(--marker-length)+var(--marker-gap))]' : 'justify-start [padding-left:calc(var(--marker-length)+var(--marker-gap))]'}${className ? ` ${className}` : ''}`}
       style={
         {
           '--accent-color': accentColor,
@@ -184,7 +193,7 @@ export const LineSidebar = ({
         ref={listRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className="m-0 flex list-none flex-col py-4 [gap:var(--item-gap)]"
+        className={`m-0 flex list-none flex-col py-4 [gap:var(--item-gap)] ${isRight ? 'items-end text-right' : 'items-start text-left'}`}
       >
         {items.map((label, index) => (
           <li
@@ -194,21 +203,31 @@ export const LineSidebar = ({
             }}
             aria-current={activeIndex === index ? 'true' : undefined}
             onClick={() => handleClick(index, label)}
-            className={`relative cursor-pointer before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
+            className={`relative cursor-pointer select-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
           >
             {showMarker && (
               <span
                 aria-hidden="true"
-                className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
+                className={`absolute ${
+                  isRight
+                    ? 'right-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-right'
+                    : 'left-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-left'
+                } top-1/2 h-px w-[length:var(--marker-length)] [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]`}
               />
             )}
-            <span className="relative inline-flex items-baseline leading-[1.2] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))]">
+            <span
+              className={`relative inline-flex items-baseline leading-[1.2] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] ${
+                isRight
+                  ? '[transform:translateX(calc(-1*var(--effect,0)*var(--max-shift)))]'
+                  : '[transform:translateX(calc(var(--effect,0)*var(--max-shift)))]'
+              }`}
+            >
               {showIndex && (
-                <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
+                <span className={`${isRight ? 'ml-[0.6rem] order-last' : 'mr-[0.6rem]'} font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]`}>
                   {String(index + 1).padStart(2, '0')}
                 </span>
               )}
-              <span className="line-clamp-1">{label}</span>
+              <span className="line-clamp-1 font-sans font-medium">{label}</span>
             </span>
           </li>
         ))}
