@@ -313,7 +313,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
             </div>
 
             {/* LineSidebar List Area */}
-            <div className="pl-14 pr-4 py-2 rounded-b-2xl overflow-hidden">
+            <div className="px-5 py-2 rounded-b-2xl overflow-hidden">
               {isExpanded ? (
                 <LineSidebar
                   items={headings.map((h) => h.text)}
@@ -322,6 +322,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
                   accentColor="#38bdf8"
                   textColor="#a3a3a3"
                   markerColor="#525252"
+                  markerPosition="right"
                   showIndex={true}
                   showMarker={true}
                   proximityRadius={100}

@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback, useEffect, CSSProperties } from "react";
 
 type Falloff = "linear" | "smooth" | "sharp";
+type MarkerPosition = "left" | "right";
 
 export interface LineSidebarProps {
   items?: string[];
@@ -11,6 +12,7 @@ export interface LineSidebarProps {
   markerColor?: string;
   showIndex?: boolean;
   showMarker?: boolean;
+  markerPosition?: MarkerPosition;
   proximityRadius?: number;
   maxShift?: number;
   falloff?: Falloff;
@@ -26,13 +28,6 @@ export interface LineSidebarProps {
   activeItemIndex?: number | null;
   onItemClick?: (index: number, label: string) => void;
   className?: string;
-  /**
-   * LineSidebar owns its own scroll container now — do NOT also wrap it in
-   * an `overflow-y-auto` div in the parent. Having two scroll owners is
-   * what caused the "sidebar doesn't track" bug (native scrollIntoView
-   * fighting the page-level smooth scroll). Pass `null` to disable
-   * internal scrolling entirely (e.g. if the list is always short).
-   */
   maxHeight?: string | null;
 }
 
@@ -49,6 +44,7 @@ export const LineSidebar = ({
   markerColor = "#525252",
   showIndex = true,
   showMarker = true,
+  markerPosition = "right",
   proximityRadius = 100,
   maxShift = 24,
   falloff = "smooth",
@@ -73,34 +69,23 @@ export const LineSidebar = ({
   const lastRef = useRef(0);
   const activeRef = useRef<number | null>(defaultActive);
   const smoothingRef = useRef(smoothing);
-  // True for one render right after a click, so the auto-scroll effect
-  // below skips re-scrolling something the user just scrolled to on purpose.
   const skipAutoScrollRef = useRef(false);
 
   const [activeIndex, setActiveIndex] = useState<number | null>(
     activeItemIndex ?? defaultActive
   );
 
-  // Controlled index sync (0 is a valid index, so check for null/undefined
-  // explicitly rather than falsy).
   useEffect(() => {
     if (activeItemIndex !== null && activeItemIndex !== undefined) {
       setActiveIndex(activeItemIndex);
     }
   }, [activeItemIndex]);
 
-  // Reset animation buffers whenever the item count changes so stale
-  // per-index state (from a previous page's headings, say) can't leak in.
   useEffect(() => {
     targetsRef.current = items.map((_, i) => targetsRef.current[i] ?? 0);
     currentRef.current = items.map((_, i) => currentRef.current[i] ?? 0);
   }, [items.length]);
 
-  // Keep the active item visible — scoped ONLY to this list's own scroll
-  // box via manual scrollTop math. Deliberately not using
-  // element.scrollIntoView(), which walks every scrollable ancestor
-  // (including the page itself) and was fighting the page-level smooth
-  // scroll triggered by clicking a TOC item.
   useEffect(() => {
     if (activeIndex === null) return;
     if (skipAutoScrollRef.current) {
@@ -161,7 +146,7 @@ export const LineSidebar = ({
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLUListElement>) => {
-      if (e.pointerType === "touch") return; // proximity hover is a mouse/trackpad affordance
+      if (e.pointerType === "touch") return;
       const ease = FALLOFF_CURVES[falloff] ?? FALLOFF_CURVES.linear;
       const itemEls = itemRefs.current;
       for (let i = 0; i < itemEls.length; i++) {
@@ -214,10 +199,16 @@ export const LineSidebar = ({
 
   if (items.length === 0) return null;
 
+  const isRight = markerPosition === "right";
+
   const tickClass = showMarker
-    ? `after:absolute after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-40 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
+    ? `after:absolute ${
+        isRight
+          ? "after:right-[calc(-1*var(--marker-length)-var(--marker-gap))] after:origin-right"
+          : "after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:origin-left"
+      } after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-40 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
         scaleTick
-          ? "after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]"
+          ? `after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]`
           : "after:-translate-y-1/2"
       }`
     : "";
@@ -225,8 +216,10 @@ export const LineSidebar = ({
   return (
     <nav
       aria-label="Table of contents"
-      className={`relative flex justify-start${
-        showMarker ? " [padding-left:calc(var(--marker-length)+var(--marker-gap))]" : ""
+      className={`relative flex ${
+        isRight
+          ? "justify-end [padding-right:calc(var(--marker-length)+var(--marker-gap))]"
+          : "justify-start [padding-left:calc(var(--marker-length)+var(--marker-gap))]"
       }${className ? ` ${className}` : ""}`}
       style={
         {
@@ -247,7 +240,9 @@ export const LineSidebar = ({
         ref={listRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className="m-0 flex list-none flex-col py-3 [gap:var(--item-gap)] overflow-y-auto overflow-x-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className={`m-0 flex list-none flex-col py-3 [gap:var(--item-gap)] overflow-y-auto overflow-x-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+          isRight ? "text-right" : "text-left"
+        }`}
         style={maxHeight ? { maxHeight } : undefined}
       >
         {items.map((label, index) => (
@@ -267,20 +262,31 @@ export const LineSidebar = ({
             {showMarker && (
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
+                className={`pointer-events-none absolute top-1/2 h-px w-[length:var(--marker-length)] ${
+                  isRight
+                    ? "right-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-right"
+                    : "left-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-left"
+                } [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]`}
               />
             )}
-            <span className="relative inline-flex items-baseline leading-[1.3] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))] will-change-transform font-sans">
-              {showIndex && (
+            <span
+              className={`relative inline-flex items-baseline leading-[1.3] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] ${
+                isRight
+                  ? "[transform:translateX(calc(var(--effect,0)*-1*var(--max-shift)))]"
+                  : "[transform:translateX(calc(var(--effect,0)*var(--max-shift)))]"
+              } will-change-transform font-sans`}
+            >
+              {!isRight && showIndex && (
                 <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
               )}
-              {/* No native `title` tooltip — it renders unpredictably
-                  (that stray floating box in the top-left of your
-                  screenshot was this). If you need the full label on
-                  truncation, use a proper Tooltip component instead. */}
               <span className="truncate max-w-[320px] block font-medium">{label}</span>
+              {isRight && showIndex && (
+                <span className="ml-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              )}
             </span>
           </li>
         ))}
