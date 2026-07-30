@@ -281,7 +281,7 @@ export const LineSidebar = ({
                   {String(index + 1).padStart(2, "0")}
                 </span>
               )}
-              <span className="truncate max-w-[320px] block font-medium">{label}</span>
+              <span className="truncate max-w-[420px] block font-medium">{label}</span>
               {isRight && showIndex && (
                 <span className="ml-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
                   {String(index + 1).padStart(2, "0")}

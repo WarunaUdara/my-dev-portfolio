@@ -280,7 +280,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           onMouseEnter={() => setIsExpanded(true)}
           onMouseLeave={() => setIsExpanded(false)}
           className={`hidden xl:block fixed right-4 lg:right-6 z-[60] pointer-events-auto transition-all duration-300 ease-out isolate ${
-            isExpanded ? "w-[420px]" : "w-[68px]"
+            isExpanded ? "w-[500px]" : "w-[68px]"
           }`}
           style={{ top: NAV_HEIGHT_PX + 24 }}
         >
