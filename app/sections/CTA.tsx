@@ -24,29 +24,29 @@ export default function CTA() {
           {/* WebGL Grainient Shader with Slow Motion Speed & Large Tactile Glass Grain Dots */}
           <div className="absolute inset-0 z-0 opacity-85 pointer-events-none mix-blend-screen">
             <Grainient
-              color1="#0284c7"
-              color2="#0369a1"
-              color3="#0f172a"
-              timeSpeed={0.06}
-              colorBalance={0.1}
-              warpStrength={1.2}
-              warpFrequency={2.5}
-              warpSpeed={0.4}
-              warpAmplitude={30.0}
-              blendAngle={20.0}
-              blendSoftness={0.15}
-              rotationAmount={350.0}
-              noiseScale={2.5}
-              grainAmount={0.35}
-              grainScale={0.3}
-              grainAnimated={true}
-              contrast={1.25}
-              gamma={1.0}
-              saturation={0.8}
-              centerX={0.0}
-              centerY={0.0}
-              zoom={0.9}
-            />
+    color1="#06B6D4"
+    color2="#000000"
+    color3="#06B6D4"
+    timeSpeed={1.3}
+    colorBalance={-0.08}
+    warpStrength={0}
+    warpFrequency={1.5}
+    warpSpeed={5}
+    warpAmplitude={5}
+    blendAngle={19}
+    blendSoftness={0}
+    rotationAmount={240}
+    noiseScale={0.85}
+    grainAmount={0.37}
+    grainScale={6.3}
+    grainAnimated={false}
+    contrast={0.8}
+    gamma={0.4}
+    saturation={1}
+    centerX={-0.01}
+    centerY={-0.09}
+    zoom={0.65}
+  />
           </div>
 
           {/* Contrast Vignette Overlay */}

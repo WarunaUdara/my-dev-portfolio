@@ -264,7 +264,7 @@ export default function Hero() {
                   </InteractiveHoverButton>
                 </a>
 
-                <button
+                {/* <button
                   className={cn(
                     "group relative inline-flex items-center gap-3 px-6 py-3.5 rounded-full border backdrop-blur-xl transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:scale-105 active:scale-95 text-xs sm:text-sm font-sans font-medium",
                     copied
@@ -289,7 +289,7 @@ export default function Hero() {
                     )}
                   </div>
                   <span className="font-mono tracking-tight">{copied ? "Copied to Clipboard!" : "warunaudarasam2003@gmail.com"}</span>
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

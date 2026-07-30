@@ -8,25 +8,25 @@ import {
   IconPencil,
   IconSparkles,
   IconArrowRight,
-  IconMessage,
+  IconListCheck,
   IconTerminal,
 } from "@tabler/icons-react";
 
-// Complete Tools & Apps List from Uses Section (Craft Tools, CLI Tools & Daily Apps)
+// Complete Tools & Apps List from Uses Section
 const USES_TOOLS = [
   { name: "Zed", icon: "/zed.png" },
   { name: "VS Code", icon: "/icons8-vs-code-96.png" },
   { name: "IntelliJ IDEA", icon: "/icons8-intellij-idea-96.png" },
+  { name: "Ghostty", icon: "/ghostty copy.webp" },
+  { name: "Opencode", icon: "/opencode-logo-dark.png" },
   { name: "Postman", icon: "/icons8-postman-inc-96.png" },
   { name: "DBeaver", icon: "/icons8-dbeaver.png" },
   { name: "Figma", icon: "/icons8-figma-96.png" },
   { name: "Framer", icon: "/framer-logo.png" },
-  { name: "Ghostty", icon: "/ghostty copy.webp" },
   { name: "GitHub CLI", icon: "/icons8-github-50.png" },
   { name: "Homebrew", icon: "/Homebrew.png" },
   { name: "Git", icon: "/icons8-git-144.png" },
   { name: "Gemini CLI", icon: "/gemini-cli-icon.png" },
-  { name: "Opencode", icon: "/opencode-logo-dark.png" },
   { name: "Codex", icon: "/codex-color.webp" },
   { name: "Notion", icon: "/notion-logo-icon.png" },
   { name: "Notion Calendar", icon: "/notion-calendar.png" },
@@ -70,7 +70,7 @@ export const Explore = () => {
         {/* Cards Grid — Standardized Portfolio Card Background & Styling */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           
-          {/* Card 1: SETUP & STACK (Matching standard card borders with full Uses tool icons marquee) */}
+          {/* Card 1: SETUP & STACK (With Full Uses Tool Icons Marquee & No Text Overflow) */}
           <div className="group relative">
             <Link href="/uses" className="block">
               <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
@@ -92,7 +92,7 @@ export const Explore = () => {
                   </div>
                 </div>
 
-                {/* Continuous Uses Tool Icons Marquee */}
+                {/* Continuous Uses Tool Icons Marquee (Fixed Text Overflow with shrink-0 min-w-max) */}
                 <div className="my-4 overflow-hidden relative">
                   <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/90 to-transparent z-10 pointer-events-none" />
                   <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/90 to-transparent z-10 pointer-events-none" />
@@ -101,10 +101,10 @@ export const Explore = () => {
                     {[...USES_TOOLS, ...USES_TOOLS].map((tool, idx) => (
                       <div
                         key={`${tool.name}-${idx}`}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-mono"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-mono shrink-0 whitespace-nowrap min-w-max"
                       >
-                        <Image src={tool.icon} alt={tool.name} width={16} height={16} className="object-contain w-4 h-4" />
-                        <span>{tool.name}</span>
+                        <Image src={tool.icon} alt={tool.name} width={16} height={16} className="object-contain w-4 h-4 shrink-0" />
+                        <span className="shrink-0">{tool.name}</span>
                       </div>
                     ))}
                   </div>
@@ -123,38 +123,32 @@ export const Explore = () => {
             </Link>
           </div>
 
-          {/* Card 2: COMMUNITY WALL (Floating Notes) */}
+          {/* Card 2: BUCKET LIST (Life Goals & Achievements) */}
           <div className="group relative">
-            <Link href="/guestbook" className="block">
+            <Link href="/bucket-list" className="block">
               <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
                 {/* Hover Arrow Button */}
                 <div className="absolute bottom-7 right-7 w-9 h-9 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
                   <IconArrowRight className="w-4 h-4 text-white" />
                 </div>
 
-                {/* Floating Note Cards Display (Monochrome Portfolio Theme) */}
-                <div className="relative h-48 mt-3 flex items-center justify-center">
-                  <div className="absolute left-6 top-2 w-36 h-38 bg-neutral-900/90 rounded-2xl p-4 shadow-2xl border border-neutral-800/90 -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-105 transition-all duration-300 overflow-hidden">
-                    <div className="space-y-2">
-                      <div className="h-2 bg-neutral-700 rounded-full w-3/4" />
-                      <div className="h-2 bg-neutral-800 rounded-full w-full" />
-                      <div className="h-2 bg-neutral-800 rounded-full w-5/6" />
+                {/* Bucket List Visual Preview */}
+                <div className="relative h-48 mt-3 flex flex-col justify-center items-center gap-3">
+                  <div className="w-full max-w-[240px] bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 shadow-xl flex items-center justify-between group-hover:scale-105 transition-transform duration-300">
+                    <div className="flex items-center gap-2.5">
+                      <IconListCheck className="w-4 h-4 text-neutral-400" />
+                      <span className="text-xs font-mono text-neutral-300">12 Goals Completed</span>
                     </div>
-                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
-                      <IconMessage className="w-4 h-4 text-neutral-400" />
-                      <span className="text-[10px] font-mono text-neutral-400">Note</span>
-                    </div>
+                    <span className="text-[10px] font-mono text-neutral-400 bg-neutral-800 px-2 py-0.5 rounded-full">30 Total</span>
                   </div>
 
-                  <div className="absolute right-6 top-6 w-36 h-38 bg-neutral-900/90 rounded-2xl p-4 shadow-2xl border border-neutral-700/90 rotate-12 group-hover:rotate-[6deg] group-hover:scale-105 transition-all duration-300 overflow-hidden">
-                    <div className="space-y-2">
-                      <div className="h-2 bg-neutral-600 rounded-full w-2/3" />
-                      <div className="h-2 bg-neutral-800 rounded-full w-full" />
-                      <div className="h-2 bg-neutral-800 rounded-full w-4/5" />
+                  <div className="w-full max-w-[240px] bg-neutral-900/90 border border-neutral-800 rounded-xl p-3 shadow-lg space-y-2">
+                    <div className="flex items-center justify-between text-[11px] font-mono text-neutral-400">
+                      <span>Speak to 1000 People</span>
+                      <span className="text-white">70%</span>
                     </div>
-                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
-                      <IconSparkles className="w-4 h-4 text-neutral-300" />
-                      <span className="text-[10px] font-mono text-neutral-300">Signed</span>
+                    <div className="h-1.5 bg-neutral-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-white w-[70%]" />
                     </div>
                   </div>
                 </div>
@@ -162,10 +156,10 @@ export const Explore = () => {
                 {/* Text Content */}
                 <div className="absolute bottom-7 left-7 right-14 space-y-1.5">
                   <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
-                    COMMUNITY WALL
+                    THE BUCKET LIST
                   </p>
                   <h3 className="text-lg font-semibold text-white leading-snug font-sans">
-                    Let me know you were here — read &amp; leave notes.
+                    The things I&apos;ll do before I&apos;m done — life goals &amp; dreams.
                   </h3>
                 </div>
               </div>
