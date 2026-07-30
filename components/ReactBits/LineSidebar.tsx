@@ -91,7 +91,7 @@ export const LineSidebar = ({
   activeItemIndex = null,
   onItemClick,
   className = '',
-  maxHeight = '52vh'
+  maxHeight = '55vh'
 }: LineSidebarProps) => {
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);

@@ -273,54 +273,32 @@ export const BlogPost = ({ slug }: { slug: string }) => {
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      {/* Floating Right Sticky LineSidebar TOC — permanently mounted for 100% hover & auto-scroll reliability */}
+      {/* Floating Right Sticky LineSidebar TOC — Free floating without container boxes */}
       {headings.length > 0 && showSidebar && (
         <aside
-          className="hidden xl:block fixed right-6 lg:right-8 z-[60] w-[380px] xl:w-[440px] pointer-events-auto transition-opacity duration-300 isolate"
+          className="hidden xl:block fixed right-8 lg:right-12 z-[60] pointer-events-auto"
           style={{ top: NAV_HEIGHT_PX + 24 }}
         >
-          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-2xl shadow-2xl">
-            {/* Card Header */}
-            <div className="flex items-center justify-between px-5 pt-4 pb-3 rounded-t-2xl border-b border-neutral-800/70 bg-neutral-900/40">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold flex items-center gap-2">
-                <IconList className="w-4 h-4 text-sky-400" />
-                <span>TOPICS</span>
-              </span>
-              <div className="flex items-center gap-1 font-mono text-[11px]">
-                <span className="text-sky-400 font-bold">
-                  {String(activeHeadingIndex + 1).padStart(2, "0")}
-                </span>
-                <span className="text-neutral-600">/</span>
-                <span className="text-neutral-500">
-                  {String(headings.length).padStart(2, "0")}
-                </span>
-              </div>
-            </div>
-
-            {/* LineSidebar List Area — Rendering verbatim original React Bits component */}
-            <div className="px-5 py-3 rounded-b-2xl">
-              <LineSidebarOriginal
-                items={headings.map((h) => h.text)}
-                accentColor="#38bdf8"
-                textColor="#c4c4c4"
-                markerColor="#6c6c6c"
-                showIndex
-                showMarker
-                proximityRadius={100}
-                maxShift={30}
-                falloff="smooth"
-                markerLength={60}
-                markerGap={0}
-                tickScale={0.5}
-                scaleTick
-                itemGap={20}
-                fontSize={1.1}
-                smoothing={100}
-                defaultActive={0}
-                onItemClick={(index, label) => handleSidebarItemClick(index)}
-              />
-            </div>
-          </div>
+          <LineSidebar
+            items={headings.map((h) => h.text)}
+            activeItemIndex={activeHeadingIndex}
+            onItemClick={(idx) => handleSidebarItemClick(idx)}
+            accentColor="#38bdf8"
+            textColor="#a3a3a3"
+            markerColor="#525252"
+            showIndex={true}
+            showMarker={true}
+            proximityRadius={140}
+            maxShift={32}
+            markerLength={64}
+            markerGap={0}
+            tickScale={0.5}
+            scaleTick={true}
+            itemGap={16}
+            fontSize={0.92}
+            smoothing={70}
+            maxHeight="60vh"
+          />
         </aside>
       )}
 
