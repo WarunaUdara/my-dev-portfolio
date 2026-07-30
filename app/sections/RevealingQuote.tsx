@@ -8,7 +8,7 @@ import SplitType from "split-type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const RevealingQuote = () => {
+export const RevealingQuote = () => {
   const textRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -84,10 +84,10 @@ const RevealingQuote = () => {
       <div className="container mx-auto max-w-4xl">
         {/* Section Title */}
         <div className="text-center mb-12">
-          <p className="text-xs sm:text-sm text-gray-400 uppercase tracking-widest mb-4">
+          <p className="text-xs sm:text-sm text-neutral-400 uppercase tracking-widest mb-4 font-mono">
             PHILOSOPHY
           </p>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif mb-2">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif mb-2 tracking-wide">
             What{" "}
             <AuroraText className="italic font-serif">
               Drives Me
@@ -96,7 +96,7 @@ const RevealingQuote = () => {
         </div>
         <div
           ref={textRef}
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif leading-tight text-center"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif leading-tight text-center tracking-wide"
         >
           I translate curiosity into structure, knowing technology defines
           future time. Every system carries ethical consequence, so I build with
