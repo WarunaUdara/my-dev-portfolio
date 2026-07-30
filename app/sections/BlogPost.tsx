@@ -24,17 +24,17 @@ const MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {
 // Premium Dark Black & Silver Minimalist MDX Typography & Component Specs
 const mdxCustomComponents = {
   h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h1 {...props} className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-[0.06em] mt-12 mb-6 pb-3 border-b border-neutral-800 leading-snug scroll-mt-28">
+    <h1 {...props} className="text-3xl sm:text-4xl font-sans font-bold text-white tracking-tight mt-14 mb-6 pb-4 border-b border-neutral-800 leading-tight scroll-mt-28">
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 {...props} className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-[0.06em] mt-12 mb-4 pt-6 border-t border-neutral-800 flex items-center gap-2 scroll-mt-28">
+    <h2 {...props} className="text-2xl sm:text-3xl font-sans font-bold text-white tracking-tight mt-14 mb-5 pt-8 border-t border-neutral-800/80 flex items-center gap-3 leading-tight scroll-mt-28">
       {children}
     </h2>
   ),
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h3 {...props} className="text-lg font-mono font-semibold text-neutral-200 mt-8 mb-3 tracking-wide scroll-mt-28">
+    <h3 {...props} className="text-lg sm:text-xl font-sans font-semibold text-neutral-100 mt-10 mb-3 tracking-tight scroll-mt-28">
       {children}
     </h3>
   ),

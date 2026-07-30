@@ -182,17 +182,13 @@ body {
   font-family: var(--font-inter), sans-serif;
 }
 
-/* Instrument Serif Global & Blog Typographic Kerning Optimization */
-.font-serif,
-article .font-serif,
-article h1,
-article h2,
-article h3 {
-  font-family: var(--font-instrument-serif), serif !important;
-  font-kerning: normal !important;
-  letter-spacing: 0.06em !important; /* Generous positive kerning (+0.06em) so characters never touch or overlap */
-  font-feature-settings: "kern" 1, "liga" 0 !important; /* Disable tight ligatures that collapse letters */
-  text-rendering: optimizeLegibility !important;
+/* Instrument Serif Display Font Rules (Main titles & hero elements only) */
+.font-serif {
+  font-family: var(--font-instrument-serif), serif;
+  font-kerning: normal;
+  letter-spacing: 0.04em;
+  font-feature-settings: "kern" 1, "liga" 0;
+  text-rendering: optimizeLegibility;
 }
 
 /* Custom Styled Minimalist Horizontal & Vertical Sliders / Scrollbars */
