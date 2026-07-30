@@ -1,136 +1,107 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
-import Image from '@/components/ui/Image';
-import Link from '@/components/ui/Link';
-import { gsap } from 'gsap';
-import AuroraText from '@/components/ui/aurora-text';
-import { IconPencil, IconMessageCircle, IconSparkles, IconArrowRight } from '@tabler/icons-react';
+import React from "react";
+import Image from "@/components/ui/Image";
+import Link from "@/components/ui/Link";
+import {
+  IconPencil,
+  IconSparkles,
+  IconArrowRight,
+  IconBrandReact,
+  IconBrandNextjs,
+  IconBrandTypescript,
+  IconBrandTailwind,
+  IconBrandDocker,
+  IconBrandAws,
+  IconBrandPython,
+  IconBrandVite,
+  IconBrandGit,
+  IconBrandFirebase,
+  IconBrandVscode,
+  IconMessage,
+  IconTerminal,
+} from "@tabler/icons-react";
 
-const Explore = () => {
-  // Refs for GSAP animations
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const card2Ref = useRef<HTMLDivElement>(null);
-  const card3Ref = useRef<HTMLDivElement>(null);
-  const icon1Ref = useRef<HTMLDivElement>(null);
-  const icon2Ref = useRef<HTMLDivElement>(null);
-  const icon3Ref = useRef<HTMLDivElement>(null);
-  const noteCard1Ref = useRef<HTMLDivElement>(null);
-  const noteCard2Ref = useRef<HTMLDivElement>(null);
+// Continuous Marquee Tech Tools List
+const TECH_TOOLS = [
+  { name: "Next.js 15", icon: IconBrandNextjs },
+  { name: "React 19", icon: IconBrandReact },
+  { name: "TypeScript", icon: IconBrandTypescript },
+  { name: "Tailwind CSS", icon: IconBrandTailwind },
+  { name: "Firebase", icon: IconBrandFirebase },
+  { name: "Docker", icon: IconBrandDocker },
+  { name: "Vite 8", icon: IconBrandVite },
+  { name: "AWS Cloud", icon: IconBrandAws },
+  { name: "Python", icon: IconBrandPython },
+  { name: "Git", icon: IconBrandGit },
+  { name: "VS Code", icon: IconBrandVscode },
+];
 
-  // Setup hover animations
-  useEffect(() => {
-    // Card 1: Wave animation for tool icons
-    if (icon1Ref.current && icon2Ref.current && icon3Ref.current && card1Ref.current) {
-      const waveTl = gsap.timeline({ paused: true });
-      waveTl
-        .to(icon2Ref.current, { y: -18, scale: 1.05, duration: 0.4, ease: "power2.out" }, 0)
-        .to([icon1Ref.current, icon3Ref.current], { y: -14, scale: 1.03, duration: 0.4, ease: "power2.out" }, 0.1)
-        .to(card1Ref.current, { borderColor: "rgba(59, 130, 246, 0.6)", boxShadow: "0 0 30px rgba(59, 130, 246, 0.2)" }, 0.15);
-      
-      const card1 = card1Ref.current;
-      const onEnter1 = () => waveTl.play();
-      const onLeave1 = () => waveTl.reverse();
-      card1.addEventListener('mouseenter', onEnter1);
-      card1.addEventListener('mouseleave', onLeave1);
-      return () => {
-        card1.removeEventListener('mouseenter', onEnter1);
-        card1.removeEventListener('mouseleave', onLeave1);
-      };
-    }
-  }, []);
-
-  useEffect(() => {
-    // Card 2: Floating Note Cards
-    if (noteCard1Ref.current && noteCard2Ref.current && card2Ref.current) {
-      const noteTl = gsap.timeline({ paused: true });
-      noteTl
-        .to(noteCard1Ref.current, { y: -15, rotation: -6, scale: 1.05, duration: 0.5, ease: "power2.out" }, 0)
-        .to(noteCard2Ref.current, { y: -10, rotation: 8, scale: 1.05, duration: 0.5, ease: "power2.out" }, 0.1)
-        .to(card2Ref.current, { borderColor: "rgba(168, 85, 247, 0.6)", boxShadow: "0 0 30px rgba(168, 85, 247, 0.2)" }, 0.1);
-      
-      const card2 = card2Ref.current;
-      const onEnter2 = () => noteTl.play();
-      const onLeave2 = () => noteTl.reverse();
-      card2.addEventListener('mouseenter', onEnter2);
-      card2.addEventListener('mouseleave', onLeave2);
-      return () => {
-        card2.removeEventListener('mouseenter', onEnter2);
-        card2.removeEventListener('mouseleave', onLeave2);
-      };
-    }
-  }, []);
-
+export const Explore = () => {
   return (
-    <section className="relative bg-black text-white py-20 overflow-hidden">
-      {/* Background Glow Orbs */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl pointer-events-none animate-pulse" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-cyan-600/5 rounded-full blur-3xl pointer-events-none animate-pulse" />
+    <section className="relative bg-black text-white py-24 overflow-hidden border-t border-neutral-900">
+      {/* Subtle Slow Ambient Glow (30s calm loop) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-neutral-900/30 rounded-full blur-[140px] pointer-events-none transition-all duration-1000" />
 
       {/* Grid Pattern Background */}
       <div
-        className="absolute inset-0 opacity-20 pointer-events-none"
+        className="absolute inset-0 opacity-[0.12] pointer-events-none"
         style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '30px 30px'
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
         }}
       />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-neutral-400 uppercase font-semibold">
-            EXPLORE &amp; CONNECT
-          </p>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-neutral-900/80 border border-neutral-800 text-xs font-mono tracking-[0.25em] text-neutral-400 uppercase font-semibold">
+            <span className="w-2 h-2 rounded-full bg-neutral-400 animate-pulse" />
+            <span>EXPLORE &amp; CONNECT</span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-serif leading-tight tracking-tight text-white">
             Explore, experiment <br />
-            <AuroraText className="italic font-serif">
+            <span className="italic font-serif text-neutral-300">
               &amp; say hello
-            </AuroraText>
+            </span>
           </h2>
         </div>
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           
-          {/* Card 1: USES */}
+          {/* Card 1: USES (Setup & Tools) */}
           <div className="group relative">
             <Link href="/uses" className="block">
-              <div 
-                ref={card1Ref}
-                className="relative bg-neutral-950 border-2 border-white/10 rounded-[32px] p-8 h-[390px] overflow-hidden transition-all duration-300 group-hover:border-sky-500/50"
-              >
-                {/* Hover Arrow */}
-                <div className="absolute bottom-8 right-8 w-11 h-11 bg-white/10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <IconArrowRight className="w-5 h-5 text-white" />
+              <div className="relative bg-neutral-950/90 border border-neutral-800/90 rounded-[32px] p-8 h-[400px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-2xl group-hover:border-neutral-700">
+                {/* Middle-Out Silver Ripple Border Overlay */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+
+                {/* Hover Arrow Button */}
+                <div className="absolute bottom-8 right-8 w-10 h-10 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg">
+                  <IconArrowRight className="w-4 h-4 text-white" />
                 </div>
 
-                {/* Tool Icons with Wave Animation */}
-                <div className="flex items-center justify-center gap-4 mb-8 mt-8">
-                  <div
-                    ref={icon1Ref}
-                    className="w-20 h-20 bg-gradient-to-br from-neutral-900 to-black border border-white/20 rounded-2xl flex items-center justify-center shadow-xl transition-all duration-300"
-                  >
-                    <Image src="/obsidian-icon.png" alt="Obsidian" width={42} height={42} className="object-contain" />
+                {/* Main Tool Highlights */}
+                <div className="flex items-center justify-center gap-4 mb-8 mt-6">
+                  <div className="w-18 h-18 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300">
+                    <Image src="/obsidian-icon.png" alt="Obsidian" width={38} height={38} className="object-contain" />
                   </div>
-                  <div
-                    ref={icon2Ref}
-                    className="w-24 h-24 bg-gradient-to-br from-neutral-900 to-black border border-white/20 rounded-2xl flex items-center justify-center shadow-xl transition-all duration-300"
-                  >
-                    <Image src="/icons8-vs-code-96.png" alt="VSCode" width={50} height={50} className="object-contain" />
+                  <div className="w-22 h-22 bg-neutral-900 border border-neutral-700 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                    <Image src="/icons8-vs-code-96.png" alt="VSCode" width={48} height={48} className="object-contain" />
                   </div>
-                  <div
-                    ref={icon3Ref}
-                    className="w-20 h-20 bg-gradient-to-br from-neutral-900 to-black border border-white/20 rounded-2xl flex items-center justify-center shadow-xl transition-all duration-300"
-                  >
-                    <Image src="/notebooklm.png" alt="NotebookLM" width={42} height={42} className="object-contain" />
+                  <div className="w-18 h-18 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300">
+                    <Image src="/notebooklm.png" alt="NotebookLM" width={38} height={38} className="object-contain" />
                   </div>
                 </div>
 
                 {/* Text Content */}
-                <div className="absolute bottom-8 left-8 right-8 space-y-1.5">
-                  <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest">SETUP &amp; STACK</p>
-                  <h3 className="text-xl font-semibold text-white leading-snug">
+                <div className="absolute bottom-8 left-8 right-16 space-y-2">
+                  <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
+                    SETUP &amp; STACK
+                  </p>
+                  <h3 className="text-xl font-semibold text-white leading-snug font-sans">
                     Check out my favorite tools, hardware and developer spots.
                   </h3>
                 </div>
@@ -138,49 +109,52 @@ const Explore = () => {
             </Link>
           </div>
 
-          {/* Card 2: GUESTBOOK */}
+          {/* Card 2: GUESTBOOK WALL */}
           <div className="group relative">
             <Link href="/guestbook" className="block">
-              <div 
-                ref={card2Ref}
-                className="relative bg-neutral-950 border-2 border-white/10 rounded-[32px] p-8 h-[390px] overflow-hidden transition-all duration-300 group-hover:border-purple-500/50"
-              >
-                {/* Hover Arrow */}
-                <div className="absolute bottom-8 right-8 w-11 h-11 bg-white/10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
-                  <IconArrowRight className="w-5 h-5 text-white" />
+              <div className="relative bg-neutral-950/90 border border-neutral-800/90 rounded-[32px] p-8 h-[400px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-2xl group-hover:border-neutral-700">
+                {/* Middle-Out Silver Ripple Border Overlay */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+
+                {/* Hover Arrow Button */}
+                <div className="absolute bottom-8 right-8 w-10 h-10 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
+                  <IconArrowRight className="w-4 h-4 text-white" />
                 </div>
 
-                {/* Floating Note Cards */}
-                <div className="relative h-56 mt-4">
-                  <div
-                    ref={noteCard1Ref}
-                    className="absolute left-6 top-2 w-36 h-44 bg-gradient-to-br from-neutral-900 to-black rounded-2xl p-5 shadow-2xl border border-cyan-500/30 -rotate-12 group-hover:rotate-[-8deg] transition-transform duration-500 overflow-hidden"
-                  >
-                    <div className="relative z-10 space-y-2.5">
-                      <div className="h-2.5 bg-cyan-400/50 rounded-full w-3/4" />
-                      <div className="h-2.5 bg-white/20 rounded-full w-full" />
-                      <div className="h-2.5 bg-white/20 rounded-full w-5/6" />
+                {/* Floating Note Cards Display (Monochrome Dark & Silver Theme) */}
+                <div className="relative h-52 mt-4 flex items-center justify-center">
+                  <div className="absolute left-6 top-2 w-36 h-40 bg-neutral-900 rounded-2xl p-4 shadow-2xl border border-neutral-800 -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-105 transition-all duration-300 overflow-hidden">
+                    <div className="space-y-2">
+                      <div className="h-2 bg-neutral-700 rounded-full w-3/4" />
+                      <div className="h-2 bg-neutral-800 rounded-full w-full" />
+                      <div className="h-2 bg-neutral-800 rounded-full w-5/6" />
                     </div>
-                    <div className="absolute bottom-3 left-3 w-8 h-8 bg-cyan-400/30 rounded-full z-10" />
+                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
+                      <IconMessage className="w-4 h-4 text-neutral-400" />
+                      <span className="text-[10px] font-mono text-neutral-400">Note</span>
+                    </div>
                   </div>
 
-                  <div
-                    ref={noteCard2Ref}
-                    className="absolute right-6 top-8 w-36 h-44 bg-gradient-to-br from-neutral-900 to-black rounded-2xl p-5 shadow-2xl border border-purple-500/30 rotate-12 group-hover:rotate-[8deg] transition-transform duration-500 overflow-hidden"
-                  >
-                    <div className="relative z-10 space-y-2.5">
-                      <div className="h-2.5 bg-purple-400/50 rounded-full w-2/3" />
-                      <div className="h-2.5 bg-white/20 rounded-full w-full" />
-                      <div className="h-2.5 bg-white/20 rounded-full w-4/5" />
+                  <div className="absolute right-6 top-6 w-36 h-40 bg-neutral-900 rounded-2xl p-4 shadow-2xl border border-neutral-700 rotate-12 group-hover:rotate-[6deg] group-hover:scale-105 transition-all duration-300 overflow-hidden">
+                    <div className="space-y-2">
+                      <div className="h-2 bg-neutral-600 rounded-full w-2/3" />
+                      <div className="h-2 bg-neutral-800 rounded-full w-full" />
+                      <div className="h-2 bg-neutral-800 rounded-full w-4/5" />
                     </div>
-                    <div className="absolute bottom-3 left-3 w-8 h-8 bg-purple-400/30 rounded-full z-10" />
+                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
+                      <IconSparkles className="w-4 h-4 text-neutral-300" />
+                      <span className="text-[10px] font-mono text-neutral-300">Signed</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Text Content */}
-                <div className="absolute bottom-8 left-8 right-8 space-y-1.5">
-                  <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest">COMMUNITY WALL</p>
-                  <h3 className="text-xl font-semibold text-white leading-snug">
+                <div className="absolute bottom-8 left-8 right-16 space-y-2">
+                  <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
+                    COMMUNITY WALL
+                  </p>
+                  <h3 className="text-xl font-semibold text-white leading-snug font-sans">
                     Let me know you were here — read &amp; leave notes.
                   </h3>
                 </div>
@@ -188,46 +162,64 @@ const Explore = () => {
             </Link>
           </div>
 
-          {/* Card 3: HIGH FOMO GUESTBOOK CTA (Replaced Spotify Card) */}
+          {/* Card 3: GUESTBOOK CTA WITH CONTINUOUS TOOL ICON ROW */}
           <div className="group relative md:col-span-2 lg:col-span-1">
             <Link href="/guestbook" className="block">
-              <div 
-                ref={card3Ref}
-                className="relative bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 border-2 border-emerald-500/30 hover:border-emerald-400 rounded-[32px] p-8 h-[390px] overflow-hidden transition-all duration-500 shadow-2xl group-hover:shadow-[0_0_30px_rgba(16,185,129,0.2)]"
-              >
-                {/* Active Indicator & Title */}
+              <div className="relative bg-neutral-950 border border-neutral-800 rounded-[32px] p-8 h-[400px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-2xl group-hover:border-neutral-700">
+                {/* Middle-Out Silver Ripple Border Overlay */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+
+                {/* Header Indicator */}
                 <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-[11px] font-mono">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    <span>35+ Messages Left</span>
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 text-[11px] font-mono">
+                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                    <span>Interactive Wall</span>
                   </div>
-                  <IconSparkles className="w-5 h-5 text-emerald-400 animate-pulse" />
+                  <IconSparkles className="w-5 h-5 text-neutral-300" />
                 </div>
 
-                {/* FOMO Main Body */}
-                <div className="space-y-4">
+                {/* CTA Main Body */}
+                <div className="space-y-3">
                   <h3 className="text-2xl font-serif text-white font-medium leading-tight">
-                    Don&apos;t leave without signing my wall!
+                    Leave your mark on my guestbook!
                   </h3>
-                  <p className="text-neutral-300 text-xs sm:text-sm leading-relaxed">
-                    Developers, designers &amp; friends from all over the world have dropped a note. Join them and leave your mark before you go!
+                  <p className="text-neutral-400 text-xs sm:text-sm leading-relaxed font-sans">
+                    Drop a message, share feedback, or say hello. Authentic notes from fellow developers and visitors.
                   </p>
                 </div>
 
-                {/* Avatar Stack + CTA Button */}
-                <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between pt-4 border-t border-neutral-800">
-                  {/* Fake Avatar Stack */}
-                  <div className="flex items-center -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-500 to-blue-600 border-2 border-black flex items-center justify-center text-[10px] font-bold text-white">WU</div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-600 border-2 border-black flex items-center justify-center text-[10px] font-bold text-white">AK</div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-orange-600 border-2 border-black flex items-center justify-center text-[10px] font-bold text-white">SL</div>
-                    <div className="w-8 h-8 rounded-full bg-neutral-800 border-2 border-black flex items-center justify-center text-[9px] font-mono text-neutral-300">+32</div>
+                {/* Continuous Tool Icons Row (Marquee) */}
+                <div className="my-6 overflow-hidden relative">
+                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
+                  
+                  <div className="flex gap-3 animate-marquee whitespace-nowrap py-1">
+                    {[...TECH_TOOLS, ...TECH_TOOLS].map((tool, idx) => {
+                      const Icon = tool.icon;
+                      return (
+                        <div
+                          key={`${tool.name}-${idx}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-mono"
+                        >
+                          <Icon className="w-3.5 h-3.5 text-neutral-400" />
+                          <span>{tool.name}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Bottom Sign CTA Bar */}
+                <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between pt-4 border-t border-neutral-900">
+                  <div className="flex items-center gap-2 text-neutral-400 font-mono text-xs">
+                    <IconTerminal className="w-4 h-4 text-neutral-500" />
+                    <span>Sign Wall</span>
                   </div>
 
-                  {/* Sign Button */}
-                  <div className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-black text-xs font-semibold group-hover:bg-emerald-400 transition-colors shadow-md">
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black text-xs font-mono font-semibold group-hover:bg-neutral-200 transition-colors shadow-lg group-hover:scale-105 transition-transform duration-200">
                     <IconPencil className="w-3.5 h-3.5" />
-                    <span>Sign Now</span>
+                    <span>Write Note</span>
                   </div>
                 </div>
               </div>
