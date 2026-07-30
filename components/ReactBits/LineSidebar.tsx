@@ -57,9 +57,9 @@ export const LineSidebar = ({
   showIndex = true,
   showMarker = true,
   proximityRadius = 100,
-  maxShift = 28,
+  maxShift = 30,
   falloff = 'smooth',
-  markerLength = 52,
+  markerLength = 56,
   markerGap = 0,
   tickScale = 0.5,
   scaleTick = true,
@@ -74,6 +74,7 @@ export const LineSidebar = ({
 }: LineSidebarProps) => {
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const markerRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const textRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const targetsRef = useRef<number[]>([]);
   const currentRef = useRef<number[]>([]);
@@ -114,7 +115,7 @@ export const LineSidebar = ({
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
 
-  // Single rAF loop — frame-rate independent exponential smoothing
+  // Single rAF loop — frame-rate independent exponential smoothing for line scaling, text move & coloring
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -134,9 +135,20 @@ export const LineSidebar = ({
       currentRef.current[i] = value;
       el.style.setProperty('--effect', value.toFixed(4));
 
-      // Dynamic real-time text coloring & font weight interpolation
+      // 1. Direct real-time line marker length scaling & color transition
+      const markerEl = markerRefs.current[i];
+      if (markerEl) {
+        const scale = (0.7 + value * 0.5).toFixed(4);
+        markerEl.style.transform = `translateY(-50%) scaleX(${scale})`;
+        const pct = Math.round(value * 100);
+        markerEl.style.backgroundColor = `color-mix(in srgb, ${accentColor} ${pct}%, ${markerColor})`;
+      }
+
+      // 2. Direct real-time text move (translateX) & color transition
       const textEl = textRefs.current[i];
       if (textEl) {
+        const shift = (value * maxShift).toFixed(2);
+        textEl.style.transform = `translateX(${shift}px)`;
         if (activeRef.current === i) {
           textEl.style.color = accentColor;
           textEl.style.fontWeight = '600';
@@ -151,7 +163,7 @@ export const LineSidebar = ({
     }
 
     rafRef.current = moving ? requestAnimationFrame(runFrame) : null;
-  }, [accentColor, textColor]);
+  }, [accentColor, textColor, markerColor, maxShift]);
 
   const startLoop = useCallback(() => {
     if (rafRef.current != null) return;
@@ -248,18 +260,26 @@ export const LineSidebar = ({
             >
               {showMarker && (
                 <span
+                  ref={el => {
+                    markerRefs.current[index] = el;
+                  }}
                   aria-hidden="true"
-                  className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
+                  className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left will-change-transform"
+                  style={{
+                    backgroundColor: isActive ? accentColor : markerColor,
+                    transform: isActive ? 'translateY(-50%) scaleX(1.2)' : 'translateY(-50%) scaleX(0.7)'
+                  }}
                 />
               )}
               <span
                 ref={el => {
                   textRefs.current[index] = el;
                 }}
-                className="relative inline-flex items-baseline leading-[1.2] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))] font-sans"
+                className="relative inline-flex items-baseline leading-[1.2] [font-size:var(--font-size)] will-change-transform font-sans"
                 style={{
                   color: isActive ? accentColor : textColor,
-                  fontWeight: isActive ? 600 : 400
+                  fontWeight: isActive ? 600 : 400,
+                  transform: isActive ? `translateX(${maxShift}px)` : 'translateX(0px)'
                 }}
               >
                 {showIndex && (
