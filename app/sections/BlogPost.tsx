@@ -24,12 +24,12 @@ const MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {
 // Premium Dark Black & Silver Minimalist MDX Typography & Component Specs
 const mdxCustomComponents = {
   h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h1 {...props} className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-[0.028em] mt-12 mb-6 pb-3 border-b border-neutral-800 leading-snug scroll-mt-28">
+    <h1 {...props} className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-[0.06em] mt-12 mb-6 pb-3 border-b border-neutral-800 leading-snug scroll-mt-28">
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 {...props} className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-[0.028em] mt-12 mb-4 pt-6 border-t border-neutral-800 flex items-center gap-2 scroll-mt-28">
+    <h2 {...props} className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-[0.06em] mt-12 mb-4 pt-6 border-t border-neutral-800 flex items-center gap-2 scroll-mt-28">
       {children}
     </h2>
   ),
@@ -150,7 +150,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           </span>
 
           {/* Post Title */}
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white leading-tight tracking-[0.028em]">
+          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white leading-tight tracking-[0.06em]">
             {meta.title}
           </h1>
 

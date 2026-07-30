@@ -182,18 +182,17 @@ body {
   font-family: var(--font-inter), sans-serif;
 }
 
-.font-serif {
-  font-family: var(--font-instrument-serif), serif;
-}
-
-/* Blog Instrument Serif Typographic Kerning & Legibility Optimization */
+/* Instrument Serif Global & Blog Typographic Kerning Optimization */
+.font-serif,
 article .font-serif,
-.blog-content .font-serif {
-  font-family: var(--font-instrument-serif), serif;
-  font-kerning: normal;
-  letter-spacing: 0.028em; /* Positive kerning (+0.028em) for optimum display legibility on dark theme */
-  font-feature-settings: "kern" 1, "liga" 1;
-  text-rendering: optimizeLegibility;
+article h1,
+article h2,
+article h3 {
+  font-family: var(--font-instrument-serif), serif !important;
+  font-kerning: normal !important;
+  letter-spacing: 0.06em !important; /* Generous positive kerning (+0.06em) so characters never touch or overlap */
+  font-feature-settings: "kern" 1, "liga" 0 !important; /* Disable tight ligatures that collapse letters */
+  text-rendering: optimizeLegibility !important;
 }
 
 /* Custom Styled Minimalist Horizontal & Vertical Sliders / Scrollbars */
