@@ -53,6 +53,27 @@ Published as a Proposed Standard by the IETF HTTP Working Group (authored by Jul
 
 `QUERY` combines the **safety and idempotency of `GET`** with the **structured payload capabilities of `POST`**:
 
+```mermaid
+graph LR
+    subgraph GET ["GET Method"]
+        G1["Safe & Idempotent"]
+        G2["Cacheable Response"]
+        G3["❌ No Body / URL Limits"]
+    end
+
+    subgraph POST ["POST Method"]
+        P1["Rich Payload / JSON Body"]
+        P2["❌ Non-Safe & Non-Idempotent"]
+        P3["❌ Uncacheable by Default"]
+    end
+
+    subgraph QUERY ["QUERY Method (RFC 10008)"]
+        Q1["Safe & Idempotent"]
+        Q2["Rich Payload / JSON Body"]
+        Q3["CDN & Proxy Cacheable"]
+    end
+```
+
 ```http
 QUERY /api/v1/products HTTP/1.1
 Host: api.example.com

@@ -45,3 +45,20 @@ TanStack Router includes built-in intent preloading. Hovering or focusing a navi
 * **Preload on Hover**: Downloads route chunk in < 20ms.
 * **Smart Caching**: Preserves route data in memory.
 * **Clean State Transitions**: Seamlessly integrates with custom terminal transition loaders and glassmorphic UI overlays.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant Link as TanStack Link Component
+    participant Preloader as Router Intent Engine
+    participant Cache as TanStack Cache / Memory
+    participant View as React 19 View Transition
+
+    User->>Link: Hover / Focus Mouse (< 20ms)
+    Link->>Preloader: Trigger Intent Event
+    Preloader->>Cache: Fetch Async Route Bundle & Loader Data
+    Cache-->>Preloader: Data Warm in Memory
+    User->>Link: Click Navigation Link
+    Link->>View: Instant 0ms Render from Warm Cache
+```

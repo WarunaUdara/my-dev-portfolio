@@ -1,4 +1,7 @@
-> 📝 *Originally published on [Medium](https://medium.com/@warunaudarasampath/kyverno-tutorial-how-to-use-a-policy-engine-on-kubernetes-87de423d2c37).*
+<div className="flex items-center gap-2.5 text-xs font-mono text-neutral-400 py-3 px-4 rounded-xl bg-neutral-900/60 border border-neutral-800 my-6 shadow-md">
+  <span className="w-2 h-2 rounded-full bg-neutral-400 animate-pulse" />
+  <span>Originally published on <a href="https://medium.com/@warunaudarasampath/kyverno-tutorial-how-to-use-a-policy-engine-on-kubernetes-87de423d2c37" target="_blank" rel="noopener noreferrer" className="text-neutral-200 underline font-semibold hover:text-white transition-colors">Medium</a></span>
+</div>
 
 Learn how to validate, mutate, and generate Kubernetes resources using plain YAML, no new languages required.
 
@@ -52,6 +55,16 @@ Kyverno registers itself as two of these:
 
 1. **A MutatingAdmissionWebhook** — receives the request first and can change it. This is how mutation works.
 2. **A ValidatingAdmissionWebhook** — receives the request after mutation and can approve or reject it. This is how validation works.
+
+```mermaid
+graph TD
+    Client["kubectl apply -f manifest.yaml"] -->|HTTP Request| APIServer["Kubernetes API Server"]
+    APIServer -->|1. Mutate Webhook| Mutate["Kyverno Mutating Webhook"]
+    Mutate -->|Inject Defaults / Labels| APIServer
+    APIServer -->|2. Validate Webhook| Validate["Kyverno Validating Webhook"]
+    Validate -->|Pass / Fail Decision| APIServer
+    APIServer -->|Approved| ETCD[("etcd Cluster Database")]
+```
 
 This happens before the resource exists. A pod that violates a policy is not created and then flagged — it is never created at all. The error comes back to your terminal immediately, with the exact message you wrote in your policy.
 

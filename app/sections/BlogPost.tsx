@@ -6,6 +6,7 @@ import Link from "@/components/ui/Link";
 import { getBlogPostBySlug } from "@/lib/blogData";
 import { IconArrowLeft, IconCalendar, IconClock, IconTag } from "@tabler/icons-react";
 import CodeBlock from "@/components/ui/CodeBlock";
+import DiagramViewer from "@/components/ui/DiagramViewer";
 
 // Dynamic MDX Component Loader Map
 import HttpQueryPost from "@/content/blog/http-query-method-rfc-10008.mdx";
@@ -20,20 +21,20 @@ const MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {
   "react-19-and-tanstack-router": React19Post,
 };
 
-// Medium-Style Standardized MDX Typography & Components
+// Premium Dark Black & Silver Minimalist MDX Typography & Component Specs
 const mdxCustomComponents = {
   h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h1 {...props} className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight mt-12 mb-6 pb-3 border-b border-neutral-800/80 leading-snug scroll-mt-28">
+    <h1 {...props} className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight mt-12 mb-6 pb-3 border-b border-neutral-800 leading-snug scroll-mt-28">
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h2 {...props} className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight mt-12 mb-4 pt-6 border-t border-neutral-800/60 flex items-center gap-2 scroll-mt-28">
+    <h2 {...props} className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight mt-12 mb-4 pt-6 border-t border-neutral-800 flex items-center gap-2 scroll-mt-28">
       {children}
     </h2>
   ),
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h3 {...props} className="text-lg font-mono font-semibold text-sky-400 mt-8 mb-3 tracking-wide scroll-mt-28">
+    <h3 {...props} className="text-lg font-mono font-semibold text-neutral-200 mt-8 mb-3 tracking-wide scroll-mt-28">
       {children}
     </h3>
   ),
@@ -43,23 +44,23 @@ const mdxCustomComponents = {
     </p>
   ),
   ul: ({ children }: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className="space-y-3 my-6 pl-5 border-l-2 border-emerald-500/50 list-none text-neutral-200 text-base sm:text-[17px]">
+    <ul className="space-y-3 my-6 pl-5 border-l-2 border-neutral-800 list-none text-neutral-200 text-base sm:text-[17px]">
       {children}
     </ul>
   ),
   ol: ({ children }: React.HTMLAttributes<HTMLOListElement>) => (
-    <ol className="space-y-3 my-6 pl-5 border-l-2 border-sky-500/50 list-decimal text-neutral-200 text-base sm:text-[17px]">
+    <ol className="space-y-3 my-6 pl-5 border-l-2 border-neutral-800 list-decimal text-neutral-200 text-base sm:text-[17px]">
       {children}
     </ol>
   ),
   li: ({ children }: React.HTMLAttributes<HTMLLIElement>) => (
     <li className="flex items-start gap-2.5 leading-relaxed">
-      <span className="text-emerald-400 font-bold mt-1">❯</span>
+      <span className="text-neutral-500 font-bold mt-1">❯</span>
       <span>{children}</span>
     </li>
   ),
   blockquote: ({ children }: React.HTMLAttributes<HTMLQuoteElement>) => (
-    <blockquote className="my-8 p-6 rounded-2xl bg-neutral-950/90 border-l-4 border-sky-400 text-neutral-200 font-serif italic text-lg leading-relaxed shadow-lg">
+    <blockquote className="my-8 p-6 rounded-2xl bg-neutral-950 border-l-2 border-neutral-700 text-neutral-300 font-serif italic text-base sm:text-lg leading-relaxed shadow-xl border border-neutral-800/80">
       {children}
     </blockquote>
   ),
@@ -75,6 +76,19 @@ const mdxCustomComponents = {
           : String(codeChild.props.children || "");
 
       const langClassName = codeChild.props.className || "";
+
+      // Interactive Diagram Engine Handler (Mermaid & Box Diagrams)
+      if (
+        langClassName.includes("language-mermaid") ||
+        langClassName.includes("language-diagram") ||
+        langClassName.includes("language-architecture")
+      ) {
+        return <DiagramViewer code={rawCode} type="mermaid" title="Architecture Diagram" />;
+      }
+      if (langClassName.includes("language-box")) {
+        return <DiagramViewer code={rawCode} type="box" title="System Flowchart" />;
+      }
+
       return <CodeBlock code={rawCode} language={langClassName} />;
     }
 
@@ -85,7 +99,7 @@ const mdxCustomComponents = {
       return <code className={className}>{children}</code>;
     }
     return (
-      <code className="px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-sky-300 font-mono text-xs font-semibold">
+      <code className="px-2 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-neutral-200 font-mono text-xs font-semibold">
         {children}
       </code>
     );

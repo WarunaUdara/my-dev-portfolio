@@ -43,6 +43,16 @@ Turboship automates the entire control plane using an **agentic AI orchestration
 3. **Multi-Cloud Provisioning**: Executes secure AWS SigV4 signed requests to deploy directly to **AWS ECS Fargate** and **Azure Container Apps**.
 4. **Human-in-the-Loop Safeguards**: Displays proposed infrastructure costs and security findings for developer approval before executing cloud mutations.
 
+```mermaid
+graph TD
+    User["Docker Hub Image Input"] -->|Submit URL| IDP["Turboship IDP Control Plane"]
+    IDP -->|1. Scan Layers| Trivy["Trivy CVE Security Scanner"]
+    Trivy -->|2. Metadata Analysis| AI["OpenAI GPT-5.5 Agent"]
+    AI -->|3. Provision Plan| Approval{"Developer Human-in-the-Loop"}
+    Approval -->|Approved| AWS["AWS ECS Fargate Cluster"]
+    Approval -->|Approved| Azure["Azure Container Apps"]
+```
+
 ---
 
 ## 🛠️ Tech Stack & Key Takeaways
