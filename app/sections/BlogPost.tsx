@@ -8,6 +8,7 @@ import { IconArrowLeft, IconCalendar, IconClock, IconTag, IconList, IconChevronL
 
 import CodeBlock from "@/components/ui/CodeBlock";
 import { LineSidebar } from "@/components/ReactBits/LineSidebar";
+import LineSidebarOriginal from "@/components/ReactBits/LineSidebarOriginal";
 
 // Dynamic MDX Component Loader Map
 import HttpQueryPost from "@/content/blog/http-query-method-rfc-10008.mdx";
@@ -296,27 +297,27 @@ export const BlogPost = ({ slug }: { slug: string }) => {
               </div>
             </div>
 
-            {/* LineSidebar List Area — Permanently mounted with padding-left for markers */}
+            {/* LineSidebar List Area — Rendering verbatim original React Bits component */}
             <div className="px-5 py-3 rounded-b-2xl">
-              <LineSidebar
+              <LineSidebarOriginal
                 items={headings.map((h) => h.text)}
-                activeItemIndex={activeHeadingIndex}
-                onItemClick={(idx) => handleSidebarItemClick(idx)}
                 accentColor="#38bdf8"
-                textColor="#a3a3a3"
-                markerColor="#525252"
-                showIndex={true}
-                showMarker={true}
+                textColor="#c4c4c4"
+                markerColor="#6c6c6c"
+                showIndex
+                showMarker
                 proximityRadius={100}
-                maxShift={24}
-                markerLength={46}
+                maxShift={30}
+                falloff="smooth"
+                markerLength={60}
                 markerGap={0}
-                tickScale={0.55}
-                scaleTick={true}
-                itemGap={14}
-                fontSize={0.9}
-                smoothing={80}
-                maxHeight="54vh"
+                tickScale={0.5}
+                scaleTick
+                itemGap={20}
+                fontSize={1.1}
+                smoothing={100}
+                defaultActive={0}
+                onItemClick={(index, label) => handleSidebarItemClick(index)}
               />
             </div>
           </div>
