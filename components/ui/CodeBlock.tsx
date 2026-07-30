@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Highlight, themes, type Language } from "prism-react-renderer";
-import { IconCopy, IconCheck, IconChevronDown, IconChevronUp } from "@tabler/icons-react";
+import { IconCopy, IconCheck, IconChevronDown, IconChevronUp, IconCode } from "@tabler/icons-react";
 
 interface CodeBlockProps {
   code: string;
@@ -49,28 +49,29 @@ export default function CodeBlock({
   const currentTheme = THEMES[activeThemeKey].theme;
 
   return (
-    <div className="my-8 rounded-2xl bg-[#0d0e15] border border-neutral-800/90 overflow-hidden shadow-2xl group relative transition-all duration-300">
-      {/* ── IDE Header ── */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#13151f] border-b border-neutral-800/80 text-xs font-mono select-none">
-        {/* macOS Window Controls */}
+    <div className="my-8 rounded-2xl bg-neutral-950 border border-neutral-800 shadow-2xl overflow-hidden group relative transition-all duration-300">
+      {/* ── IDE Window Header ── */}
+      <div className="flex items-center justify-between px-4 py-3 bg-neutral-900/90 border-b border-neutral-800 text-xs font-mono select-none">
+        {/* Minimalist Window Status Indicator */}
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]/50" />
-          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]/50" />
-          <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]/50" />
-          {filename && (
-            <span className="ml-3 text-neutral-400 font-sans text-xs font-medium tracking-wide">
-              {filename}
+          <div className="w-2.5 h-2.5 rounded-full bg-neutral-700 border border-neutral-600/50" />
+          <div className="w-2.5 h-2.5 rounded-full bg-neutral-800 border border-neutral-700/50" />
+          <div className="w-2.5 h-2.5 rounded-full bg-neutral-800 border border-neutral-700/50" />
+          <div className="flex items-center gap-1.5 ml-2 text-neutral-400">
+            <IconCode className="w-3.5 h-3.5 text-neutral-500" />
+            <span className="font-mono text-xs font-medium tracking-wide uppercase text-neutral-300">
+              {filename || normalizedLang}
             </span>
-          )}
+          </div>
         </div>
 
-        {/* Right Header Actions */}
+        {/* Right Header Controls */}
         <div className="flex items-center gap-3">
           {/* Theme Selector Dropdown */}
           <select
             value={activeThemeKey}
             onChange={(e) => setActiveThemeKey(e.target.value as keyof typeof THEMES)}
-            className="bg-neutral-900/90 text-neutral-400 hover:text-white border border-neutral-800 rounded-lg px-2.5 py-1 text-[11px] font-mono cursor-pointer focus:outline-none focus:border-neutral-600 transition-colors"
+            className="bg-neutral-950 text-neutral-400 hover:text-white border border-neutral-800 rounded-lg px-2.5 py-1 text-[11px] font-mono cursor-pointer focus:outline-none focus:border-neutral-600 transition-colors"
             title="Change Code Theme"
           >
             {Object.entries(THEMES).map(([key, item]) => (
@@ -83,13 +84,13 @@ export default function CodeBlock({
           {/* Copy Button */}
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white text-xs font-mono transition-all active:scale-95 shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white text-xs font-mono transition-all active:scale-95 shadow-sm"
             title="Copy code to clipboard"
           >
             {copied ? (
               <>
-                <IconCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-emerald-400 font-semibold">Copied!</span>
+                <IconCheck className="w-3.5 h-3.5 text-white" />
+                <span className="text-white font-semibold">Copied</span>
               </>
             ) : (
               <>
@@ -101,7 +102,7 @@ export default function CodeBlock({
         </div>
       </div>
 
-      {/* ── Syntax Highlighted Code Container ── */}
+      {/* ── Syntax Highlighted Code Container with Styled Horizontal Slider ── */}
       <div
         className={`relative transition-all duration-300 overflow-hidden ${
           isLongCode && !isExpanded ? "max-h-[380px]" : "max-h-none"
@@ -110,7 +111,7 @@ export default function CodeBlock({
         <Highlight theme={currentTheme} code={cleanCode} language={normalizedLang}>
           {({ className, style, tokens, getLineProps, getTokenProps }) => (
             <pre
-              className={`${className} p-5 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed no-visible-scrollbar m-0`}
+              className={`${className} p-5 font-mono text-xs sm:text-sm overflow-x-auto custom-scrollbar leading-relaxed m-0`}
               style={{ ...style, backgroundColor: "transparent" }}
             >
               {tokens.map((line, i) => {
@@ -118,7 +119,7 @@ export default function CodeBlock({
                 return (
                   <div key={i} {...lineProps} className="table-row">
                     {/* Line Numbers */}
-                    <span className="table-cell select-none text-right pr-5 text-neutral-600/70 font-mono text-[11px] sm:text-xs w-8 tracking-tighter">
+                    <span className="table-cell select-none text-right pr-5 text-neutral-600 font-mono text-[11px] sm:text-xs w-8 tracking-tighter">
                       {i + 1}
                     </span>
                     {/* Code Line Content */}
@@ -136,25 +137,25 @@ export default function CodeBlock({
 
         {/* Bottom Fade Gradient for Collapsed Snippets */}
         {isLongCode && !isExpanded && (
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0d0e15] via-[#0d0e15]/80 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-neutral-950 via-neutral-950/85 to-transparent pointer-events-none" />
         )}
       </div>
 
       {/* ── Bottom Expand / Shrink Toggle Bar ── */}
       {isLongCode && (
-        <div className="flex items-center justify-end px-4 py-2.5 bg-[#11121a] border-t border-neutral-800/60 relative z-10">
+        <div className="flex items-center justify-end px-4 py-2.5 bg-neutral-900/90 border-t border-neutral-800 relative z-10">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/80 hover:border-neutral-600 text-xs font-mono font-medium text-neutral-200 hover:text-white transition-all shadow-md active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-xs font-mono font-medium text-neutral-300 hover:text-white transition-all shadow-md active:scale-95"
           >
             {isExpanded ? (
               <>
-                <IconChevronUp className="w-3.5 h-3.5 text-sky-400" />
+                <IconChevronUp className="w-3.5 h-3.5 text-neutral-400" />
                 <span>Shrink Snippet</span>
               </>
             ) : (
               <>
-                <IconChevronDown className="w-3.5 h-3.5 text-sky-400" />
+                <IconChevronDown className="w-3.5 h-3.5 text-neutral-400" />
                 <span>Expand Snippet ({lines.length} lines)</span>
               </>
             )}

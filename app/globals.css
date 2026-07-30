@@ -186,6 +186,52 @@ body {
   font-family: var(--font-instrument-serif), serif;
 }
 
+/* Blog Instrument Serif Typographic Kerning & Legibility Optimization */
+article .font-serif,
+.blog-content .font-serif {
+  font-family: var(--font-instrument-serif), serif;
+  font-kerning: normal;
+  letter-spacing: 0.028em; /* Positive kerning (+0.028em) for optimum display legibility on dark theme */
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* Custom Styled Minimalist Horizontal & Vertical Sliders / Scrollbars */
+.custom-scrollbar,
+pre,
+.mermaid-svg-container {
+  scrollbar-width: thin;
+  scrollbar-color: #404040 #121212;
+}
+
+.custom-scrollbar::-webkit-scrollbar,
+pre::-webkit-scrollbar,
+.mermaid-svg-container::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+pre::-webkit-scrollbar-track,
+.mermaid-svg-container::-webkit-scrollbar-track {
+  background: #121212;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+pre::-webkit-scrollbar-thumb,
+.mermaid-svg-container::-webkit-scrollbar-thumb {
+  background: #404040;
+  border-radius: 9999px;
+  border: 1px solid #262626;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+pre::-webkit-scrollbar-thumb:hover,
+.mermaid-svg-container::-webkit-scrollbar-thumb:hover {
+  background: #737373;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
