@@ -182,13 +182,8 @@ body {
   font-family: var(--font-inter), sans-serif;
 }
 
-/* Instrument Serif Display Font Rules (Main titles & hero elements only) */
 .font-serif {
   font-family: var(--font-instrument-serif), serif;
-  font-kerning: normal;
-  letter-spacing: 0.04em;
-  font-feature-settings: "kern" 1, "liga" 0;
-  text-rendering: optimizeLegibility;
 }
 
 /* Custom Styled Minimalist Horizontal & Vertical Sliders / Scrollbars */

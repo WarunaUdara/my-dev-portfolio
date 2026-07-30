@@ -150,7 +150,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           </span>
 
           {/* Post Title */}
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white leading-tight tracking-[0.06em]">
+          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white leading-tight tracking-tight">
             {meta.title}
           </h1>
 

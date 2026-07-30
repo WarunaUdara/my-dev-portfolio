@@ -13,7 +13,7 @@ export const AuroraText = memo(
   ({
     children,
     className = "",
-    colors = ["#ffffff", "#e2e8f0", "#94a3b8", "#cbd5e1"],
+    colors = ["#a717de", "#ff0cbd", "#3c34f3", "#ff6926"],
     speed = 1,
   }: AuroraTextProps) => {
     const gradientStyle = {
@@ -25,11 +25,15 @@ export const AuroraText = memo(
     };
 
     return (
-      <span
-        className={`animate-aurora relative inline-block bg-clip-text text-transparent ${className}`}
-        style={gradientStyle}
-      >
-        {children}
+      <span className={`relative inline-block ${className}`}>
+        <span className="sr-only">{children}</span>
+        <span
+          className="animate-aurora relative bg-clip-text text-transparent"
+          style={gradientStyle}
+          aria-hidden="true"
+        >
+          {children}
+        </span>
       </span>
     );
   }
