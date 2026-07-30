@@ -111,6 +111,7 @@ export const LineSidebar = ({
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
 
+  // Single rAF loop — frame-rate independent exponential smoothing
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -266,15 +267,20 @@ export const LineSidebar = ({
                   isRight
                     ? "right-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-right"
                     : "left-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-left"
-                } [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]`}
+                }`}
+                style={{
+                  backgroundColor: `color-mix(in srgb, ${accentColor} calc(var(--effect, 0) * 100%), ${markerColor})`,
+                  transform: `translateY(-50%) scaleX(calc(0.7 + var(--effect, 0) * 0.5))`,
+                }}
               />
             )}
             <span
-              className={`relative inline-flex items-baseline leading-[1.3] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] ${
-                isRight
-                  ? "[transform:translateX(calc(var(--effect,0)*-1*var(--max-shift)))]"
-                  : "[transform:translateX(calc(var(--effect,0)*var(--max-shift)))]"
-              } will-change-transform font-sans`}
+              className="relative inline-flex items-baseline leading-[1.3] will-change-transform font-sans"
+              style={{
+                color: `color-mix(in srgb, ${accentColor} calc(var(--effect, 0) * 100%), ${textColor})`,
+                fontSize: `${fontSize}rem`,
+                transform: `translateX(calc(var(--effect, 0) * ${isRight ? -1 * maxShift : maxShift}px))`,
+              }}
             >
               {!isRight && showIndex && (
                 <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
