@@ -34,7 +34,7 @@ const FALLOFF_CURVES: Record<Falloff, (p: number) => number> = {
   sharp: p => p * p * p
 };
 
-// Pure JS RGB color interpolation — 100% cross-browser CSSOM safe
+// Pure JS RGB color interpolation — 100% cross-browser safe
 function interpolateColor(color1: string, color2: string, factor: number): string {
   const parseHex = (hex: string): [number, number, number] => {
     let c = hex.replace('#', '').trim();
@@ -77,16 +77,16 @@ export const LineSidebar = ({
   markerColor = '#525252',
   showIndex = true,
   showMarker = true,
-  proximityRadius = 120,
-  maxShift = 30,
+  proximityRadius = 140,
+  maxShift = 32,
   falloff = 'smooth',
-  markerLength = 56,
+  markerLength = 64,
   markerGap = 0,
   tickScale = 0.5,
   scaleTick = true,
   itemGap = 16,
   fontSize = 0.92,
-  smoothing = 80,
+  smoothing = 70,
   defaultActive = 0,
   activeItemIndex = null,
   onItemClick,
@@ -155,15 +155,15 @@ export const LineSidebar = ({
       const value = settled ? target : next;
       currentRef.current[i] = value;
 
-      // 1. Direct line marker length scaling (0.7x -> 1.2x) & RGB color transition
+      // 1. Line marker dramatic stretch (0.5x -> 1.8x) & color transition
       const markerEl = markerRefs.current[i];
       if (markerEl) {
-        const scale = (0.7 + value * 0.5).toFixed(4);
+        const scale = (0.5 + value * 1.3).toFixed(4);
         markerEl.style.transform = `translateY(-50%) scaleX(${scale})`;
         markerEl.style.backgroundColor = interpolateColor(markerColor, accentColor, value);
       }
 
-      // 2. Direct text move (0px -> maxShift px) & RGB color transition
+      // 2. Text move (0px -> maxShift px) & color transition
       const textEl = textRefs.current[i];
       if (textEl) {
         const shift = (value * maxShift).toFixed(2);
@@ -229,7 +229,7 @@ export const LineSidebar = ({
   const tickClass = showMarker
     ? `after:absolute after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-50 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
         scaleTick
-          ? "after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]"
+          ? "after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.5+var(--effect,0)*0.8))]"
           : 'after:-translate-y-1/2'
       }`
     : '';
@@ -280,7 +280,7 @@ export const LineSidebar = ({
                   className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left pointer-events-none"
                   style={{
                     backgroundColor: isActive ? accentColor : markerColor,
-                    transform: isActive ? 'translateY(-50%) scaleX(1.2)' : 'translateY(-50%) scaleX(0.7)'
+                    transform: isActive ? 'translateY(-50%) scaleX(1.8)' : 'translateY(-50%) scaleX(0.5)'
                   }}
                 />
               )}
