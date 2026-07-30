@@ -25,6 +25,7 @@ export interface LineSidebarProps {
   activeItemIndex?: number | null;
   onItemClick?: (index: number, label: string) => void;
   className?: string;
+  maxHeight?: string;
 }
 
 const FALLOFF_CURVES: Record<Falloff, (p: number) => number> = {
@@ -68,10 +69,12 @@ export const LineSidebar = ({
   defaultActive = 0,
   activeItemIndex = null,
   onItemClick,
-  className = ''
+  className = '',
+  maxHeight = '52vh'
 }: LineSidebarProps) => {
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const textRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const targetsRef = useRef<number[]>([]);
   const currentRef = useRef<number[]>([]);
   const rafRef = useRef<number | null>(null);
@@ -80,6 +83,7 @@ export const LineSidebar = ({
   const smoothingRef = useRef(smoothing);
   const [activeIndex, setActiveIndex] = useState<number | null>(activeItemIndex ?? defaultActive);
 
+  // Controlled active index sync
   useEffect(() => {
     if (activeItemIndex !== null && activeItemIndex !== undefined) {
       setActiveIndex(activeItemIndex);
@@ -87,6 +91,25 @@ export const LineSidebar = ({
       startLoop();
     }
   }, [activeItemIndex]);
+
+  // Auto-scroll list internal scrollbox to keep active item in view as reader scrolls article
+  useEffect(() => {
+    if (activeIndex === null) return;
+    const list = listRef.current;
+    const el = itemRefs.current[activeIndex];
+    if (!list || !el) return;
+
+    const elTop = el.offsetTop;
+    const elBottom = elTop + el.offsetHeight;
+    const viewTop = list.scrollTop;
+    const viewBottom = viewTop + list.clientHeight;
+
+    if (elTop < viewTop) {
+      list.scrollTo({ top: elTop - 12, behavior: "smooth" });
+    } else if (elBottom > viewBottom) {
+      list.scrollTo({ top: elBottom - list.clientHeight + 12, behavior: "smooth" });
+    }
+  }, [activeIndex]);
 
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
@@ -110,11 +133,25 @@ export const LineSidebar = ({
       const value = settled ? target : next;
       currentRef.current[i] = value;
       el.style.setProperty('--effect', value.toFixed(4));
+
+      // Dynamic real-time text coloring & font weight interpolation
+      const textEl = textRefs.current[i];
+      if (textEl) {
+        if (activeRef.current === i) {
+          textEl.style.color = accentColor;
+          textEl.style.fontWeight = '600';
+        } else {
+          const pct = Math.round(value * 100);
+          textEl.style.color = `color-mix(in srgb, ${accentColor} ${pct}%, ${textColor})`;
+          textEl.style.fontWeight = value > 0.3 ? '600' : '400';
+        }
+      }
+
       if (!settled) moving = true;
     }
 
     rafRef.current = moving ? requestAnimationFrame(runFrame) : null;
-  }, []);
+  }, [accentColor, textColor]);
 
   const startLoop = useCallback(() => {
     if (rafRef.current != null) return;
@@ -122,7 +159,7 @@ export const LineSidebar = ({
     rafRef.current = requestAnimationFrame(runFrame);
   }, [runFrame]);
 
-  // Viewport-relative direct mouse distance calculation — 100% exact regardless of parent offsetParent
+  // Viewport-relative direct mouse distance calculation — 100% exact
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLUListElement>) => {
       const ease = FALLOFF_CURVES[falloff] ?? FALLOFF_CURVES.linear;
@@ -194,7 +231,8 @@ export const LineSidebar = ({
         ref={listRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className="m-0 flex list-none flex-col py-4 [gap:var(--item-gap)]"
+        className="m-0 flex list-none flex-col py-4 [gap:var(--item-gap)] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ maxHeight }}
       >
         {items.map((label, index) => {
           const isActive = activeIndex === index;
@@ -207,9 +245,6 @@ export const LineSidebar = ({
               aria-current={isActive ? 'true' : undefined}
               onClick={() => handleClick(index, label)}
               className={`relative cursor-pointer select-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
-              style={{
-                '--effect': isActive ? '1.0000' : undefined
-              } as CSSProperties}
             >
               {showMarker && (
                 <span
@@ -218,9 +253,12 @@ export const LineSidebar = ({
                 />
               )}
               <span
+                ref={el => {
+                  textRefs.current[index] = el;
+                }}
                 className="relative inline-flex items-baseline leading-[1.2] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))] font-sans"
                 style={{
-                  color: isActive ? accentColor : `color-mix(in srgb, ${accentColor} calc(var(--effect, 0) * 100%), ${textColor})`,
+                  color: isActive ? accentColor : textColor,
                   fontWeight: isActive ? 600 : 400
                 }}
               >
