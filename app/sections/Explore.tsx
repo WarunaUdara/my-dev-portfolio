@@ -8,34 +8,26 @@ import {
   IconPencil,
   IconSparkles,
   IconArrowRight,
-  IconBrandReact,
-  IconBrandNextjs,
-  IconBrandTypescript,
-  IconBrandTailwind,
-  IconBrandDocker,
-  IconBrandAws,
-  IconBrandPython,
-  IconBrandVite,
-  IconBrandGit,
-  IconBrandFirebase,
-  IconBrandVscode,
   IconMessage,
   IconTerminal,
 } from "@tabler/icons-react";
 
-// Continuous Marquee Tech Tools List
-const TECH_TOOLS = [
-  { name: "Next.js 15", icon: IconBrandNextjs },
-  { name: "React 19", icon: IconBrandReact },
-  { name: "TypeScript", icon: IconBrandTypescript },
-  { name: "Tailwind CSS", icon: IconBrandTailwind },
-  { name: "Firebase", icon: IconBrandFirebase },
-  { name: "Docker", icon: IconBrandDocker },
-  { name: "Vite 8", icon: IconBrandVite },
-  { name: "AWS Cloud", icon: IconBrandAws },
-  { name: "Python", icon: IconBrandPython },
-  { name: "Git", icon: IconBrandGit },
-  { name: "VS Code", icon: IconBrandVscode },
+// Tools & Apps List from Uses Section
+const USES_TOOLS = [
+  { name: "VS Code", icon: "/icons8-vs-code-96.png" },
+  { name: "Obsidian", icon: "/obsidian-icon.png" },
+  { name: "NotebookLM", icon: "/notebooklm.png" },
+  { name: "Zed", icon: "/zed.png" },
+  { name: "IntelliJ IDEA", icon: "/icons8-intellij-idea-96.png" },
+  { name: "Postman", icon: "/icons8-postman-inc-96.png" },
+  { name: "Figma", icon: "/icons8-figma-96.png" },
+  { name: "Ghostty", icon: "/ghostty copy.webp" },
+  { name: "Git", icon: "/icons8-git-144.png" },
+  { name: "Homebrew", icon: "/Homebrew.png" },
+  { name: "Notion", icon: "/notion-logo-icon.png" },
+  { name: "Spotify", icon: "/spotify-logo.png" },
+  { name: "DBeaver", icon: "/icons8-dbeaver.png" },
+  { name: "Framer", icon: "/framer-logo.png" },
 ];
 
 export const Explore = () => {
@@ -56,7 +48,7 @@ export const Explore = () => {
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header with AuroraText */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-neutral-900/80 border border-neutral-800 text-xs font-mono tracking-[0.25em] text-neutral-400 uppercase font-semibold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/90 border border-neutral-800/80 text-xs font-mono tracking-[0.25em] text-neutral-400 uppercase font-semibold">
             <span className="w-2 h-2 rounded-full bg-neutral-400 animate-pulse" />
             <span>EXPLORE &amp; CONNECT</span>
           </div>
@@ -68,58 +60,57 @@ export const Explore = () => {
           </h2>
         </div>
 
-        {/* Cards Grid */}
+        {/* Cards Grid — Standardized Portfolio Card Background & Styling */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           
-          {/* Card 1: SETUP & STACK (With Middle-Out Ripple Border & Continuous Tool Icon Marquee) */}
+          {/* Card 1: SETUP & STACK (With Middle-Out Ripple Border & Continuous Uses Tools Marquee) */}
           <div className="group relative">
             <Link href="/uses" className="block">
-              <div className="relative bg-neutral-950/90 border border-neutral-800/90 rounded-[32px] p-8 h-[400px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-2xl group-hover:border-neutral-700">
+              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
                 {/* Middle-Out Silver Ripple Border Overlay */}
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
                 <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
 
                 {/* Hover Arrow Button */}
-                <div className="absolute bottom-8 right-8 w-10 h-10 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
+                <div className="absolute bottom-7 right-7 w-9 h-9 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
                   <IconArrowRight className="w-4 h-4 text-white" />
                 </div>
 
                 {/* Featured Tool App Badges */}
                 <div className="flex items-center justify-center gap-3 mb-4 mt-2">
-                  <div className="w-14 h-14 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300">
-                    <Image src="/obsidian-icon.png" alt="Obsidian" width={30} height={30} className="object-contain" />
+                  <div className="relative w-14 h-14 bg-neutral-900/90 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2.5">
+                    <Image src="/obsidian-icon.png" alt="Obsidian" width={32} height={32} className="object-contain" />
                   </div>
-                  <div className="w-18 h-18 bg-neutral-900 border border-neutral-700 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                  <div className="relative w-16 h-16 bg-neutral-900/90 border border-neutral-700 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 p-3">
                     <Image src="/icons8-vs-code-96.png" alt="VSCode" width={40} height={40} className="object-contain" />
                   </div>
-                  <div className="w-14 h-14 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300">
-                    <Image src="/notebooklm.png" alt="NotebookLM" width={30} height={30} className="object-contain" />
+                  <div className="relative w-14 h-14 bg-neutral-900/90 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2.5">
+                    <Image src="/notebooklm.png" alt="NotebookLM" width={32} height={32} className="object-contain" />
                   </div>
                 </div>
 
-                {/* Continuous Tool Icons Row (Marquee) */}
+                {/* Continuous Uses Tool Icons Marquee */}
                 <div className="my-4 overflow-hidden relative">
-                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
-                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/90 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/90 to-transparent z-10 pointer-events-none" />
                   
                   <div className="flex gap-2.5 animate-marquee whitespace-nowrap py-1">
-                    {[...TECH_TOOLS, ...TECH_TOOLS].map((tool, idx) => {
-                      const Icon = tool.icon;
-                      return (
-                        <div
-                          key={`${tool.name}-${idx}`}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-mono"
-                        >
-                          <Icon className="w-3.5 h-3.5 text-neutral-400" />
-                          <span>{tool.name}</span>
+                    {[...USES_TOOLS, ...USES_TOOLS].map((tool, idx) => (
+                      <div
+                        key={`${tool.name}-${idx}`}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-mono"
+                      >
+                        <div className="relative w-4 h-4 flex items-center justify-center">
+                          <Image src={tool.icon} alt={tool.name} fill className="object-contain" />
                         </div>
-                      );
-                    })}
+                        <span>{tool.name}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
                 {/* Text Content */}
-                <div className="absolute bottom-8 left-8 right-16 space-y-1.5">
+                <div className="absolute bottom-7 left-7 right-14 space-y-1.5">
                   <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
                     SETUP &amp; STACK
                   </p>
@@ -131,18 +122,18 @@ export const Explore = () => {
             </Link>
           </div>
 
-          {/* Card 2: GUESTBOOK WALL (Floating Notes) */}
+          {/* Card 2: COMMUNITY WALL (Floating Notes) */}
           <div className="group relative">
             <Link href="/guestbook" className="block">
-              <div className="relative bg-neutral-950/90 border border-neutral-800/90 rounded-[32px] p-8 h-[400px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-2xl group-hover:border-neutral-700">
+              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
                 {/* Hover Arrow Button */}
-                <div className="absolute bottom-8 right-8 w-10 h-10 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
+                <div className="absolute bottom-7 right-7 w-9 h-9 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
                   <IconArrowRight className="w-4 h-4 text-white" />
                 </div>
 
-                {/* Floating Note Cards Display (Monochrome Dark Theme) */}
-                <div className="relative h-52 mt-4 flex items-center justify-center">
-                  <div className="absolute left-6 top-2 w-36 h-40 bg-neutral-900 rounded-2xl p-4 shadow-2xl border border-neutral-800 -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-105 transition-all duration-300 overflow-hidden">
+                {/* Floating Note Cards Display (Monochrome Portfolio Theme) */}
+                <div className="relative h-48 mt-3 flex items-center justify-center">
+                  <div className="absolute left-6 top-2 w-36 h-38 bg-neutral-900/90 rounded-2xl p-4 shadow-2xl border border-neutral-800/90 -rotate-12 group-hover:rotate-[-6deg] group-hover:scale-105 transition-all duration-300 overflow-hidden">
                     <div className="space-y-2">
                       <div className="h-2 bg-neutral-700 rounded-full w-3/4" />
                       <div className="h-2 bg-neutral-800 rounded-full w-full" />
@@ -154,7 +145,7 @@ export const Explore = () => {
                     </div>
                   </div>
 
-                  <div className="absolute right-6 top-6 w-36 h-40 bg-neutral-900 rounded-2xl p-4 shadow-2xl border border-neutral-700 rotate-12 group-hover:rotate-[6deg] group-hover:scale-105 transition-all duration-300 overflow-hidden">
+                  <div className="absolute right-6 top-6 w-36 h-38 bg-neutral-900/90 rounded-2xl p-4 shadow-2xl border border-neutral-700/90 rotate-12 group-hover:rotate-[6deg] group-hover:scale-105 transition-all duration-300 overflow-hidden">
                     <div className="space-y-2">
                       <div className="h-2 bg-neutral-600 rounded-full w-2/3" />
                       <div className="h-2 bg-neutral-800 rounded-full w-full" />
@@ -168,7 +159,7 @@ export const Explore = () => {
                 </div>
 
                 {/* Text Content */}
-                <div className="absolute bottom-8 left-8 right-16 space-y-1.5">
+                <div className="absolute bottom-7 left-7 right-14 space-y-1.5">
                   <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
                     COMMUNITY WALL
                   </p>
@@ -183,10 +174,10 @@ export const Explore = () => {
           {/* Card 3: GUESTBOOK SIGN CTA */}
           <div className="group relative md:col-span-2 lg:col-span-1">
             <Link href="/guestbook" className="block">
-              <div className="relative bg-neutral-950 border border-neutral-800 rounded-[32px] p-8 h-[400px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-2xl group-hover:border-neutral-700">
+              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
                 {/* Header Indicator */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 text-[11px] font-mono">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-[11px] font-mono">
                     <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                     <span>Interactive Wall</span>
                   </div>
@@ -194,7 +185,7 @@ export const Explore = () => {
                 </div>
 
                 {/* CTA Main Body */}
-                <div className="space-y-3 my-6">
+                <div className="space-y-3 my-5">
                   <h3 className="text-2xl font-serif text-white font-medium leading-tight">
                     Leave your mark on my guestbook!
                   </h3>
@@ -204,7 +195,7 @@ export const Explore = () => {
                 </div>
 
                 {/* Bottom Sign CTA Bar */}
-                <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between pt-4 border-t border-neutral-900">
+                <div className="absolute bottom-7 left-7 right-7 flex items-center justify-between pt-4 border-t border-neutral-900">
                   <div className="flex items-center gap-2 text-neutral-400 font-mono text-xs">
                     <IconTerminal className="w-4 h-4 text-neutral-500" />
                     <span>Sign Wall</span>
