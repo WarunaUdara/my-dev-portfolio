@@ -1,6 +1,20 @@
-# Agent Configuration & Git Workflow Guidelines
+# Agent Configuration & Mandatory Guidelines
 
-This document outlines the guidelines and specific Git workflow rules that Antigravity and other development agents must strictly follow when working on the **my-dev-portfolio** project.
+This document outlines the guidelines and specific mandatory rules that Antigravity and all development subagents must strictly follow when working on the **my-dev-portfolio** project.
+
+---
+
+## ⚡ CRITICAL DIRECTIVE: PACKAGE MANAGER (BUN EXCLUSIVELY)
+
+> [!IMPORTANT]
+> **DO NOT USE `npm` UNDER ANY CIRCUMSTANCES.**
+> This project uses **Bun (`bun`)** exclusively for package management, dependency installations, script execution, and task running.
+
+### Mandatory Command Substitutions:
+- **Installing Packages**: Use `bun add <package>` (or `bun add -d <package>`). **NEVER use `npm install`**.
+- **Running Scripts**: Use `bun run <script>` (e.g. `bun run dev`, `bun run build`). **NEVER use `npm run`**.
+- **Executing CLI Tools**: Use `bunx <tool>` (e.g. `bunx vite build`). **NEVER use `npx`**.
+- **Installing Dependencies**: Use `bun install`.
 
 ---
 
@@ -59,7 +73,7 @@ For this portfolio project, standard scopes include:
 * `cv-download` - CV download tracking API/button
 * `uses` - Uses setup page/components
 * `nav` - Navigation bars & footer
-* `deps` - Tooling, package managers (Bun/npm)
+* `deps` - Tooling, package managers (Bun)
 * `docs` - Markdown and code documentation
 * `styling` - CSS variables, global CSS, Tailwind v4 config
 
