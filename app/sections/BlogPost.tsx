@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "@/components/ui/Image";
 import Link from "@/components/ui/Link";
 import { getBlogPostBySlug } from "@/lib/blogData";
-import { IconArrowLeft, IconCalendar, IconClock, IconTag, IconList } from "@tabler/icons-react";
+import { IconArrowLeft, IconCalendar, IconClock, IconTag, IconList, IconChevronLeft } from "@tabler/icons-react";
 
 import CodeBlock from "@/components/ui/CodeBlock";
 import { LineSidebar } from "@/components/ReactBits/LineSidebar";
@@ -103,6 +103,8 @@ function formatShortTopic(fullText: string): string {
   return words.slice(0, 6).join(" ");
 }
 
+const NAV_HEIGHT_PX = 88;
+
 export const BlogPost = ({ slug }: { slug: string }) => {
   const meta = getBlogPostBySlug(slug);
   const MDXContent = MDX_COMPONENTS[slug];
@@ -111,8 +113,12 @@ export const BlogPost = ({ slug }: { slug: string }) => {
   const [headings, setHeadings] = useState<{ id: string; text: string }[]>([]);
   const [activeHeadingIndex, setActiveHeadingIndex] = useState<number>(0);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  // Extract article section headings & observe active topic & article bounds
+  const suppressSpyRef = useRef(false);
+  const suppressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Extract heading elements
   useEffect(() => {
     if (!articleContentRef.current) return;
     const elements = Array.from(
@@ -120,63 +126,133 @@ export const BlogPost = ({ slug }: { slug: string }) => {
     ) as HTMLElement[];
 
     const itemsList: { id: string; text: string }[] = [];
-
     elements.forEach((el, index) => {
       const id = el.id || `section-topic-${index}`;
       el.id = id;
       const fullText = el.textContent || `Section ${index + 1}`;
-      const shortText = formatShortTopic(fullText);
-      itemsList.push({ id, text: shortText });
+      itemsList.push({ id, text: formatShortTopic(fullText) });
     });
-
     setHeadings(itemsList);
+  }, [slug]);
 
+  // Bug 1 Fix: Scroll-spy with top/bottom edge boundary handling
+  useEffect(() => {
+    if (!articleContentRef.current || headings.length === 0) return;
+    const elements = headings
+      .map((h) => document.getElementById(h.id))
+      .filter((el): el is HTMLElement => el !== null);
     if (elements.length === 0) return;
 
-    // Window scroll listener: Synchronizes active TOC topic and hides sidebar when outside article bounds
-    const handleScroll = () => {
-      if (!articleContentRef.current) return;
+    const visible = new Map<string, number>();
 
-      const articleRect = articleContentRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (suppressSpyRef.current) return;
 
-      // Show sidebar while reading article body (hides when scrolling down to CTA / Footer)
-      const inArticleBody = articleRect.top < viewportHeight * 0.6 && articleRect.bottom > 200;
-      setShowSidebar(inArticleBody);
-
-      if (!inArticleBody) return;
-
-      // Find active topic heading closest to upper focus area (offset = 35% of viewport height)
-      const focusThreshold = Math.min(360, viewportHeight * 0.4);
-      let currentActiveIndex = 0;
-
-      for (let i = 0; i < elements.length; i++) {
-        const rect = elements[i].getBoundingClientRect();
-        if (rect.top <= focusThreshold) {
-          currentActiveIndex = i;
-        } else {
-          break;
+        for (const entry of entries) {
+          const id = entry.target.id;
+          if (entry.isIntersecting) {
+            visible.set(id, entry.boundingClientRect.top);
+          } else {
+            visible.delete(id);
+          }
         }
+
+        if (visible.size > 0) {
+          let bestId: string | null = null;
+          let bestTop = Infinity;
+          visible.forEach((top, id) => {
+            if (top < bestTop) {
+              bestTop = top;
+              bestId = id;
+            }
+          });
+          if (bestId) {
+            const idx = headings.findIndex((h) => h.id === bestId);
+            if (idx !== -1) setActiveHeadingIndex(idx);
+          }
+        }
+      },
+      {
+        rootMargin: `-${NAV_HEIGHT_PX + 8}px 0px -65% 0px`,
+        threshold: 0,
+      }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    // Handle scroll edge boundaries (Top intro & Bottom end dead-zones)
+    const handleEdgeScroll = () => {
+      if (suppressSpyRef.current) return;
+
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+
+      // Top boundary check
+      if (scrollTop < 150) {
+        setActiveHeadingIndex(0);
+        return;
       }
 
-      setActiveHeadingIndex(currentActiveIndex);
+      // Bottom boundary check
+      if (scrollTop + windowHeight >= fullHeight - 120) {
+        setActiveHeadingIndex(headings.length - 1);
+        return;
+      }
+    };
+
+    window.addEventListener("scroll", handleEdgeScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleEdgeScroll);
+    };
+  }, [headings]);
+
+  // Sidebar visibility throttle
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        if (!articleContentRef.current) return;
+        const rect = articleContentRef.current.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const inArticleBody = rect.top < viewportHeight * 0.6 && rect.bottom > 200;
+        setShowSidebar(inArticleBody);
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
-
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, [slug]);
 
+  useEffect(() => {
+    return () => {
+      if (suppressTimeoutRef.current) clearTimeout(suppressTimeoutRef.current);
+    };
+  }, []);
+
   const handleSidebarItemClick = (index: number) => {
     const targetId = headings[index]?.id;
-    if (targetId) {
-      const el = document.getElementById(targetId);
-      if (el) {
-        const topOffset = el.getBoundingClientRect().top + window.scrollY - 110;
-        window.scrollTo({ top: topOffset, behavior: "smooth" });
-      }
-    }
+    if (!targetId) return;
+    const el = document.getElementById(targetId);
+    if (!el) return;
+
+    setActiveHeadingIndex(index);
+    suppressSpyRef.current = true;
+    if (suppressTimeoutRef.current) clearTimeout(suppressTimeoutRef.current);
+
+    const topOffset = el.getBoundingClientRect().top + window.scrollY - (NAV_HEIGHT_PX + 22);
+    window.scrollTo({ top: topOffset, behavior: "smooth" });
+
+    suppressTimeoutRef.current = setTimeout(() => {
+      suppressSpyRef.current = false;
+    }, 900);
   };
 
   if (!meta || !MDXContent) {
@@ -196,46 +272,85 @@ export const BlogPost = ({ slug }: { slug: string }) => {
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      {/* Floating Right Sticky LineSidebar TOC — visible only while reading article body */}
+      {/* Collapsible / Expandable Right Fixed LineSidebar TOC
+          - Collapsed by default as a narrow strip (showing progress counter)
+          - Expands outward smoothly (420px wide) on hover or click */}
       {headings.length > 0 && showSidebar && (
-        <aside className="hidden xl:block fixed top-28 right-4 lg:right-8 z-40 w-[310px] pointer-events-auto">
-          {/* Card with reserved space for marker lines */}
-          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-xl shadow-2xl overflow-hidden">
+        <aside
+          onMouseEnter={() => setIsExpanded(true)}
+          onMouseLeave={() => setIsExpanded(false)}
+          className={`hidden xl:block fixed right-4 lg:right-6 z-[60] pointer-events-auto transition-all duration-300 ease-out isolate ${
+            isExpanded ? "w-[420px]" : "w-[68px]"
+          }`}
+          style={{ top: NAV_HEIGHT_PX + 24 }}
+        >
+          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-2xl shadow-2xl overflow-hidden transition-all duration-300">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-neutral-800/70 bg-neutral-900/40">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold flex items-center gap-2">
-                <IconList className="w-3.5 h-3.5 text-sky-400" />
-                <span>TOPICS</span>
-              </span>
-              <span className="text-[10px] font-mono text-neutral-500">
-                {activeHeadingIndex + 1}/{headings.length}
-              </span>
+            <div className="flex items-center justify-between px-4 pt-3.5 pb-3 rounded-t-2xl border-b border-neutral-800/70 bg-neutral-900/40">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="p-1 rounded-md hover:bg-neutral-800 text-sky-400 transition-colors"
+                  aria-label="Toggle Table of Contents"
+                >
+                  <IconList className="w-4 h-4" />
+                </button>
+                {isExpanded && (
+                  <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold animate-fadeIn">
+                    TOPICS
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] font-mono text-sky-400 font-bold">
+                  {String(activeHeadingIndex + 1).padStart(2, "0")}
+                </span>
+                <span className="text-[10px] font-mono text-neutral-600">/</span>
+                <span className="text-[10px] font-mono text-neutral-500">
+                  {String(headings.length).padStart(2, "0")}
+                </span>
+              </div>
             </div>
 
-            {/* Scroll container — owns overflow. pl-14 gives room for left marker lines. */}
-            <div
-              className="overflow-y-auto overflow-x-visible max-h-[60vh] pl-14 pr-4 py-1"
-              style={{ scrollbarWidth: 'none' }}
-            >
-              <LineSidebar
-                items={headings.map((h) => h.text)}
-                activeItemIndex={activeHeadingIndex}
-                onItemClick={(idx) => handleSidebarItemClick(idx)}
-                accentColor="#38bdf8"
-                textColor="#737373"
-                markerColor="#404040"
-                showIndex={false}
-                showMarker={true}
-                proximityRadius={70}
-                maxShift={12}
-                markerLength={36}
-                markerGap={0}
-                tickScale={0.5}
-                scaleTick={true}
-                itemGap={12}
-                fontSize={0.82}
-                smoothing={80}
-              />
+            {/* LineSidebar List Area */}
+            <div className="pl-14 pr-4 py-2 rounded-b-2xl overflow-hidden">
+              {isExpanded ? (
+                <LineSidebar
+                  items={headings.map((h) => h.text)}
+                  activeItemIndex={activeHeadingIndex}
+                  onItemClick={(idx) => handleSidebarItemClick(idx)}
+                  accentColor="#38bdf8"
+                  textColor="#a3a3a3"
+                  markerColor="#525252"
+                  showIndex={true}
+                  showMarker={true}
+                  proximityRadius={100}
+                  maxShift={20}
+                  markerLength={44}
+                  markerGap={0}
+                  tickScale={0.55}
+                  scaleTick={true}
+                  itemGap={14}
+                  fontSize={0.88}
+                  smoothing={80}
+                  maxHeight="58vh"
+                />
+              ) : (
+                /* Collapsed narrow progress indicator strip */
+                <div className="flex flex-col items-center py-4 space-y-2">
+                  {headings.map((_, i) => (
+                    <div
+                      key={i}
+                      onClick={() => handleSidebarItemClick(i)}
+                      className={`cursor-pointer transition-all rounded-full ${
+                        activeHeadingIndex === i
+                          ? "w-7 h-1.5 bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]"
+                          : "w-3 h-1 bg-neutral-800 hover:bg-neutral-600"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </aside>

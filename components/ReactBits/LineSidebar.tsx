@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect, CSSProperties } from 'react';
+import { useRef, useState, useCallback, useEffect, CSSProperties } from "react";
 
-type Falloff = 'linear' | 'smooth' | 'sharp';
+type Falloff = "linear" | "smooth" | "sharp";
 
 export interface LineSidebarProps {
   items?: string[];
@@ -22,27 +22,36 @@ export interface LineSidebarProps {
   fontSize?: number;
   smoothing?: number;
   defaultActive?: number | null;
+  /** Controlled active index (e.g. driven by a scroll-spy in the parent). */
   activeItemIndex?: number | null;
   onItemClick?: (index: number, label: string) => void;
   className?: string;
+  /**
+   * LineSidebar owns its own scroll container now — do NOT also wrap it in
+   * an `overflow-y-auto` div in the parent. Having two scroll owners is
+   * what caused the "sidebar doesn't track" bug (native scrollIntoView
+   * fighting the page-level smooth scroll). Pass `null` to disable
+   * internal scrolling entirely (e.g. if the list is always short).
+   */
+  maxHeight?: string | null;
 }
 
 const FALLOFF_CURVES: Record<Falloff, (p: number) => number> = {
-  linear: p => p,
-  smooth: p => p * p * (3 - 2 * p),
-  sharp: p => p * p * p
+  linear: (p) => p,
+  smooth: (p) => p * p * (3 - 2 * p),
+  sharp: (p) => p * p * p,
 };
 
 export const LineSidebar = ({
   items = [],
-  accentColor = '#38bdf8',
-  textColor = '#a3a3a3',
-  markerColor = '#525252',
+  accentColor = "#38bdf8",
+  textColor = "#a3a3a3",
+  markerColor = "#525252",
   showIndex = true,
   showMarker = true,
   proximityRadius = 100,
   maxShift = 24,
-  falloff = 'smooth',
+  falloff = "smooth",
   markerLength = 48,
   markerGap = 0,
   tickScale = 0.5,
@@ -53,7 +62,8 @@ export const LineSidebar = ({
   defaultActive = 0,
   activeItemIndex = null,
   onItemClick,
-  className = ''
+  className = "",
+  maxHeight = "60vh",
 }: LineSidebarProps) => {
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -63,31 +73,59 @@ export const LineSidebar = ({
   const lastRef = useRef(0);
   const activeRef = useRef<number | null>(defaultActive);
   const smoothingRef = useRef(smoothing);
+  // True for one render right after a click, so the auto-scroll effect
+  // below skips re-scrolling something the user just scrolled to on purpose.
+  const skipAutoScrollRef = useRef(false);
+
   const [activeIndex, setActiveIndex] = useState<number | null>(
     activeItemIndex ?? defaultActive
   );
 
-  // Sync external activeItemIndex prop → internal state
+  // Controlled index sync (0 is a valid index, so check for null/undefined
+  // explicitly rather than falsy).
   useEffect(() => {
     if (activeItemIndex !== null && activeItemIndex !== undefined) {
       setActiveIndex(activeItemIndex);
     }
   }, [activeItemIndex]);
 
-  // Auto-scroll active item into view within overflow container
+  // Reset animation buffers whenever the item count changes so stale
+  // per-index state (from a previous page's headings, say) can't leak in.
   useEffect(() => {
-    if (activeIndex !== null && itemRefs.current[activeIndex]) {
-      itemRefs.current[activeIndex]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      });
+    targetsRef.current = items.map((_, i) => targetsRef.current[i] ?? 0);
+    currentRef.current = items.map((_, i) => currentRef.current[i] ?? 0);
+  }, [items.length]);
+
+  // Keep the active item visible — scoped ONLY to this list's own scroll
+  // box via manual scrollTop math. Deliberately not using
+  // element.scrollIntoView(), which walks every scrollable ancestor
+  // (including the page itself) and was fighting the page-level smooth
+  // scroll triggered by clicking a TOC item.
+  useEffect(() => {
+    if (activeIndex === null) return;
+    if (skipAutoScrollRef.current) {
+      skipAutoScrollRef.current = false;
+      return;
+    }
+    const list = listRef.current;
+    const el = itemRefs.current[activeIndex];
+    if (!list || !el) return;
+
+    const elTop = el.offsetTop;
+    const elBottom = elTop + el.offsetHeight;
+    const viewTop = list.scrollTop;
+    const viewBottom = viewTop + list.clientHeight;
+
+    if (elTop < viewTop) {
+      list.scrollTo({ top: elTop - 8, behavior: "smooth" });
+    } else if (elBottom > viewBottom) {
+      list.scrollTo({ top: elBottom - list.clientHeight + 8, behavior: "smooth" });
     }
   }, [activeIndex]);
 
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
 
-  // Frame-rate independent exponential animation loop
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -99,13 +137,16 @@ export const LineSidebar = ({
     for (let i = 0; i < itemEls.length; i++) {
       const el = itemEls[i];
       if (!el) continue;
-      const target = Math.max(targetsRef.current[i] || 0, activeRef.current === i ? 1 : 0);
+      const target = Math.max(
+        targetsRef.current[i] || 0,
+        activeRef.current === i ? 1 : 0
+      );
       const cur = currentRef.current[i] || 0;
       const next = cur + (target - cur) * k;
       const settled = Math.abs(target - next) < 0.0015;
       const value = settled ? target : next;
       currentRef.current[i] = value;
-      el.style.setProperty('--effect', value.toFixed(4));
+      el.style.setProperty("--effect", value.toFixed(4));
       if (!settled) moving = true;
     }
 
@@ -118,9 +159,9 @@ export const LineSidebar = ({
     rafRef.current = requestAnimationFrame(runFrame);
   }, [runFrame]);
 
-  // Screen-relative direct pointer calculation — immune to scroll offsets or parent containers!
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLUListElement>) => {
+      if (e.pointerType === "touch") return; // proximity hover is a mouse/trackpad affordance
       const ease = FALLOFF_CURVES[falloff] ?? FALLOFF_CURVES.linear;
       const itemEls = itemRefs.current;
       for (let i = 0; i < itemEls.length; i++) {
@@ -143,10 +184,21 @@ export const LineSidebar = ({
 
   const handleClick = useCallback(
     (index: number, label: string) => {
+      skipAutoScrollRef.current = true;
       setActiveIndex(index);
       onItemClick?.(index, label);
     },
     [onItemClick]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLLIElement>, index: number, label: string) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleClick(index, label);
+      }
+    },
+    [handleClick]
   );
 
   useEffect(() => {
@@ -160,29 +212,34 @@ export const LineSidebar = ({
     []
   );
 
+  if (items.length === 0) return null;
+
   const tickClass = showMarker
     ? `after:absolute after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-40 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
         scaleTick
-          ? 'after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]'
-          : 'after:-translate-y-1/2'
+          ? "after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]"
+          : "after:-translate-y-1/2"
       }`
-    : '';
+    : "";
 
   return (
     <nav
-      className={`relative flex justify-start${showMarker ? ' [padding-left:calc(var(--marker-length)+var(--marker-gap))]' : ''}${className ? ` ${className}` : ''}`}
+      aria-label="Table of contents"
+      className={`relative flex justify-start${
+        showMarker ? " [padding-left:calc(var(--marker-length)+var(--marker-gap))]" : ""
+      }${className ? ` ${className}` : ""}`}
       style={
         {
-          '--accent-color': accentColor,
-          '--text-color': textColor,
-          '--marker-color': markerColor,
-          '--marker-length': `${markerLength}px`,
-          '--marker-gap': `${markerGap}px`,
-          '--tick-scale': tickScale,
-          '--max-shift': `${maxShift}px`,
-          '--item-gap': `${itemGap}px`,
-          '--font-size': `${fontSize}rem`,
-          '--smoothing': `${smoothing}ms`
+          "--accent-color": accentColor,
+          "--text-color": textColor,
+          "--marker-color": markerColor,
+          "--marker-length": `${markerLength}px`,
+          "--marker-gap": `${markerGap}px`,
+          "--tick-scale": tickScale,
+          "--max-shift": `${maxShift}px`,
+          "--item-gap": `${itemGap}px`,
+          "--font-size": `${fontSize}rem`,
+          "--smoothing": `${smoothing}ms`,
         } as CSSProperties
       }
     >
@@ -190,31 +247,40 @@ export const LineSidebar = ({
         ref={listRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className="m-0 flex list-none flex-col py-3 [gap:var(--item-gap)]"
+        className="m-0 flex list-none flex-col py-3 [gap:var(--item-gap)] overflow-y-auto overflow-x-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={maxHeight ? { maxHeight } : undefined}
       >
         {items.map((label, index) => (
           <li
             key={`${label}-${index}`}
-            ref={el => {
+            ref={(el) => {
               itemRefs.current[index] = el;
             }}
-            aria-current={activeIndex === index ? 'true' : undefined}
+            role="button"
+            tabIndex={0}
+            aria-label={label}
+            aria-current={activeIndex === index ? "true" : undefined}
             onClick={() => handleClick(index, label)}
-            className={`relative cursor-pointer select-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
+            onKeyDown={(e) => handleKeyDown(e, index, label)}
+            className={`relative cursor-pointer select-none outline-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] focus-visible:[text-shadow:0_0_0_1px_var(--accent-color)] ${tickClass}`}
           >
             {showMarker && (
               <span
                 aria-hidden="true"
-                className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
+                className="pointer-events-none absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
               />
             )}
             <span className="relative inline-flex items-baseline leading-[1.3] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))] will-change-transform font-sans">
               {showIndex && (
                 <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
-                  {String(index + 1).padStart(2, '0')}
+                  {String(index + 1).padStart(2, "0")}
                 </span>
               )}
-              <span className="truncate max-w-[210px] block" title={label}>{label}</span>
+              {/* No native `title` tooltip — it renders unpredictably
+                  (that stray floating box in the top-left of your
+                  screenshot was this). If you need the full label on
+                  truncation, use a proper Tooltip component instead. */}
+              <span className="truncate max-w-[320px] block font-medium">{label}</span>
             </span>
           </li>
         ))}
