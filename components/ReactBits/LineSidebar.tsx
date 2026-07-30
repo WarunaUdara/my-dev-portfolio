@@ -34,6 +34,27 @@ const FALLOFF_CURVES: Record<Falloff, (p: number) => number> = {
   sharp: p => p * p * p
 };
 
+// Pure JS RGB color interpolation — 100% cross-browser CSSOM safe
+function interpolateColor(color1: string, color2: string, factor: number): string {
+  const parseHex = (hex: string): [number, number, number] => {
+    let c = hex.replace('#', '').trim();
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    const num = parseInt(c, 16);
+    if (isNaN(num)) return [163, 163, 163];
+    return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+  };
+
+  const c1 = parseHex(color1);
+  const c2 = parseHex(color2);
+  const f = Math.max(0, Math.min(1, factor));
+
+  const r = Math.round(c1[0] + f * (c2[0] - c1[0]));
+  const g = Math.round(c1[1] + f * (c2[1] - c1[1]));
+  const b = Math.round(c1[2] + f * (c2[2] - c1[2]));
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 const DEFAULT_ITEMS = [
   'Overview',
   'Components',
@@ -134,28 +155,21 @@ export const LineSidebar = ({
       const value = settled ? target : next;
       currentRef.current[i] = value;
 
-      // 1. Direct real-time line marker length scaling & color transition
+      // 1. Direct line marker length scaling (0.7x -> 1.2x) & RGB color transition
       const markerEl = markerRefs.current[i];
       if (markerEl) {
         const scale = (0.7 + value * 0.5).toFixed(4);
         markerEl.style.transform = `translateY(-50%) scaleX(${scale})`;
-        const pct = Math.round(value * 100);
-        markerEl.style.backgroundColor = `color-mix(in srgb, ${accentColor} ${pct}%, ${markerColor})`;
+        markerEl.style.backgroundColor = interpolateColor(markerColor, accentColor, value);
       }
 
-      // 2. Direct real-time text move (translateX) & color transition
+      // 2. Direct text move (0px -> maxShift px) & RGB color transition
       const textEl = textRefs.current[i];
       if (textEl) {
         const shift = (value * maxShift).toFixed(2);
         textEl.style.transform = `translateX(${shift}px)`;
-        if (activeRef.current === i) {
-          textEl.style.color = accentColor;
-          textEl.style.fontWeight = '600';
-        } else {
-          const pct = Math.round(value * 100);
-          textEl.style.color = `color-mix(in srgb, ${accentColor} ${pct}%, ${textColor})`;
-          textEl.style.fontWeight = value > 0.3 ? '600' : '400';
-        }
+        textEl.style.color = interpolateColor(textColor, accentColor, value);
+        textEl.style.fontWeight = value > 0.3 ? '600' : '400';
       }
 
       if (!settled) moving = true;
@@ -264,6 +278,10 @@ export const LineSidebar = ({
                   }}
                   aria-hidden="true"
                   className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left pointer-events-none"
+                  style={{
+                    backgroundColor: isActive ? accentColor : markerColor,
+                    transform: isActive ? 'translateY(-50%) scaleX(1.2)' : 'translateY(-50%) scaleX(0.7)'
+                  }}
                 />
               )}
               <span
@@ -271,6 +289,11 @@ export const LineSidebar = ({
                   textRefs.current[index] = el;
                 }}
                 className="relative inline-flex items-baseline leading-[1.2] [font-size:var(--font-size)] font-sans"
+                style={{
+                  color: isActive ? accentColor : textColor,
+                  fontWeight: isActive ? 600 : 400,
+                  transform: isActive ? `translateX(${maxShift}px)` : 'translateX(0px)'
+                }}
               >
                 {showIndex && (
                   <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
