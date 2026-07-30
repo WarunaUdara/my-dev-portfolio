@@ -56,7 +56,7 @@ export const LineSidebar = ({
   markerColor = '#525252',
   showIndex = true,
   showMarker = true,
-  proximityRadius = 100,
+  proximityRadius = 120,
   maxShift = 30,
   falloff = 'smooth',
   markerLength = 56,
@@ -115,7 +115,7 @@ export const LineSidebar = ({
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
 
-  // Single rAF loop — frame-rate independent exponential smoothing for line scaling, text move & coloring
+  // Single rAF loop — frame-rate independent exponential smoothing
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -133,7 +133,6 @@ export const LineSidebar = ({
       const settled = Math.abs(target - next) < 0.0015;
       const value = settled ? target : next;
       currentRef.current[i] = value;
-      el.style.setProperty('--effect', value.toFixed(4));
 
       // 1. Direct real-time line marker length scaling & color transition
       const markerEl = markerRefs.current[i];
@@ -264,23 +263,14 @@ export const LineSidebar = ({
                     markerRefs.current[index] = el;
                   }}
                   aria-hidden="true"
-                  className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left will-change-transform"
-                  style={{
-                    backgroundColor: isActive ? accentColor : markerColor,
-                    transform: isActive ? 'translateY(-50%) scaleX(1.2)' : 'translateY(-50%) scaleX(0.7)'
-                  }}
+                  className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left pointer-events-none"
                 />
               )}
               <span
                 ref={el => {
                   textRefs.current[index] = el;
                 }}
-                className="relative inline-flex items-baseline leading-[1.2] [font-size:var(--font-size)] will-change-transform font-sans"
-                style={{
-                  color: isActive ? accentColor : textColor,
-                  fontWeight: isActive ? 600 : 400,
-                  transform: isActive ? `translateX(${maxShift}px)` : 'translateX(0px)'
-                }}
+                className="relative inline-flex items-baseline leading-[1.2] [font-size:var(--font-size)] font-sans"
               >
                 {showIndex && (
                   <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
