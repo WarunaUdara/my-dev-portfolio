@@ -280,13 +280,13 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           onMouseEnter={() => setIsExpanded(true)}
           onMouseLeave={() => setIsExpanded(false)}
           className={`hidden xl:block fixed right-4 lg:right-6 z-[60] pointer-events-auto transition-all duration-300 ease-out isolate ${
-            isExpanded ? "w-[500px]" : "w-[68px]"
+            isExpanded ? "w-[580px] xl:w-[620px]" : "w-[68px]"
           }`}
           style={{ top: NAV_HEIGHT_PX + 24 }}
         >
           <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-2xl shadow-2xl transition-all duration-300">
             {/* Header */}
-            <div className="flex items-center justify-between px-4 pt-3.5 pb-3 rounded-t-2xl border-b border-neutral-800/70 bg-neutral-900/40">
+            <div className="flex items-center justify-between px-5 pt-3.5 pb-3 rounded-t-2xl border-b border-neutral-800/70 bg-neutral-900/40">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
@@ -313,7 +313,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
             </div>
 
             {/* LineSidebar List Area — No overflow-hidden so marker lines render cleanly */}
-            <div className="px-4 py-2 rounded-b-2xl">
+            <div className="px-6 py-3 rounded-b-2xl">
               {isExpanded ? (
                 <LineSidebar
                   items={headings.map((h) => h.text)}
@@ -325,13 +325,13 @@ export const BlogPost = ({ slug }: { slug: string }) => {
                   showIndex={true}
                   showMarker={true}
                   proximityRadius={100}
-                  maxShift={20}
-                  markerLength={44}
+                  maxShift={28}
+                  markerLength={50}
                   markerGap={0}
                   tickScale={0.55}
                   scaleTick={true}
-                  itemGap={14}
-                  fontSize={0.88}
+                  itemGap={16}
+                  fontSize={0.92}
                   smoothing={80}
                 />
               ) : (

@@ -56,14 +56,14 @@ export const LineSidebar = ({
   showIndex = true,
   showMarker = true,
   proximityRadius = 100,
-  maxShift = 24,
+  maxShift = 28,
   falloff = 'smooth',
-  markerLength = 48,
+  markerLength = 52,
   markerGap = 0,
   tickScale = 0.5,
   scaleTick = true,
   itemGap = 16,
-  fontSize = 0.9,
+  fontSize = 0.92,
   smoothing = 80,
   defaultActive = 0,
   activeItemIndex = null,
@@ -91,9 +91,7 @@ export const LineSidebar = ({
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
 
-  // Single rAF loop that eases every item's --effect toward its target using
-  // frame-rate independent exponential smoothing, so color, shift and scale
-  // all move together without staggering CSS transitions.
+  // Single rAF loop — frame-rate independent exponential smoothing
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -101,9 +99,9 @@ export const LineSidebar = ({
     const k = 1 - Math.exp(-dt / tau);
 
     let moving = false;
-    const items = itemRefs.current;
-    for (let i = 0; i < items.length; i++) {
-      const el = items[i];
+    const itemEls = itemRefs.current;
+    for (let i = 0; i < itemEls.length; i++) {
+      const el = itemEls[i];
       if (!el) continue;
       const target = Math.max(targetsRef.current[i] || 0, activeRef.current === i ? 1 : 0);
       const cur = currentRef.current[i] || 0;
@@ -124,19 +122,17 @@ export const LineSidebar = ({
     rafRef.current = requestAnimationFrame(runFrame);
   }, [runFrame]);
 
+  // Viewport-relative direct mouse distance calculation — 100% exact regardless of parent offsetParent
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLUListElement>) => {
-      const list = listRef.current;
-      if (!list) return;
-      const rect = list.getBoundingClientRect();
-      const pointerY = e.clientY - rect.top;
       const ease = FALLOFF_CURVES[falloff] ?? FALLOFF_CURVES.linear;
-      const items = itemRefs.current;
-      for (let i = 0; i < items.length; i++) {
-        const el = items[i];
+      const itemEls = itemRefs.current;
+      for (let i = 0; i < itemEls.length; i++) {
+        const el = itemEls[i];
         if (!el) continue;
-        const center = el.offsetTop + el.offsetHeight / 2;
-        const distance = Math.abs(pointerY - center);
+        const elRect = el.getBoundingClientRect();
+        const center = elRect.top + elRect.height / 2;
+        const distance = Math.abs(e.clientY - center);
         targetsRef.current[i] = ease(Math.max(0, 1 - distance / proximityRadius));
       }
       startLoop();
@@ -200,32 +196,44 @@ export const LineSidebar = ({
         onPointerLeave={handlePointerLeave}
         className="m-0 flex list-none flex-col py-4 [gap:var(--item-gap)]"
       >
-        {items.map((label, index) => (
-          <li
-            key={`${label}-${index}`}
-            ref={el => {
-              itemRefs.current[index] = el;
-            }}
-            aria-current={activeIndex === index ? 'true' : undefined}
-            onClick={() => handleClick(index, label)}
-            className={`relative cursor-pointer select-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
-          >
-            {showMarker && (
-              <span
-                aria-hidden="true"
-                className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
-              />
-            )}
-            <span className="relative inline-flex items-baseline leading-[1.2] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))]">
-              {showIndex && (
-                <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
+        {items.map((label, index) => {
+          const isActive = activeIndex === index;
+          return (
+            <li
+              key={`${label}-${index}`}
+              ref={el => {
+                itemRefs.current[index] = el;
+              }}
+              aria-current={isActive ? 'true' : undefined}
+              onClick={() => handleClick(index, label)}
+              className={`relative cursor-pointer select-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
+              style={{
+                '--effect': isActive ? '1.0000' : undefined
+              } as CSSProperties}
+            >
+              {showMarker && (
+                <span
+                  aria-hidden="true"
+                  className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
+                />
               )}
-              <span className="truncate max-w-[320px] block font-medium">{label}</span>
-            </span>
-          </li>
-        ))}
+              <span
+                className="relative inline-flex items-baseline leading-[1.2] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))] font-sans"
+                style={{
+                  color: isActive ? accentColor : `color-mix(in srgb, ${accentColor} calc(var(--effect, 0) * 100%), ${textColor})`,
+                  fontWeight: isActive ? 600 : 400
+                }}
+              >
+                {showIndex && (
+                  <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                )}
+                <span className="truncate max-w-[480px] block">{label}</span>
+              </span>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
