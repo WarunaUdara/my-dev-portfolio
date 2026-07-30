@@ -272,84 +272,52 @@ export const BlogPost = ({ slug }: { slug: string }) => {
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      {/* Collapsible / Expandable Right Fixed LineSidebar TOC
-          - Collapsed by default as a narrow strip (showing progress counter)
-          - Expands outward smoothly (420px wide) on hover or click */}
+      {/* Floating Right Sticky LineSidebar TOC — permanently mounted for 100% hover & auto-scroll reliability */}
       {headings.length > 0 && showSidebar && (
         <aside
-          onMouseEnter={() => setIsExpanded(true)}
-          onMouseLeave={() => setIsExpanded(false)}
-          className={`hidden xl:block fixed right-4 lg:right-6 z-[60] pointer-events-auto transition-all duration-300 ease-out isolate ${
-            isExpanded ? "w-[580px] xl:w-[620px]" : "w-[68px]"
-          }`}
+          className="hidden xl:block fixed right-6 lg:right-8 z-[60] w-[380px] xl:w-[440px] pointer-events-auto transition-opacity duration-300 isolate"
           style={{ top: NAV_HEIGHT_PX + 24 }}
         >
-          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-2xl shadow-2xl transition-all duration-300">
-            {/* Header */}
-            <div className="flex items-center justify-between px-5 pt-3.5 pb-3 rounded-t-2xl border-b border-neutral-800/70 bg-neutral-900/40">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="p-1 rounded-md hover:bg-neutral-800 text-sky-400 transition-colors"
-                  aria-label="Toggle Table of Contents"
-                >
-                  <IconList className="w-4 h-4" />
-                </button>
-                {isExpanded && (
-                  <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold animate-fadeIn">
-                    TOPICS
-                  </span>
-                )}
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-[10px] font-mono text-sky-400 font-bold">
+          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-2xl shadow-2xl">
+            {/* Card Header */}
+            <div className="flex items-center justify-between px-5 pt-4 pb-3 rounded-t-2xl border-b border-neutral-800/70 bg-neutral-900/40">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-semibold flex items-center gap-2">
+                <IconList className="w-4 h-4 text-sky-400" />
+                <span>TOPICS</span>
+              </span>
+              <div className="flex items-center gap-1 font-mono text-[11px]">
+                <span className="text-sky-400 font-bold">
                   {String(activeHeadingIndex + 1).padStart(2, "0")}
                 </span>
-                <span className="text-[10px] font-mono text-neutral-600">/</span>
-                <span className="text-[10px] font-mono text-neutral-500">
+                <span className="text-neutral-600">/</span>
+                <span className="text-neutral-500">
                   {String(headings.length).padStart(2, "0")}
                 </span>
               </div>
             </div>
 
-            {/* LineSidebar List Area — No overflow-hidden so marker lines render cleanly */}
-            <div className="px-6 py-3 rounded-b-2xl">
-              {isExpanded ? (
-                <LineSidebar
-                  items={headings.map((h) => h.text)}
-                  activeItemIndex={activeHeadingIndex}
-                  onItemClick={(idx) => handleSidebarItemClick(idx)}
-                  accentColor="#38bdf8"
-                  textColor="#a3a3a3"
-                  markerColor="#525252"
-                  showIndex={true}
-                  showMarker={true}
-                  proximityRadius={100}
-                  maxShift={28}
-                  markerLength={50}
-                  markerGap={0}
-                  tickScale={0.55}
-                  scaleTick={true}
-                  itemGap={16}
-                  fontSize={0.92}
-                  smoothing={80}
-                />
-              ) : (
-                /* Collapsed narrow progress indicator strip */
-                <div className="flex flex-col items-center py-4 space-y-2">
-                  {headings.map((_, i) => (
-                    <div
-                      key={i}
-                      onClick={() => handleSidebarItemClick(i)}
-                      className={`cursor-pointer transition-all rounded-full ${
-                        activeHeadingIndex === i
-                          ? "w-7 h-1.5 bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]"
-                          : "w-3 h-1 bg-neutral-800 hover:bg-neutral-600"
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
+            {/* LineSidebar List Area — Permanently mounted with padding-left for markers */}
+            <div className="px-5 py-3 rounded-b-2xl">
+              <LineSidebar
+                items={headings.map((h) => h.text)}
+                activeItemIndex={activeHeadingIndex}
+                onItemClick={(idx) => handleSidebarItemClick(idx)}
+                accentColor="#38bdf8"
+                textColor="#a3a3a3"
+                markerColor="#525252"
+                showIndex={true}
+                showMarker={true}
+                proximityRadius={100}
+                maxShift={24}
+                markerLength={46}
+                markerGap={0}
+                tickScale={0.55}
+                scaleTick={true}
+                itemGap={14}
+                fontSize={0.9}
+                smoothing={80}
+                maxHeight="54vh"
+              />
             </div>
           </div>
         </aside>
