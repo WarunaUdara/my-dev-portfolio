@@ -12,22 +12,29 @@ import {
   IconTerminal,
 } from "@tabler/icons-react";
 
-// Tools & Apps List from Uses Section
+// Complete Tools & Apps List from Uses Section (Craft Tools, CLI Tools & Daily Apps)
 const USES_TOOLS = [
-  { name: "VS Code", icon: "/icons8-vs-code-96.png" },
-  { name: "Obsidian", icon: "/obsidian-icon.png" },
-  { name: "NotebookLM", icon: "/notebooklm.png" },
   { name: "Zed", icon: "/zed.png" },
+  { name: "VS Code", icon: "/icons8-vs-code-96.png" },
   { name: "IntelliJ IDEA", icon: "/icons8-intellij-idea-96.png" },
   { name: "Postman", icon: "/icons8-postman-inc-96.png" },
-  { name: "Figma", icon: "/icons8-figma-96.png" },
-  { name: "Ghostty", icon: "/ghostty copy.webp" },
-  { name: "Git", icon: "/icons8-git-144.png" },
-  { name: "Homebrew", icon: "/Homebrew.png" },
-  { name: "Notion", icon: "/notion-logo-icon.png" },
-  { name: "Spotify", icon: "/spotify-logo.png" },
   { name: "DBeaver", icon: "/icons8-dbeaver.png" },
+  { name: "Figma", icon: "/icons8-figma-96.png" },
   { name: "Framer", icon: "/framer-logo.png" },
+  { name: "Ghostty", icon: "/ghostty copy.webp" },
+  { name: "GitHub CLI", icon: "/icons8-github-50.png" },
+  { name: "Homebrew", icon: "/Homebrew.png" },
+  { name: "Git", icon: "/icons8-git-144.png" },
+  { name: "Gemini CLI", icon: "/gemini-cli-icon.png" },
+  { name: "Opencode", icon: "/opencode-logo-dark.png" },
+  { name: "Codex", icon: "/codex-color.webp" },
+  { name: "Notion", icon: "/notion-logo-icon.png" },
+  { name: "Notion Calendar", icon: "/notion-calendar.png" },
+  { name: "Obsidian", icon: "/obsidian-icon.png" },
+  { name: "NotebookLM", icon: "/notebooklm.png" },
+  { name: "ChatWise", icon: "/chat-wise.png" },
+  { name: "Spotify", icon: "/spotify-logo.png" },
+  { name: "Opal", icon: "/opal.png" },
 ];
 
 export const Explore = () => {
@@ -63,14 +70,10 @@ export const Explore = () => {
         {/* Cards Grid — Standardized Portfolio Card Background & Styling */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           
-          {/* Card 1: SETUP & STACK (With Middle-Out Ripple Border & Continuous Uses Tools Marquee) */}
+          {/* Card 1: SETUP & STACK (Matching standard card borders with full Uses tool icons marquee) */}
           <div className="group relative">
             <Link href="/uses" className="block">
               <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
-                {/* Middle-Out Silver Ripple Border Overlay */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
-                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
-
                 {/* Hover Arrow Button */}
                 <div className="absolute bottom-7 right-7 w-9 h-9 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
                   <IconArrowRight className="w-4 h-4 text-white" />
@@ -100,9 +103,7 @@ export const Explore = () => {
                         key={`${tool.name}-${idx}`}
                         className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-mono"
                       >
-                        <div className="relative w-4 h-4 flex items-center justify-center">
-                          <Image src={tool.icon} alt={tool.name} fill className="object-contain" />
-                        </div>
+                        <Image src={tool.icon} alt={tool.name} width={16} height={16} className="object-contain w-4 h-4" />
                         <span>{tool.name}</span>
                       </div>
                     ))}
