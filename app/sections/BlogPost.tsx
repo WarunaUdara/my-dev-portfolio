@@ -1,14 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import Image from "@/components/ui/Image";
 import Link from "@/components/ui/Link";
 import { getBlogPostBySlug } from "@/lib/blogData";
-import { IconArrowLeft, IconCalendar, IconClock, IconTag, IconList, IconChevronLeft } from "@tabler/icons-react";
-
+import { IconArrowLeft, IconCalendar, IconClock, IconTag } from "@tabler/icons-react";
 import CodeBlock from "@/components/ui/CodeBlock";
-import { LineSidebar } from "@/components/ReactBits/LineSidebar";
-import LineSidebarOriginal from "@/components/ReactBits/LineSidebarOriginal";
 
 // Dynamic MDX Component Loader Map
 import HttpQueryPost from "@/content/blog/http-query-method-rfc-10008.mdx";
@@ -96,165 +93,10 @@ const mdxCustomComponents = {
   hr: () => <hr className="my-10 border-neutral-800/80" />,
 };
 
-// Format heading text into clean TOC label preserving technical terms
-function formatShortTopic(fullText: string): string {
-  const clean = fullText.replace(/^#+\s*/, "").trim();
-  const words = clean.split(/\s+/);
-  if (words.length <= 6) return clean;
-  return words.slice(0, 6).join(" ");
-}
-
-const NAV_HEIGHT_PX = 88;
-
 export const BlogPost = ({ slug }: { slug: string }) => {
   const meta = getBlogPostBySlug(slug);
   const MDXContent = MDX_COMPONENTS[slug];
-
   const articleContentRef = useRef<HTMLDivElement>(null);
-  const [headings, setHeadings] = useState<{ id: string; text: string }[]>([]);
-  const [activeHeadingIndex, setActiveHeadingIndex] = useState<number>(0);
-  const [showSidebar, setShowSidebar] = useState<boolean>(false);
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
-  const suppressSpyRef = useRef(false);
-  const suppressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Extract heading elements
-  useEffect(() => {
-    if (!articleContentRef.current) return;
-    const elements = Array.from(
-      articleContentRef.current.querySelectorAll("h1, h2, h3")
-    ) as HTMLElement[];
-
-    const itemsList: { id: string; text: string }[] = [];
-    elements.forEach((el, index) => {
-      const id = el.id || `section-topic-${index}`;
-      el.id = id;
-      const fullText = el.textContent || `Section ${index + 1}`;
-      itemsList.push({ id, text: formatShortTopic(fullText) });
-    });
-    setHeadings(itemsList);
-  }, [slug]);
-
-  // Bug 1 Fix: Scroll-spy with top/bottom edge boundary handling
-  useEffect(() => {
-    if (!articleContentRef.current || headings.length === 0) return;
-    const elements = headings
-      .map((h) => document.getElementById(h.id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (elements.length === 0) return;
-
-    const visible = new Map<string, number>();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (suppressSpyRef.current) return;
-
-        for (const entry of entries) {
-          const id = entry.target.id;
-          if (entry.isIntersecting) {
-            visible.set(id, entry.boundingClientRect.top);
-          } else {
-            visible.delete(id);
-          }
-        }
-
-        if (visible.size > 0) {
-          let bestId: string | null = null;
-          let bestTop = Infinity;
-          visible.forEach((top, id) => {
-            if (top < bestTop) {
-              bestTop = top;
-              bestId = id;
-            }
-          });
-          if (bestId) {
-            const idx = headings.findIndex((h) => h.id === bestId);
-            if (idx !== -1) setActiveHeadingIndex(idx);
-          }
-        }
-      },
-      {
-        rootMargin: `-${NAV_HEIGHT_PX + 8}px 0px -65% 0px`,
-        threshold: 0,
-      }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    // Handle scroll edge boundaries (Top intro & Bottom end dead-zones)
-    const handleEdgeScroll = () => {
-      if (suppressSpyRef.current) return;
-
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const fullHeight = document.documentElement.scrollHeight;
-
-      // Top boundary check
-      if (scrollTop < 150) {
-        setActiveHeadingIndex(0);
-        return;
-      }
-
-      // Bottom boundary check
-      if (scrollTop + windowHeight >= fullHeight - 120) {
-        setActiveHeadingIndex(headings.length - 1);
-        return;
-      }
-    };
-
-    window.addEventListener("scroll", handleEdgeScroll, { passive: true });
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", handleEdgeScroll);
-    };
-  }, [headings]);
-
-  // Sidebar visibility throttle
-  useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        ticking = false;
-        if (!articleContentRef.current) return;
-        const rect = articleContentRef.current.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        const inArticleBody = rect.top < viewportHeight * 0.6 && rect.bottom > 200;
-        setShowSidebar(inArticleBody);
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [slug]);
-
-  useEffect(() => {
-    return () => {
-      if (suppressTimeoutRef.current) clearTimeout(suppressTimeoutRef.current);
-    };
-  }, []);
-
-  const handleSidebarItemClick = (index: number) => {
-    const targetId = headings[index]?.id;
-    if (!targetId) return;
-    const el = document.getElementById(targetId);
-    if (!el) return;
-
-    setActiveHeadingIndex(index);
-    suppressSpyRef.current = true;
-    if (suppressTimeoutRef.current) clearTimeout(suppressTimeoutRef.current);
-
-    const topOffset = el.getBoundingClientRect().top + window.scrollY - (NAV_HEIGHT_PX + 22);
-    window.scrollTo({ top: topOffset, behavior: "smooth" });
-
-    suppressTimeoutRef.current = setTimeout(() => {
-      suppressSpyRef.current = false;
-    }, 900);
-  };
 
   if (!meta || !MDXContent) {
     return (
@@ -272,35 +114,6 @@ export const BlogPost = ({ slug }: { slug: string }) => {
     <article className="relative min-h-screen bg-transparent text-white py-24 px-4 sm:px-6 md:px-12 scroll-mt-20">
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-
-      {/* Floating Right Sticky LineSidebar TOC — Free floating without container boxes */}
-      {headings.length > 0 && showSidebar && (
-        <aside
-          className="hidden xl:block fixed right-8 lg:right-12 z-[60] pointer-events-auto"
-          style={{ top: NAV_HEIGHT_PX + 24 }}
-        >
-          <LineSidebar
-            items={headings.map((h) => h.text)}
-            activeItemIndex={activeHeadingIndex}
-            onItemClick={(idx) => handleSidebarItemClick(idx)}
-            accentColor="#38bdf8"
-            textColor="#a3a3a3"
-            markerColor="#525252"
-            showIndex={true}
-            showMarker={true}
-            proximityRadius={140}
-            maxShift={32}
-            markerLength={64}
-            markerGap={0}
-            tickScale={0.5}
-            scaleTick={true}
-            itemGap={16}
-            fontSize={0.92}
-            smoothing={70}
-            maxHeight="60vh"
-          />
-        </aside>
-      )}
 
       {/* Main Reading Column */}
       <div className="container mx-auto max-w-3xl relative z-10 space-y-10">
