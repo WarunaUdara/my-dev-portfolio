@@ -284,7 +284,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           }`}
           style={{ top: NAV_HEIGHT_PX + 24 }}
         >
-          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-2xl shadow-2xl overflow-hidden transition-all duration-300">
+          <div className="rounded-2xl bg-neutral-950/95 border border-neutral-800/90 backdrop-blur-2xl shadow-2xl transition-all duration-300">
             {/* Header */}
             <div className="flex items-center justify-between px-4 pt-3.5 pb-3 rounded-t-2xl border-b border-neutral-800/70 bg-neutral-900/40">
               <div className="flex items-center gap-2">
@@ -312,8 +312,8 @@ export const BlogPost = ({ slug }: { slug: string }) => {
               </div>
             </div>
 
-            {/* LineSidebar List Area */}
-            <div className="px-5 py-2 rounded-b-2xl overflow-hidden">
+            {/* LineSidebar List Area — No overflow-hidden so marker lines render cleanly */}
+            <div className="px-4 py-2 rounded-b-2xl">
               {isExpanded ? (
                 <LineSidebar
                   items={headings.map((h) => h.text)}
@@ -322,7 +322,6 @@ export const BlogPost = ({ slug }: { slug: string }) => {
                   accentColor="#38bdf8"
                   textColor="#a3a3a3"
                   markerColor="#525252"
-                  markerPosition="right"
                   showIndex={true}
                   showMarker={true}
                   proximityRadius={100}
@@ -334,7 +333,6 @@ export const BlogPost = ({ slug }: { slug: string }) => {
                   itemGap={14}
                   fontSize={0.88}
                   smoothing={80}
-                  maxHeight="58vh"
                 />
               ) : (
                 /* Collapsed narrow progress indicator strip */

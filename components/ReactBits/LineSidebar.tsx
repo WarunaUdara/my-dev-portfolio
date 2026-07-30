@@ -1,9 +1,8 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect, CSSProperties } from "react";
+import { useRef, useState, useCallback, useEffect, CSSProperties } from 'react';
 
-type Falloff = "linear" | "smooth" | "sharp";
-type MarkerPosition = "left" | "right";
+type Falloff = 'linear' | 'smooth' | 'sharp';
 
 export interface LineSidebarProps {
   items?: string[];
@@ -12,7 +11,6 @@ export interface LineSidebarProps {
   markerColor?: string;
   showIndex?: boolean;
   showMarker?: boolean;
-  markerPosition?: MarkerPosition;
   proximityRadius?: number;
   maxShift?: number;
   falloff?: Falloff;
@@ -24,30 +22,42 @@ export interface LineSidebarProps {
   fontSize?: number;
   smoothing?: number;
   defaultActive?: number | null;
-  /** Controlled active index (e.g. driven by a scroll-spy in the parent). */
   activeItemIndex?: number | null;
   onItemClick?: (index: number, label: string) => void;
   className?: string;
-  maxHeight?: string | null;
 }
 
 const FALLOFF_CURVES: Record<Falloff, (p: number) => number> = {
-  linear: (p) => p,
-  smooth: (p) => p * p * (3 - 2 * p),
-  sharp: (p) => p * p * p,
+  linear: p => p,
+  smooth: p => p * p * (3 - 2 * p),
+  sharp: p => p * p * p
 };
 
+const DEFAULT_ITEMS = [
+  'Overview',
+  'Components',
+  'Animations',
+  'Backgrounds',
+  'Showcase',
+  'Playground',
+  'Templates',
+  'Changelog',
+  'Community',
+  'Resources',
+  'Documentation',
+  'Support'
+];
+
 export const LineSidebar = ({
-  items = [],
-  accentColor = "#38bdf8",
-  textColor = "#a3a3a3",
-  markerColor = "#525252",
+  items = DEFAULT_ITEMS,
+  accentColor = '#38bdf8',
+  textColor = '#a3a3a3',
+  markerColor = '#525252',
   showIndex = true,
   showMarker = true,
-  markerPosition = "right",
   proximityRadius = 100,
   maxShift = 24,
-  falloff = "smooth",
+  falloff = 'smooth',
   markerLength = 48,
   markerGap = 0,
   tickScale = 0.5,
@@ -58,8 +68,7 @@ export const LineSidebar = ({
   defaultActive = 0,
   activeItemIndex = null,
   onItemClick,
-  className = "",
-  maxHeight = "60vh",
+  className = ''
 }: LineSidebarProps) => {
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -67,51 +76,24 @@ export const LineSidebar = ({
   const currentRef = useRef<number[]>([]);
   const rafRef = useRef<number | null>(null);
   const lastRef = useRef(0);
-  const activeRef = useRef<number | null>(defaultActive);
+  const activeRef = useRef<number | null>(activeItemIndex ?? defaultActive);
   const smoothingRef = useRef(smoothing);
-  const skipAutoScrollRef = useRef(false);
-
-  const [activeIndex, setActiveIndex] = useState<number | null>(
-    activeItemIndex ?? defaultActive
-  );
+  const [activeIndex, setActiveIndex] = useState<number | null>(activeItemIndex ?? defaultActive);
 
   useEffect(() => {
     if (activeItemIndex !== null && activeItemIndex !== undefined) {
       setActiveIndex(activeItemIndex);
+      activeRef.current = activeItemIndex;
+      startLoop();
     }
   }, [activeItemIndex]);
-
-  useEffect(() => {
-    targetsRef.current = items.map((_, i) => targetsRef.current[i] ?? 0);
-    currentRef.current = items.map((_, i) => currentRef.current[i] ?? 0);
-  }, [items.length]);
-
-  useEffect(() => {
-    if (activeIndex === null) return;
-    if (skipAutoScrollRef.current) {
-      skipAutoScrollRef.current = false;
-      return;
-    }
-    const list = listRef.current;
-    const el = itemRefs.current[activeIndex];
-    if (!list || !el) return;
-
-    const elTop = el.offsetTop;
-    const elBottom = elTop + el.offsetHeight;
-    const viewTop = list.scrollTop;
-    const viewBottom = viewTop + list.clientHeight;
-
-    if (elTop < viewTop) {
-      list.scrollTo({ top: elTop - 8, behavior: "smooth" });
-    } else if (elBottom > viewBottom) {
-      list.scrollTo({ top: elBottom - list.clientHeight + 8, behavior: "smooth" });
-    }
-  }, [activeIndex]);
 
   activeRef.current = activeIndex;
   smoothingRef.current = smoothing;
 
-  // Single rAF loop — frame-rate independent exponential smoothing
+  // Single rAF loop that eases every item's --effect toward its target using
+  // frame-rate independent exponential smoothing, so color, shift and scale
+  // all move together without staggering CSS transitions.
   const runFrame = useCallback((now: number) => {
     const dt = Math.min((now - lastRef.current) / 1000, 0.05);
     lastRef.current = now;
@@ -119,20 +101,17 @@ export const LineSidebar = ({
     const k = 1 - Math.exp(-dt / tau);
 
     let moving = false;
-    const itemEls = itemRefs.current;
-    for (let i = 0; i < itemEls.length; i++) {
-      const el = itemEls[i];
+    const items = itemRefs.current;
+    for (let i = 0; i < items.length; i++) {
+      const el = items[i];
       if (!el) continue;
-      const target = Math.max(
-        targetsRef.current[i] || 0,
-        activeRef.current === i ? 1 : 0
-      );
+      const target = Math.max(targetsRef.current[i] || 0, activeRef.current === i ? 1 : 0);
       const cur = currentRef.current[i] || 0;
       const next = cur + (target - cur) * k;
       const settled = Math.abs(target - next) < 0.0015;
       const value = settled ? target : next;
       currentRef.current[i] = value;
-      el.style.setProperty("--effect", value.toFixed(4));
+      el.style.setProperty('--effect', value.toFixed(4));
       if (!settled) moving = true;
     }
 
@@ -147,15 +126,17 @@ export const LineSidebar = ({
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLUListElement>) => {
-      if (e.pointerType === "touch") return;
+      const list = listRef.current;
+      if (!list) return;
+      const rect = list.getBoundingClientRect();
+      const pointerY = e.clientY - rect.top;
       const ease = FALLOFF_CURVES[falloff] ?? FALLOFF_CURVES.linear;
-      const itemEls = itemRefs.current;
-      for (let i = 0; i < itemEls.length; i++) {
-        const el = itemEls[i];
+      const items = itemRefs.current;
+      for (let i = 0; i < items.length; i++) {
+        const el = items[i];
         if (!el) continue;
-        const elRect = el.getBoundingClientRect();
-        const center = elRect.top + elRect.height / 2;
-        const distance = Math.abs(e.clientY - center);
+        const center = el.offsetTop + el.offsetHeight / 2;
+        const distance = Math.abs(pointerY - center);
         targetsRef.current[i] = ease(Math.max(0, 1 - distance / proximityRadius));
       }
       startLoop();
@@ -170,21 +151,10 @@ export const LineSidebar = ({
 
   const handleClick = useCallback(
     (index: number, label: string) => {
-      skipAutoScrollRef.current = true;
       setActiveIndex(index);
       onItemClick?.(index, label);
     },
     [onItemClick]
-  );
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLLIElement>, index: number, label: string) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleClick(index, label);
-      }
-    },
-    [handleClick]
   );
 
   useEffect(() => {
@@ -198,42 +168,29 @@ export const LineSidebar = ({
     []
   );
 
-  if (items.length === 0) return null;
-
-  const isRight = markerPosition === "right";
-
   const tickClass = showMarker
-    ? `after:absolute ${
-        isRight
-          ? "after:right-[calc(-1*var(--marker-length)-var(--marker-gap))] after:origin-right"
-          : "after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:origin-left"
-      } after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-40 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
+    ? `after:absolute after:left-[calc(-1*var(--marker-length)-var(--marker-gap))] after:top-[calc(100%+var(--item-gap)/2)] after:h-px after:opacity-50 after:content-[''] last:after:content-none after:[background-color:var(--marker-color)] after:[width:calc(var(--marker-length)*var(--tick-scale))] ${
         scaleTick
-          ? `after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]`
-          : "after:-translate-y-1/2"
+          ? "after:origin-left after:[transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.6))]"
+          : 'after:-translate-y-1/2'
       }`
-    : "";
+    : '';
 
   return (
     <nav
-      aria-label="Table of contents"
-      className={`relative flex ${
-        isRight
-          ? "justify-end [padding-right:calc(var(--marker-length)+var(--marker-gap))]"
-          : "justify-start [padding-left:calc(var(--marker-length)+var(--marker-gap))]"
-      }${className ? ` ${className}` : ""}`}
+      className={`relative flex justify-start${showMarker ? ' [padding-left:calc(var(--marker-length)+var(--marker-gap))]' : ''}${className ? ` ${className}` : ''}`}
       style={
         {
-          "--accent-color": accentColor,
-          "--text-color": textColor,
-          "--marker-color": markerColor,
-          "--marker-length": `${markerLength}px`,
-          "--marker-gap": `${markerGap}px`,
-          "--tick-scale": tickScale,
-          "--max-shift": `${maxShift}px`,
-          "--item-gap": `${itemGap}px`,
-          "--font-size": `${fontSize}rem`,
-          "--smoothing": `${smoothing}ms`,
+          '--accent-color': accentColor,
+          '--text-color': textColor,
+          '--marker-color': markerColor,
+          '--marker-length': `${markerLength}px`,
+          '--marker-gap': `${markerGap}px`,
+          '--tick-scale': tickScale,
+          '--max-shift': `${maxShift}px`,
+          '--item-gap': `${itemGap}px`,
+          '--font-size': `${fontSize}rem`,
+          '--smoothing': `${smoothing}ms`
         } as CSSProperties
       }
     >
@@ -241,58 +198,31 @@ export const LineSidebar = ({
         ref={listRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className={`m-0 flex list-none flex-col py-3 [gap:var(--item-gap)] overflow-y-auto overflow-x-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
-          isRight ? "text-right" : "text-left"
-        }`}
-        style={maxHeight ? { maxHeight } : undefined}
+        className="m-0 flex list-none flex-col py-4 [gap:var(--item-gap)]"
       >
         {items.map((label, index) => (
           <li
             key={`${label}-${index}`}
-            ref={(el) => {
+            ref={el => {
               itemRefs.current[index] = el;
             }}
-            role="button"
-            tabIndex={0}
-            aria-label={label}
-            aria-current={activeIndex === index ? "true" : undefined}
+            aria-current={activeIndex === index ? 'true' : undefined}
             onClick={() => handleClick(index, label)}
-            onKeyDown={(e) => handleKeyDown(e, index, label)}
-            className={`relative cursor-pointer select-none outline-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] focus-visible:[text-shadow:0_0_0_1px_var(--accent-color)] ${tickClass}`}
+            className={`relative cursor-pointer select-none before:absolute before:-inset-x-12 before:-inset-y-[6px] before:content-[''] ${tickClass}`}
           >
             {showMarker && (
               <span
                 aria-hidden="true"
-                className={`pointer-events-none absolute top-1/2 h-px w-[length:var(--marker-length)] ${
-                  isRight
-                    ? "right-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-right"
-                    : "left-[calc(-1*var(--marker-length)-var(--marker-gap))] origin-left"
-                }`}
-                style={{
-                  backgroundColor: `color-mix(in srgb, ${accentColor} calc(var(--effect, 0) * 100%), ${markerColor})`,
-                  transform: `translateY(-50%) scaleX(calc(0.7 + var(--effect, 0) * 0.5))`,
-                }}
+                className="absolute left-[calc(-1*var(--marker-length)-var(--marker-gap))] top-1/2 h-px w-[length:var(--marker-length)] origin-left [background-color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--marker-color))] [transform:translateY(-50%)_scaleX(calc(0.7+var(--effect,0)*0.5))]"
               />
             )}
-            <span
-              className="relative inline-flex items-baseline leading-[1.3] will-change-transform font-sans"
-              style={{
-                color: `color-mix(in srgb, ${accentColor} calc(var(--effect, 0) * 100%), ${textColor})`,
-                fontSize: `${fontSize}rem`,
-                transform: `translateX(calc(var(--effect, 0) * ${isRight ? -1 * maxShift : maxShift}px))`,
-              }}
-            >
-              {!isRight && showIndex && (
+            <span className="relative inline-flex items-baseline leading-[1.2] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))]">
+              {showIndex && (
                 <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
-                  {String(index + 1).padStart(2, "0")}
+                  {String(index + 1).padStart(2, '0')}
                 </span>
               )}
-              <span className="truncate max-w-[420px] block font-medium">{label}</span>
-              {isRight && showIndex && (
-                <span className="ml-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-              )}
+              <span className="truncate max-w-[320px] block font-medium">{label}</span>
             </span>
           </li>
         ))}
