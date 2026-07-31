@@ -11,23 +11,25 @@ interface BounceCardsProps {
   easeType?: string;
   transformStyles?: string[];
   enableHover?: boolean;
+  cardClassName?: string;
 }
 
 export default function BounceCards({
   className = '',
   images = [],
-  containerWidth = 500,
-  containerHeight = 220,
+  containerWidth = 600,
+  containerHeight = 230,
   animationDelay = 0.3,
   animationStagger = 0.08,
   easeType = 'elastic.out(1, 0.7)',
   transformStyles = [
-    'rotate(-4deg) translate(-135px)',
-    'rotate(2deg) translate(-45px)',
-    'rotate(-3deg) translate(45px)',
-    'rotate(4deg) translate(135px)'
+    'rotate(-5deg) translate(-165px)',
+    'rotate(2.5deg) translate(-55px)',
+    'rotate(-3deg) translate(55px)',
+    'rotate(4.5deg) translate(165px)'
   ],
-  enableHover = true
+  enableHover = true,
+  cardClassName = 'w-[150px] sm:w-[210px] aspect-[16/10]'
 }: BounceCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -83,13 +85,13 @@ export default function BounceCards({
       if (i === hoveredIdx) {
         const noRotation = getNoRotationTransform(baseTransform);
         gsap.to(selector, {
-          transform: `${noRotation} scale(1.06)`,
+          transform: `${noRotation} scale(1.08)`,
           duration: 0.4,
           ease: 'back.out(1.4)',
           overwrite: 'auto'
         });
       } else {
-        const offsetX = i < hoveredIdx ? -35 : 35;
+        const offsetX = i < hoveredIdx ? -45 : 45;
         const pushedTransform = getPushedTransform(baseTransform, offsetX);
 
         const distance = Math.abs(hoveredIdx - i);
@@ -137,7 +139,7 @@ export default function BounceCards({
       {images.map((src, idx) => (
         <div
           key={idx}
-          className={`card card-${idx} absolute w-[110px] sm:w-[145px] aspect-[4/5] border-2 border-neutral-700/80 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 hover:border-white/90 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:z-30 cursor-pointer`}
+          className={`card card-${idx} absolute ${cardClassName} border-2 border-neutral-700/80 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 hover:border-white/90 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] hover:z-30 cursor-pointer`}
           style={{
             transform: transformStyles[idx] || 'none'
           }}

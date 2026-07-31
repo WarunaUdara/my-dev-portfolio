@@ -159,16 +159,23 @@ export default function Volunteering() {
 
         {/* Interactive BounceCards for Event Division Vice President */}
         {item.images && item.images.length > 0 && (
-          <div className="pt-4 border-t border-neutral-900 flex flex-col items-center">
+          <div className="pt-4 border-t border-neutral-900 flex flex-col items-center overflow-x-auto custom-scrollbar">
             <p className="text-xs uppercase tracking-wider text-neutral-500 font-mono mb-2">
               Event Highlights &amp; Team Gallery
             </p>
             <BounceCards
               images={item.images}
-              containerWidth={520}
-              containerHeight={210}
+              containerWidth={620}
+              containerHeight={230}
               animationDelay={0.2}
               enableHover={true}
+              cardClassName="w-[155px] sm:w-[215px] aspect-[16/10]"
+              transformStyles={[
+                'rotate(-5deg) translate(-165px)',
+                'rotate(2.5deg) translate(-55px)',
+                'rotate(-3deg) translate(55px)',
+                'rotate(4.5deg) translate(165px)'
+              ]}
             />
           </div>
         )}
