@@ -103,7 +103,7 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                 {/* Prominent Waruna Speaking Portrait - Direct Image Masking for PNG Transparency */}
                 <div className="relative z-20 w-80 sm:w-96 md:w-[420px] h-[480px] sm:h-[520px] flex items-end justify-center">
                   <Image
-                    src="/me/waruna-speaking.png"
+                    src="/me/waruna-speaking.webp"
                     alt="Waruna Udara Speaking"
                     fill
                     className="object-cover object-top"

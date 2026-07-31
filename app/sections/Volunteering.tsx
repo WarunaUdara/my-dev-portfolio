@@ -3,8 +3,20 @@
 import React from "react";
 import { Timeline, TimelineEntry } from "@/components/ui/timeline";
 import { IconCheck, IconBuildingCommunity, IconCalendarEvent } from "@tabler/icons-react";
+import BounceCards from "@/components/ReactBits/BounceCards";
 
-const volunteeringData = [
+interface VolunteeringItem {
+  role: string;
+  organization: string;
+  projectOrEvent: string | null;
+  duration: string;
+  category: string;
+  description: string;
+  highlights: string[];
+  images?: string[];
+}
+
+const volunteeringData: VolunteeringItem[] = [
   {
     role: "IT Operations Team Head",
     organization: "Career Skills Development Society",
@@ -43,6 +55,7 @@ const volunteeringData = [
     category: "Science and Technology",
     description: "Leading the Event Division for the ICT Society.",
     highlights: [],
+    images: ["/me/icts1.webp", "/me/icts2.webp", "/me/icts3.webp", "/me/icts4.webp"],
   },
   {
     role: "ComSoc Standing Committee Member - Volunteer Management",
@@ -89,7 +102,7 @@ const volunteeringData = [
   {
     role: "Member",
     organization: "ICTS - Information and Communication Technology Society",
-    projectOrEvent: null,
+    projectOrEvent: "Sep 2024 - Nov 2025",
     duration: "Sep 2024 - Nov 2025",
     category: "Science and Technology",
     description: "Actively participated in initiatives promoting ICT knowledge and collaboration within the community.",
@@ -141,6 +154,22 @@ export default function Volunteering() {
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {/* Interactive BounceCards for Event Division Vice President */}
+        {item.images && item.images.length > 0 && (
+          <div className="pt-4 border-t border-neutral-900 flex flex-col items-center">
+            <p className="text-xs uppercase tracking-wider text-neutral-500 font-mono mb-2">
+              Event Highlights &amp; Team Gallery
+            </p>
+            <BounceCards
+              images={item.images}
+              containerWidth={520}
+              containerHeight={210}
+              animationDelay={0.2}
+              enableHover={true}
+            />
           </div>
         )}
       </div>

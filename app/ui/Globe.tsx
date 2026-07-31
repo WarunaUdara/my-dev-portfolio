@@ -19,10 +19,8 @@ export interface GlobeArc {
 
 const DEFAULT_MARKERS: GlobeMarker[] = [
   { id: "colombo", label: "SRI LANKA", location: [7.8731, 80.7718], size: 0.05 },
-  { id: "london", label: "LONDON", location: [51.5074, -0.1278], size: 0.035 },
   { id: "dubai", label: "DUBAI", location: [25.2048, 55.2708], size: 0.035 },
-  { id: "tokyo", label: "TOKYO", location: [35.6762, 139.6503], size: 0.035 },
-  { id: "sf", label: "SAN FRANCISCO", location: [37.78, -122.44], size: 0.035 },
+  { id: "paris", label: "PARIS", location: [48.8566, 2.3522], size: 0.035 }
 ];
 
 const DEFAULT_ARCS: GlobeArc[] = [

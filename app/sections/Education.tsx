@@ -28,7 +28,7 @@ export const EDUCATION_DATA: EducationItem[] = [
       name: "Faculty of Technology",
       link: "https://tech.sjp.ac.lk/",
     },
-    logo: "/me/usj-logo.png",
+    logo: "/me/usj-logo.webp",
     degree: "Bachelor of Information and Communication Technology (Hons), Network Technology",
     period: "May 2024 – Dec 2028",
     description: "Undergraduate | BICT (Hons) Specialized in Network Technology",
@@ -37,7 +37,7 @@ export const EDUCATION_DATA: EducationItem[] = [
   {
     id: "EDU02",
     institution: "Institute of Computer Engineering Technology (iCET)",
-    logo: "/me/icet-image.png",
+    logo: "/me/icet-image.webp",
     degree: "Diploma in Software Engineering",
     period: "Nov 2023 – Jun 2024",
     gradient: "from-neutral-900/90 via-neutral-950 to-black",
@@ -45,7 +45,7 @@ export const EDUCATION_DATA: EducationItem[] = [
   {
     id: "EDU03",
     institution: "Ananda Sastralaya National School",
-    logo: "/me/school-logo.png",
+    logo: "/me/school-logo.webp",
     degree: "Engineering Technology",
     period: "Feb 2008 – Mar 2022",
     achievements: [

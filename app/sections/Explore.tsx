@@ -39,9 +39,9 @@ const USES_TOOLS = [
 
 export const Explore = () => {
   return (
-    <section className="relative bg-black text-white py-24 overflow-hidden border-t border-neutral-900">
+    <section className="relative bg-black text-white py-16 overflow-hidden border-t border-neutral-900">
       {/* Subtle Slow Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-neutral-900/30 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[300px] bg-neutral-900/30 rounded-full blur-[130px] pointer-events-none" />
 
       {/* Grid Pattern Background */}
       <div
@@ -54,12 +54,12 @@ export const Explore = () => {
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header with AuroraText */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/90 border border-neutral-800/80 text-xs font-mono tracking-[0.25em] text-neutral-400 uppercase font-semibold">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-2.5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/90 border border-neutral-800/80 text-[11px] font-mono tracking-[0.25em] text-neutral-400 uppercase font-semibold">
             <span className="w-2 h-2 rounded-full bg-neutral-400 animate-pulse" />
             <span>EXPLORE &amp; CONNECT</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-serif leading-tight tracking-tight text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif leading-tight tracking-tight text-white">
             Explore, experiment <br />
             <AuroraText className="italic font-serif">
               &amp; say hello
@@ -67,43 +67,43 @@ export const Explore = () => {
           </h2>
         </div>
 
-        {/* Cards Grid — Standardized Portfolio Card Background & Styling */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        {/* Cards Grid — Compact Sleek Portfolio Cards (h-[330px]) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
           
-          {/* Card 1: SETUP & STACK (With Full Uses Tool Icons Marquee & No Text Overflow) */}
+          {/* Card 1: SETUP & STACK */}
           <div className="group relative">
             <Link href="/uses" className="block">
-              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
+              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-6 h-[330px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
                 {/* Hover Arrow Button */}
-                <div className="absolute bottom-7 right-7 w-9 h-9 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
-                  <IconArrowRight className="w-4 h-4 text-white" />
+                <div className="absolute bottom-6 right-6 w-8 h-8 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
+                  <IconArrowRight className="w-3.5 h-3.5 text-white" />
                 </div>
 
                 {/* Featured Tool App Badges */}
-                <div className="flex items-center justify-center gap-3 mb-4 mt-2">
-                  <div className="relative w-14 h-14 bg-neutral-900/90 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2.5">
-                    <Image src="/obsidian-icon.png" alt="Obsidian" width={32} height={32} className="object-contain" />
+                <div className="flex items-center justify-center gap-2.5 mb-3 mt-1">
+                  <div className="relative w-12 h-12 bg-neutral-900/90 border border-neutral-800 rounded-xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2">
+                    <Image src="/obsidian-icon.png" alt="Obsidian" width={28} height={28} className="object-contain" />
                   </div>
-                  <div className="relative w-16 h-16 bg-neutral-900/90 border border-neutral-700 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 p-3">
-                    <Image src="/icons8-vs-code-96.png" alt="VSCode" width={40} height={40} className="object-contain" />
+                  <div className="relative w-14 h-14 bg-neutral-900/90 border border-neutral-700 rounded-xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 p-2.5">
+                    <Image src="/icons8-vs-code-96.png" alt="VSCode" width={34} height={34} className="object-contain" />
                   </div>
-                  <div className="relative w-14 h-14 bg-neutral-900/90 border border-neutral-800 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2.5">
-                    <Image src="/notebooklm.png" alt="NotebookLM" width={32} height={32} className="object-contain" />
+                  <div className="relative w-12 h-12 bg-neutral-900/90 border border-neutral-800 rounded-xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2">
+                    <Image src="/notebooklm.png" alt="NotebookLM" width={28} height={28} className="object-contain" />
                   </div>
                 </div>
 
-                {/* Continuous Uses Tool Icons Marquee (Fixed Text Overflow with shrink-0 min-w-max) */}
-                <div className="my-4 overflow-hidden relative">
-                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/90 to-transparent z-10 pointer-events-none" />
-                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/90 to-transparent z-10 pointer-events-none" />
+                {/* Continuous Uses Tool Icons Marquee */}
+                <div className="my-3 overflow-hidden relative">
+                  <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-black/90 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-black/90 to-transparent z-10 pointer-events-none" />
                   
-                  <div className="flex gap-2.5 animate-marquee whitespace-nowrap py-1">
+                  <div className="flex gap-2 animate-marquee whitespace-nowrap py-1">
                     {[...USES_TOOLS, ...USES_TOOLS].map((tool, idx) => (
                       <div
                         key={`${tool.name}-${idx}`}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs font-mono shrink-0 whitespace-nowrap min-w-max"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-[11px] font-mono shrink-0 whitespace-nowrap min-w-max"
                       >
-                        <Image src={tool.icon} alt={tool.name} width={16} height={16} className="object-contain w-4 h-4 shrink-0" />
+                        <Image src={tool.icon} alt={tool.name} width={14} height={14} className="object-contain w-3.5 h-3.5 shrink-0" />
                         <span className="shrink-0">{tool.name}</span>
                       </div>
                     ))}
@@ -111,11 +111,11 @@ export const Explore = () => {
                 </div>
 
                 {/* Text Content */}
-                <div className="absolute bottom-7 left-7 right-14 space-y-1.5">
-                  <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
+                <div className="absolute bottom-6 left-6 right-12 space-y-1">
+                  <p className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
                     SETUP &amp; STACK
                   </p>
-                  <h3 className="text-lg font-semibold text-white leading-snug font-sans">
+                  <h3 className="text-base font-semibold text-white leading-snug font-sans">
                     Check out my favorite tools, hardware and developer spots.
                   </h3>
                 </div>
@@ -123,27 +123,27 @@ export const Explore = () => {
             </Link>
           </div>
 
-          {/* Card 2: BUCKET LIST (Life Goals & Achievements) */}
+          {/* Card 2: BUCKET LIST */}
           <div className="group relative">
             <Link href="/bucket-list" className="block">
-              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
+              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-6 h-[330px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
                 {/* Hover Arrow Button */}
-                <div className="absolute bottom-7 right-7 w-9 h-9 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
-                  <IconArrowRight className="w-4 h-4 text-white" />
+                <div className="absolute bottom-6 right-6 w-8 h-8 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110 shadow-lg z-10">
+                  <IconArrowRight className="w-3.5 h-3.5 text-white" />
                 </div>
 
                 {/* Bucket List Visual Preview */}
-                <div className="relative h-48 mt-3 flex flex-col justify-center items-center gap-3">
-                  <div className="w-full max-w-[240px] bg-neutral-900/90 border border-neutral-800 rounded-xl p-3.5 shadow-xl flex items-center justify-between group-hover:scale-105 transition-transform duration-300">
-                    <div className="flex items-center gap-2.5">
-                      <IconListCheck className="w-4 h-4 text-neutral-400" />
-                      <span className="text-xs font-mono text-neutral-300">12 Goals Completed</span>
+                <div className="relative h-40 mt-1 flex flex-col justify-center items-center gap-2.5">
+                  <div className="w-full max-w-[220px] bg-neutral-900/90 border border-neutral-800 rounded-xl p-3 shadow-xl flex items-center justify-between group-hover:scale-105 transition-transform duration-300">
+                    <div className="flex items-center gap-2">
+                      <IconListCheck className="w-3.5 h-3.5 text-neutral-400" />
+                      <span className="text-[11px] font-mono text-neutral-300">12 Goals Done</span>
                     </div>
                     <span className="text-[10px] font-mono text-neutral-400 bg-neutral-800 px-2 py-0.5 rounded-full">30 Total</span>
                   </div>
 
-                  <div className="w-full max-w-[240px] bg-neutral-900/90 border border-neutral-800 rounded-xl p-3 shadow-lg space-y-2">
-                    <div className="flex items-center justify-between text-[11px] font-mono text-neutral-400">
+                  <div className="w-full max-w-[220px] bg-neutral-900/90 border border-neutral-800 rounded-xl p-2.5 shadow-lg space-y-1.5">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-neutral-400">
                       <span>Speak to 1000 People</span>
                       <span className="text-white">70%</span>
                     </div>
@@ -154,11 +154,11 @@ export const Explore = () => {
                 </div>
 
                 {/* Text Content */}
-                <div className="absolute bottom-7 left-7 right-14 space-y-1.5">
-                  <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
+                <div className="absolute bottom-6 left-6 right-12 space-y-1">
+                  <p className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest font-semibold">
                     THE BUCKET LIST
                   </p>
-                  <h3 className="text-lg font-semibold text-white leading-snug font-sans">
+                  <h3 className="text-base font-semibold text-white leading-snug font-sans">
                     The things I&apos;ll do before I&apos;m done — life goals &amp; dreams.
                   </h3>
                 </div>
@@ -169,34 +169,34 @@ export const Explore = () => {
           {/* Card 3: GUESTBOOK SIGN CTA */}
           <div className="group relative md:col-span-2 lg:col-span-1">
             <Link href="/guestbook" className="block">
-              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-7 h-[390px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
+              <div className="relative bg-black/90 backdrop-blur-sm border border-neutral-800/80 shadow-[0_0_0_1px_rgba(255,255,255,.05),0_2px_4px_rgba(0,0,0,.4)] rounded-2xl p-6 h-[330px] overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:border-neutral-700">
                 {/* Header Indicator */}
-                <div className="flex items-center justify-between mb-5">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-[11px] font-mono">
-                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-[10px] font-mono">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                     <span>Interactive Wall</span>
                   </div>
-                  <IconSparkles className="w-5 h-5 text-neutral-300" />
+                  <IconSparkles className="w-4 h-4 text-neutral-300" />
                 </div>
 
                 {/* CTA Main Body */}
-                <div className="space-y-3 my-5">
-                  <h3 className="text-2xl font-serif text-white font-medium leading-tight">
+                <div className="space-y-2.5 my-4">
+                  <h3 className="text-xl font-serif text-white font-medium leading-tight">
                     Leave your mark on my guestbook!
                   </h3>
-                  <p className="text-neutral-400 text-xs sm:text-sm leading-relaxed font-sans">
+                  <p className="text-neutral-400 text-xs leading-relaxed font-sans">
                     Drop a message, share feedback, or say hello. Authentic notes from fellow developers and visitors.
                   </p>
                 </div>
 
                 {/* Bottom Sign CTA Bar */}
-                <div className="absolute bottom-7 left-7 right-7 flex items-center justify-between pt-4 border-t border-neutral-900">
-                  <div className="flex items-center gap-2 text-neutral-400 font-mono text-xs">
-                    <IconTerminal className="w-4 h-4 text-neutral-500" />
+                <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between pt-3.5 border-t border-neutral-900">
+                  <div className="flex items-center gap-1.5 text-neutral-400 font-mono text-xs">
+                    <IconTerminal className="w-3.5 h-3.5 text-neutral-500" />
                     <span>Sign Wall</span>
                   </div>
 
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black text-xs font-mono font-semibold group-hover:bg-neutral-200 transition-colors shadow-lg group-hover:scale-105 transition-transform duration-200">
+                  <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-black text-xs font-mono font-semibold group-hover:bg-neutral-200 transition-colors shadow-lg group-hover:scale-105 transition-transform duration-200">
                     <IconPencil className="w-3.5 h-3.5" />
                     <span>Write Note</span>
                   </div>

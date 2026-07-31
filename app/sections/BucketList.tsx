@@ -26,7 +26,7 @@ const bucketItems: BucketItem[] = [
     text: "Parents trip to India",
     completed: false,
     date: "Half done ✈️",
-    note: "Planning & initial travel arrangements in progress.",
+    
   },
   { id: 7, text: "Remote working with client from abroad", completed: false },
   { id: 8, text: "Certified AWS Solutions Architect Associate", completed: false, date: "2026" },
@@ -50,7 +50,7 @@ const bucketItems: BucketItem[] = [
     completed: false,
     date: "700/1,000 done",
     progressRatio: 0.7,
-    note: "Spoken to 700+ attendees across tech sessions, workshops & keynotes.",
+    
   },
   { id: 19, text: "Solo hike", completed: false },
   { id: 20, text: "Participate in hackathons", completed: true },
