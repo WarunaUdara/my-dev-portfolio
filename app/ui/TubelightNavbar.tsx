@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { gsap } from "gsap";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "@/components/ui/Link";
 import Image from "@/components/ui/Image";
 import {
   IconChevronDown,
   IconLink,
   IconPhoto,
-  IconCreditCard,
+  IconX,
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 
@@ -91,9 +91,10 @@ export function NavBar({ items, className }: NavBarProps) {
     }
   }, [pathname, items, isOnMorePage]);
 
-  // GSAP Dual Width & Height Expansion Timeline Logic
+  // GSAP Dual Width & Height Expansion (Desktop Only)
   const animateNavExpansion = useCallback(
     (expanding: boolean) => {
+      if (isMobile) return;
       const navEl = navRef.current;
       if (!navEl) return;
 
@@ -102,16 +103,16 @@ export function NavBar({ items, className }: NavBarProps) {
         gsap.killTweensOf(cardsRef.current);
       }
 
-      const collapsedWidth = isMobile ? "92vw" : "660px";
-      const expandedWidth = isMobile ? "94vw" : "820px";
-      const targetHeight = expanding ? (isMobile ? 520 : 310) : 52;
+      const collapsedWidth = "660px";
+      const expandedWidth = "820px";
+      const targetHeight = expanding ? 295 : 52;
 
       if (expanding) {
         // Expand width AND height simultaneously
         gsap.to(navEl, {
           width: expandedWidth,
           height: targetHeight,
-          borderRadius: isMobile ? "24px" : "28px",
+          borderRadius: "28px",
           duration: 0.4,
           ease: "power3.out",
         });
@@ -153,30 +154,35 @@ export function NavBar({ items, className }: NavBarProps) {
     [isMobile]
   );
 
-  // Trigger GSAP animation whenever isExpanded changes
+  // Trigger GSAP animation whenever isExpanded changes (Desktop)
   useEffect(() => {
-    animateNavExpansion(isExpanded);
-  }, [isExpanded, animateNavExpansion]);
+    if (!isMobile) {
+      animateNavExpansion(isExpanded);
+    }
+  }, [isExpanded, isMobile, animateNavExpansion]);
 
-  // Hover Handlers with safety delay
+  // Hover Handlers with safety delay (Desktop Only)
   const handleMoreMouseEnter = useCallback(() => {
+    if (isMobile) return;
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
     }
     setIsExpanded(true);
-  }, []);
+  }, [isMobile]);
 
   const handleContainerMouseLeave = useCallback(() => {
+    if (isMobile) return;
     hoverTimeoutRef.current = setTimeout(() => {
       setIsExpanded(false);
     }, 180);
-  }, []);
+  }, [isMobile]);
 
   const handleContainerMouseEnter = useCallback(() => {
+    if (isMobile) return;
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
     }
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     return () => {
@@ -216,215 +222,313 @@ export function NavBar({ items, className }: NavBarProps) {
   };
 
   return (
-    <div
-      className={cn(
-        "fixed bottom-6 sm:top-6 left-1/2 -translate-x-1/2 z-[9999] pointer-events-none w-full flex justify-center",
-        className
-      )}
-    >
-      <div
-        ref={navRef}
-        onMouseEnter={handleContainerMouseEnter}
-        onMouseLeave={handleContainerMouseLeave}
-        className={cn(
-          "pointer-events-auto overflow-hidden will-change-[height,width,border-radius] transition-colors duration-300 relative border shadow-2xl",
-          isExpanded
-            ? "bg-neutral-950/95 backdrop-blur-2xl border-neutral-800/90 shadow-[0_0_60px_rgba(0,0,0,0.85)]"
-            : "bg-black/80 border-white/10 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-        )}
-        style={{
-          width: isMobile ? "92vw" : "660px",
-          height: "52px",
-          borderRadius: "9999px",
-        }}
-      >
-        {/* Top Navigation Bar Header Row (Fixed 52px) */}
-        <div className="h-[52px] flex items-center justify-between px-3 sm:px-4 w-full">
-          <div className="flex items-center gap-1 sm:gap-2 w-full justify-between sm:justify-center">
-            {items.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.name;
-              const isMoreMenu = item.name === "More";
-              const isBookCall = item.name === "Book a Call";
+    <>
+      {/* Mobile Glassmorphic Dropup Drawer Overlay (Bottom Anchored) */}
+      <AnimatePresence>
+        {isMobile && isExpanded && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsExpanded(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[9997]"
+            />
 
-              return (
-                <div
-                  key={item.name}
-                  className="relative shrink-0"
-                  onMouseEnter={() => isMoreMenu && handleMoreMouseEnter()}
-                >
-                  <Link
-                    href={item.url}
-                    onClick={(e) => handleNavClick(e, item)}
-                    className={cn(
-                      "relative cursor-pointer text-xs sm:text-sm font-semibold px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full transition-all flex items-center gap-1.5 select-none whitespace-nowrap",
-                      isBookCall
-                        ? isActive
-                          ? "bg-white text-black font-bold shadow-[0_0_22px_rgba(255,255,255,0.6)] border border-white"
-                          : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-[0_0_12px_rgba(255,255,255,0.12)]"
-                        : "text-foreground/80 hover:text-white",
-                      !isBookCall && isActive && "bg-white/10 text-white font-bold"
-                    )}
+            {/* Dropup Container */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed bottom-24 left-1/2 -translate-x-1/2 w-[92vw] max-w-[400px] z-[9998] max-h-[75vh] overflow-y-auto"
+            >
+              <div className="bg-neutral-950/95 backdrop-blur-2xl border border-white/15 rounded-3xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)] space-y-3">
+                {/* Header */}
+                <div className="flex items-center justify-between px-2 pb-2 border-b border-white/10">
+                  <span className="text-white font-serif text-lg font-bold tracking-wide">
+                    Explore More
+                  </span>
+                  <button
+                    onClick={() => setIsExpanded(false)}
+                    className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/20 transition-colors"
                   >
-                    <span className="hidden md:inline relative z-10 whitespace-nowrap">{item.name}</span>
-                    <span className="md:hidden relative z-10">
-                      <Icon size={18} strokeWidth={2.2} />
-                    </span>
+                    <IconX size={16} />
+                  </button>
+                </div>
 
-                    {isMoreMenu && (
-                      <IconChevronDown
-                        size={15}
-                        className={cn(
-                          "hidden md:inline transition-transform duration-300",
-                          isExpanded ? "rotate-180 text-white" : "rotate-0 text-foreground/70"
-                        )}
-                      />
-                    )}
+                {/* Mobile Cards Stack */}
+                <div className="space-y-3 pt-1">
+                  {/* Card 1: Guestbook */}
+                  <Link
+                    href="/guestbook"
+                    onClick={handleMenuItemClick}
+                    className="group relative block rounded-2xl overflow-hidden h-28 border border-white/10"
+                  >
+                    <Image
+                      src="/guestbook.webp"
+                      alt="Guestbook"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                    <div className="absolute bottom-3 left-4">
+                      <h4 className="text-white font-serif text-lg font-bold">Guestbook</h4>
+                      <p className="text-neutral-300 text-xs">Let me know you were here</p>
+                    </div>
+                  </Link>
 
-                    {isActive && !isBookCall && (
-                      <motion.div
-                        layoutId="lamp"
-                        className="absolute inset-0 w-full bg-white/10 rounded-full -z-10"
-                        initial={false}
-                        transition={{
-                          type: "spring",
-                          stiffness: 350,
-                          damping: 30,
-                        }}
-                      >
-                        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-white rounded-t-full shadow-[0_0_12px_rgba(255,255,255,0.9)]">
-                          <div className="absolute w-12 h-6 bg-white/20 rounded-full blur-md -top-2 -left-2" />
-                          <div className="absolute w-8 h-6 bg-white/20 rounded-full blur-md -top-1" />
-                        </div>
-                      </motion.div>
-                    )}
+                  {/* Card 2: Bucket List */}
+                  <Link
+                    href="/bucket-list"
+                    onClick={handleMenuItemClick}
+                    className="group relative block rounded-2xl overflow-hidden h-28 border border-white/10"
+                  >
+                    <Image
+                      src="/bucket-list.png"
+                      alt="Bucket List"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                    <div className="absolute bottom-3 left-4">
+                      <h4 className="text-white font-serif text-lg font-bold">Bucket List</h4>
+                      <p className="text-neutral-300 text-xs">Dreams with a deadline</p>
+                    </div>
+                  </Link>
+
+                  {/* Card 3: Links */}
+                  <Link
+                    href="/links"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-3 p-3.5 rounded-2xl bg-neutral-900/90 border border-white/10 hover:border-white/25 transition-all"
+                  >
+                    <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <IconLink size={18} />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold text-sm">Links</h4>
+                      <p className="text-neutral-400 text-xs">All my links are here</p>
+                    </div>
+                  </Link>
+
+                  {/* Card 4: Uses */}
+                  <Link
+                    href="/uses"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-3 p-3.5 rounded-2xl bg-neutral-900/90 border border-white/10 hover:border-white/25 transition-all"
+                  >
+                    <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <IconPhoto size={18} />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold text-sm">Uses</h4>
+                      <p className="text-neutral-400 text-xs">A peek into my digital workspace</p>
+                    </div>
                   </Link>
                 </div>
-              );
-            })}
-          </div>
-        </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
-        {/* Expanded Navigation Content Cards (GSAP Staggered Entrance) */}
+      {/* Main Navbar Container */}
+      <div
+        className={cn(
+          "fixed left-1/2 -translate-x-1/2 z-[9999] pointer-events-none w-full flex justify-center",
+          isMobile ? "bottom-6" : "top-6",
+          className
+        )}
+      >
         <div
+          ref={navRef}
+          onMouseEnter={handleContainerMouseEnter}
+          onMouseLeave={handleContainerMouseLeave}
           className={cn(
-            "w-full p-3 sm:p-4 border-t border-neutral-800/80 transition-opacity duration-300",
-            isExpanded ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+            "pointer-events-auto overflow-hidden will-change-[height,width,border-radius] transition-colors duration-300 relative border shadow-2xl",
+            isExpanded && !isMobile
+              ? "bg-neutral-950/75 backdrop-blur-3xl border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+              : "bg-neutral-950/40 border-white/20 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
           )}
+          style={{
+            width: isMobile ? "92vw" : "660px",
+            height: "52px",
+            borderRadius: isMobile ? "9999px" : "9999px",
+          }}
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 w-full h-[430px] md:h-[235px]">
-            {/* Card 1: Guestbook */}
-            <div ref={(el) => { cardsRef.current[0] = el; }} className="h-full">
-              <Link
-                href="/guestbook"
-                onClick={handleMenuItemClick}
-                className="group relative block rounded-2xl overflow-hidden h-full border border-neutral-800/80 hover:border-neutral-600 transition-all shadow-xl bg-neutral-900/80"
-              >
-                <Image
-                  src="/guestbook.webp"
-                  alt="Guestbook"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                <div className="absolute bottom-5 left-5 right-5">
-                  <h3 className="text-white font-serif text-xl sm:text-2xl font-bold mb-1 tracking-wide">
-                    Guestbook
-                  </h3>
-                  <p className="text-neutral-300/90 text-xs font-sans leading-relaxed">
-                    Let me know you were here
-                  </p>
-                </div>
-              </Link>
-            </div>
+          {/* Top Navigation Bar Header Row (Fixed 52px) */}
+          <div className="h-[52px] flex items-center justify-between px-3 sm:px-4 w-full">
+            <div className="flex items-center gap-1 sm:gap-2 w-full justify-between sm:justify-center">
+              {items.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.name;
+                const isMoreMenu = item.name === "More";
+                const isBookCall = item.name === "Book a Call";
 
-            {/* Card 2: Bucket List */}
-            <div ref={(el) => { cardsRef.current[1] = el; }} className="h-full">
-              <Link
-                href="/bucket-list"
-                onClick={handleMenuItemClick}
-                className="group relative block rounded-2xl overflow-hidden h-full border border-neutral-800/80 hover:border-neutral-600 transition-all shadow-xl bg-neutral-900/80"
-              >
-                <Image
-                  src="/bucket-list.png"
-                  alt="Bucket List"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                <div className="absolute bottom-5 left-5 right-5">
-                  <h3 className="text-white font-serif text-xl sm:text-2xl font-bold mb-1 tracking-wide">
-                    Bucket List
-                  </h3>
-                  <p className="text-neutral-300/90 text-xs font-sans leading-relaxed">
-                    Dreams with a deadline
-                  </p>
-                </div>
-              </Link>
-            </div>
+                return (
+                  <div
+                    key={item.name}
+                    className="relative shrink-0"
+                    onMouseEnter={() => isMoreMenu && handleMoreMouseEnter()}
+                  >
+                    <Link
+                      href={item.url}
+                      onClick={(e) => handleNavClick(e, item)}
+                      className={cn(
+                        "relative cursor-pointer text-xs sm:text-sm font-semibold px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full transition-all flex items-center gap-1.5 select-none whitespace-nowrap",
+                        isBookCall
+                          ? isActive
+                            ? "bg-white text-black font-bold shadow-[0_0_22px_rgba(255,255,255,0.6)] border border-white"
+                            : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-[0_0_12px_rgba(255,255,255,0.12)]"
+                          : "text-foreground/80 hover:text-white",
+                        !isBookCall && isActive && "bg-white/10 text-white font-bold"
+                      )}
+                    >
+                      <span className="hidden md:inline relative z-10 whitespace-nowrap">{item.name}</span>
+                      <span className="md:hidden relative z-10">
+                        <Icon size={18} strokeWidth={2.2} />
+                      </span>
 
-            {/* Card 3 Stack: Links, Uses, Attribution */}
-            <div ref={(el) => { cardsRef.current[2] = el; }} className="h-full flex flex-col gap-2.5 justify-between">
-              {/* Links Card */}
-              <Link
-                href="/links"
-                onClick={handleMenuItemClick}
-                className="group relative flex items-center gap-3 p-3 rounded-xl bg-neutral-900/90 hover:bg-neutral-800/90 border border-neutral-800/80 hover:border-neutral-700 transition-all shadow-md flex-1"
-              >
-                <div className="w-8 h-8 rounded-lg bg-neutral-800 border border-neutral-700/80 flex items-center justify-center shrink-0 group-hover:bg-neutral-700 transition-colors">
-                  <IconLink size={16} className="text-neutral-300 group-hover:text-white" />
-                </div>
-                <div className="overflow-hidden">
-                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide whitespace-nowrap">
-                    Links
-                  </h4>
-                  <p className="text-neutral-400 text-[11px] leading-tight truncate">
-                    All my links are here
-                  </p>
-                </div>
-              </Link>
+                      {isMoreMenu && (
+                        <IconChevronDown
+                          size={15}
+                          className={cn(
+                            "hidden md:inline transition-transform duration-300",
+                            isExpanded ? "rotate-180 text-white" : "rotate-0 text-foreground/70"
+                          )}
+                        />
+                      )}
 
-              {/* Uses Card */}
-              <Link
-                href="/uses"
-                onClick={handleMenuItemClick}
-                className="group relative flex items-center gap-3 p-3 rounded-xl bg-neutral-900/90 hover:bg-neutral-800/90 border border-neutral-800/80 hover:border-neutral-700 transition-all shadow-md flex-1"
-              >
-                <div className="w-8 h-8 rounded-lg bg-neutral-800 border border-neutral-700/80 flex items-center justify-center shrink-0 group-hover:bg-neutral-700 transition-colors">
-                  <IconPhoto size={16} className="text-neutral-300 group-hover:text-white" />
-                </div>
-                <div className="overflow-hidden">
-                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide whitespace-nowrap">
-                    Uses
-                  </h4>
-                  <p className="text-neutral-400 text-[11px] leading-tight truncate">
-                    A peek into my digital workspace
-                  </p>
-                </div>
-              </Link>
-
-              {/* Attribution Card */}
-              <Link
-                href="/links"
-                onClick={handleMenuItemClick}
-                className="group relative flex items-center gap-3 p-3 rounded-xl bg-neutral-900/90 hover:bg-neutral-800/90 border border-neutral-800/80 hover:border-neutral-700 transition-all shadow-md flex-1"
-              >
-                <div className="w-8 h-8 rounded-lg bg-neutral-800 border border-neutral-700/80 flex items-center justify-center shrink-0 group-hover:bg-neutral-700 transition-colors">
-                  <IconCreditCard size={16} className="text-neutral-300 group-hover:text-white" />
-                </div>
-                <div className="overflow-hidden">
-                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide whitespace-nowrap">
-                    Attribution
-                  </h4>
-                  <p className="text-neutral-400 text-[11px] leading-tight truncate">
-                    Journey to create this site
-                  </p>
-                </div>
-              </Link>
+                      {isActive && !isBookCall && (
+                        <motion.div
+                          layoutId="lamp"
+                          className="absolute inset-0 w-full bg-white/10 rounded-full -z-10"
+                          initial={false}
+                          transition={{
+                            type: "spring",
+                            stiffness: 350,
+                            damping: 30,
+                          }}
+                        >
+                          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-white rounded-t-full shadow-[0_0_12px_rgba(255,255,255,0.9)]">
+                            <div className="absolute w-12 h-6 bg-white/20 rounded-full blur-md -top-2 -left-2" />
+                            <div className="absolute w-8 h-6 bg-white/20 rounded-full blur-md -top-1" />
+                          </div>
+                        </motion.div>
+                      )}
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           </div>
+
+          {/* Desktop Expanded Navigation Cards (2-Card Stack in Col 3, Attribution Removed) */}
+          {!isMobile && (
+            <div
+              className={cn(
+                "w-full p-3 sm:p-4 border-t border-white/10 transition-opacity duration-300",
+                isExpanded ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+              )}
+            >
+              <div className="grid grid-cols-3 gap-3 md:gap-4 w-full h-[220px]">
+                {/* Card 1: Guestbook */}
+                <div ref={(el) => { cardsRef.current[0] = el; }} className="h-full">
+                  <Link
+                    href="/guestbook"
+                    onClick={handleMenuItemClick}
+                    className="group relative block rounded-2xl overflow-hidden h-full border border-white/15 hover:border-white/40 transition-all shadow-xl bg-neutral-900/60"
+                  >
+                    <Image
+                      src="/guestbook.webp"
+                      alt="Guestbook"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                    <div className="absolute bottom-5 left-5 right-5">
+                      <h3 className="text-white font-serif text-xl sm:text-2xl font-bold mb-1 tracking-wide">
+                        Guestbook
+                      </h3>
+                      <p className="text-neutral-300/90 text-xs font-sans leading-relaxed">
+                        Let me know you were here
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+
+                {/* Card 2: Bucket List */}
+                <div ref={(el) => { cardsRef.current[1] = el; }} className="h-full">
+                  <Link
+                    href="/bucket-list"
+                    onClick={handleMenuItemClick}
+                    className="group relative block rounded-2xl overflow-hidden h-full border border-white/15 hover:border-white/40 transition-all shadow-xl bg-neutral-900/60"
+                  >
+                    <Image
+                      src="/bucket-list.png"
+                      alt="Bucket List"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                    <div className="absolute bottom-5 left-5 right-5">
+                      <h3 className="text-white font-serif text-xl sm:text-2xl font-bold mb-1 tracking-wide">
+                        Bucket List
+                      </h3>
+                      <p className="text-neutral-300/90 text-xs font-sans leading-relaxed">
+                        Dreams with a deadline
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+
+                {/* Card 3 Stack: Links & Uses (Attribution Removed) */}
+                <div ref={(el) => { cardsRef.current[2] = el; }} className="h-full flex flex-col gap-3 justify-between">
+                  {/* Links Card */}
+                  <Link
+                    href="/links"
+                    onClick={handleMenuItemClick}
+                    className="group relative flex items-center gap-3 p-4 rounded-2xl bg-neutral-900/60 hover:bg-neutral-800/80 border border-white/15 hover:border-white/40 transition-all shadow-md flex-1"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
+                      <IconLink size={18} className="text-white" />
+                    </div>
+                    <div className="overflow-hidden">
+                      <h4 className="text-white font-semibold text-sm mb-0.5 tracking-wide whitespace-nowrap">
+                        Links
+                      </h4>
+                      <p className="text-neutral-300 text-xs leading-tight truncate">
+                        All my links are here
+                      </p>
+                    </div>
+                  </Link>
+
+                  {/* Uses Card */}
+                  <Link
+                    href="/uses"
+                    onClick={handleMenuItemClick}
+                    className="group relative flex items-center gap-3 p-4 rounded-2xl bg-neutral-900/60 hover:bg-neutral-800/80 border border-white/15 hover:border-white/40 transition-all shadow-md flex-1"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
+                      <IconPhoto size={18} className="text-white" />
+                    </div>
+                    <div className="overflow-hidden">
+                      <h4 className="text-white font-semibold text-sm mb-0.5 tracking-wide whitespace-nowrap">
+                        Uses
+                      </h4>
+                      <p className="text-neutral-300 text-xs leading-tight truncate">
+                        A peek into my digital workspace
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
