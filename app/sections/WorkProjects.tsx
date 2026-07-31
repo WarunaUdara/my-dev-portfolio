@@ -56,7 +56,8 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     link: "https://cryptx.lk",
     techStack: [
       { name: "REACT", icon: "/icons8-react-24.png" },
-      { name: "TANSTACK", icon: "/tanstack.png" },
+      { name: "TANSTACK ROUTER", icon: "/tanstack.png" },
+      { name: "TANSTACK QUERY", icon: "/tanstack.png" },
       { name: "APPWRITE", icon: "/icons8-postgresql-96.png" },
       { name: "TYPESCRIPT", icon: "/ts.png" },
       { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },

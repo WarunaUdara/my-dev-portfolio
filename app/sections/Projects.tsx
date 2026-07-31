@@ -57,7 +57,8 @@ const projects: ProjectData[] = [
     teamMembers: ["Waruna Udara", "Malin Dhamsara", "Pruthivi Thejan", "Nuwan Konara"],
     techStack: [
       { name: "React", icon: "/icons8-react-24.png" },
-      { name: "TanStack", icon: "/tanstack.png" },
+      { name: "TanStack Router", icon: "/tanstack.png" },
+      { name: "TanStack Query", icon: "/tanstack.png" },
       { name: "Appwrite", icon: "/icons8-postgresql-96.png" },
       { name: "TypeScript", icon: "/ts.png" },
       { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
