@@ -40,6 +40,7 @@ const techStack = [
   { name: 'Oracle', icon: '/icons8-oracle-96.png' },
   { name: 'Flyway', icon: '/flyway-seeklogo.png' },
   { name: 'DBeaver', icon: '/icons8-dbeaver.png' },
+  { name: 'Redis', icon: '/icons8-redis-48.png' },
 
   // 5. DevOps, Security & Cloud Infra
   { name: 'Docker', icon: '/icons8-docker-144.png' },

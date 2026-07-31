@@ -28,7 +28,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
   {
     id: "01",
     category: "MICROSERVICES EDTECH",
-    date: "Jul 2026",
+    date: "IN PROGRESS 🚧",
     title: "StudEd",
     tagline: "Subscription-based Sri Lankan educational platform with 11 Go microservices, GraphQL, & native 3Dmol/Manim visualizers",
     imageSrc: "/projects/studed.png",
@@ -41,7 +41,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
       { name: "TANSTACK ROUTER", icon: "/tanstack.png" },
       { name: "TANSTACK QUERY", icon: "/tanstack.png" },
       { name: "POSTGRESQL", icon: "/icons8-postgresql-96.png" },
-      { name: "REDIS 7", icon: "/icons8-dbeaver.png" },
+      { name: "REDIS 7", icon: "/icons8-redis-48.png" },
       { name: "KUBERNETES", icon: "/icons8-kubernetes-48.png" },
       { name: "OPENTOFU", icon: "/opentofu.webp" },
     ],

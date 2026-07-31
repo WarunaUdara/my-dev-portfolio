@@ -14,6 +14,7 @@ interface ProjectData {
   title: string;
   detailsTitle: string;
   pillarText: string;
+  status?: string;
   descriptionPoints: string[];
   teamMembers?: string[];
   techStack: Array<{ name: string; icon: string }>;
@@ -27,8 +28,9 @@ const projects: ProjectData[] = [
     title: "StudEd",
     detailsTitle: "StudEd: Microservices & GraphQL Intelligent Learning Platform",
     pillarText: "Subscription-Based Educational Platform & Gamified Micro-Learning",
+    status: "IN PROGRESS 🚧",
     descriptionPoints: [
-      "Engineered Sri Lanka's premium subscription-based learning platform for Grades 1–11, O/L & A/L with an editorial Intelligent Learning Canvas.",
+      "Engineered Sri Lanka's premium subscription-based learning platform for Grades 1–11, O/L & A/L with an editorial Intelligent Learning Canvas (Currently in Active Development).",
       "Powered by 11 Go microservices, gRPC inter-service communications, unified GraphQL API gateway (gqlgen + Chi), PostgreSQL 15, and Redis 7 ZSET leaderboards.",
       "Features native domain visualizers (Manim math animations, 3Dmol molecular models, tscircuit, Matter.js physics), OKLCH color space, zero-asset Web Audio sound synthesis, and streak gamification."
     ],
@@ -241,7 +243,13 @@ const Projects = () => {
                   </div>
 
                   {/* Description text at top left */}
-                  <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10 max-w-[75%]">
+                  <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10 max-w-[75%] space-y-1.5">
+                    {project.status && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/25 border border-amber-400/40 text-amber-200 text-xs font-mono font-semibold tracking-wider shadow-lg backdrop-blur-md mb-1">
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        {project.status}
+                      </span>
+                    )}
                     <p className="text-white font-sans text-base md:text-lg font-medium leading-relaxed">
                       {project.pillarText}
                     </p>
