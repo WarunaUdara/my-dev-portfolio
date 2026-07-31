@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "@/components/ui/Image";
 import { Timeline, TimelineEntry } from "@/components/ui/timeline";
 import { IconCheck, IconBuildingCommunity, IconCalendarEvent } from "@tabler/icons-react";
 import BounceCards from "@/components/ReactBits/BounceCards";
@@ -8,6 +9,7 @@ import BounceCards from "@/components/ReactBits/BounceCards";
 interface VolunteeringItem {
   role: string;
   organization: string;
+  logo?: string;
   projectOrEvent: string | null;
   duration: string;
   category: string;
@@ -20,24 +22,27 @@ const volunteeringData: VolunteeringItem[] = [
   {
     role: "IT Operations Team Head",
     organization: "Career Skills Development Society",
+    logo: "/me/csds-logo.webp",
     projectOrEvent: "JESA 2026",
     duration: "Jun 2026 - Present",
     category: "Science and Technology",
-    description: "Platform launch lead and IT operations management.",
-    highlights: ["Platform launch"],
+    description: "J'pura Employability Skills Awards (JESA) is the most glamorous awarding ceremony organized by the Career Skills Development Society (CSDS) in collaboration with the Career Guidance Unit of University of Sri Jayewardenepura with the aim of felicitating undergraduates who have excelled in the fields of leadership, designing, communication, innovation, and entrepreneurship.",
+    highlights: ["Platform launch lead and IT operations management."],
   },
   {
     role: "Event & Logistics Lead",
     organization: "AWS Student Builder Group at USJ",
+    logo: "/me/aws-sbg-usj-logo.webp",
     projectOrEvent: null,
     duration: "May 2026 - Present",
     category: "Science and Technology",
-    description: "Leading event organization and logistics management for the student builder group.",
+    description: "Contributing in event organization and logistics management for the student builder group.",
     highlights: [],
   },
   {
     role: "Project Co-chair",
     organization: "IEEE CS Student Branch Chapter - University of Sri Jayewardenepura",
+    logo: "/me/ieee-cs-logo.webp",
     projectOrEvent: "Beauty of Cloud 2.0",
     duration: "May 2026 - Present",
     category: "Science and Technology",
@@ -45,21 +50,25 @@ const volunteeringData: VolunteeringItem[] = [
     highlights: [
       "Workshop 4 - Code to Cloud with Platform Engineering",
       "Workshop 3 - Cloud Architecture: What Happens When You Open Instagram?",
+      "Workshop 2 - From IDE to Production with Google cloud",
+      "Workshop 1 - Getting into Cloud with AWS",
     ],
   },
   {
     role: "Event Division Vice President",
     organization: "ICTS - Information and Communication Technology Society",
+    logo: "/me/icts-logo.webp",
     projectOrEvent: null,
     duration: "Oct 2025 - Present",
     category: "Science and Technology",
     description: "Leading the Event Division for the ICT Society.",
     highlights: [],
-    images: ["/me/icts1.webp", "/me/icts2.webp", "/me/icts3.webp", "/me/icts4.webp"],
+    images: ["/me/icts1.webp", "/me/icts5.webp", "/me/icts3.webp", "/me/icts2.webp", "/me/icts4.webp"],
   },
   {
     role: "ComSoc Standing Committee Member - Volunteer Management",
     organization: "IEEE ComSoc Student Branch Chapter - University of Sri Jayewardenepura",
+    logo: "/me/ieee-comsoc-logo.webp",
     projectOrEvent: null,
     duration: "Oct 2025 - Present",
     category: "Science and Technology",
@@ -69,6 +78,7 @@ const volunteeringData: VolunteeringItem[] = [
   {
     role: "Head - Programming Team",
     organization: "IEEE CS Student Branch Chapter - University of Sri Jayewardenepura",
+    logo: "/me/ieee-cs-logo.webp",
     projectOrEvent: "ALGOARENA (in collaboration with Leo Clubs)",
     duration: "Sep 2025 - Jan 2026",
     category: "Science and Technology",
@@ -77,13 +87,12 @@ const volunteeringData: VolunteeringItem[] = [
       "Leading the development of the official event website",
       "Mentoring team members on development tools and technologies",
       "Selecting appropriate development tools and hosting solutions",
-      "Monitoring and inspecting event execution in collaboration with the team head",
-      "Coordinating with other teams, scheduling meetings, and logging progress",
     ],
   },
   {
     role: "Logistics Team Member",
     organization: "IEEE Student Branch - University of Sri Jayewardenepura",
+    logo: "/me/ieee-sb-logo.webp",
     projectOrEvent: "IEEE REBOOT 1.0 phase 2",
     duration: "Oct 2025",
     category: "Science and Technology",
@@ -93,6 +102,7 @@ const volunteeringData: VolunteeringItem[] = [
   {
     role: "Programming and Web Development Crew Member",
     organization: "IEEE CS Student Branch Chapter - University of Sri Jayewardenepura",
+    logo: "/me/ieee-cs-logo.webp",
     projectOrEvent: "Beauty of Cloud",
     duration: "Apr 2025 - Sep 2025",
     category: "Science and Technology",
@@ -102,6 +112,7 @@ const volunteeringData: VolunteeringItem[] = [
   {
     role: "Member",
     organization: "ICTS - Information and Communication Technology Society",
+    logo: "/me/icts-logo.webp",
     projectOrEvent: null,
     duration: "Sep 2024 - Nov 2025",
     category: "Science and Technology",
@@ -122,8 +133,14 @@ export default function Volunteering() {
 
         {/* Organization & Event Meta */}
         <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-neutral-300">
-          <div className="flex items-center gap-1.5 font-medium text-gray-200">
-            <IconBuildingCommunity className="w-4 h-4 text-neutral-400" />
+          <div className="flex items-center gap-2 font-medium text-gray-200">
+            {item.logo ? (
+              <div className="relative w-6 h-6 rounded-full overflow-hidden border border-neutral-700 bg-neutral-900 shrink-0 flex items-center justify-center p-0.5">
+                <Image src={item.logo} alt={item.organization} width={20} height={20} className="object-contain rounded-full" />
+              </div>
+            ) : (
+              <IconBuildingCommunity className="w-4 h-4 text-neutral-400 shrink-0" />
+            )}
             <span>{item.organization}</span>
           </div>
 
