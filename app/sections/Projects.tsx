@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Lens } from '../ui/lens';
 import AuroraText from '@/components/ui/aurora-text';
+import { IconUsers, IconExternalLink } from '@tabler/icons-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,83 +14,147 @@ interface ProjectData {
   detailsTitle: string;
   pillarText: string;
   descriptionPoints: string[];
+  teamMembers?: string[];
   techStack: Array<{ name: string; icon: string }>;
   imageSrc: string;
   gradient: string;
   link: string;
 }
 
+const projects: ProjectData[] = [
+  {
+    title: "JESA 2026",
+    detailsTitle: "J'pura Employability Skills Awards: JESA 2026 - Revamp",
+    pillarText: "Official Awards Ecosystem & Admin Control Centre",
+    descriptionPoints: [
+      "Led digital transformation of JESA, evolving 2025 platform into a modern 2026 production ecosystem.",
+      "Re-engineered platform architecture with scalable admin control centre, dynamic faculty workflows with complex validations, and Playwright E2E testing.",
+      "Resolved production blocker caused by firebase-admin/jose ESM incompatibility via custom JWT verification, stabilizing Vercel Node 22 runtime."
+    ],
+    teamMembers: ["Waruna Udara (IT Ops Head)", "Pruthivi Thejan (UI/UX)", "Dharaka Meth", "Yesith Sri Hansana", "Pasindu Jeewan"],
+    techStack: [
+      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+      { name: "React 19", icon: "/icons8-react-24.png" },
+      { name: "TypeScript", icon: "/ts.png" },
+      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
+      { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" },
+      { name: "Node.js 22", icon: "/icons8-nodejs-144.png" },
+      { name: "Vercel", icon: "/vercel.png" }
+    ],
+    imageSrc: "/projects/jesa.png",
+    gradient: "bg-gradient-to-br from-amber-600 via-amber-700 to-amber-950",
+    link: "https://jesa.lk"
+  },
+  {
+    title: "CRYPTX 2.0",
+    detailsTitle: "CRYPTX 2.0 Official Web Platform",
+    pillarText: "Inter-University Hackathon, Designathon & CTF Platform",
+    descriptionPoints: [
+      "Official website for CryptX 2.0, Sri Lanka's premier inter-university tech event combining Hackathon, Designathon & CTF.",
+      "24-hour development sprint (100+ commits) in a team of 4, building full React & TanStack frontend.",
+      "Appwrite backend (database, hosting, storage) scaling seamlessly to 1,200+ user registrations across multiple event tracks."
+    ],
+    teamMembers: ["Waruna Udara", "Malin Dhamsara", "Pruthivi Thejan", "Nuwan Konara"],
+    techStack: [
+      { name: "React", icon: "/icons8-react-24.png" },
+      { name: "TanStack", icon: "/tanstack.png" },
+      { name: "Appwrite", icon: "/icons8-postgresql-96.png" },
+      { name: "TypeScript", icon: "/ts.png" },
+      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
+    ],
+    imageSrc: "/projects/cryptx.png",
+    gradient: "bg-gradient-to-br from-cyan-600 via-cyan-700 to-blue-950",
+    link: "https://cryptx.lk"
+  },
+  {
+    title: "EMWEE",
+    detailsTitle: "EMWEE Startup Web Platform",
+    pillarText: "Startup Web Platform & Ecosystem",
+    descriptionPoints: [
+      "Official web platform for EMWEE startup ecosystem.",
+      "Custom UI/UX engineering, high-performance responsive web design, and scalable cloud architecture.",
+      "Collaborative agile development with multi-developer team execution."
+    ],
+    teamMembers: ["Waruna Udara", "Malin Dhamsara", "Vineth Ranathunga", "Farhan Hameeth", "Thisal Kokuhennadige"],
+    techStack: [
+      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+      { name: "React", icon: "/icons8-react-24.png" },
+      { name: "TypeScript", icon: "/ts.png" },
+      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
+      { name: "Vercel", icon: "/vercel.png" }
+    ],
+    imageSrc: "/projects/emwee.png",
+    gradient: "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-950",
+    link: "https://emwee.co"
+  },
+  {
+    title: "AlgoArena",
+    detailsTitle: "AlgoArena Hackathon Platform",
+    pillarText: "Real-Time Hackathon & Coding Platform",
+    descriptionPoints: [
+      "Built with Next.js 14 using Server Components and Firebase Authentication.",
+      "Real-time team formation and submission tracking with Firestore.",
+      "Responsive UI with Tailwind CSS and smooth animations."
+    ],
+    techStack: [
+      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+      { name: "React", icon: "/icons8-react-24.png" },
+      { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" },
+      { name: "TypeScript", icon: "/ts.png" },
+      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
+    ],
+    imageSrc: "/projects-algoarena.png",
+    gradient: "bg-gradient-to-br from-pink-600 via-pink-700 to-pink-950",
+    link: "https://algoarena.live"
+  },
+  {
+    title: "Personal Portfolio",
+    detailsTitle: "Personal Developer Portfolio",
+    pillarText: "Interactive Developer Portfolio",
+    descriptionPoints: [
+      "Developed with Next.js 15, React 19, and TypeScript for type safety.",
+      "GSAP animations with ScrollTrigger and dynamic WebGL shaders.",
+      "Deployed on Vercel with Bun package manager for speed."
+    ],
+    techStack: [
+      { name: "Next.js 15", icon: "/icons8-nextjs-144.png" },
+      { name: "React 19", icon: "/icons8-react-24.png" },
+      { name: "TypeScript", icon: "/ts.png" },
+      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
+      { name: "Bun", icon: "/Bun.png" },
+      { name: "Vercel", icon: "/vercel.png" }
+    ],
+    imageSrc: "/projects-portfolio.png",
+    gradient: "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-950",
+    link: "https://warunadev.vercel.app"
+  },
+  {
+    title: "Beauty Of Cloud",
+    detailsTitle: "Beauty Of Cloud Platform",
+    pillarText: "Inter-University Cloud Computing Ideathon",
+    descriptionPoints: [
+      "IEEE CS Chapter USJ flagship event promoting cloud technologies.",
+      "Next.js with MongoDB Atlas for scalable data management.",
+      "Tailwind CSS for responsive design across all devices."
+    ],
+    techStack: [
+      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+      { name: "React", icon: "/icons8-react-24.png" },
+      { name: "MongoDB", icon: "/icons8-mongo-db-96.png" },
+      { name: "Vercel", icon: "/vercel.png" },
+      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
+    ],
+    imageSrc: "/projects-beautyofcloud.png",
+    gradient: "bg-gradient-to-br from-blue-600 via-blue-700 to-blue-950",
+    link: "https://beautyof.cloud"
+  }
+];
+
 const Projects = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const descriptionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const projects: ProjectData[] = [
-    {
-      title: "Algorena",
-      detailsTitle: "AlgoArena",
-      pillarText: "Hackathon Platform",
-      descriptionPoints: [
-        "Built with Next.js 14 using Server Components and Firebase Authentication.",
-        "Real-time team formation and submission tracking with Firestore.",
-        "Responsive UI with Tailwind CSS and smooth animations."
-      ],
-      techStack: [
-        { name: "Next.js", icon: "/icons8-nextjs-144.png" },
-        { name: "React", icon: "/icons8-react-24.png" },
-        { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" },
-        { name: "TypeScript", icon: "/ts.png" },
-        { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
-      ],
-      imageSrc: "/projects-algoarena.png",
-      gradient: "bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900",
-      link: "https://algoarena.live"
-    },
-    {
-      title: "Personal Portfolio",
-      detailsTitle: "Personal Portfolio",
-      pillarText: "Developer Portfolio",
-      descriptionPoints: [
-        "Developed with Next.js 15, React 19, and TypeScript for type safety.",
-        "GSAP animations with ScrollTrigger for interactive experiences.",
-        "Deployed on Vercel, Static assets are deployed to a global Content Delivery Network (CDN) for low latency and instant delivery worldwide, which optimizes performance and SEO."
-      ],
-      techStack: [
-        { name: "Next.js", icon: "/icons8-nextjs-144.png" },
-        { name: "React", icon: "/icons8-react-24.png" },
-        { name: "TypeScript", icon: "/ts.png" },
-        { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
-        { name: "Vercel", icon: "/vercel.png" },
-        { name: "Bun", icon: "/Bun.png" },
-        { name: "GSAP", icon: "/gsap-logo_svgstack_com_28451764740258.png" },
-        { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" }
-      ],
-      imageSrc: "/projects-portfolio.png",
-      gradient: "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-900",
-      link: "https://warunadev.vercel.app"
-    },
-    {
-      title: "Beauty Of Cloud",
-      detailsTitle: "Beauty Of Cloud",
-      pillarText: "Inter-University Cloud Computing Ideathon",
-      descriptionPoints: [
-        "IEEE CS Chapter USJ flagship event promoting cloud technologies.",
-        "Next.js with MongoDB Atlas for scalable data management.",
-        "Tailwind CSS for responsive design across all devices."
-      ],
-      techStack: [
-        { name: "Next.js", icon: "/icons8-nextjs-144.png" },
-        { name: "React", icon: "/icons8-react-24.png" },
-        { name: "MongoDB", icon: "/icons8-mongo-db-96.png" },
-        { name: "Vercel", icon: "/vercel.png" },
-        { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
-      ],
-      imageSrc: "/projects-beautyofcloud.png",
-      gradient: "bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900",
-      link: "https://beautyof.cloud"
-    }
-  ];
 
   useEffect(() => {
     if (!sectionRef.current || !descriptionRef.current) return;
@@ -130,12 +195,12 @@ const Projects = () => {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative bg-black text-white overflow-hidden py-20 scroll-mt-20"
+      className="relative bg-black text-white overflow-hidden py-20 scroll-mt-20 border-t border-neutral-900"
     >
       {/* Section Title */}
       <div className="container mx-auto px-6 mb-12 text-center">
-        <p className="text-xs sm:text-sm text-gray-400 uppercase tracking-[0.3em] mb-4">
-          MY WORK
+        <p className="text-xs sm:text-sm text-neutral-400 uppercase tracking-[0.3em] mb-4 font-mono font-semibold">
+          FEATURED WORK
         </p>
         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight">
           Featured{' '}
@@ -148,7 +213,7 @@ const Projects = () => {
       {/* Main Content - Two Column Layout */}
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16">
-          {/* Left: Scrolling Cards - Takes more space */}
+          {/* Left: Scrolling Cards */}
           <div className="space-y-24">
             {projects.map((project, index) => (
               <div
@@ -161,34 +226,32 @@ const Projects = () => {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`relative rounded-[32px] overflow-hidden ${project.gradient} border-2 border-white/20 transition-all duration-300 hover:translate-y-[-8px] block cursor-pointer`}
+                  className={`relative rounded-[32px] overflow-hidden ${project.gradient} border-2 border-white/20 transition-all duration-300 hover:translate-y-[-8px] block cursor-pointer shadow-2xl`}
                 >
-                  {/* Arrow icon - Top right corner */}
-                  <div className="absolute top-6 right-6 md:top-8 md:right-8 z-10 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                  {/* Arrow icon */}
+                  <div className="absolute top-6 right-6 md:top-8 md:right-8 z-10 w-11 h-11 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 group-hover:scale-110">
+                    <IconExternalLink className="w-5 h-5 text-white" />
                   </div>
 
                   {/* Description text at top left */}
-                  <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10 max-w-[70%]">
-                    <p className="text-white text-base md:text-lg leading-relaxed">
+                  <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10 max-w-[75%]">
+                    <p className="text-white font-sans text-base md:text-lg font-medium leading-relaxed">
                       {project.pillarText}
                     </p>
                   </div>
 
-                  {/* Image - Landscape aspect ratio, sticks to bottom */}
+                  {/* Image Container */}
                   <div className="relative w-full pt-24 md:pt-28 lg:pt-28">
                     <div className="relative w-full aspect-[16/9] lg:aspect-[16/9]">
-                      {/* Desktop: padding on all sides with Lens effect */}
+                      {/* Desktop: padding with Lens effect */}
                       <div className="hidden lg:block absolute inset-0 px-6 pb-6">
                         <Lens zoomFactor={1.8} lensSize={200}>
-                          <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                          <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl bg-neutral-950 border border-white/10">
                             <Image
                               src={project.imageSrc}
                               alt={project.title}
                               fill
-                              className="object-contain object-bottom"
+                              className="object-cover object-top"
                               sizes="(max-width: 1024px) 100vw, 60vw"
                               priority={index === 0}
                               quality={85}
@@ -197,14 +260,14 @@ const Projects = () => {
                         </Lens>
                       </div>
                       
-                      {/* Mobile: small padding on sides only, no bottom padding, no lens */}
+                      {/* Mobile */}
                       <div className="lg:hidden absolute inset-0 px-3 pt-0 pb-0">
-                        <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                        <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl bg-neutral-950 border border-white/10">
                           <Image
                             src={project.imageSrc}
                             alt={project.title}
                             fill
-                            className="object-contain object-bottom"
+                            className="object-cover object-top"
                             sizes="100vw"
                             priority={index === 0}
                             quality={85}
@@ -216,28 +279,33 @@ const Projects = () => {
                 </a>
 
                 {/* Mobile: Description below each card */}
-                <div className="lg:hidden mt-8 px-2">
-                  {/* Title */}
-                  <h3 className="text-2xl font-serif font-bold text-white mb-6 leading-tight">
+                <div className="lg:hidden mt-8 px-2 space-y-4">
+                  <h3 className="text-2xl font-serif font-bold text-white leading-tight">
                     {project.detailsTitle}
                   </h3>
 
-                  {/* Description Points */}
-                  <ul className="space-y-3 mb-6">
+                  {project.teamMembers && (
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-300 font-mono">
+                      <IconUsers className="w-4 h-4 text-neutral-400 shrink-0" />
+                      <span className="text-neutral-400 font-semibold">Team:</span>
+                      <span>{project.teamMembers.join(", ")}</span>
+                    </div>
+                  )}
+
+                  <ul className="space-y-2.5">
                     {project.descriptionPoints.map((point, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-gray-300">
-                        <span className="text-[var(--color-8)] text-xl mt-0.5 flex-shrink-0 font-light">+</span>
+                      <li key={idx} className="flex items-start gap-3 text-gray-300 font-sans">
+                        <span className="text-neutral-400 text-lg mt-0.5 flex-shrink-0 font-light">+</span>
                         <span className="text-sm leading-relaxed">{point}</span>
                       </li>
                     ))}
                   </ul>
 
-                  {/* Tech Stack Badges */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 pt-2">
                     {project.techStack.map((tech, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-gray-300 font-medium flex items-center gap-2"
+                        className="px-3 py-1.5 bg-neutral-900 border border-neutral-800 rounded-full text-xs text-gray-300 font-mono flex items-center gap-2"
                       >
                         <Image src={tech.icon} alt={tech.name} width={14} height={14} className="w-3.5 h-3.5 object-contain" />
                         {tech.name}
@@ -249,34 +317,43 @@ const Projects = () => {
             ))}
           </div>
 
-          {/* Right: Description - Desktop: Pinned, Mobile: Hidden */}
+          {/* Right: Description - Desktop: Pinned */}
           <div className="hidden lg:block relative">
             <div 
               ref={descriptionRef}
               className="h-screen flex items-center justify-center"
             >
-              <div className="w-full pb-80">
-                {/* Title */}
-                <h3 className="text-2xl lg:text-3xl xl:text-4xl font-serif font-bold text-white mb-8 leading-tight">
+              <div className="w-full pb-80 space-y-6">
+                <h3 className="text-2xl lg:text-3xl xl:text-4xl font-serif font-bold text-white leading-tight">
                   {projects[activeIndex].detailsTitle}
                 </h3>
 
-                {/* Description Points */}
-                <ul className="space-y-3 mb-10">
+                {projects[activeIndex].teamMembers && (
+                  <div className="p-3.5 rounded-xl bg-neutral-900/80 border border-neutral-800 text-xs font-mono text-neutral-300 space-y-1">
+                    <div className="flex items-center gap-2 text-neutral-400 font-semibold uppercase tracking-wider">
+                      <IconUsers className="w-4 h-4 text-neutral-300" />
+                      <span>Collaborators &amp; Team</span>
+                    </div>
+                    <p className="text-neutral-200 leading-relaxed font-sans">
+                      {projects[activeIndex].teamMembers?.join(" • ")}
+                    </p>
+                  </div>
+                )}
+
+                <ul className="space-y-3">
                   {projects[activeIndex].descriptionPoints.map((point, idx) => (
-                    <li key={idx} className="flex items-start gap-4 text-gray-300">
-                      <span className="text-[var(--color-8)] text-2xl mt-0.5 flex-shrink-0 font-light">+</span>
+                    <li key={idx} className="flex items-start gap-3.5 text-gray-300 font-sans">
+                      <span className="text-neutral-400 text-xl mt-0.5 flex-shrink-0 font-light">+</span>
                       <span className="text-base leading-relaxed">{point}</span>
                     </li>
                   ))}
                 </ul>
 
-                {/* Tech Stack Badges */}
-                <div className="flex flex-wrap gap-2.5">
+                <div className="flex flex-wrap gap-2.5 pt-2">
                   {projects[activeIndex].techStack.map((tech, idx) => (
                     <span
                       key={idx}
-                      className="px-3.5 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-full text-xs text-gray-300 font-medium transition-all duration-300 flex items-center gap-2"
+                      className="px-3.5 py-1.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 rounded-full text-xs text-neutral-300 font-mono font-medium transition-all duration-300 flex items-center gap-2"
                     >
                       <Image src={tech.icon} alt={tech.name} width={16} height={16} className="w-4 h-4 object-contain" />
                       {tech.name}
@@ -288,10 +365,6 @@ const Projects = () => {
           </div>
         </div>
       </div>
-
-      {/* Background Decorations */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[var(--color-8)]/5 rounded-full blur-3xl pointer-events-none animate-pulse" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[var(--color-9)]/5 rounded-full blur-3xl pointer-events-none animate-pulse" />
     </section>
   );
 };

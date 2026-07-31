@@ -53,6 +53,7 @@ const volunteeringData: VolunteeringItem[] = [
       "Workshop 2 - From IDE to Production with Google cloud",
       "Workshop 1 - Getting into Cloud with AWS",
     ],
+    images: ["/me/boc1.webp", "/me/boc2.webp",],
   },
   {
     role: "Event Division Vice President",

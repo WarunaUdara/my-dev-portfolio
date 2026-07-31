@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "@/components/ui/Image";
 import AuroraText from "@/components/ui/aurora-text";
+import { IconUsers, IconExternalLink } from "@tabler/icons-react";
 
 export interface TechStackItem {
   name: string;
@@ -15,6 +16,7 @@ export interface WorkProjectItem {
   date: string;
   title: string;
   tagline: string;
+  teamMembers?: string[];
   imageSrc: string;
   gradient: string;
   link: string;
@@ -24,12 +26,68 @@ export interface WorkProjectItem {
 export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
   {
     id: "01",
-    category: "WEB APP",
-    date: "Q2 2026",
+    category: "REVAMP ECOSYSTEM",
+    date: "Jun – Jul 2026",
+    title: "JESA 2026",
+    tagline: "J'pura Employability Skills Awards official web platform, admin control centre & dynamic form workflow engine",
+    teamMembers: ["Waruna Udara (IT Ops Head)", "Pruthivi Thejan", "Dharaka Meth", "Yesith Sri Hansana", "Pasindu Jeewan"],
+    imageSrc: "/projects/jesa.png",
+    gradient: "bg-gradient-to-br from-amber-600 via-amber-700 to-amber-950",
+    link: "https://jesa.lk",
+    techStack: [
+      { name: "NEXT.JS 15", icon: "/icons8-nextjs-144.png" },
+      { name: "REACT 19", icon: "/icons8-react-24.png" },
+      { name: "TYPESCRIPT", icon: "/ts.png" },
+      { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },
+      { name: "FIREBASE", icon: "/google-firebase-logo-icon-hd.png" },
+      { name: "NODE.JS 22", icon: "/icons8-nodejs-144.png" },
+      { name: "VERCEL", icon: "/vercel.png" },
+    ],
+  },
+  {
+    id: "02",
+    category: "TECH EVENT PLATFORM",
+    date: "Feb – Mar 2026",
+    title: "CRYPTX 2.0",
+    tagline: "Official web platform for Sri Lanka's premier inter-university Hackathon, Designathon & CTF",
+    teamMembers: ["Waruna Udara", "Malin Dhamsara", "Pruthivi Thejan", "Nuwan Konara"],
+    imageSrc: "/projects/cryptx.png",
+    gradient: "bg-gradient-to-br from-cyan-600 via-cyan-700 to-blue-950",
+    link: "https://cryptx.lk",
+    techStack: [
+      { name: "REACT", icon: "/icons8-react-24.png" },
+      { name: "TANSTACK", icon: "/tanstack.png" },
+      { name: "APPWRITE", icon: "/icons8-postgresql-96.png" },
+      { name: "TYPESCRIPT", icon: "/ts.png" },
+      { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },
+    ],
+  },
+  {
+    id: "03",
+    category: "STARTUP PLATFORM",
+    date: "2026",
+    title: "EMWEE",
+    tagline: "Official web platform for EMWEE startup ecosystem with high-performance cloud architecture",
+    teamMembers: ["Waruna Udara", "Malin Dhamsara", "Vineth Ranathunga", "Farhan Hameeth", "Thisal Kokuhennadige"],
+    imageSrc: "/projects/emwee.png",
+    gradient: "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-950",
+    link: "https://emwee.co",
+    techStack: [
+      { name: "NEXT.JS", icon: "/icons8-nextjs-144.png" },
+      { name: "REACT", icon: "/icons8-react-24.png" },
+      { name: "TYPESCRIPT", icon: "/ts.png" },
+      { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },
+      { name: "VERCEL", icon: "/vercel.png" },
+    ],
+  },
+  {
+    id: "04",
+    category: "HACKATHON PLATFORM",
+    date: "2025 – 2026",
     title: "AlgoArena",
     tagline: "Real-time competitive coding & hackathon management platform built for speed",
     imageSrc: "/projects-algoarena.png",
-    gradient: "bg-gradient-to-br from-pink-600 via-pink-700 to-rose-900",
+    gradient: "bg-gradient-to-br from-pink-600 via-pink-700 to-rose-950",
     link: "https://algoarena.live",
     techStack: [
       { name: "NEXT.JS 14", icon: "/icons8-nextjs-144.png" },
@@ -37,18 +95,17 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
       { name: "TYPESCRIPT", icon: "/ts.png" },
       { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },
       { name: "FIREBASE", icon: "/google-firebase-logo-icon-hd.png" },
-      { name: "GSAP", icon: "/gsap-logo_svgstack_com_28451764740258.png" },
       { name: "VERCEL", icon: "/vercel.png" },
     ],
   },
   {
-    id: "02",
+    id: "05",
     category: "DEV PORTFOLIO",
-    date: "Q4 2024",
+    date: "2024 – 2026",
     title: "Personal Portfolio",
-    tagline: "Ultra-fast Next.js portfolio featuring WebGL glassmorphism and custom audio interactive features",
+    tagline: "Ultra-fast Next.js portfolio featuring WebGL glassmorphism & GSAP animations",
     imageSrc: "/projects-portfolio.png",
-    gradient: "bg-gradient-to-br from-indigo-600 via-blue-700 to-purple-900",
+    gradient: "bg-gradient-to-br from-indigo-600 via-purple-700 to-purple-950",
     link: "https://warunadev.vercel.app",
     techStack: [
       { name: "NEXT.JS 15", icon: "/icons8-nextjs-144.png" },
@@ -60,13 +117,13 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     ],
   },
   {
-    id: "03",
+    id: "06",
     category: "IDEATHON PLATFORM",
-    date: "Q1 2025",
+    date: "2025",
     title: "Beauty Of Cloud",
     tagline: "Inter-university cloud computing ideathon platform engineered with MongoDB Atlas",
     imageSrc: "/projects-beautyofcloud.png",
-    gradient: "bg-gradient-to-br from-slate-700 via-neutral-800 to-slate-900",
+    gradient: "bg-gradient-to-br from-slate-700 via-neutral-800 to-slate-950",
     link: "https://beautyof.cloud",
     techStack: [
       { name: "NEXT.JS", icon: "/icons8-nextjs-144.png" },
@@ -84,7 +141,7 @@ export const WorkProjects = () => {
     <div className="w-full relative z-10">
       {/* Section Title */}
       <div className="text-center mb-16 sm:mb-20">
-        <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-neutral-400 uppercase mb-3">
+        <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-neutral-400 uppercase mb-3 font-semibold">
           CASE STUDIES
         </p>
         <h2 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-tight">
@@ -131,9 +188,17 @@ export const WorkProjects = () => {
               </div>
 
               {/* Project Title */}
-              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-wide group-hover:text-sky-300 transition-colors">
+              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-wide group-hover:text-amber-200 transition-colors">
                 {project.title}
               </h3>
+
+              {/* Team Members Tag */}
+              {project.teamMembers && (
+                <div className="flex items-center gap-2 text-xs font-mono text-neutral-400">
+                  <IconUsers className="w-4 h-4 text-neutral-400 shrink-0" />
+                  <span className="truncate">Team: {project.teamMembers.join(", ")}</span>
+                </div>
+              )}
 
               {/* Compact Hero Card Container */}
               <a
@@ -147,20 +212,8 @@ export const WorkProjects = () => {
                   <p className="text-white/95 text-xs sm:text-sm font-sans font-medium leading-relaxed max-w-xs">
                     {project.tagline}
                   </p>
-                  <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center text-white flex-shrink-0 group-hover/card:bg-white group-hover/card:text-black group-hover/card:rotate-45 transition-all duration-300">
-                    <svg
-                      className="w-3.5 h-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      />
-                    </svg>
+                  <div className="w-8 h-8 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-white flex-shrink-0 group-hover/card:bg-white group-hover/card:text-black group-hover/card:rotate-45 transition-all duration-300">
+                    <IconExternalLink className="w-4 h-4" />
                   </div>
                 </div>
 
