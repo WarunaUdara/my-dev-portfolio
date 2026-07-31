@@ -54,14 +54,14 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   },
   {
     slug: "react-19-and-tanstack-router",
-    title: "Architecting Modern React 19 Applications with TanStack Router & Vite",
+    title: "Engineering an Elite Portfolio: React 19, TanStack Router, GSAP Physics & Glassmorphic UX",
     date: "April 10, 2026",
-    description: "Why TanStack Router and Vite form the most resilient, type-safe client architecture for modern web applications.",
+    description: "An in-depth technical architectural postmortem of Waruna Udara's developer portfolio — showcasing React 19, TanStack Router, GSAP ScrollTrigger physics, Bun runtime, zero-asset Web Audio synthesis, and glassmorphic UI engineering.",
     category: "WEB ARCHITECTURE",
-    readTime: "4 min read",
-    tags: ["React 19", "TanStack Router", "Vite", "TypeScript"],
+    readTime: "8 min read",
+    tags: ["React 19", "TanStack Router", "GSAP", "Vite", "TypeScript", "Bun", "UI/UX Engineering"],
     coverImage: "/projects-portfolio.png",
-    author: "Waruna Udara",
+    author: "Waruna Udara Sampath",
   },
 ];
 
