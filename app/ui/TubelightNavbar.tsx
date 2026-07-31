@@ -102,7 +102,7 @@ export function NavBar({ items, className }: NavBarProps) {
         gsap.killTweensOf(cardsRef.current);
       }
 
-      const collapsedWidth = isMobile ? "92vw" : "560px";
+      const collapsedWidth = isMobile ? "92vw" : "660px";
       const expandedWidth = isMobile ? "94vw" : "820px";
       const targetHeight = expanding ? (isMobile ? 520 : 310) : 52;
 
@@ -230,17 +230,17 @@ export function NavBar({ items, className }: NavBarProps) {
           "pointer-events-auto overflow-hidden will-change-[height,width,border-radius] transition-colors duration-300 relative border shadow-2xl",
           isExpanded
             ? "bg-neutral-950/95 backdrop-blur-2xl border-neutral-800/90 shadow-[0_0_60px_rgba(0,0,0,0.85)]"
-            : "bg-background/5 border-border backdrop-blur-lg shadow-lg"
+            : "bg-black/80 border-white/10 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
         )}
         style={{
-          width: isMobile ? "92vw" : "560px",
+          width: isMobile ? "92vw" : "660px",
           height: "52px",
           borderRadius: "9999px",
         }}
       >
         {/* Top Navigation Bar Header Row (Fixed 52px) */}
-        <div className="h-[52px] flex items-center justify-between px-2 sm:px-3 w-full">
-          <div className="flex items-center gap-1 sm:gap-1.5 w-full justify-between sm:justify-center">
+        <div className="h-[52px] flex items-center justify-between px-3 sm:px-4 w-full">
+          <div className="flex items-center gap-1 sm:gap-2 w-full justify-between sm:justify-center">
             {items.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.name;
@@ -250,23 +250,23 @@ export function NavBar({ items, className }: NavBarProps) {
               return (
                 <div
                   key={item.name}
-                  className="relative"
+                  className="relative shrink-0"
                   onMouseEnter={() => isMoreMenu && handleMoreMouseEnter()}
                 >
                   <Link
                     href={item.url}
                     onClick={(e) => handleNavClick(e, item)}
                     className={cn(
-                      "relative cursor-pointer text-xs sm:text-sm font-semibold px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full transition-all flex items-center gap-1 select-none",
+                      "relative cursor-pointer text-xs sm:text-sm font-semibold px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full transition-all flex items-center gap-1.5 select-none whitespace-nowrap",
                       isBookCall
                         ? isActive
-                          ? "bg-white text-black font-bold shadow-[0_0_22px_rgba(255,255,255,0.5)] border border-white"
+                          ? "bg-white text-black font-bold shadow-[0_0_22px_rgba(255,255,255,0.6)] border border-white"
                           : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-[0_0_12px_rgba(255,255,255,0.12)]"
-                        : "text-foreground/80 hover:text-primary",
-                      !isBookCall && isActive && "bg-muted text-primary"
+                        : "text-foreground/80 hover:text-white",
+                      !isBookCall && isActive && "bg-white/10 text-white font-bold"
                     )}
                   >
-                    <span className="hidden md:inline relative z-10">{item.name}</span>
+                    <span className="hidden md:inline relative z-10 whitespace-nowrap">{item.name}</span>
                     <span className="md:hidden relative z-10">
                       <Icon size={18} strokeWidth={2.2} />
                     </span>
@@ -284,18 +284,17 @@ export function NavBar({ items, className }: NavBarProps) {
                     {isActive && !isBookCall && (
                       <motion.div
                         layoutId="lamp"
-                        className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"
+                        className="absolute inset-0 w-full bg-white/10 rounded-full -z-10"
                         initial={false}
                         transition={{
                           type: "spring",
-                          stiffness: 300,
+                          stiffness: 350,
                           damping: 30,
                         }}
                       >
-                        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
-                          <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
-                          <div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
-                          <div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
+                        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-white rounded-t-full shadow-[0_0_12px_rgba(255,255,255,0.9)]">
+                          <div className="absolute w-12 h-6 bg-white/20 rounded-full blur-md -top-2 -left-2" />
+                          <div className="absolute w-8 h-6 bg-white/20 rounded-full blur-md -top-1" />
                         </div>
                       </motion.div>
                     )}
@@ -347,7 +346,7 @@ export function NavBar({ items, className }: NavBarProps) {
                 className="group relative block rounded-2xl overflow-hidden h-full border border-neutral-800/80 hover:border-neutral-600 transition-all shadow-xl bg-neutral-900/80"
               >
                 <Image
-                  src="/bucket-list.webp"
+                  src="/bucket-list.png"
                   alt="Bucket List"
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -376,7 +375,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   <IconLink size={16} className="text-neutral-300 group-hover:text-white" />
                 </div>
                 <div className="overflow-hidden">
-                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide">
+                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide whitespace-nowrap">
                     Links
                   </h4>
                   <p className="text-neutral-400 text-[11px] leading-tight truncate">
@@ -395,7 +394,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   <IconPhoto size={16} className="text-neutral-300 group-hover:text-white" />
                 </div>
                 <div className="overflow-hidden">
-                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide">
+                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide whitespace-nowrap">
                     Uses
                   </h4>
                   <p className="text-neutral-400 text-[11px] leading-tight truncate">
@@ -414,7 +413,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   <IconCreditCard size={16} className="text-neutral-300 group-hover:text-white" />
                 </div>
                 <div className="overflow-hidden">
-                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide">
+                  <h4 className="text-white font-semibold text-xs sm:text-sm mb-0.5 tracking-wide whitespace-nowrap">
                     Attribution
                   </h4>
                   <p className="text-neutral-400 text-[11px] leading-tight truncate">
