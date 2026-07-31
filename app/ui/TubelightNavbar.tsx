@@ -91,7 +91,7 @@ export function NavBar({ items, className }: NavBarProps) {
     }
   }, [pathname, items, isOnMorePage]);
 
-  // GSAP Dual Width & Height Expansion (Desktop Only)
+  // GSAP Compact Dual Width & Height Expansion (Desktop Only)
   const animateNavExpansion = useCallback(
     (expanding: boolean) => {
       if (isMobile) return;
@@ -103,39 +103,39 @@ export function NavBar({ items, className }: NavBarProps) {
         gsap.killTweensOf(cardsRef.current);
       }
 
-      const collapsedWidth = "660px";
-      const expandedWidth = "820px";
-      const targetHeight = expanding ? 295 : 52;
+      const collapsedWidth = "520px";
+      const expandedWidth = "680px";
+      const targetHeight = expanding ? 230 : 46;
 
       if (expanding) {
         // Expand width AND height simultaneously
         gsap.to(navEl, {
           width: expandedWidth,
           height: targetHeight,
-          borderRadius: "28px",
-          duration: 0.4,
+          borderRadius: "22px",
+          duration: 0.38,
           ease: "power3.out",
         });
 
         // Stagger inner cards entrance
         gsap.fromTo(
           cardsRef.current,
-          { y: 25, opacity: 0 },
+          { y: 20, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.35,
+            duration: 0.32,
             ease: "power3.out",
-            stagger: 0.06,
-            delay: 0.08,
+            stagger: 0.05,
+            delay: 0.06,
           }
         );
       } else {
         // Stagger cards exit
         gsap.to(cardsRef.current, {
-          y: 15,
+          y: 12,
           opacity: 0,
-          duration: 0.2,
+          duration: 0.18,
           ease: "power3.in",
           stagger: 0.03,
         });
@@ -143,11 +143,11 @@ export function NavBar({ items, className }: NavBarProps) {
         // Collapse width AND height back to compact glassmorphic pill
         gsap.to(navEl, {
           width: collapsedWidth,
-          height: 52,
+          height: 46,
           borderRadius: "9999px",
           duration: 0.35,
           ease: "power3.inOut",
-          delay: 0.04,
+          delay: 0.03,
         });
       }
     },
@@ -242,29 +242,29 @@ export function NavBar({ items, className }: NavBarProps) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed bottom-24 left-1/2 -translate-x-1/2 w-[92vw] max-w-[400px] z-[9998] max-h-[75vh] overflow-y-auto"
+              className="fixed bottom-20 left-1/2 -translate-x-1/2 w-[92vw] max-w-[380px] z-[9998] max-h-[75vh] overflow-y-auto"
             >
-              <div className="bg-neutral-950/95 backdrop-blur-2xl border border-white/15 rounded-3xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)] space-y-3">
+              <div className="bg-neutral-950/95 backdrop-blur-2xl border border-white/15 rounded-2xl p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] space-y-2.5">
                 {/* Header */}
-                <div className="flex items-center justify-between px-2 pb-2 border-b border-white/10">
-                  <span className="text-white font-serif text-lg font-bold tracking-wide">
+                <div className="flex items-center justify-between px-1 pb-2 border-b border-white/10">
+                  <span className="text-white font-serif text-base font-semibold tracking-wide">
                     Explore More
                   </span>
                   <button
                     onClick={() => setIsExpanded(false)}
-                    className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/20 transition-colors"
+                    className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/20 transition-colors"
                   >
-                    <IconX size={16} />
+                    <IconX size={14} />
                   </button>
                 </div>
 
                 {/* Mobile Cards Stack */}
-                <div className="space-y-3 pt-1">
+                <div className="space-y-2.5 pt-1">
                   {/* Card 1: Guestbook */}
                   <Link
                     href="/guestbook"
                     onClick={handleMenuItemClick}
-                    className="group relative block rounded-2xl overflow-hidden h-28 border border-white/10"
+                    className="group relative block rounded-xl overflow-hidden h-24 border border-white/10"
                   >
                     <Image
                       src="/guestbook.webp"
@@ -273,9 +273,9 @@ export function NavBar({ items, className }: NavBarProps) {
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                    <div className="absolute bottom-3 left-4">
-                      <h4 className="text-white font-serif text-lg font-bold">Guestbook</h4>
-                      <p className="text-neutral-300 text-xs">Let me know you were here</p>
+                    <div className="absolute bottom-2.5 left-3">
+                      <h4 className="text-white font-serif text-base font-bold">Guestbook</h4>
+                      <p className="text-neutral-300 text-[11px] font-light">Let me know you were here</p>
                     </div>
                   </Link>
 
@@ -283,7 +283,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   <Link
                     href="/bucket-list"
                     onClick={handleMenuItemClick}
-                    className="group relative block rounded-2xl overflow-hidden h-28 border border-white/10"
+                    className="group relative block rounded-xl overflow-hidden h-24 border border-white/10"
                   >
                     <Image
                       src="/bucket-list.png"
@@ -292,9 +292,9 @@ export function NavBar({ items, className }: NavBarProps) {
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                    <div className="absolute bottom-3 left-4">
-                      <h4 className="text-white font-serif text-lg font-bold">Bucket List</h4>
-                      <p className="text-neutral-300 text-xs">Dreams with a deadline</p>
+                    <div className="absolute bottom-2.5 left-3">
+                      <h4 className="text-white font-serif text-base font-bold">Bucket List</h4>
+                      <p className="text-neutral-300 text-[11px] font-light">Dreams with a deadline</p>
                     </div>
                   </Link>
 
@@ -302,14 +302,14 @@ export function NavBar({ items, className }: NavBarProps) {
                   <Link
                     href="/links"
                     onClick={handleMenuItemClick}
-                    className="flex items-center gap-3 p-3.5 rounded-2xl bg-neutral-900/90 border border-white/10 hover:border-white/25 transition-all"
+                    className="flex items-center gap-2.5 p-3 rounded-xl bg-neutral-900/90 border border-white/10 hover:border-white/25 transition-all"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <IconLink size={18} />
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <IconLink size={16} />
                     </div>
                     <div>
-                      <h4 className="text-white font-semibold text-sm">Links</h4>
-                      <p className="text-neutral-400 text-xs">All my links are here</p>
+                      <h4 className="text-white font-medium text-xs">Links</h4>
+                      <p className="text-neutral-400 text-[11px] font-light">All my links are here</p>
                     </div>
                   </Link>
 
@@ -317,14 +317,14 @@ export function NavBar({ items, className }: NavBarProps) {
                   <Link
                     href="/uses"
                     onClick={handleMenuItemClick}
-                    className="flex items-center gap-3 p-3.5 rounded-2xl bg-neutral-900/90 border border-white/10 hover:border-white/25 transition-all"
+                    className="flex items-center gap-2.5 p-3 rounded-xl bg-neutral-900/90 border border-white/10 hover:border-white/25 transition-all"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <IconPhoto size={18} />
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <IconPhoto size={16} />
                     </div>
                     <div>
-                      <h4 className="text-white font-semibold text-sm">Uses</h4>
-                      <p className="text-neutral-400 text-xs">A peek into my digital workspace</p>
+                      <h4 className="text-white font-medium text-xs">Uses</h4>
+                      <p className="text-neutral-400 text-[11px] font-light">A peek into my digital workspace</p>
                     </div>
                   </Link>
                 </div>
@@ -338,7 +338,7 @@ export function NavBar({ items, className }: NavBarProps) {
       <div
         className={cn(
           "fixed left-1/2 -translate-x-1/2 z-[9999] pointer-events-none w-full flex justify-center",
-          isMobile ? "bottom-6" : "top-6",
+          isMobile ? "bottom-5" : "top-5",
           className
         )}
       >
@@ -349,18 +349,18 @@ export function NavBar({ items, className }: NavBarProps) {
           className={cn(
             "pointer-events-auto overflow-hidden will-change-[height,width,border-radius] transition-colors duration-300 relative border shadow-2xl",
             isExpanded && !isMobile
-              ? "bg-neutral-950/75 backdrop-blur-3xl border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+              ? "bg-neutral-950/80 backdrop-blur-3xl border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
               : "bg-neutral-950/40 border-white/20 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
           )}
           style={{
-            width: isMobile ? "92vw" : "660px",
-            height: "52px",
-            borderRadius: isMobile ? "9999px" : "9999px",
+            width: isMobile ? "92vw" : "520px",
+            height: "46px",
+            borderRadius: "9999px",
           }}
         >
-          {/* Top Navigation Bar Header Row (Fixed 52px) */}
-          <div className="h-[52px] flex items-center justify-between px-3 sm:px-4 w-full">
-            <div className="flex items-center gap-1 sm:gap-2 w-full justify-between sm:justify-center">
+          {/* Top Navigation Bar Header Row (Fixed 46px) */}
+          <div className="h-[46px] flex items-center justify-between px-2 sm:px-3 w-full">
+            <div className="flex items-center gap-0.5 sm:gap-1 w-full justify-between sm:justify-center">
               {items.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.name;
@@ -377,26 +377,26 @@ export function NavBar({ items, className }: NavBarProps) {
                       href={item.url}
                       onClick={(e) => handleNavClick(e, item)}
                       className={cn(
-                        "relative cursor-pointer text-xs sm:text-sm font-semibold px-3.5 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full transition-all flex items-center gap-1.5 select-none whitespace-nowrap",
+                        "relative cursor-pointer text-[12px] sm:text-[13px] font-light px-3 sm:px-3.5 py-1 rounded-full transition-all flex items-center gap-1 select-none whitespace-nowrap tracking-wide",
                         isBookCall
                           ? isActive
-                            ? "bg-white text-black font-bold shadow-[0_0_22px_rgba(255,255,255,0.6)] border border-white"
-                            : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-[0_0_12px_rgba(255,255,255,0.12)]"
-                          : "text-foreground/80 hover:text-white",
-                        !isBookCall && isActive && "bg-white/10 text-white font-bold"
+                            ? "bg-white text-black font-semibold shadow-[0_0_18px_rgba(255,255,255,0.6)] border border-white"
+                            : "bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-[0_0_10px_rgba(255,255,255,0.1)] font-medium"
+                          : "text-neutral-300 hover:text-white",
+                        !isBookCall && isActive && "bg-white/10 text-white font-medium"
                       )}
                     >
                       <span className="hidden md:inline relative z-10 whitespace-nowrap">{item.name}</span>
                       <span className="md:hidden relative z-10">
-                        <Icon size={18} strokeWidth={2.2} />
+                        <Icon size={16} strokeWidth={2} />
                       </span>
 
                       {isMoreMenu && (
                         <IconChevronDown
-                          size={15}
+                          size={14}
                           className={cn(
-                            "hidden md:inline transition-transform duration-300",
-                            isExpanded ? "rotate-180 text-white" : "rotate-0 text-foreground/70"
+                            "hidden md:inline transition-transform duration-300 opacity-70",
+                            isExpanded ? "rotate-180 text-white opacity-100" : "rotate-0 text-neutral-300"
                           )}
                         />
                       )}
@@ -412,9 +412,8 @@ export function NavBar({ items, className }: NavBarProps) {
                             damping: 30,
                           }}
                         >
-                          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-white rounded-t-full shadow-[0_0_12px_rgba(255,255,255,0.9)]">
-                            <div className="absolute w-12 h-6 bg-white/20 rounded-full blur-md -top-2 -left-2" />
-                            <div className="absolute w-8 h-6 bg-white/20 rounded-full blur-md -top-1" />
+                          <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-7 h-0.5 bg-white rounded-t-full shadow-[0_0_10px_rgba(255,255,255,0.9)]">
+                            <div className="absolute w-10 h-5 bg-white/20 rounded-full blur-md -top-2 -left-1.5" />
                           </div>
                         </motion.div>
                       )}
@@ -425,21 +424,21 @@ export function NavBar({ items, className }: NavBarProps) {
             </div>
           </div>
 
-          {/* Desktop Expanded Navigation Cards (2-Card Stack in Col 3, Attribution Removed) */}
+          {/* Desktop Compact Expanded Navigation Cards */}
           {!isMobile && (
             <div
               className={cn(
-                "w-full p-3 sm:p-4 border-t border-white/10 transition-opacity duration-300",
+                "w-full p-2.5 border-t border-white/10 transition-opacity duration-300",
                 isExpanded ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
               )}
             >
-              <div className="grid grid-cols-3 gap-3 md:gap-4 w-full h-[220px]">
+              <div className="grid grid-cols-3 gap-2.5 w-full h-[165px]">
                 {/* Card 1: Guestbook */}
                 <div ref={(el) => { cardsRef.current[0] = el; }} className="h-full">
                   <Link
                     href="/guestbook"
                     onClick={handleMenuItemClick}
-                    className="group relative block rounded-2xl overflow-hidden h-full border border-white/15 hover:border-white/40 transition-all shadow-xl bg-neutral-900/60"
+                    className="group relative block rounded-xl overflow-hidden h-full border border-white/15 hover:border-white/40 transition-all shadow-lg bg-neutral-900/60"
                   >
                     <Image
                       src="/guestbook.webp"
@@ -447,12 +446,12 @@ export function NavBar({ items, className }: NavBarProps) {
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                    <div className="absolute bottom-5 left-5 right-5">
-                      <h3 className="text-white font-serif text-xl sm:text-2xl font-bold mb-1 tracking-wide">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <h3 className="text-white font-serif text-base font-semibold mb-0.5 tracking-wide">
                         Guestbook
                       </h3>
-                      <p className="text-neutral-300/90 text-xs font-sans leading-relaxed">
+                      <p className="text-neutral-300/90 text-[11px] font-light leading-tight">
                         Let me know you were here
                       </p>
                     </div>
@@ -464,7 +463,7 @@ export function NavBar({ items, className }: NavBarProps) {
                   <Link
                     href="/bucket-list"
                     onClick={handleMenuItemClick}
-                    className="group relative block rounded-2xl overflow-hidden h-full border border-white/15 hover:border-white/40 transition-all shadow-xl bg-neutral-900/60"
+                    className="group relative block rounded-xl overflow-hidden h-full border border-white/15 hover:border-white/40 transition-all shadow-lg bg-neutral-900/60"
                   >
                     <Image
                       src="/bucket-list.png"
@@ -472,34 +471,34 @@ export function NavBar({ items, className }: NavBarProps) {
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
-                    <div className="absolute bottom-5 left-5 right-5">
-                      <h3 className="text-white font-serif text-xl sm:text-2xl font-bold mb-1 tracking-wide">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <h3 className="text-white font-serif text-base font-semibold mb-0.5 tracking-wide">
                         Bucket List
                       </h3>
-                      <p className="text-neutral-300/90 text-xs font-sans leading-relaxed">
+                      <p className="text-neutral-300/90 text-[11px] font-light leading-tight">
                         Dreams with a deadline
                       </p>
                     </div>
                   </Link>
                 </div>
 
-                {/* Card 3 Stack: Links & Uses (Attribution Removed) */}
-                <div ref={(el) => { cardsRef.current[2] = el; }} className="h-full flex flex-col gap-3 justify-between">
+                {/* Card 3 Stack: Links & Uses */}
+                <div ref={(el) => { cardsRef.current[2] = el; }} className="h-full flex flex-col gap-2 justify-between">
                   {/* Links Card */}
                   <Link
                     href="/links"
                     onClick={handleMenuItemClick}
-                    className="group relative flex items-center gap-3 p-4 rounded-2xl bg-neutral-900/60 hover:bg-neutral-800/80 border border-white/15 hover:border-white/40 transition-all shadow-md flex-1"
+                    className="group relative flex items-center gap-2.5 p-2.5 rounded-xl bg-neutral-900/60 hover:bg-neutral-800/80 border border-white/15 hover:border-white/40 transition-all shadow-sm flex-1"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
-                      <IconLink size={18} className="text-white" />
+                    <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
+                      <IconLink size={15} className="text-white" />
                     </div>
                     <div className="overflow-hidden">
-                      <h4 className="text-white font-semibold text-sm mb-0.5 tracking-wide whitespace-nowrap">
+                      <h4 className="text-white font-medium text-xs mb-0.5 tracking-wide whitespace-nowrap">
                         Links
                       </h4>
-                      <p className="text-neutral-300 text-xs leading-tight truncate">
+                      <p className="text-neutral-300 text-[10px] font-light leading-tight truncate">
                         All my links are here
                       </p>
                     </div>
@@ -509,16 +508,16 @@ export function NavBar({ items, className }: NavBarProps) {
                   <Link
                     href="/uses"
                     onClick={handleMenuItemClick}
-                    className="group relative flex items-center gap-3 p-4 rounded-2xl bg-neutral-900/60 hover:bg-neutral-800/80 border border-white/15 hover:border-white/40 transition-all shadow-md flex-1"
+                    className="group relative flex items-center gap-2.5 p-2.5 rounded-xl bg-neutral-900/60 hover:bg-neutral-800/80 border border-white/15 hover:border-white/40 transition-all shadow-sm flex-1"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
-                      <IconPhoto size={18} className="text-white" />
+                    <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
+                      <IconPhoto size={15} className="text-white" />
                     </div>
                     <div className="overflow-hidden">
-                      <h4 className="text-white font-semibold text-sm mb-0.5 tracking-wide whitespace-nowrap">
+                      <h4 className="text-white font-medium text-xs mb-0.5 tracking-wide whitespace-nowrap">
                         Uses
                       </h4>
-                      <p className="text-neutral-300 text-xs leading-tight truncate">
+                      <p className="text-neutral-300 text-[10px] font-light leading-tight truncate">
                         A peek into my digital workspace
                       </p>
                     </div>
