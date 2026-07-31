@@ -1,11 +1,12 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
 import Image from '@/components/ui/Image';
+import Link from '@/components/ui/Link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Lens } from '../ui/lens';
 import AuroraText from '@/components/ui/aurora-text';
-import { IconUsers, IconExternalLink } from '@tabler/icons-react';
+import { IconUsers, IconExternalLink, IconArrowRight } from '@tabler/icons-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,17 +24,40 @@ interface ProjectData {
 
 const projects: ProjectData[] = [
   {
+    title: "StudEd",
+    detailsTitle: "StudEd: Microservices & GraphQL Intelligent Learning Platform",
+    pillarText: "Subscription-Based Educational Platform & Gamified Micro-Learning",
+    descriptionPoints: [
+      "Engineered Sri Lanka's premium subscription-based learning platform for Grades 1–11, O/L & A/L with an editorial Intelligent Learning Canvas.",
+      "Powered by 11 Go microservices, gRPC inter-service communications, unified GraphQL API gateway (gqlgen + Chi), PostgreSQL 15, and Redis 7 ZSET leaderboards.",
+      "Features native domain visualizers (Manim math animations, 3Dmol molecular models, tscircuit, Matter.js physics), OKLCH color space, zero-asset Web Audio sound synthesis, and streak gamification."
+    ],
+    techStack: [
+      { name: "React 19", icon: "/icons8-react-24.png" },
+      { name: "Go 1.22", icon: "/golang.webp" },
+      { name: "GraphQL", icon: "/graphql.png" },
+      { name: "TanStack Router", icon: "/tanstack.png" },
+      { name: "TanStack Query", icon: "/tanstack.png" },
+      { name: "PostgreSQL", icon: "/icons8-postgresql-96.png" },
+      { name: "Redis", icon: "/icons8-dbeaver.png" },
+      { name: "Kubernetes / Helm", icon: "/icons8-kubernetes-48.png" }
+    ],
+    imageSrc: "/projects/studed.png",
+    gradient: "bg-gradient-to-br from-violet-600 via-indigo-700 to-slate-950",
+    link: "/blog/studed-microservices-educational-platform"
+  },
+  {
     title: "JESA 2026",
     detailsTitle: "J'pura Employability Skills Awards: JESA 2026 - Revamp",
     pillarText: "Official Awards Ecosystem & Admin Control Centre",
     descriptionPoints: [
       "Led digital transformation of JESA, evolving 2025 platform into a modern 2026 production ecosystem.",
       "Re-engineered platform architecture with scalable admin control centre, dynamic faculty workflows with complex validations, and Playwright E2E testing.",
-      "Resolved production blocker caused by firebase-admin/jose ESM incompatibility via custom JWT verification, stabilizing Vercel Node 22 runtime."
+      "Resolved production blockers caused by firebase-admin & jose ESM incompatibility, stabilizing Node 22 runtime on Vercel."
     ],
     teamMembers: ["Waruna Udara (IT Ops Head)", "Pruthivi Thejan (UI/UX)", "Dharaka Meth", "Yesith Sri Hansana", "Pasindu Jeewan"],
     techStack: [
-      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
+      { name: "Next.js 15", icon: "/icons8-nextjs-144.png" },
       { name: "React 19", icon: "/icons8-react-24.png" },
       { name: "TypeScript", icon: "/ts.png" },
       { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
@@ -88,26 +112,6 @@ const projects: ProjectData[] = [
     imageSrc: "/projects/emwee.png",
     gradient: "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-950",
     link: "https://emwee.co"
-  },
-  {
-    title: "AlgoArena",
-    detailsTitle: "AlgoArena Hackathon Platform",
-    pillarText: "Real-Time Hackathon & Coding Platform",
-    descriptionPoints: [
-      "Built with Next.js 14 using Server Components and Firebase Authentication.",
-      "Real-time team formation and submission tracking with Firestore.",
-      "Responsive UI with Tailwind CSS and smooth animations."
-    ],
-    techStack: [
-      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
-      { name: "React", icon: "/icons8-react-24.png" },
-      { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" },
-      { name: "TypeScript", icon: "/ts.png" },
-      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
-    ],
-    imageSrc: "/projects-algoarena.png",
-    gradient: "bg-gradient-to-br from-pink-600 via-pink-700 to-pink-950",
-    link: "https://algoarena.live"
   },
   {
     title: "Personal Portfolio",
@@ -224,10 +228,10 @@ const Projects = () => {
                 className="relative group"
               >
                 {/* Card - Landscape orientation - Clickable */}
-                <a 
+                <Link
                   href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={project.link.startsWith("http") ? "_blank" : undefined}
+                  rel={project.link.startsWith("http") ? "noopener noreferrer" : undefined}
                   className={`relative rounded-[32px] overflow-hidden ${project.gradient} border-2 border-white/20 transition-all duration-300 hover:translate-y-[-8px] block cursor-pointer shadow-2xl`}
                 >
                   {/* Arrow icon */}
@@ -278,7 +282,7 @@ const Projects = () => {
                       </div>
                     </div>
                   </div>
-                </a>
+                </Link>
 
                 {/* Mobile: Description below each card */}
                 <div className="lg:hidden mt-8 px-2 space-y-4">
@@ -366,6 +370,17 @@ const Projects = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* See More / View All Work CTA Button */}
+      <div className="mt-20 text-center flex justify-center relative z-20">
+        <Link
+          href="/work"
+          className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-neutral-900 border border-neutral-700/80 hover:border-white/80 hover:bg-neutral-800 text-white font-mono text-xs sm:text-sm font-semibold tracking-widest uppercase transition-all duration-300 shadow-2xl group hover:scale-105"
+        >
+          <span>SEE MORE PROJECTS</span>
+          <IconArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+        </Link>
       </div>
     </section>
   );

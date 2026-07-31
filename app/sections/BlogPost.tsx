@@ -13,12 +13,14 @@ import HttpQueryPost from "@/content/blog/http-query-method-rfc-10008.mdx";
 import KyvernoPost from "@/content/blog/kyverno-tutorial-kubernetes-policy-engine.mdx";
 import TurboshipPost from "@/content/blog/building-turboship-buildathon.mdx";
 import React19Post from "@/content/blog/react-19-and-tanstack-router.mdx";
+import StudEdPost from "@/content/blog/studed-microservices-educational-platform.mdx";
 
 const MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {
   "http-query-method-rfc-10008": HttpQueryPost,
   "kyverno-tutorial-kubernetes-policy-engine": KyvernoPost,
   "building-turboship-buildathon": TurboshipPost,
   "react-19-and-tanstack-router": React19Post,
+  "studed-microservices-educational-platform": StudEdPost,
 };
 
 // Premium Dark Black & Silver Minimalist MDX Typography & Component Specs

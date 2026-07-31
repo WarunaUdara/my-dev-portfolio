@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "@/components/ui/Image";
+import Link from "@/components/ui/Link";
 import AuroraText from "@/components/ui/aurora-text";
 import { IconUsers, IconExternalLink } from "@tabler/icons-react";
 
@@ -26,6 +27,26 @@ export interface WorkProjectItem {
 export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
   {
     id: "01",
+    category: "MICROSERVICES EDTECH",
+    date: "Jul 2026",
+    title: "StudEd",
+    tagline: "Subscription-based Sri Lankan educational platform with 11 Go microservices, GraphQL, & native 3Dmol/Manim visualizers",
+    imageSrc: "/projects/studed.png",
+    gradient: "bg-gradient-to-br from-violet-600 via-indigo-700 to-slate-950",
+    link: "/blog/studed-microservices-educational-platform",
+    techStack: [
+      { name: "REACT 19", icon: "/icons8-react-24.png" },
+      { name: "GO 1.22", icon: "/golang.webp" },
+      { name: "GRAPHQL", icon: "/graphql.png" },
+      { name: "TANSTACK ROUTER", icon: "/tanstack.png" },
+      { name: "TANSTACK QUERY", icon: "/tanstack.png" },
+      { name: "POSTGRESQL", icon: "/icons8-postgresql-96.png" },
+      { name: "REDIS 7", icon: "/icons8-dbeaver.png" },
+      { name: "KUBERNETES", icon: "/icons8-kubernetes-48.png" },
+    ],
+  },
+  {
+    id: "02",
     category: "REVAMP ECOSYSTEM",
     date: "Jun – Jul 2026",
     title: "JESA 2026",
@@ -45,7 +66,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     ],
   },
   {
-    id: "02",
+    id: "03",
     category: "TECH EVENT PLATFORM",
     date: "Feb – Mar 2026",
     title: "CRYPTX 2.0",
@@ -64,7 +85,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     ],
   },
   {
-    id: "03",
+    id: "04",
     category: "STARTUP PLATFORM",
     date: "2026",
     title: "EMWEE",
@@ -83,7 +104,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     ],
   },
   {
-    id: "04",
+    id: "05",
     category: "HACKATHON PLATFORM",
     date: "2025 – 2026",
     title: "AlgoArena",
@@ -101,7 +122,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     ],
   },
   {
-    id: "05",
+    id: "06",
     category: "DEV PORTFOLIO",
     date: "2024 – 2026",
     title: "Personal Portfolio",
@@ -119,7 +140,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     ],
   },
   {
-    id: "06",
+    id: "07",
     category: "IDEATHON PLATFORM",
     date: "2025",
     title: "Beauty Of Cloud",
@@ -203,10 +224,10 @@ export const WorkProjects = () => {
               )}
 
               {/* Compact Hero Card Container */}
-              <a
+              <Link
                 href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={project.link.startsWith("http") ? "_blank" : undefined}
+                rel={project.link.startsWith("http") ? "noopener noreferrer" : undefined}
                 className={`relative rounded-2xl p-5 sm:p-6 ${project.gradient} border border-white/20 shadow-2xl overflow-hidden block transition-all duration-300 hover:-translate-y-1.5 cursor-pointer group/card`}
               >
                 {/* Top Tagline & Arrow */}
@@ -228,7 +249,7 @@ export const WorkProjects = () => {
                     className="object-cover object-top group-hover/card:scale-105 transition-transform duration-500"
                   />
                 </div>
-              </a>
+              </Link>
 
               {/* Tech Stack Badges with Logo Icons */}
               <div className="flex flex-wrap gap-2 pt-2">

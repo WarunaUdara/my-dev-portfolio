@@ -42,6 +42,17 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     author: "Waruna Udara",
   },
   {
+    slug: "studed-microservices-educational-platform",
+    title: "StudEd: Architecting a Microservices & GraphQL Intelligent Learning Platform",
+    date: "Jul 28, 2026",
+    description: "An architectural breakdown of StudEd — Sri Lanka's premium subscription-based educational platform powered by 11 Go microservices, TanStack Router/Query, OKLCH perceptual color space, zero-asset Web Audio synthesis, and native 3Dmol & Manim visualizers.",
+    category: "SYSTEM ARCHITECTURE",
+    readTime: "7 min read",
+    tags: ["Go", "GraphQL", "Microservices", "React 19", "TanStack", "PostgreSQL", "Kubernetes", "GitOps"],
+    coverImage: "/projects/studed.png",
+    author: "Waruna Udara Sampath",
+  },
+  {
     slug: "react-19-and-tanstack-router",
     title: "Architecting Modern React 19 Applications with TanStack Router & Vite",
     date: "April 10, 2026",
