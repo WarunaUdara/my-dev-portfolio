@@ -74,8 +74,9 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     gradient: "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-950",
     link: "https://emwee.co",
     techStack: [
-      { name: "NEXT.JS", icon: "/icons8-nextjs-144.png" },
       { name: "REACT", icon: "/icons8-react-24.png" },
+      { name: "TANSTACK ROUTER", icon: "/tanstack.png" },
+      { name: "TANSTACK QUERY", icon: "/tanstack.png" },
       { name: "TYPESCRIPT", icon: "/ts.png" },
       { name: "TAILWIND CSS", icon: "/icons8-tailwind-css-144.png" },
       { name: "VERCEL", icon: "/vercel.png" },

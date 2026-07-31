@@ -78,8 +78,9 @@ const projects: ProjectData[] = [
     ],
     teamMembers: ["Waruna Udara", "Malin Dhamsara", "Vineth Ranathunga", "Farhan Hameeth", "Thisal Kokuhennadige"],
     techStack: [
-      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
       { name: "React", icon: "/icons8-react-24.png" },
+      { name: "TanStack Router", icon: "/tanstack.png" },
+      { name: "TanStack Query", icon: "/tanstack.png" },
       { name: "TypeScript", icon: "/ts.png" },
       { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
       { name: "Vercel", icon: "/vercel.png" }
