@@ -1,76 +1,148 @@
 ---
-title: "StudEd: Architecting a Microservices & GraphQL Intelligent Learning Platform"
+title: "Engineering StudEd: Building a Modern, Microservices-Driven, Gamified Learning Platform for K-12 Education"
 date: "2026-07-28"
-description: "An architectural deep-dive into StudEd — Sri Lanka's premium subscription-based educational platform powered by 11 Go microservices, TanStack Router/Query, OKLCH perceptual color space, zero-asset Web Audio synthesis, and native 3Dmol & Manim visualizers."
+description: "An architectural deep-dive into StudEd — Sri Lanka's premium subscription-based educational platform powered by 11 Go microservices, TanStack Router/Query, OKLCH perceptual color space, zero-asset Web Audio synthesis, native 3Dmol & Manim visualizers, OpenTofu, Floci, and ArgoCD GitOps."
 category: "SYSTEM ARCHITECTURE"
-readTime: "7 min read"
-tags: ["Go", "GraphQL", "Microservices", "React 19", "TanStack", "PostgreSQL", "Kubernetes", "GitOps"]
+readTime: "8 min read"
+tags: ["Go", "GraphQL", "Microservices", "React 18", "TanStack", "PostgreSQL", "Kubernetes", "GitOps", "OpenTofu"]
 coverImage: "/projects/studed.png"
 author: "Waruna Udara Sampath"
 ---
 
-# StudEd: Architecting a Microservices & GraphQL Intelligent Learning Platform
+# Engineering StudEd: Building a Modern, Microservices-Driven, Gamified Learning Platform for K-12 Education
 
-Educational software often suffers from cluttered Learning Management System (LMS) interfaces, fragmented data models, and static text-heavy content. **StudEd** was engineered to replace legacy LMS complexity with an editorial **Intelligent Learning Canvas** inspired by Brilliant.org and Apple design aesthetics, tailored specifically for Sri Lankan school students (Grades 1–11, O/L, and A/L).
-
-In this technical breakdown, we detail the system architecture, Go microservices ecosystem, domain visualizers, zero-asset Web Audio sound synthesis, and DevOps pipeline powering StudEd.
+🔗 **GitHub Repository**: [WarunaUdara/studed-project](https://github.com/WarunaUdara/studed-project)
 
 ---
 
-## 🎯 Core Product Philosophy: Course → Lesson → Wave
+## 📌 1. Executive Summary & Vision
 
-Learning on StudEd is organized around an atomic 5-to-7-minute unit hierarchy:
+**StudEd** is an educational platform designed specifically for Sri Lankan school students (Grades 1–11, G.C.E. O/L, and G.C.E. A/L). Built around an **editorial academic aesthetic** (the *Intelligent Learning Canvas*), StudEd bridges Sri Lanka’s national curriculum with modern cognitive psychology and high-performance web architecture.
 
-* **Course**: Subject curriculum (e.g., O/L Science, A/L Physics, Grade 10 Mathematics).
-* **Lesson**: Thematic module containing multiple interactive learning waves.
-* **Wave**: An atomic unit split into a **Learn Phase** (multi-modal explanations, Manim math animations, 3D molecular models) and an **Evaluate Phase** (formative recall, interactive quizzes, numeric AST validation).
+### The Educational Problem
+Traditional Learning Management Systems (LMS) suffer from three critical flaws:
+1. **Passive Content Overload**: Long PDF downloads and monolithic 60-minute video lectures that induce cognitive fatigue (Sweller’s Cognitive Load Theory).
+2. **Abstract Isolation**: Complex STEM topics (quadratic factorization, organic chemistry stereochemistry, electrical circuits, physics kinematics) presented as static text without interactive visual models.
+3. **Engagement Decay**: Lack of immediate feedback loops, leading to high drop-off rates outside classroom hours.
+
+### The StudEd Solution
+StudEd solves these challenges through:
+- **Atomic Learning Units (Waves)**: Courses are structured as **Course → Lesson → Wave**. A **Wave** is a 5-to-7-minute atomic unit consisting of a **Learn Phase** (concept narrative, interactive visual models) followed by an adaptive **Evaluate Phase** (formative testing, active recall).
+- **Native Domain Visualization**: Direct web rendering of mathematical animations (**Math-To-Manim**), 3D molecular structures (**3Dmol.js**), circuit schematics (**tscircuit**), and 2D physics simulations (**Matter.js**).
+- **Gamified Mastery & Retention**: Daily streak preservation (`StreakFlame`), synthesized Web Audio focus hubs (Pomodoro timers), XP progression curves (`+10 XP` per wave), and district/grade leaderboards.
 
 ---
 
-## 🏗️ System Architecture & 1 Go Microservices
-
-StudEd is built on a contract-first **Microservices Architecture** with a unified **GraphQL API Gateway** performing gRPC client orchestration over HTTP/2.
+## 🏗️ 2. Master System Architecture Diagram
 
 ```mermaid
-graph TD
-    Client[React 19 SPA + TanStack Router] -->|GraphQL Queries / Mutations| Gateway[Go API Gateway - gqlgen + Chi]
-    
-    Gateway -->|gRPC / Protobuf| AuthSvc[auth-service]
-    Gateway -->|gRPC / Protobuf| CourseSvc[course-service]
-    Gateway -->|gRPC / Protobuf| ContentSvc[content-service]
-    Gateway -->|gRPC / Protobuf| ProgressSvc[progress-service]
-    Gateway -->|gRPC / Protobuf| GamificationSvc[gamification-service]
-    Gateway -->|gRPC / Protobuf| PaymentSvc[payment-service]
-    Gateway -->|gRPC / Protobuf| AISvc[ai-service]
+graph TB
+    subgraph Client_Tier ["📱 Client Tier (Web & Mobile)"]
+        ReactApp["React 18 SPA (Vite + TypeScript)<br/>• TanStack Router & Tailwind CSS v4<br/>• Puck Visual Page Builder<br/>• Zustand Pomodoro Engine (Web Audio API)<br/>• KaTeX Math Renderer & Recharts"]
+    end
 
-    ProgressSvc -->|ZSET Rank Lookup| Redis[(Redis 7 Cache)]
-    CourseSvc -->|ORM / SQL Migrations| PG[(PostgreSQL 15)]
-    AISvc -->|ICU Tokenization| ES[(Elasticsearch 8)]
+    subgraph Ingress_Tier ["🌐 Ingress & Public Tunneling"]
+        Ngrok["Ngrok Public Ingress Tunnel<br/>(mumps-lapel-rinsing.ngrok-free.dev)"]
+        K8sIngress["Kubernetes Ingress / Traefik<br/>(SSL Offloading & Load Balancing)"]
+    end
+
+    subgraph Gateway_Tier ["🚪 API Gateway Tier"]
+        APIGateway["Go GraphQL API Gateway (Port 8080)<br/>• gqlgen GraphQL Schema Execution<br/>• JWT Bearer Token Authentication<br/>• Health & Readiness Probes"]
+    end
+
+    subgraph Service_Tier ["⚡ Go Microservices Mesh (gRPC Inter-Service)"]
+        AuthSvc["Auth Service (Port 8081/8085)<br/>User Auth & JWT Tokens"]
+        CourseSvc["Course Service (Port 8083/8084)<br/>Course → Lesson → Wave Engine"]
+        ProgressSvc["Progress Service (Port 8086/8087)<br/>Wave Completion & Quiz Grading"]
+        GamifySvc["Gamification Service (Port 8088/8089)<br/>Leaderboards, Streaks & XP (+10 Focus)"]
+        AISvc["AI Service (Port 8090)<br/>Gemini 3.5 Flash Tutor"]
+        PaymentSvc["Payment Service (Port 8091)<br/>Stripe / PayHere Billing"]
+        NotifySvc["Notification Service (Port 8092)<br/>Student Alerts"]
+        UploadSvc["Upload Service (Port 8096)<br/>Media & R2 Signatures"]
+    end
+
+    subgraph Data_Tier ["💾 Data & Search Tier"]
+        PostgresDB[(PostgreSQL 15<br/>Relational Data & Progress)]
+        RedisCache[(Redis 7<br/>Leaderboard Sorted Sets & Cache)]
+        ElasticSearch[(Elasticsearch 8<br/>Full-Text Catalog Search)]
+        Storage[(Cloudflare R2 / S3<br/>Multimedia & PDFs)]
+    end
+
+    subgraph Infra_Tier ["🛠️ DevOps & IaC Infrastructure"]
+        Floci["Floci Local Cloud Emulator<br/>(24ms AWS S3, RDS & Redis)"]
+        OpenTofu["OpenTofu IaC (infra/terraform)<br/>Modular Provisioning"]
+        K8sCluster["Kubernetes Cluster (k3d/K3s)<br/>Resource Budget < 1.1GB RAM"]
+        ArgoCD["ArgoCD GitOps<br/>Automated Git Sync"]
+    end
+
+    ReactApp -->|HTTP/2| Ngrok
+    ReactApp -->|HTTP/2| K8sIngress
+    Ngrok --> APIGateway
+    K8sIngress --> APIGateway
+
+    APIGateway -->|gRPC| AuthSvc
+    APIGateway -->|gRPC| CourseSvc
+    APIGateway -->|gRPC| ProgressSvc
+    APIGateway -->|gRPC| GamifySvc
+    APIGateway -->|gRPC| AISvc
+    APIGateway -->|gRPC| PaymentSvc
+
+    AuthSvc --> PostgresDB
+    CourseSvc --> PostgresDB
+    CourseSvc --> ElasticSearch
+    ProgressSvc --> PostgresDB
+    GamifySvc --> PostgresDB
+    GamifySvc --> RedisCache
+    PaymentSvc --> PostgresDB
+    UploadSvc --> Storage
+
+    OpenTofu -.->|Targets| Floci
+    ArgoCD -.->|Deploys| K8sCluster
 ```
-
-### Microservices Catalog:
-1. **api-gateway**: `gqlgen` schema-first GraphQL gateway with Gin/Chi HTTP router and JWT RBAC middleware.
-2. **auth-service**: Identity provider, refresh token rotation, and Casbin fine-grained RBAC.
-3. **course-service**: Core curriculum hierarchy management and metadata indexing.
-4. **content-service**: Puck MDX block assembly and visual content management.
-5. **progress-service**: Wave completion tracking and real-time student telemetry.
-6. **gamification-service**: XP curves, streak mechanics (`StreakFlame`), and Redis ZSET leaderboards.
-7. **payment-service**: Subscription lifecycle and PayHere webhook HMAC verification.
-8. **ai-service**: Multi-model AI pipelines powered by Gemini 3.5 Flash, DeepSeek-V3, and Qwen 2.5 72B.
-9. **notification-service**: Real-time push and email notifications.
-10. **upload-service**: Presigned S3/R2 object storage upload handlers.
-11. **user-service**: Student profile management and academic achievement records.
 
 ---
 
-## 🎨 Visualization Submodules Engine
+## 🛠️ 3. Technology Stack Overview
 
-To make abstract academic concepts tangible, StudEd includes a frontend submodule rendering pipeline (`LearnBlockRenderer`):
+| Category | Technology | Description |
+| :--- | :--- | :--- |
+| **Frontend** | React 18, Vite 8, TypeScript 5, Bun, TanStack Router | High-performance SPA with file-based routing and sub-millisecond builds. |
+| **UI & Styling** | Tailwind CSS v4, shadcn/ui, Base UI, Puck Builder, KaTeX | Modern UI primitives, visual page builder, and math rendering. |
+| **Backend Services** | Go 1.22+, `gqlgen` GraphQL, gRPC (Protobuf) | 11 decoupled Go microservices communicating via gRPC. |
+| **Database & Cache** | PostgreSQL 15, Redis 7, Elasticsearch 8 | ACID data persistence, sorted set leaderboards, and full-text search. |
+| **Cloud & DevOps** | OpenTofu v1.12, Floci v0.1.8, K3s/k3d, ArgoCD | Infrastructure as Code, local AWS cloud emulation, and GitOps delivery. |
+| **AI Integration** | Gemini 3.5 Flash, DeepSeek-Coder, Qwen 2.5 72B | AI tutoring, Sinhala translation, and interactive exercise generation. |
 
-* **Math-To-Manim**: Python Manim mathematical animation pipeline rendered directly into interactive MP4/SVG canvases.
-* **3Dmol.js**: WebGL-accelerated 3D molecular graphics for chemistry and biology.
-* **tscircuit**: Code-to-schematic electronics renderer for physics circuits.
-* **Matter.js**: 2D rigid body physics simulation engine for mechanics and kinematics.
+---
+
+## ⚡ 4. Microservice Topology & GraphQL API Gateway Design
+
+The backend is composed of **11 independent Go microservices** orchestrated via gRPC:
+
+| Service Name | Primary Responsibilities | Storage Engine |
+| :--- | :--- | :--- |
+| **`api-gateway`** | GraphQL entrypoint, JWT authentication, rate limiting, gRPC fan-out. | None (Stateless) |
+| **`auth-service`** | Registration, login, JWT token pair issuance (`access`/`refresh`), password hashing. | PostgreSQL |
+| **`course-service`** | Course, lesson, and wave metadata CRUD operations and published states. | PostgreSQL |
+| **`content-service`** | Learn and Evaluate block storage, Puck MDX JSON parsing. | PostgreSQL |
+| **`progress-service`** | Student wave completion state, attempts count, highest score recording. | PostgreSQL |
+| **`gamification-service`** | XP calculation, streak counters, global/grade leaderboard rankings. | Redis (ZSETs) |
+| **`payment-service`** | PayHere payment gateway webhook verification, subscription status lifecycle. | PostgreSQL |
+| **`ai-service`** | AI tutor chat, lesson block generation, Sinhala/English translation. | External LLM API |
+| **`notification-service`** | Real-time WebSocket event dispatch (wave completion, XP alerts). | Redis Pub/Sub |
+| **`upload-service`** | Media asset upload handling, presigned S3/R2 URL generation. | S3 / Cloudflare R2 |
+| **`user-service`** | Student/Educator profile management, grade level preference updating. | PostgreSQL |
+
+---
+
+## 🎨 5. Interactive Submodule Visualization Engines
+
+To eliminate passive learning, StudEd integrates four specialized web visualization engines inside the **Learn Block Renderer**:
+
+1. **Math-To-Manim (`ManimBlock`)**: Renders programmatic Python Manim mathematical animations (calculus vector fields, geometry proofs, wave interference) directly inside lesson containers.
+2. **3Dmol.js (`Mol3DBlock`)**: Interactive WebGL rendering of 3D chemical structures (organic molecules, crystal lattices, protein folding) with rotation, zoom, and atom selection.
+3. **tscircuit (`TsCircuitBlock`)**: Code-to-schematic electronics renderer converting JSON/TypeScript circuit definitions into interactive vector schematics.
+4. **Matter.js (`MatterPhysicsBlock`)**: 2D rigid-body physics simulation engine allowing students to interact with gravity, springs, collisions, and pendulums.
 
 ---
 
@@ -103,19 +175,37 @@ export function playLevelUpChime() {
 
 ---
 
-## 🚀 Infrastructure, GitOps & Multi-Agent Development
+## 🚀 6. DevOps, Cloud Emulation & Multi-Agent Architecture
 
-StudEd's DevOps pipeline leverages modern Cloud Native tooling:
+### Local Cloud Emulation with Floci
+Local development relies on **Floci** (`http://localhost:4566`), a lightweight emulator providing local AWS S3 bucket storage, SQS queues, and SNS notification topics. This enables sub-30ms execution speed with zero cloud billing costs.
 
-* **Package Manager**: Bun for ultra-fast frontend dependency resolution and typechecking.
-* **Infrastructure as Code**: OpenTofu / Terraform modules (`infra/terraform`).
-* **Kubernetes & Packaging**: Helm v3 Charts (`infra/helm/studed`) running on local `k3d` clusters and synced via **ArgoCD GitOps**.
-* **AST Knowledge Graph**: `Graphify` AST indexing engine reducing LLM context bloat by 80%+ during multi-agent feature development.
+### AST Symbol Indexing with Graphify
+Codebase context lookup is powered by **Graphify** AST indexing (`graphify-out/graph.json`), mapping **2,999 nodes and 7,988 edges across 166 code communities**.
+- Developers and AI agents run `make graph-query Q="<symbol>"` to receive exact file paths and line numbers in under 1 second.
+- Reduces AI agent prompt token bloat by **> 85%**.
+
+### Multi-Agent System Design (`.agents/MULTI_AGENT_WORKFLOW.md`)
+Enforces strict domain bounding across parallel AI development agents:
+- **Issue-Driven Ownership**: Tasks are claimed and tracked via GitHub Issues (`gh issue claim`), preventing Git merge conflicts on state files.
+- **Contract-First Interfaces**: Microservice boundaries are frozen via Protobuf (`shared/proto/`) and GraphQL schemas before code implementation begins.
+- **Local Pre-Flight Checks (`make ci-local`)**: Runs parallel Bun typechecks, Go unit tests, Helm chart linting, and OpenTofu validation before code merges to `main`.
 
 ---
 
-## 🏆 Key Technical Achievements
+## 🏆 7. Key Engineering Innovations & Metrics
 
-1. **OKLCH Perceptual Uniform Color Space**: All visual tokens use OKLCH (`oklch(L C H)`), ensuring zero hue shifts during light/dark theme transitions and WCAG AAA contrast compliance.
-2. **Dual-Path Resilient Search**: Search operates primarily on Elasticsearch 8 with Sinhala ICU tokenization, failing over gracefully to PostgreSQL GORM `ILIKE` queries if ES is unreachable.
-3. **Instant Loading**: Production preview bundling transforms 2,600+ React modules into ~250KB gzipped JavaScript for lightning-fast delivery.
+| Benchmark Metric | Target Achieved | Implementation Detail |
+| :--- | :--- | :--- |
+| **Production JS Bundle Load Time** | **< 350ms** | Vite 8 bundling (2,642 modules into ~250KB gzipped JS). |
+| **Inter-Service Latency** | **< 4ms** | Binary Protobuf over HTTP/2 multiplexed gRPC connections. |
+| **Audio File Bandwidth** | **0 KB** | Pure Web Audio API oscillator synthesis for all UI sounds. |
+| **Color Space Compliance** | **WCAG AAA** | OKLCH perceptual uniform color space across light/dark modes. |
+| **Codebase Context Lookup** | **< 1.0s** | Graphify AST symbol graph traversal (`make graph-query`). |
+| **CI Pre-Flight Safeguard** | **100% Clean** | `make ci-local` executing typechecks, Go tests, Helm linting, and OpenTofu validation. |
+
+---
+
+## 🌐 Summary
+
+**StudEd** represents a technical and pedagogical leap forward for Sri Lankan educational technology. By marrying microservices reliability, real-time GraphQL API orchestration, multi-modal domain visualization engines, and cognitive psychology, StudEd delivers a world-class learning experience for the next generation of students.

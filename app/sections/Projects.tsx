@@ -40,7 +40,8 @@ const projects: ProjectData[] = [
       { name: "TanStack Query", icon: "/tanstack.png" },
       { name: "PostgreSQL", icon: "/icons8-postgresql-96.png" },
       { name: "Redis", icon: "/icons8-dbeaver.png" },
-      { name: "Kubernetes / Helm", icon: "/icons8-kubernetes-48.png" }
+      { name: "Kubernetes / Helm", icon: "/icons8-kubernetes-48.png" },
+      { name: "OpenTofu", icon: "/opentofu.webp" }
     ],
     imageSrc: "/projects/studed.png",
     gradient: "bg-gradient-to-br from-violet-600 via-indigo-700 to-slate-950",

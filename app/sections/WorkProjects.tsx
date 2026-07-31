@@ -43,6 +43,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
       { name: "POSTGRESQL", icon: "/icons8-postgresql-96.png" },
       { name: "REDIS 7", icon: "/icons8-dbeaver.png" },
       { name: "KUBERNETES", icon: "/icons8-kubernetes-48.png" },
+      { name: "OPENTOFU", icon: "/opentofu.webp" },
     ],
   },
   {
