@@ -17,19 +17,19 @@ interface BounceCardsProps {
 export default function BounceCards({
   className = '',
   images = [],
-  containerWidth = 600,
-  containerHeight = 230,
+  containerWidth = 750,
+  containerHeight = 240,
   animationDelay = 0.3,
   animationStagger = 0.08,
   easeType = 'elastic.out(1, 0.7)',
   transformStyles = [
-    'rotate(-5deg) translate(-165px)',
-    'rotate(2.5deg) translate(-55px)',
-    'rotate(-3deg) translate(55px)',
-    'rotate(4.5deg) translate(165px)'
+    'rotate(-4deg) translate(-255px)',
+    'rotate(2deg) translate(-85px)',
+    'rotate(-2.5deg) translate(85px)',
+    'rotate(4deg) translate(255px)'
   ],
   enableHover = true,
-  cardClassName = 'w-[150px] sm:w-[210px] aspect-[16/10]'
+  cardClassName = 'w-[160px] sm:w-[220px] aspect-[16/10]'
 }: BounceCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function BounceCards({
           overwrite: 'auto'
         });
       } else {
-        const offsetX = i < hoveredIdx ? -45 : 45;
+        const offsetX = i < hoveredIdx ? -55 : 55;
         const pushedTransform = getPushedTransform(baseTransform, offsetX);
 
         const distance = Math.abs(hoveredIdx - i);

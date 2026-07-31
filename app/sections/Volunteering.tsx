@@ -102,7 +102,7 @@ const volunteeringData: VolunteeringItem[] = [
   {
     role: "Member",
     organization: "ICTS - Information and Communication Technology Society",
-    projectOrEvent: "Sep 2024 - Nov 2025",
+    projectOrEvent: null,
     duration: "Sep 2024 - Nov 2025",
     category: "Science and Technology",
     description: "Actively participated in initiatives promoting ICT knowledge and collaboration within the community.",
@@ -157,26 +157,46 @@ export default function Volunteering() {
           </div>
         )}
 
-        {/* Interactive BounceCards for Event Division Vice President */}
+        {/* Interactive Event Highlights Gallery */}
         {item.images && item.images.length > 0 && (
-          <div className="pt-4 border-t border-neutral-900 flex flex-col items-center overflow-x-auto custom-scrollbar">
-            <p className="text-xs uppercase tracking-wider text-neutral-500 font-mono mb-2">
+          <div className="pt-5 border-t border-neutral-900 flex flex-col items-center">
+            <p className="text-xs uppercase tracking-wider text-neutral-500 font-mono mb-3 text-center">
               Event Highlights &amp; Team Gallery
             </p>
-            <BounceCards
-              images={item.images}
-              containerWidth={620}
-              containerHeight={230}
-              animationDelay={0.2}
-              enableHover={true}
-              cardClassName="w-[155px] sm:w-[215px] aspect-[16/10]"
-              transformStyles={[
-                'rotate(-5deg) translate(-165px)',
-                'rotate(2.5deg) translate(-55px)',
-                'rotate(-3deg) translate(55px)',
-                'rotate(4.5deg) translate(165px)'
-              ]}
-            />
+            
+            {/* Desktop View: Wide Fan-out BounceCards */}
+            <div className="hidden sm:block w-full overflow-visible">
+              <BounceCards
+                images={item.images}
+                containerWidth={750}
+                containerHeight={240}
+                animationDelay={0.2}
+                enableHover={true}
+                cardClassName="w-[170px] md:w-[220px] aspect-[16/10]"
+                transformStyles={[
+                  'rotate(-4deg) translate(-255px)',
+                  'rotate(2deg) translate(-85px)',
+                  'rotate(-2.5deg) translate(85px)',
+                  'rotate(4deg) translate(255px)'
+                ]}
+              />
+            </div>
+
+            {/* Mobile View: 2x2 Grid Layout for Full Image Legibility */}
+            <div className="grid grid-cols-2 gap-2.5 my-2 w-full sm:hidden">
+              {item.images.map((img, i) => (
+                <div
+                  key={i}
+                  className="group relative rounded-xl border border-neutral-800 overflow-hidden aspect-[16/10] shadow-lg bg-neutral-900"
+                >
+                  <img
+                    src={img}
+                    alt={`icts-${i + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
