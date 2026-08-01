@@ -63,7 +63,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
       { name: "TAILWIND CSS", icon: "/techstack-icons/tailwindcss.png" },
       { name: "FIREBASE", icon: "/techstack-icons/firebase.png" },
       { name: "NODE.JS 22", icon: "/techstack-icons/nodejs.png" },
-      { name: "VERCEL", icon: "/techstack-icons/vercel.png" },
+      { name: "VERCEL", icon: "/techstack-icons/vercel.webp" },
     ],
   },
   {
@@ -101,7 +101,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
       { name: "TANSTACK QUERY", icon: "/techstack-icons/tanstack.png" },
       { name: "TYPESCRIPT", icon: "/techstack-icons/typescript.png" },
       { name: "TAILWIND CSS", icon: "/techstack-icons/tailwindcss.png" },
-      { name: "VERCEL", icon: "/techstack-icons/vercel.png" },
+      { name: "VERCEL", icon: "/techstack-icons/vercel.webp" },
     ],
   },
   {
@@ -119,7 +119,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
       { name: "TYPESCRIPT", icon: "/techstack-icons/typescript.png" },
       { name: "TAILWIND CSS", icon: "/techstack-icons/tailwindcss.png" },
       { name: "FIREBASE", icon: "/techstack-icons/firebase.png" },
-      { name: "VERCEL", icon: "/techstack-icons/vercel.png" },
+      { name: "VERCEL", icon: "/techstack-icons/vercel.webp" },
     ],
   },
   {
@@ -137,7 +137,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
       { name: "TYPESCRIPT", icon: "/techstack-icons/typescript.png" },
       { name: "TAILWIND CSS", icon: "/techstack-icons/tailwindcss.png" },
       { name: "BUN", icon: "/techstack-icons/bun.png" },
-      { name: "VERCEL", icon: "/techstack-icons/vercel.png" },
+      { name: "VERCEL", icon: "/techstack-icons/vercel.webp" },
     ],
   },
   {
@@ -155,7 +155,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
       { name: "MONGODB", icon: "/techstack-icons/mongodb.png" },
       { name: "TYPESCRIPT", icon: "/techstack-icons/typescript.png" },
       { name: "TAILWIND CSS", icon: "/techstack-icons/tailwindcss.png" },
-      { name: "VERCEL", icon: "/techstack-icons/vercel.png" },
+      { name: "VERCEL", icon: "/techstack-icons/vercel.webp" },
     ],
   },
 ];

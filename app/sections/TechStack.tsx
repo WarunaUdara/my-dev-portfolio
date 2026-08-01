@@ -54,7 +54,7 @@ const TechStack = () => {
     { name: 'Grafana', icon: '/techstack-icons/grafana.png' },
     { name: 'AWS', icon: '/techstack-icons/aws.png' },
     { name: 'Azure', icon: '/techstack-icons/azure.png' },
-    { name: 'Vercel', icon: '/techstack-icons/vercel.png' },
+    { name: 'Vercel', icon: '/techstack-icons/vercel.webp' },
     { name: 'Linux', icon: '/techstack-icons/linux.png' },
     { name: 'ngrok', icon: '/techstack-icons/ngrok.svg' },
 

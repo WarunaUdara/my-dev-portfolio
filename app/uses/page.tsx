@@ -20,22 +20,22 @@ interface ToolItem {
 
 const CRAFT_TOOLS: ToolItem[] = [
   { name: "Zed", icon: "/zed.png", link: "https://zed.dev/" },
-  { name: "VS Code", icon: "/icons8-vs-code-96.png", link: "https://code.visualstudio.com/" },
-  { name: "IntelliJ IDEA", icon: "/icons8-intellij-idea-96.png", link: "https://www.jetbrains.com/idea/" },
-  { name: "Postman", icon: "/icons8-postman-inc-96.png", link: "https://www.postman.com/" },
-  { name: "DBeaver", icon: "/icons8-dbeaver.png", link: "https://dbeaver.io/" },
-  { name: "Figma", icon: "/icons8-figma-96.png", link: "https://www.figma.com/" },
+  { name: "VS Code", icon: "/techstack-icons/vscode.png", link: "https://code.visualstudio.com/" },
+  { name: "IntelliJ IDEA", icon: "/techstack-icons/intellij.png", link: "https://www.jetbrains.com/idea/" },
+  { name: "Postman", icon: "/techstack-icons/postman.png", link: "https://www.postman.com/" },
+  { name: "DBeaver", icon: "/techstack-icons/dbeaver.png", link: "https://dbeaver.io/" },
+  { name: "Figma", icon: "/techstack-icons/figma.png", link: "https://www.figma.com/" },
   { name: "Framer", icon: "/framer-logo.png", link: "https://www.framer.com/" },
   { name: "Anti gravity", icon: "/uses/google-antigravity.webp", link: "https://antigravity.google/" },
 ];
 
 const CLI_TOOLS: ToolItem[] = [
   { name: "Ghostty", icon: "/ghostty copy.webp", link: "https://ghostty.org/" },
-  { name: "GitHub CLI", icon: "/icons8-github-50.png", link: "https://cli.github.com/" },
+  { name: "GitHub CLI", icon: "/techstack-icons/github.png", link: "https://cli.github.com/" },
   { name: "Homebrew", icon: "/Homebrew.png", link: "https://brew.sh/" },
-  { name: "Git Worktrees", icon: "/icons8-git-144.png" },
+  { name: "Git Worktrees", icon: "/techstack-icons/git.png" },
   { name: "Gemini CLI", icon: "/gemini-cli-icon.png", link: "https://geminicli.com/" },
-  { name: "Opencode", icon: "/opencode-logo-dark.png", link: "https://opencode.ai/" },
+  { name: "Opencode", icon: "/techstack-icons/opencode.png", link: "https://opencode.ai/" },
   { name: "Codex", icon: "/codex-color.webp", link: "https://chatgpt.com/codex/cloud" },
   { name: "Mole", icon: "/uses/mole-cleaner.png", link: "https://mole.fit/" },
 ];

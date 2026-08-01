@@ -66,7 +66,7 @@ const projects: ProjectData[] = [
       { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
       { name: "Firebase", icon: "/techstack-icons/firebase.png" },
       { name: "Node.js 22", icon: "/techstack-icons/nodejs.png" },
-      { name: "Vercel", icon: "/techstack-icons/vercel.png" }
+      { name: "Vercel", icon: "/techstack-icons/vercel.webp" }
     ],
     imageSrc: "/projects/jesa.png",
     gradient: "bg-gradient-to-br from-amber-600 via-amber-700 to-amber-950",
@@ -110,7 +110,7 @@ const projects: ProjectData[] = [
       { name: "TanStack Query", icon: "/techstack-icons/tanstack.png" },
       { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
       { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
-      { name: "Vercel", icon: "/techstack-icons/vercel.png" }
+      { name: "Vercel", icon: "/techstack-icons/vercel.webp" }
     ],
     imageSrc: "/projects/emwee.png",
     gradient: "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-950",
@@ -131,7 +131,7 @@ const projects: ProjectData[] = [
       { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
       { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
       { name: "Bun", icon: "/techstack-icons/bun.png" },
-      { name: "Vercel", icon: "/techstack-icons/vercel.png" }
+      { name: "Vercel", icon: "/techstack-icons/vercel.webp" }
     ],
     imageSrc: "/projects-portfolio.png",
     gradient: "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-950",
@@ -150,7 +150,7 @@ const projects: ProjectData[] = [
       { name: "Next.js", icon: "/techstack-icons/nextjs.png" },
       { name: "React", icon: "/techstack-icons/react.png" },
       { name: "MongoDB", icon: "/techstack-icons/mongodb.png" },
-      { name: "Vercel", icon: "/techstack-icons/vercel.png" },
+      { name: "Vercel", icon: "/techstack-icons/vercel.webp" },
       { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" }
     ],
     imageSrc: "/projects-beautyofcloud.png",

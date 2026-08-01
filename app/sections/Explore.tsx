@@ -15,17 +15,17 @@ import {
 // Complete Tools & Apps List from Uses Section
 const USES_TOOLS = [
   { name: "Zed", icon: "/zed.png" },
-  { name: "VS Code", icon: "/icons8-vs-code-96.png" },
-  { name: "IntelliJ IDEA", icon: "/icons8-intellij-idea-96.png" },
+  { name: "VS Code", icon: "/techstack-icons/vscode.png" },
+  { name: "IntelliJ IDEA", icon: "/techstack-icons/intellij.png" },
   { name: "Ghostty", icon: "/ghostty copy.webp" },
-  { name: "Opencode", icon: "/opencode-logo-dark.png" },
-  { name: "Postman", icon: "/icons8-postman-inc-96.png" },
-  { name: "DBeaver", icon: "/icons8-dbeaver.png" },
-  { name: "Figma", icon: "/icons8-figma-96.png" },
+  { name: "Opencode", icon: "/techstack-icons/opencode.png" },
+  { name: "Postman", icon: "/techstack-icons/postman.png" },
+  { name: "DBeaver", icon: "/techstack-icons/dbeaver.png" },
+  { name: "Figma", icon: "/techstack-icons/figma.png" },
   { name: "Framer", icon: "/framer-logo.png" },
-  { name: "GitHub CLI", icon: "/icons8-github-50.png" },
+  { name: "GitHub CLI", icon: "/techstack-icons/github.png" },
   { name: "Homebrew", icon: "/Homebrew.png" },
-  { name: "Git", icon: "/icons8-git-144.png" },
+  { name: "Git", icon: "/techstack-icons/git.png" },
   { name: "Gemini CLI", icon: "/gemini-cli-icon.png" },
   { name: "Codex", icon: "/codex-color.webp" },
   { name: "Notion", icon: "/notion-logo-icon.png" },
@@ -85,7 +85,7 @@ export const Explore = () => {
                     <Image src="/obsidian-icon.png" alt="Obsidian" width={28} height={28} className="object-contain" />
                   </div>
                   <div className="relative w-14 h-14 bg-neutral-900/90 border border-neutral-700 rounded-xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 p-2.5">
-                    <Image src="/icons8-vs-code-96.png" alt="VSCode" width={34} height={34} className="object-contain" />
+                    <Image src="/techstack-icons/vscode.png" alt="VSCode" width={34} height={34} className="object-contain" />
                   </div>
                   <div className="relative w-12 h-12 bg-neutral-900/90 border border-neutral-800 rounded-xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2">
                     <Image src="/notebooklm.png" alt="NotebookLM" width={28} height={28} className="object-contain" />
