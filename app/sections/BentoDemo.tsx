@@ -188,10 +188,10 @@ const features = [
   },
   {
     name: "Resume",
-    description: "Download my professional resume and learn more about my experience.",
+    description: "My 2026 resume is currently being updated with recent microservices & cloud projects. Please reach out directly!",
     className: "col-span-3 lg:col-span-1",
-    href: "/waruna-udara-sampath-resume.pdf",
-    cta: "Download CV",
+    href: "#",
+    cta: "Updating for 2026 🚧",
     background: (
       <div className="absolute inset-0 overflow-hidden">
         {/* Animated Background Gradient */}
@@ -219,8 +219,8 @@ const features = [
             <div className="relative w-24 h-28 bg-gradient-to-br from-neutral-900 via-neutral-950 to-black rounded-xl shadow-2xl border border-neutral-800 overflow-hidden">
               {/* Document Header Bar - Dark Metallic */}
               <div className="absolute top-0 left-0 right-0 h-7 bg-neutral-800/90 border-b border-neutral-700/60 flex items-center px-2.5 justify-between">
-                <span className="text-[9px] font-mono font-bold text-neutral-300">CV.PDF</span>
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span className="text-[9px] font-mono font-bold text-amber-400">2026 🚧</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
               </div>
               
               {/* Document Lines */}

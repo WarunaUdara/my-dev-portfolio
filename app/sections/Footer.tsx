@@ -94,10 +94,13 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <a href="/waruna-udara-sampath-resume.pdf" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors">
-                    <span>Download CV</span>
+                  <button
+                    onClick={() => alert("📄 My 2026 resume is currently being updated with recent microservices & cloud projects! Please connect with me on LinkedIn or email me directly.")}
+                    className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors cursor-pointer text-left"
+                  >
+                    <span>Resume (Updating 2026 🚧)</span>
                     <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>

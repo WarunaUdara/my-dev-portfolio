@@ -42,10 +42,10 @@ const Links = () => {
       description: 'Connect on Email'
     },
     {
-      title: 'Resume',
-      url: '/resume.pdf',
+      title: 'Resume (Updating 2026 🚧)',
+      url: '#',
       icon: <IconFileText className="w-5 h-5" />,
-      description: 'View my resume'
+      description: 'Updating for 2026'
     },
     {
       title: 'Instagram',
@@ -81,9 +81,15 @@ const Links = () => {
             <a
               key={index}
               href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/10 hover:border-white/30 hover:bg-zinc-800/50 transition-all duration-300"
+              target={link.url.startsWith("http") ? "_blank" : undefined}
+              rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined}
+              onClick={(e) => {
+                if (link.url === '#') {
+                  e.preventDefault();
+                  alert('📄 My 2026 resume is currently under active revision with recent Go microservices, Cloud Native, and Kubernetes projects! Please connect directly via LinkedIn or Email.');
+                }
+              }}
+              className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/10 hover:border-white/30 hover:bg-zinc-800/50 transition-all duration-300 cursor-pointer"
             >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 text-white">
