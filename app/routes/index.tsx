@@ -1,16 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router';
+import React from 'react';
 import Hero from '../sections/Hero';
 import About from '../sections/About';
-import RevealingQuote from '../sections/RevealingQuote';
-import Projects from '../sections/Projects';
-import TechStack from '../sections/TechStack';
-import GitHubActivity from '../sections/GitHubActivity';
-import Explore from '../sections/Explore';
 import Footer from '../sections/Footer';
 import { NavBar } from '../ui/TubelightNavbar';
 import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText, IconPhoneCall } from '@tabler/icons-react';
 import SEOHead from '@/components/ui/SEOHead';
 import { PAGE_META, PERSON_SCHEMA, WEBSITE_SCHEMA, PROFILE_PAGE_SCHEMA, SITE_URL } from '@/lib/seo';
+
+// Below-the-fold sections load on demand so the initial home paint only needs
+// Hero + chrome. Each chunk is fetched in parallel right after mount.
+const RevealingQuote = React.lazy(() => import('../sections/RevealingQuote'));
+const Projects = React.lazy(() => import('../sections/Projects'));
+const TechStack = React.lazy(() => import('../sections/TechStack'));
+const GitHubActivity = React.lazy(() => import('../sections/GitHubActivity'));
+const Explore = React.lazy(() => import('../sections/Explore'));
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -38,11 +42,13 @@ function HomePage() {
       />
       <Hero />
       <About />
-      <RevealingQuote />
-      <Projects />
-      <TechStack />
-      <GitHubActivity />
-      <Explore />
+      <React.Suspense fallback={<div className="min-h-[20vh]" aria-hidden />}>
+        <RevealingQuote />
+        <Projects />
+        <TechStack />
+        <GitHubActivity />
+        <Explore />
+      </React.Suspense>
       <Footer />
       <NavBar items={navItems} />
     </div>

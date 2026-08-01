@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
       TanStackRouterVite({
         routesDirectory: './app/routes',
         generatedRouteTree: './app/routeTree.gen.ts',
+        autoCodeSplitting: true,
       }),
       react(),
       tailwindcss(),
