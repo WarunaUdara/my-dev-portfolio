@@ -2,6 +2,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Providers } from '../providers';
 import TerminalLoader from '@/components/ui/TerminalLoader';
 import RouteTerminalLoader from '@/components/ui/RouteTerminalLoader';
+import DevToolsGuard from '@/components/ui/DevToolsGuard';
 import '../globals.css';
 
 export const Route = createRootRoute({
@@ -48,6 +49,7 @@ function RootLayout() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <DevToolsGuard />
       <TerminalLoader>
         <RouteTerminalLoader>
           <main className="min-h-screen bg-background text-foreground antialiased selection:bg-blue-500 selection:text-white">
