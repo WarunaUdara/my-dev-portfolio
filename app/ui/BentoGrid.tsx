@@ -94,9 +94,9 @@ const BentoCard = ({
             target="_blank" 
             rel="noopener noreferrer"
             onClick={(e) => {
-              if (href === '#' || cta.includes('Updating')) {
+              if (href === '#' || href === '' || cta.includes('Updating')) {
                 e.preventDefault();
-                alert('📄 My 2026 resume is currently under active revision with recent Go microservices, Cloud Native, and Kubernetes projects! Please connect directly via LinkedIn or Email.');
+                e.stopPropagation();
                 return;
               }
               if (href.includes('resume') || href.includes('cv')) {
@@ -128,6 +128,11 @@ const BentoCard = ({
           target="_blank" 
           rel="noopener noreferrer"
           onClick={(e) => {
+            if (href === '#' || href === '' || cta.includes('Updating')) {
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
             if (href.includes('resume') || href.includes('cv')) {
               handleCVDownload();
             }

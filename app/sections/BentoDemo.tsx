@@ -188,7 +188,8 @@ const features = [
   },
   {
     name: "Resume",
-    description: "My 2026 resume is currently being updated with recent microservices & cloud projects. Please reach out directly!",
+    // Previous: description: "Download my professional resume and learn more about my experience.", href: "/waruna-udara-sampath-resume.pdf", cta: "Download CV",
+    description: "Resume updating for 2026. Available soon.",
     className: "col-span-3 lg:col-span-1",
     href: "#",
     cta: "Updating for 2026 🚧",

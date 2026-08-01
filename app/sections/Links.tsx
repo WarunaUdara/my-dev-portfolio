@@ -41,6 +41,7 @@ const Links = () => {
       icon: <IconMail className="w-5 h-5" />,
       description: 'Connect on Email'
     },
+    // Previous: { title: 'Resume', url: '/resume.pdf', icon: <IconFileText className="w-5 h-5" />, description: 'View my resume' },
     {
       title: 'Resume (Updating 2026 🚧)',
       url: '#',
@@ -86,7 +87,8 @@ const Links = () => {
               onClick={(e) => {
                 if (link.url === '#') {
                   e.preventDefault();
-                  alert('📄 My 2026 resume is currently under active revision with recent Go microservices, Cloud Native, and Kubernetes projects! Please connect directly via LinkedIn or Email.');
+                  e.stopPropagation();
+                  return;
                 }
               }}
               className="group flex items-center justify-between p-5 rounded-2xl bg-zinc-900/50 border border-white/10 hover:border-white/30 hover:bg-zinc-800/50 transition-all duration-300 cursor-pointer"
