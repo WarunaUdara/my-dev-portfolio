@@ -69,12 +69,12 @@ export default function ContactSection() {
           </p>
         </div>
 
-        {/* Responsive Cal.com Container (Fully responsive on mobile, cropped on desktop) */}
-        <div className="w-full max-w-4xl mx-auto min-h-[580px] h-[640px] sm:h-[485px] sm:max-h-[485px] overflow-y-auto sm:overflow-hidden rounded-2xl border border-neutral-800/80 bg-[#101010] shadow-2xl relative z-10">
+        {/* Responsive Cal.com Container (Fully responsive on mobile, tightly cropped & fitted on desktop) */}
+        <div className="w-full max-w-4xl mx-auto h-[640px] sm:h-[418px] sm:max-h-[418px] overflow-y-auto sm:overflow-hidden rounded-2xl border border-neutral-800/80 bg-[#101010] shadow-2xl relative z-10">
           <Cal
             namespace="30min"
             calLink="waruna-udara"
-            style={{ width: "100%", height: "100%", minHeight: "560px" }}
+            style={{ width: "100%", height: "100%", minHeight: "100%" }}
             config={{ layout: "month_view", theme: "dark" }}
           />
         </div>
