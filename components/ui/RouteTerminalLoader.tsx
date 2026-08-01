@@ -152,7 +152,7 @@ export default function RouteTerminalLoader({ children }: { children: React.Reac
 
     if (timerRef.current) clearTimeout(timerRef.current);
 
-    const minDisplayPromise = new Promise((resolve) => setTimeout(resolve, 450));
+    const minDisplayPromise = new Promise((resolve) => setTimeout(resolve, 350));
     const preloadPromise = preloadRouteImages(config.preloads);
 
     Promise.all([minDisplayPromise, preloadPromise]).then(() => {

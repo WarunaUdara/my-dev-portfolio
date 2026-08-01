@@ -6,7 +6,10 @@ import Link from "@/components/ui/Link";
 import { getBlogPostBySlug } from "@/lib/blogData";
 import { IconArrowLeft, IconCalendar, IconClock, IconTag } from "@tabler/icons-react";
 import CodeBlock from "@/components/ui/CodeBlock";
-import DiagramViewer from "@/components/ui/DiagramViewer";
+
+// Lazy-load DiagramViewer so mermaid (and its ~0.5MB diagram renderers) only
+// loads when a post actually renders a diagram, not on every first paint.
+const DiagramViewer = React.lazy(() => import("@/components/ui/DiagramViewer"));
 
 // Dynamic MDX Component Loader Map
 import HttpQueryPost from "@/content/blog/http-query-method-rfc-10008.mdx";
@@ -192,7 +195,17 @@ export const BlogPost = ({ slug }: { slug: string }) => {
 
         {/* Rendered MDX Content */}
         <div ref={articleContentRef} className="space-y-6 text-neutral-300 font-sans">
-          <MDXContent components={mdxCustomComponents} />
+          <React.Suspense
+            fallback={
+              <div className="my-8 min-h-[200px] rounded-2xl bg-neutral-950 border border-neutral-800 flex items-center justify-center">
+                <span className="text-xs font-mono text-neutral-500 animate-pulse">
+                  Rendering diagram…
+                </span>
+              </div>
+            }
+          >
+            <MDXContent components={mdxCustomComponents} />
+          </React.Suspense>
         </div>
 
         {/* Footer Tags */}

@@ -295,8 +295,13 @@ export interface TerminalProps {
   username?: string;
   className?: string;
   typingSpeed?: number;
+  typingJitter?: number;
   delayBetweenCommands?: number;
   initialDelay?: number;
+  enterDelay?: number;
+  outputLineDelay?: number;
+  postOutputDelay?: number;
+  doneDelay?: number;
   enableSound?: boolean;
   onComplete?: () => void;
 }
@@ -325,8 +330,13 @@ export function Terminal({
   username = "Waruna-MacBook-Air",
   className,
   typingSpeed = 35,
+  typingJitter = 20,
   delayBetweenCommands = 600,
   initialDelay = 400,
+  enterDelay = 70,
+  outputLineDelay = 120,
+  postOutputDelay = 250,
+  doneDelay = 180,
   enableSound = true,
   onComplete,
 }: TerminalProps) {
@@ -370,7 +380,7 @@ export function Terminal({
           setCurrentText(currentCommand.slice(0, charIdx + 1));
           setCharIdx((c) => c + 1);
         },
-        typingSpeed + Math.random() * 20,
+        typingSpeed + Math.random() * typingJitter,
       );
       return () => clearTimeout(t);
     } else {
@@ -378,10 +388,10 @@ export function Terminal({
       const t = setTimeout(() => {
         up("Enter");
         setPhase("executing");
-      }, 70);
+      }, enterDelay);
       return () => clearTimeout(t);
     }
-  }, [phase, charIdx, currentCommand, typingSpeed, down, up]);
+  }, [phase, charIdx, currentCommand, typingSpeed, typingJitter, enterDelay, down, up]);
 
   useEffect(() => {
     if (phase !== "executing") return;
@@ -409,7 +419,7 @@ export function Terminal({
           { type: "output", content: currentOutputs[outputIdx] },
         ]);
         setOutputIdx((i) => i + 1);
-      }, 120);
+      }, outputLineDelay);
       return () => clearTimeout(t);
     } else if (outputIdx >= currentOutputs.length) {
       const t = setTimeout(() => {
@@ -418,10 +428,10 @@ export function Terminal({
         } else {
           setPhase("pausing");
         }
-      }, 250);
+      }, postOutputDelay);
       return () => clearTimeout(t);
     }
-  }, [phase, outputIdx, currentOutputs, isLastCommand]);
+  }, [phase, outputIdx, currentOutputs, isLastCommand, outputLineDelay, postOutputDelay]);
 
   useEffect(() => {
     if (phase !== "pausing") return;
@@ -438,10 +448,10 @@ export function Terminal({
     if (phase === "done") {
       const t = setTimeout(() => {
         if (onComplete) onComplete();
-      }, 180);
+      }, doneDelay);
       return () => clearTimeout(t);
     }
-  }, [phase, onComplete]);
+  }, [phase, onComplete, doneDelay]);
 
   useEffect(() => {
     const interval = setInterval(() => setCursorVisible((v) => !v), 530);
