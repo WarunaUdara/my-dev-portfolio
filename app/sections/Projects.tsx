@@ -100,7 +100,7 @@ const projects: ProjectData[] = [
     pillarText: "Startup Web Platform & Ecosystem",
     descriptionPoints: [
       "Official web platform for EMWEE startup ecosystem.",
-      "Custom UI/UX engineering, high-performance responsive web design, and scalable cloud architecture.",
+      "Custom UI/UX engineering and high-performance responsive web design.",
       "Collaborative agile development with multi-developer team execution."
     ],
     teamMembers: ["Waruna Udara", "Malin Dhamsara", "Vineth Ranathunga", "Farhan Hameeth", "Thisal Kokuhennadige"],

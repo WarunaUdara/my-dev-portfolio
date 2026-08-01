@@ -90,7 +90,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     category: "STARTUP PLATFORM",
     date: "2026",
     title: "EMWEE",
-    tagline: "Official web platform for EMWEE startup ecosystem with high-performance cloud architecture",
+    tagline: "Official web platform for EMWEE startup ecosystem with modern web design & interactive UX",
     teamMembers: ["Waruna Udara", "Malin Dhamsara", "Vineth Ranathunga", "Farhan Hameeth", "Thisal Kokuhennadige"],
     imageSrc: "/projects/emwee.png",
     gradient: "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-950",
