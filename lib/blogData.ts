@@ -54,7 +54,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   },
   {
     slug: "react-19-and-tanstack-router",
-    title: "Engineering an Elite Portfolio: React 19, TanStack Router, GSAP Physics & Glassmorphic UX",
+    title: "Architecting Technical Excellence: React 19, TanStack Router, GSAP Physics & Web Audio Engine",
     date: "April 10, 2026",
     description: "An in-depth technical architectural postmortem of Waruna Udara's developer portfolio — showcasing React 19, TanStack Router, GSAP ScrollTrigger physics, Bun runtime, zero-asset Web Audio synthesis, and glassmorphic UI engineering.",
     category: "WEB ARCHITECTURE",

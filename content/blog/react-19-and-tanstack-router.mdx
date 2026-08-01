@@ -1,5 +1,5 @@
 ---
-title: "Engineering an Elite Portfolio: React 19, TanStack Router, GSAP Physics & Glassmorphic UX"
+title: "Architecting Technical Excellence: React 19, TanStack Router, GSAP Physics & Web Audio Engine"
 date: "2026-04-10"
 description: "An in-depth technical architectural postmortem of Waruna Udara's developer portfolio — showcasing React 19, TanStack Router, GSAP ScrollTrigger physics, Bun runtime, zero-asset Web Audio synthesis, and glassmorphic UI engineering."
 category: "WEB ARCHITECTURE"
@@ -9,7 +9,7 @@ coverImage: "/projects-portfolio.png"
 author: "Waruna Udara Sampath"
 ---
 
-# Engineering an Elite Portfolio: React 19, TanStack Router, GSAP Physics & Glassmorphic UX
+# Architecting Technical Excellence: React 19, TanStack Router, GSAP Physics & Web Audio Engine
 
 🔗 **Live Portfolio**: [warunadev.vercel.app](https://warunadev.vercel.app)  
 🔗 **Source Code**: [GitHub Repository](https://github.com/WarunaUdara/my-dev-portfolio)
@@ -24,19 +24,19 @@ In this article, I break down the engineering decisions, performance benchmarks,
 
 ```mermaid
 graph TD
-    Client[Browser / User Agent] -->|Instant 0ms Route Chunk| Router[TanStack Router - Type-Safe File Routes]
-    Router -->|GSAP ScrollTrigger Context| Animations[GSAP Physics & Parallax Engine]
-    Router -->|Intent Preload Under 20ms| Cache[TanStack Client Memory Cache]
+    Client["Browser / User Agent"] -->|Instant 0ms Route Chunk| Router["TanStack Router - Type-Safe File Routes"]
+    Router -->|GSAP ScrollTrigger Context| Animations["GSAP Physics & Parallax Engine"]
+    Router -->|Intent Preload Under 20ms| Cache["TanStack Client Memory Cache"]
     
-    subgraph UI_System ["🎨 Obsidian & Silver Minimalist UI Tier"]
-        Bento[Bento Grid Component]
-        Bounce[ReactBits BounceCards GSAP Engine]
-        Terminal[Interactive CLI / Command Deck]
-        Lens[WebGL Micro Lens Visualizer]
+    subgraph UI_System ["Obsidian and Silver Minimalist UI Tier"]
+        Bento["Bento Grid Component"]
+        Bounce["ReactBits BounceCards GSAP Engine"]
+        Terminal["Interactive CLI / Command Deck"]
+        Lens["WebGL Micro Lens Visualizer"]
     end
 
-    subgraph Sound_Engine ["🔊 Zero-Asset Sound Engine"]
-        WebAudio[Web Audio API Oscillators - 0 KB Downloads]
+    subgraph Sound_Engine ["Zero-Asset Sound Engine"]
+        WebAudio["Web Audio API Oscillators - 0 KB Downloads"]
     end
 
     Router --> UI_System
@@ -75,7 +75,7 @@ sequenceDiagram
     participant Cache as TanStack Memory Cache
     participant View as React 19 View Transition
 
-    User->>Link: Hover Mouse Over Link (Under 20ms)
+    User->>Link: Hover Mouse Over Link - Under 20ms
     Link->>Preloader: Trigger Intent Event
     Preloader->>Cache: Fetch Async Route Chunk
     Cache-->>Preloader: Data Warm in Memory
