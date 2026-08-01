@@ -26,7 +26,7 @@ In this article, I break down the engineering decisions, performance benchmarks,
 graph TD
     Client[Browser / User Agent] -->|Instant 0ms Route Chunk| Router[TanStack Router - Type-Safe File Routes]
     Router -->|GSAP ScrollTrigger Context| Animations[GSAP Physics & Parallax Engine]
-    Router -->|Intent Preload < 20ms| Cache[TanStack Client Memory Cache]
+    Router -->|Intent Preload Under 20ms| Cache[TanStack Client Memory Cache]
     
     subgraph UI_System ["🎨 Obsidian & Silver Minimalist UI Tier"]
         Bento[Bento Grid Component]
@@ -75,7 +75,7 @@ sequenceDiagram
     participant Cache as TanStack Memory Cache
     participant View as React 19 View Transition
 
-    User->>Link: Hover Mouse Over Link (< 20ms)
+    User->>Link: Hover Mouse Over Link (Under 20ms)
     Link->>Preloader: Trigger Intent Event
     Preloader->>Cache: Fetch Async Route Chunk
     Cache-->>Preloader: Data Warm in Memory
