@@ -382,13 +382,13 @@ const Projects = () => {
       </div>
 
       {/* See More / View All Work CTA Button */}
-      <div className="mt-20 text-center flex justify-center relative z-20">
+      <div className="mt-14 sm:mt-16 text-center flex justify-center relative z-20">
         <Link
           href="/work"
-          className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-neutral-900 border border-neutral-700/80 hover:border-white/80 hover:bg-neutral-800 text-white font-mono text-xs sm:text-sm font-semibold tracking-widest uppercase transition-all duration-300 shadow-2xl group hover:scale-105"
+          className="inline-flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-2.5 rounded-full bg-neutral-950/90 border border-white/20 hover:border-white/50 text-neutral-200 hover:text-white font-mono text-xs font-medium tracking-wider uppercase backdrop-blur-2xl transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.08)] hover:shadow-[0_0_30px_rgba(255,255,255,0.18)] group hover:scale-105 active:scale-95"
         >
           <span>SEE MORE PROJECTS</span>
-          <IconArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+          <IconArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
         </Link>
       </div>
     </section>
