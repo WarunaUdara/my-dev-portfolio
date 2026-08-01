@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Terminal from "./terminal";
 
 export interface TerminalLoaderProps {
   children: React.ReactNode;
 }
+
+// Cap how long the reveal waits on fonts so the loader never hangs on a slow font server.
+const MAX_FONT_WAIT_MS = 1500;
 
 export function TerminalLoader({ children }: TerminalLoaderProps) {
   // Synchronously check sessionStorage so client routing NEVER re-triggers loader
@@ -24,13 +27,31 @@ export function TerminalLoader({ children }: TerminalLoaderProps) {
     return true;
   });
 
-  const handleComplete = () => {
+  const revealRef = useRef(false);
+
+  const reveal = useCallback(() => {
+    if (revealRef.current) return;
+    revealRef.current = true;
     if (typeof window !== "undefined") {
       sessionStorage.setItem("hasSeenLoader", "true");
     }
     setShowLoader(false);
     setHasLoaded(true);
-  };
+  }, []);
+
+  // Skip button reveals immediately; user explicitly wants out.
+  const handleSkip = useCallback(() => reveal(), [reveal]);
+
+  // Natural completion waits for fonts to be ready so the revealed page is
+  // already fully styled (no font-swap flash), capped so it never stalls.
+  const handleComplete = useCallback(() => {
+    if (typeof document !== "undefined" && "fonts" in document && document.fonts) {
+      const cap = new Promise<void>((resolve) => setTimeout(resolve, MAX_FONT_WAIT_MS));
+      Promise.race([document.fonts.ready.catch(() => {}), cap]).then(reveal);
+    } else {
+      reveal();
+    }
+  }, [reveal]);
 
   return (
     <>
@@ -48,7 +69,7 @@ export function TerminalLoader({ children }: TerminalLoaderProps) {
 
             {/* Fast Skip Button */}
             <button
-              onClick={handleComplete}
+              onClick={handleSkip}
               className="absolute top-6 right-6 z-[10000] text-[11px] font-mono tracking-widest text-neutral-400 hover:text-white uppercase px-3 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/90 transition-all duration-200 hover:scale-105"
             >
               Skip ➜
@@ -58,9 +79,14 @@ export function TerminalLoader({ children }: TerminalLoaderProps) {
             <div className="relative z-10 w-full max-w-xl">
               <Terminal
                 username="Waruna-MacBook-Air"
-                typingSpeed={18}
-                initialDelay={150}
-                delayBetweenCommands={180}
+                typingSpeed={9}
+                typingJitter={8}
+                initialDelay={80}
+                delayBetweenCommands={100}
+                enterDelay={45}
+                outputLineDelay={65}
+                postOutputDelay={110}
+                doneDelay={60}
                 onComplete={handleComplete}
                 commands={[
                   "sudo brew install coffee --double-espresso",
