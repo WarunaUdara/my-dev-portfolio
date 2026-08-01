@@ -3,70 +3,69 @@
 import React from 'react';
 import Image from '@/components/ui/Image';
 import AuroraText from "@/components/ui/aurora-text";
-import CurvedLoop from '../ui/CurvedLoop';
 
 const TechStack = () => {
-const techStack = [
-  // 1. Programming Languages
-  { name: 'C', icon: '/icons8-c-144.png' },
-  { name: 'Java', icon: '/icons8-java-144.png' },
-  { name: 'Python', icon: '/icons8-python-144.png' },
-  { name: 'JavaScript', icon: '/icons8-javascript-144.png' },
-  { name: 'TypeScript', icon: '/ts.png' },
-  { name: 'Go', icon: '/golang.webp' },
-  { name: 'Rust', icon: '/rust-logo.png' },
+  const techStack = [
+    // 1. Programming Languages
+    { name: 'C', icon: '/techstack-icons/c.png' },
+    { name: 'Java', icon: '/techstack-icons/java.png' },
+    { name: 'Python', icon: '/techstack-icons/python.png' },
+    { name: 'JavaScript', icon: '/techstack-icons/javascript.png' },
+    { name: 'TypeScript', icon: '/techstack-icons/typescript.png' },
+    { name: 'Go', icon: '/techstack-icons/golang.webp' },
+    { name: 'Rust', icon: '/techstack-icons/rust.png' },
 
-  // 2. Web Fundamentals & API
-  { name: 'HTML5', icon: '/icons8-html5-144.png' },
-  { name: 'CSS3', icon: '/icons8-css3-144.png' },
-  { name: 'GraphQL', icon: '/graphql.png' },
-  { name: 'Swagger', icon: '/icons8-swagger-144.png' },
-  { name: 'Node.js', icon: '/icons8-nodejs-144.png' },
-  { name: 'Spring Boot', icon: '/icons8-spring-boot-48.png' },
+    // 2. Web Fundamentals & API
+    { name: 'HTML5', icon: '/techstack-icons/html5.png' },
+    { name: 'CSS3', icon: '/techstack-icons/css3.png' },
+    { name: 'GraphQL', icon: '/techstack-icons/graphql.png' },
+    { name: 'Swagger', icon: '/techstack-icons/swagger.png' },
+    { name: 'Node.js', icon: '/techstack-icons/nodejs.png' },
+    { name: 'Spring Boot', icon: '/techstack-icons/spring-boot.png' },
 
-  // 3. Frontend Frameworks & UI
-  { name: 'React', icon: '/icons8-react-24.png' },
-  { name: 'Next.js', icon: '/icons8-nextjs-144.png' },
-  { name: 'TanStack', icon: '/tanstack.png' },
-  { name: 'Angular', icon: '/icons8-angular-96.png' },
-  { name: 'Tailwind CSS', icon: '/icons8-tailwind-css-144.png' },
-  { name: 'Bootstrap', icon: '/icons8-bootstrap-144.png' },
+    // 3. Frontend Frameworks & UI
+    { name: 'React', icon: '/techstack-icons/react.png' },
+    { name: 'Next.js', icon: '/techstack-icons/nextjs.png' },
+    { name: 'TanStack', icon: '/techstack-icons/tanstack.png' },
+    { name: 'Angular', icon: '/techstack-icons/angular.png' },
+    { name: 'Tailwind CSS', icon: '/techstack-icons/tailwindcss.png' },
+    { name: 'Bootstrap', icon: '/techstack-icons/bootstrap.png' },
 
-  // 4. Databases & Search
-  { name: 'MySQL', icon: '/icons8-mysql-144.png' },
-  { name: 'PostgreSQL', icon: '/icons8-postgresql-96.png' },
-  { name: 'MongoDB', icon: '/icons8-mongo-db-96.png' },
-  { name: 'Elasticsearch', icon: '/elasticsearch.webp' },
-  { name: 'Oracle', icon: '/icons8-oracle-96.png' },
-  { name: 'Flyway', icon: '/flyway-seeklogo.png' },
-  { name: 'DBeaver', icon: '/icons8-dbeaver.png' },
-  { name: 'Redis', icon: '/icons8-redis-48.png' },
+    // 4. Databases & Search
+    { name: 'MySQL', icon: '/techstack-icons/mysql.png' },
+    { name: 'PostgreSQL', icon: '/techstack-icons/postgresql.png' },
+    { name: 'MongoDB', icon: '/techstack-icons/mongodb.png' },
+    { name: 'Elasticsearch', icon: '/techstack-icons/elasticsearch.webp' },
+    { name: 'Oracle', icon: '/techstack-icons/oracle.png' },
+    { name: 'Flyway', icon: '/techstack-icons/flyway.png' },
+    { name: 'DBeaver', icon: '/techstack-icons/dbeaver.png' },
+    { name: 'Redis', icon: '/techstack-icons/redis.png' },
 
-  // 5. DevOps, Security & Cloud Infra
-  { name: 'Docker', icon: '/icons8-docker-144.png' },
-  { name: 'Kubernetes', icon: '/icons8-kubernetes-48.png' },
-  { name: 'Argo CD', icon: '/argo-cd.webp', link: 'https://argo-cd.readthedocs.io/en/stable/' },
-  { name: 'OpenTofu', icon: '/opentofu.webp', link: 'https://opentofu.org/' },
-  { name: 'Terraform', icon: '/icons8-terraform-48.png' },
-  { name: 'Kyverno', icon: '/kyverno.webp' },
-  { name: 'Trivy', icon: '/trivy.webp', link: 'https://trivy.dev/' },
-  { name: 'Prometheus', icon: '/prometheus.webp' },
-  { name: 'Grafana', icon: '/icons8-grafana-24.png' },
-  { name: 'AWS', icon: '/aws.png' },
-  { name: 'Azure', icon: '/icons8-azure-96.png' },
-  { name: 'Vercel', icon: '/vercel.webp' },
-  { name: 'Linux', icon: '/Linux.png' },
-  { name: 'ngrok', icon: '/ngrok.svg' },
+    // 5. DevOps, Containers, Security & Cloud Infra
+    { name: 'Docker', icon: '/techstack-icons/docker.png' },
+    { name: 'Podman', icon: '/techstack-icons/podman.webp', link: 'https://podman.io/' },
+    { name: 'Kubernetes', icon: '/techstack-icons/kubernetes.png' },
+    { name: 'Argo CD', icon: '/techstack-icons/argo-cd.webp', link: 'https://argo-cd.readthedocs.io/en/stable/' },
+    { name: 'OpenTofu', icon: '/techstack-icons/opentofu.webp', link: 'https://opentofu.org/' },
+    { name: 'Terraform', icon: '/techstack-icons/terraform.png' },
+    { name: 'Kyverno', icon: '/techstack-icons/kyverno.webp' },
+    { name: 'Trivy', icon: '/techstack-icons/trivy.webp', link: 'https://trivy.dev/' },
+    { name: 'Prometheus', icon: '/techstack-icons/prometheus.webp' },
+    { name: 'Grafana', icon: '/techstack-icons/grafana.png' },
+    { name: 'AWS', icon: '/techstack-icons/aws.png' },
+    { name: 'Azure', icon: '/techstack-icons/azure.png' },
+    { name: 'Vercel', icon: '/techstack-icons/vercel.png' },
+    { name: 'Linux', icon: '/techstack-icons/linux.png' },
+    { name: 'ngrok', icon: '/techstack-icons/ngrok.svg' },
 
-  // 6. Messaging & Messaging Platforms
-  { name: 'Kafka', icon: '/icons8-apache-kafka-64.png' },
-  { name: 'Bun', icon: '/Bun.png' },
-  { name: 'Git', icon: '/icons8-git-144.png' },
-  { name: 'GitHub', icon: '/icons8-github-50.png' },
-  { name: 'GitLab', icon: '/icons8-gitlab-96.png' },
-  { name: 'Firebase', icon: '/google-firebase-logo-icon-hd.png' }
-];
-
+    // 6. Messaging, Runtime & Tools
+    { name: 'Kafka', icon: '/techstack-icons/kafka.png' },
+    { name: 'Bun', icon: '/techstack-icons/bun.png' },
+    { name: 'Git', icon: '/techstack-icons/git.png' },
+    { name: 'GitHub', icon: '/techstack-icons/github.png' },
+    { name: 'GitLab', icon: '/techstack-icons/gitlab.png' },
+    { name: 'Firebase', icon: '/techstack-icons/firebase.png' }
+  ];
 
   return (
     <section className="relative bg-black text-white py-20 px-4 sm:px-6">
@@ -107,17 +106,6 @@ const techStack = [
           ))}
         </div>
       </div>
-      <br /><br />
-      {/* <div className="container mx-auto">
-        <CurvedLoop 
-          marqueeText="Scalability ✦ Maintainability ✦ Security ✦ Performance ✦ Reliability"
-          speed={2}
-          curveAmount={0}
-          direction="right"
-          interactive={true}
-          className="font-serif text-white/80"
-        />
-      </div> */}
     </section>
   );
 };

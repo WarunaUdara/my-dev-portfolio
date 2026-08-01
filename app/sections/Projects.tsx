@@ -35,15 +35,15 @@ const projects: ProjectData[] = [
       "Features native domain visualizers (Manim math animations, 3Dmol molecular models, tscircuit, Matter.js physics), OKLCH color space, zero-asset Web Audio sound synthesis, and streak gamification."
     ],
     techStack: [
-      { name: "React 19", icon: "/icons8-react-24.png" },
-      { name: "Go 1.22", icon: "/golang.webp" },
-      { name: "GraphQL", icon: "/graphql.png" },
-      { name: "TanStack Router", icon: "/tanstack.png" },
-      { name: "TanStack Query", icon: "/tanstack.png" },
-      { name: "PostgreSQL", icon: "/icons8-postgresql-96.png" },
-      { name: "Redis", icon: "/icons8-dbeaver.png" },
-      { name: "Kubernetes / Helm", icon: "/icons8-kubernetes-48.png" },
-      { name: "OpenTofu", icon: "/opentofu.webp" }
+      { name: "React 19", icon: "/techstack-icons/react.png" },
+      { name: "Go 1.22", icon: "/techstack-icons/golang.webp" },
+      { name: "GraphQL", icon: "/techstack-icons/graphql.png" },
+      { name: "TanStack Router", icon: "/techstack-icons/tanstack.png" },
+      { name: "TanStack Query", icon: "/techstack-icons/tanstack.png" },
+      { name: "PostgreSQL", icon: "/techstack-icons/postgresql.png" },
+      { name: "Redis", icon: "/techstack-icons/redis.png" },
+      { name: "Kubernetes / Helm", icon: "/techstack-icons/kubernetes.png" },
+      { name: "OpenTofu", icon: "/techstack-icons/opentofu.webp" }
     ],
     imageSrc: "/projects/studed.png",
     gradient: "bg-gradient-to-br from-violet-600 via-indigo-700 to-slate-950",
@@ -60,13 +60,13 @@ const projects: ProjectData[] = [
     ],
     teamMembers: ["Waruna Udara (IT Ops Head)", "Pruthivi Thejan (UI/UX)", "Dharaka Meth", "Yesith Sri Hansana", "Pasindu Jeewan"],
     techStack: [
-      { name: "Next.js 15", icon: "/icons8-nextjs-144.png" },
-      { name: "React 19", icon: "/icons8-react-24.png" },
-      { name: "TypeScript", icon: "/ts.png" },
-      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
-      { name: "Firebase", icon: "/google-firebase-logo-icon-hd.png" },
-      { name: "Node.js 22", icon: "/icons8-nodejs-144.png" },
-      { name: "Vercel", icon: "/vercel.png" }
+      { name: "Next.js 15", icon: "/techstack-icons/nextjs.png" },
+      { name: "React 19", icon: "/techstack-icons/react.png" },
+      { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
+      { name: "Firebase", icon: "/techstack-icons/firebase.png" },
+      { name: "Node.js 22", icon: "/techstack-icons/nodejs.png" },
+      { name: "Vercel", icon: "/techstack-icons/vercel.png" }
     ],
     imageSrc: "/projects/jesa.png",
     gradient: "bg-gradient-to-br from-amber-600 via-amber-700 to-amber-950",
@@ -83,12 +83,12 @@ const projects: ProjectData[] = [
     ],
     teamMembers: ["Waruna Udara", "Malin Dhamsara", "Pruthivi Thejan", "Nuwan Konara"],
     techStack: [
-      { name: "React", icon: "/icons8-react-24.png" },
-      { name: "TanStack Router", icon: "/tanstack.png" },
-      { name: "TanStack Query", icon: "/tanstack.png" },
-      { name: "Appwrite", icon: "/icons8-postgresql-96.png" },
-      { name: "TypeScript", icon: "/ts.png" },
-      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
+      { name: "React", icon: "/techstack-icons/react.png" },
+      { name: "TanStack Router", icon: "/techstack-icons/tanstack.png" },
+      { name: "TanStack Query", icon: "/techstack-icons/tanstack.png" },
+      { name: "Appwrite", icon: "/techstack-icons/postgresql.png" },
+      { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" }
     ],
     imageSrc: "/projects/cryptx.png",
     gradient: "bg-gradient-to-br from-cyan-600 via-cyan-700 to-blue-950",
@@ -105,12 +105,12 @@ const projects: ProjectData[] = [
     ],
     teamMembers: ["Waruna Udara", "Malin Dhamsara", "Vineth Ranathunga", "Farhan Hameeth", "Thisal Kokuhennadige"],
     techStack: [
-      { name: "React", icon: "/icons8-react-24.png" },
-      { name: "TanStack Router", icon: "/tanstack.png" },
-      { name: "TanStack Query", icon: "/tanstack.png" },
-      { name: "TypeScript", icon: "/ts.png" },
-      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
-      { name: "Vercel", icon: "/vercel.png" }
+      { name: "React", icon: "/techstack-icons/react.png" },
+      { name: "TanStack Router", icon: "/techstack-icons/tanstack.png" },
+      { name: "TanStack Query", icon: "/techstack-icons/tanstack.png" },
+      { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
+      { name: "Vercel", icon: "/techstack-icons/vercel.png" }
     ],
     imageSrc: "/projects/emwee.png",
     gradient: "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-950",
@@ -126,12 +126,12 @@ const projects: ProjectData[] = [
       "Deployed on Vercel with Bun package manager for speed."
     ],
     techStack: [
-      { name: "Next.js 15", icon: "/icons8-nextjs-144.png" },
-      { name: "React 19", icon: "/icons8-react-24.png" },
-      { name: "TypeScript", icon: "/ts.png" },
-      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" },
-      { name: "Bun", icon: "/Bun.png" },
-      { name: "Vercel", icon: "/vercel.png" }
+      { name: "Next.js 15", icon: "/techstack-icons/nextjs.png" },
+      { name: "React 19", icon: "/techstack-icons/react.png" },
+      { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
+      { name: "Bun", icon: "/techstack-icons/bun.png" },
+      { name: "Vercel", icon: "/techstack-icons/vercel.png" }
     ],
     imageSrc: "/projects-portfolio.png",
     gradient: "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-950",
@@ -147,11 +147,11 @@ const projects: ProjectData[] = [
       "Tailwind CSS for responsive design across all devices."
     ],
     techStack: [
-      { name: "Next.js", icon: "/icons8-nextjs-144.png" },
-      { name: "React", icon: "/icons8-react-24.png" },
-      { name: "MongoDB", icon: "/icons8-mongo-db-96.png" },
-      { name: "Vercel", icon: "/vercel.png" },
-      { name: "Tailwind CSS", icon: "/icons8-tailwind-css-144.png" }
+      { name: "Next.js", icon: "/techstack-icons/nextjs.png" },
+      { name: "React", icon: "/techstack-icons/react.png" },
+      { name: "MongoDB", icon: "/techstack-icons/mongodb.png" },
+      { name: "Vercel", icon: "/techstack-icons/vercel.png" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" }
     ],
     imageSrc: "/projects-beautyofcloud.png",
     gradient: "bg-gradient-to-br from-blue-600 via-blue-700 to-blue-950",
