@@ -7,6 +7,7 @@ export default function DevToolsGuard() {
   const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isTemporarilyDismissed, setIsTemporarilyDismissed] = useState(false);
 
   // Check localStorage and URL params for owner bypass
   useEffect(() => {
@@ -56,39 +57,54 @@ export default function DevToolsGuard() {
     );
   }, [isUnlocked]);
 
-  // DevTools detection loop (Only triggers when DevTools is ACTUALLY open)
+  // DevTools detection loop (Stable detection using window size & console getters)
   useEffect(() => {
-    if (typeof window === "undefined" || isUnlocked) return;
+    if (typeof window === "undefined" || isUnlocked || isTemporarilyDismissed) return;
 
     const threshold = 160;
 
     const checkDevTools = () => {
-      // Dimension differential check (docked DevTools side/bottom)
-      const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-      const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+      // Metric 1: Window Dimension Differential (Docked DevTools side/bottom)
+      const widthDiff = window.outerWidth - window.innerWidth > threshold;
+      const heightDiff = window.outerHeight - window.innerHeight > threshold;
 
-      // Debugger execution timing check (undocked/separated DevTools)
-      const start = performance.now();
-      // eslint-disable-next-line no-debugger
-      debugger;
-      const end = performance.now();
-      const debuggerOpen = end - start > 100;
-
-      if (widthThreshold || heightThreshold || debuggerOpen) {
+      if (widthDiff || heightDiff) {
         setIsDevToolsOpen(true);
       } else {
-        setIsDevToolsOpen(false);
+        // Only close if dimensions return completely to normal
+        if (window.outerWidth - window.innerWidth < 100 && window.outerHeight - window.innerHeight < 100) {
+          setIsDevToolsOpen(false);
+        }
       }
     };
 
-    const intervalId = setInterval(checkDevTools, 800);
+    const intervalId = setInterval(checkDevTools, 500);
     window.addEventListener("resize", checkDevTools);
 
     return () => {
       clearInterval(intervalId);
       window.removeEventListener("resize", checkDevTools);
     };
-  }, [isUnlocked]);
+  }, [isUnlocked, isTemporarilyDismissed]);
+
+  // Console Getter Trap for Undocked/Separate Window DevTools
+  useEffect(() => {
+    if (typeof window === "undefined" || isUnlocked || isTemporarilyDismissed) return;
+
+    const trapImage = new Image();
+    Object.defineProperty(trapImage, "id", {
+      get: function () {
+        setIsDevToolsOpen(true);
+        return "devtools-active";
+      },
+    });
+
+    const consoleTrapInterval = setInterval(() => {
+      console.dir(trapImage);
+    }, 1200);
+
+    return () => clearInterval(consoleTrapInterval);
+  }, [isUnlocked, isTemporarilyDismissed]);
 
   // Keyboard shortcut listener for Owner Bypass (Cmd/Ctrl + Option/Alt + Shift + D)
   useEffect(() => {
@@ -117,6 +133,15 @@ export default function DevToolsGuard() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isUnlocked]);
 
+  const handleDismiss = () => {
+    setIsDevToolsOpen(false);
+    setIsTemporarilyDismissed(true);
+    // Cooldown 15 seconds before re-evaluating
+    setTimeout(() => {
+      setIsTemporarilyDismissed(false);
+    }, 15000);
+  };
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -141,7 +166,7 @@ export default function DevToolsGuard() {
       )}
 
       {/* Premium Editorial DevTools Overlay (Triggers ONLY when DevTools is open) */}
-      {isDevToolsOpen && !isUnlocked && (
+      {isDevToolsOpen && !isUnlocked && !isTemporarilyDismissed && (
         <div className="fixed inset-0 z-[99999] bg-black/96 backdrop-blur-3xl flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-300 select-none">
           {/* Subtle Ambient Red Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-950/20 rounded-full blur-[160px] pointer-events-none" />
@@ -190,7 +215,7 @@ export default function DevToolsGuard() {
             {/* Clean Action Button */}
             <div className="pt-2 flex flex-col items-center justify-center gap-3">
               <button
-                onClick={() => setIsDevToolsOpen(false)}
+                onClick={handleDismiss}
                 className="w-full px-6 py-3 rounded-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-neutral-500 text-white font-mono text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-lg hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
               >
                 <IconX className="w-3.5 h-3.5 text-neutral-400" />
