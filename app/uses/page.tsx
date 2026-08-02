@@ -49,7 +49,6 @@ const DAILY_APPS: ToolItem[] = [
   { name: "ChatWise", icon: "/chat-wise.webp", link: "https://chatwise.app/" },
   { name: "ClickUp", icon: "https://img.icons8.com/?size=100&id=znqq179L1K9g&format=png&color=000000", link: "https://clickup.com/" },
   { name: "Microsoft ToDo", icon: "https://img.icons8.com/?size=100&id=HpPqCqynotVp&format=png&color=000000", link: "https://todo.microsoft.com/" },
-  { name: "Spotify", icon: "/spotify-logo.webp", link: "https://www.spotify.com/" },
   { name: "Opal", icon: "/opal.webp", link: "https://www.opal.so/" },
   { name: "Hermes", icon: "/uses/hermes-icon.webp", link: "https://hermes-agent.nousresearch.com/" },
 ];
