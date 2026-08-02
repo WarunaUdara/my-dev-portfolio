@@ -42,8 +42,7 @@ export async function GET() {
     }
 
     return NextResponse.json(data.data.user.contributionsCollection.contributionCalendar);
-  } catch (error) {
-    console.error('GitHub GraphQL Error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch contributions' },
       { status: 500 }

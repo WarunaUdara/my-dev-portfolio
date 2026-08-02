@@ -27,8 +27,8 @@ const handleCVDownload = async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (error) {
-    console.error('Failed to track download:', error);
+  } catch {
+    // Tracking is non-blocking; the download still proceeds for the user
   }
 };
 

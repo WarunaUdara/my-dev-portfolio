@@ -26,8 +26,7 @@ const GitHubActivity = () => {
         const res = await fetch('/api/github/stats');
         if (!res.ok) return null;
         return res.json();
-      } catch (err) {
-        console.error('Failed to fetch GitHub stats:', err);
+      } catch {
         return null;
       }
     },

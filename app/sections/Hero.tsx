@@ -209,8 +209,7 @@ export default function Hero() {
           throw new Error('Fallback copy failed');
         }
       }
-    } catch (err) {
-      console.error('Failed to copy email:', err);
+    } catch {
       // Show error message to user
       setToastMessage("Couldn't copy. Click 'Send Email' instead.");
       setShowToast(true);

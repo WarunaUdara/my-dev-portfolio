@@ -1,13 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { IconX, IconLock, IconLockOpen } from "@tabler/icons-react";
+import { IconLock, IconLockOpen } from "@tabler/icons-react";
+
+interface DevToolsWindow extends Window {
+  unlockDev?: () => string;
+  lockDev?: () => string;
+}
 
 export default function DevToolsGuard() {
   const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [isTemporarilyDismissed, setIsTemporarilyDismissed] = useState(false);
 
   // Check localStorage and URL params for owner bypass
   useEffect(() => {
@@ -24,87 +28,108 @@ export default function DevToolsGuard() {
       }
     }
 
+    const devWindow = window as unknown as DevToolsWindow;
+
     // Global helper methods for portfolio owner
-    (window as any).unlockDev = () => {
+    devWindow.unlockDev = () => {
       localStorage.setItem("portfolio_dev_unlocked", "true");
       setIsUnlocked(true);
       setIsDevToolsOpen(false);
-      console.log("%c 🔓 Developer Mode Unlocked", "color: #34d399; font-size: 14px; font-family: monospace;");
       return "Developer bypass mode unlocked!";
     };
 
-    (window as any).lockDev = () => {
+    devWindow.lockDev = () => {
       localStorage.removeItem("portfolio_dev_unlocked");
       setIsUnlocked(false);
-      console.log("%c 🔒 Developer Mode Locked", "color: #f87171; font-size: 14px; font-family: monospace;");
       return "Developer protection reactivated.";
     };
   }, []);
 
-  // Professional Console Notice (Only logged once in devtools)
+  // DevTools detection loop (sticky: overlay stays up until DevTools is closed)
   useEffect(() => {
     if (typeof window === "undefined" || isUnlocked) return;
 
-    console.clear();
-    console.log(
-      "%c ATTENTION %c Developer Tools Inspection Active",
-      "background: #991b1b; color: #ffffff; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 4px;",
-      "color: #e2e8f0; font-size: 12px; font-family: monospace;"
-    );
-    console.log(
-      "%cThis environment uses technical inspection monitoring. To disable this protection for development, press [ Cmd + Option + Shift + D ] or run unlockDev().",
-      "color: #a3a3a3; font-size: 11px; font-family: monospace; line-height: 1.5;"
-    );
-  }, [isUnlocked]);
-
-  // DevTools detection loop (Stable detection using window size & console getters)
-  useEffect(() => {
-    if (typeof window === "undefined" || isUnlocked || isTemporarilyDismissed) return;
-
     const threshold = 160;
+    const graceMs = 3000;
 
-    const checkDevTools = () => {
-      // Metric 1: Window Dimension Differential (Docked DevTools side/bottom)
-      const widthDiff = window.outerWidth - window.innerWidth > threshold;
-      const heightDiff = window.outerHeight - window.innerHeight > threshold;
-
-      if (widthDiff || heightDiff) {
-        setIsDevToolsOpen(true);
-      } else {
-        // Only close if dimensions return completely to normal
-        if (window.outerWidth - window.innerWidth < 100 && window.outerHeight - window.innerHeight < 100) {
-          setIsDevToolsOpen(false);
-        }
-      }
-    };
-
-    const intervalId = setInterval(checkDevTools, 500);
-    window.addEventListener("resize", checkDevTools);
-
-    return () => {
-      clearInterval(intervalId);
-      window.removeEventListener("resize", checkDevTools);
-    };
-  }, [isUnlocked, isTemporarilyDismissed]);
-
-  // Console Getter Trap for Undocked/Separate Window DevTools
-  useEffect(() => {
-    if (typeof window === "undefined" || isUnlocked || isTemporarilyDismissed) return;
+    // Any positive signal (docked size change, console trap firing, or a
+    // DevTools keyboard shortcut) refreshes this timestamp. The overlay only
+    // clears once the signal has been quiet for the grace period, which
+    // prevents the flicker from undocked DevTools toggling the size check.
+    let lastSignal = 0;
 
     const trapImage = new Image();
     Object.defineProperty(trapImage, "id", {
-      get: function () {
-        setIsDevToolsOpen(true);
-        return "devtools-active";
+      get: () => {
+        lastSignal = Date.now();
       },
     });
 
-    const consoleTrapInterval = setInterval(() => {
-      console.dir(trapImage);
-    }, 1200);
+    const markOpen = () => {
+      lastSignal = Date.now();
+      setIsDevToolsOpen(true);
+    };
 
-    return () => clearInterval(consoleTrapInterval);
-  }, [isUnlocked, isTemporarilyDismissed]);
+    const detect = () => {
+      // Docked DevTools shrink the viewport window.
+      const widthDiff = window.outerWidth - window.innerWidth;
+      const heightDiff = window.outerHeight - window.innerHeight;
+      const dockedOpen = widthDiff > threshold || heightDiff > threshold;
+
+      if (dockedOpen) {
+        lastSignal = Date.now();
+      }
+
+      setIsDevToolsOpen(dockedOpen || Date.now() - lastSignal <= graceMs);
+    };
+
+    // Undocked DevTools are caught via the console getter trap: the id getter
+    // is only evaluated while the DevTools console is live, so each interval
+    // tick refreshes the heartbeat. When DevTools closes the trap goes quiet.
+    const trapInterval = setInterval(() => {
+      console.dir(trapImage);
+      detect();
+    }, 1000);
+
+    const dimensionInterval = setInterval(detect, 500);
+    window.addEventListener("resize", detect);
+
+    // Keyboard shortcuts that open DevTools trigger the overlay immediately
+    const devToolsShortcuts = (e: KeyboardEvent) => {
+      if (e.key === "F12") {
+        markOpen();
+        return;
+      }
+
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+      const metaOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+      const key = e.key.toUpperCase();
+
+      if (metaOrCtrl && e.shiftKey && ["I", "J", "C", "K"].includes(key)) {
+        markOpen();
+      } else if (metaOrCtrl && e.altKey && ["I", "J", "C"].includes(key)) {
+        markOpen();
+      }
+    };
+    window.addEventListener("keydown", devToolsShortcuts);
+
+    return () => {
+      clearInterval(trapInterval);
+      clearInterval(dimensionInterval);
+      window.removeEventListener("resize", detect);
+      window.removeEventListener("keydown", devToolsShortcuts);
+    };
+  }, [isUnlocked]);
+
+  // Silently disable right-click while protection is active (no warning shown)
+  useEffect(() => {
+    if (typeof window === "undefined" || isUnlocked) return;
+
+    const blockContextMenu = (e: MouseEvent) => e.preventDefault();
+    window.addEventListener("contextmenu", blockContextMenu);
+
+    return () => window.removeEventListener("contextmenu", blockContextMenu);
+  }, [isUnlocked]);
 
   // Keyboard shortcut listener for Owner Bypass (Cmd/Ctrl + Option/Alt + Shift + D)
   useEffect(() => {
@@ -121,10 +146,10 @@ export default function DevToolsGuard() {
         if (nextState) {
           localStorage.setItem("portfolio_dev_unlocked", "true");
           setIsDevToolsOpen(false);
-          showToast("🔓 Developer Mode Unlocked");
+          showToast("Developer Mode Unlocked");
         } else {
           localStorage.removeItem("portfolio_dev_unlocked");
-          showToast("🔒 Developer Protection Active");
+          showToast("Developer Protection Active");
         }
       }
     };
@@ -132,15 +157,6 @@ export default function DevToolsGuard() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isUnlocked]);
-
-  const handleDismiss = () => {
-    setIsDevToolsOpen(false);
-    setIsTemporarilyDismissed(true);
-    // Cooldown 15 seconds before re-evaluating
-    setTimeout(() => {
-      setIsTemporarilyDismissed(false);
-    }, 15000);
-  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -165,8 +181,8 @@ export default function DevToolsGuard() {
         </div>
       )}
 
-      {/* Premium Editorial DevTools Overlay (Triggers ONLY when DevTools is open) */}
-      {isDevToolsOpen && !isUnlocked && !isTemporarilyDismissed && (
+      {/* Premium Editorial DevTools Overlay (stays visible until DevTools is closed) */}
+      {isDevToolsOpen && !isUnlocked && (
         <div className="fixed inset-0 z-[99999] bg-black/96 backdrop-blur-3xl flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-300 select-none">
           {/* Subtle Ambient Red Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-950/20 rounded-full blur-[160px] pointer-events-none" />
@@ -190,7 +206,7 @@ export default function DevToolsGuard() {
                 Restricted Environment Notice
               </h2>
               <p className="text-neutral-400 font-sans text-sm leading-relaxed max-w-sm mx-auto">
-                Developer inspection tools are currently open. Please close DevTools to continue exploring the application.
+                Developer inspection tools are currently open. Close DevTools to continue exploring the application.
               </p>
             </div>
 
@@ -212,16 +228,10 @@ export default function DevToolsGuard() {
               </div>
             </div>
 
-            {/* Clean Action Button */}
-            <div className="pt-2 flex flex-col items-center justify-center gap-3">
-              <button
-                onClick={handleDismiss}
-                className="w-full px-6 py-3 rounded-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-neutral-500 text-white font-mono text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-lg hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
-              >
-                <IconX className="w-3.5 h-3.5 text-neutral-400" />
-                <span>Close Inspector &amp; Continue</span>
-              </button>
-            </div>
+            {/* Instruction */}
+            <p className="pt-2 text-xs font-mono text-neutral-300">
+              The screen will unlock automatically once Developer Tools are closed.
+            </p>
 
             {/* Discreet Owner Shortcut Hint */}
             <p className="text-[10px] font-mono text-neutral-600">

@@ -41,8 +41,8 @@ export default function CodeBlock({
       await navigator.clipboard.writeText(cleanCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy code: ", err);
+    } catch {
+      // Clipboard access can be denied; the copy is a no-op in that case
     }
   };
 

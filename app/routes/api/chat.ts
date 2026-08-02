@@ -33,7 +33,6 @@ export async function handleApiChat(request: Request) {
       }
     );
   } catch (error) {
-    console.error('TanStack AI MCP Error:', error);
     return new Response(
       JSON.stringify({
         success: false,

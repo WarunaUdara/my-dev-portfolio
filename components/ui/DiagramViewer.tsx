@@ -75,7 +75,6 @@ export const DiagramViewer: React.FC<DiagramViewerProps> = ({
         }
       } catch (err: any) {
         if (isMounted) {
-          console.error("Mermaid render error:", err);
           setError(err?.message || "Failed to render diagram");
         }
       }
