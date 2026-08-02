@@ -75,15 +75,13 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                 <div>
                   <div
                     className={cn(
-                      'space-y-4 overflow-hidden transition-[max-height] duration-500 ease-in-out',
+                      'space-y-5 overflow-hidden transition-[max-height] duration-500 ease-in-out',
                       bioExpanded ? 'max-h-[2000px]' : 'max-h-[280px]'
                     )}
                   >
-                    <div className={cn(!bioExpanded && 'space-y-4')}>
-                      {ABOUT_BIO.split('\n\n').map((para, idx) => (
-                        <p key={idx}>{renderBold(para)}</p>
-                      ))}
-                    </div>
+                    {ABOUT_BIO.split('\n\n').map((para, idx) => (
+                      <p key={idx}>{renderBold(para)}</p>
+                    ))}
                   </div>
                   <button
                     type="button"
