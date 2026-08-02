@@ -63,7 +63,7 @@ const About = ({ isAboutPage = false }: AboutProps) => {
               {!isAboutPage && (
                 <>
                   <p>
-                    Driven by a deep curiosity for modern software systems, cloud architecture, and intuitive user design. Over the past 3+ years, I&apos;ve engineered robust web platforms, automated cloud infrastructures, and led tech communities.
+                    I&apos;m <strong className="text-white font-semibold">Waruna Udara Sampath</strong>, driven by a deep curiosity for modern software systems, cloud architecture, and intuitive user design. Over the past 3+ years, I&apos;ve engineered robust web platforms, automated cloud infrastructures, and led tech communities.
                   </p>
                   <p>
                     Whether orchestrating containerized microservices, diving into frontend design systems, or exploring artificial intelligence, I build software that is performant, scalable, and delightful.
@@ -76,9 +76,9 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                     </p>
                     <Link
                       href="/about"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-mono font-semibold hover:bg-neutral-200 transition-colors group"
+                      className="group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-neutral-950/90 border border-neutral-800 hover:border-neutral-500 text-neutral-200 hover:text-white font-mono text-xs font-medium tracking-wider uppercase backdrop-blur-xl transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:scale-105 active:scale-95"
                     >
-                      Read Full Story
+                      More About Me
                       <IconArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </Link>
                   </div>
