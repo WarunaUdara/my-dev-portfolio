@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from '@/components/ui/Image';
-import { IconBrandLinkedin, IconBrandGithub, IconChevronDown } from '@tabler/icons-react';
+import Link from '@/components/ui/Link';
+import { IconBrandLinkedin, IconBrandGithub, IconChevronDown, IconArrowRight } from '@tabler/icons-react';
 import ScrollFrost from '@/components/canvasui/ScrollFrost';
 import AuroraText from '@/components/ui/aurora-text';
 import { OrbitingCircles } from '@/components/ui/orbiting-circles';
@@ -67,6 +68,20 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                   <p>
                     Whether orchestrating containerized microservices, diving into frontend design systems, or exploring artificial intelligence, I build software that is performant, scalable, and delightful.
                   </p>
+
+                  {/* Small nav to the full story on the /about page */}
+                  <div className="pt-3">
+                    <p className="text-sm text-neutral-400 mb-3">
+                      Want to know more about my journey?
+                    </p>
+                    <Link
+                      href="/about"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-mono font-semibold hover:bg-neutral-200 transition-colors group"
+                    >
+                      Read Full Story
+                      <IconArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
+                  </div>
                 </>
               )}
 
