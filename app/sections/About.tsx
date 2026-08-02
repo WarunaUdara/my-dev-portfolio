@@ -71,29 +71,29 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                 {/* Orbiting Circles Layer 1 (Inner Orbit) */}
                 <OrbitingCircles radius={170} duration={28} iconSize={40}>
                   <div className="w-10 h-10 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/techstack-icons/kubernetes.png" alt="Kubernetes" width={28} height={28} className="object-contain" />
+                    <Image src="/techstack-icons/kubernetes.webp" alt="Kubernetes" width={28} height={28} className="object-contain" />
                   </div>
                   <div className="w-10 h-10 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/techstack-icons/terraform.png" alt="Terraform" width={28} height={28} className="object-contain" />
+                    <Image src="/techstack-icons/terraform.webp" alt="Terraform" width={28} height={28} className="object-contain" />
                   </div>
                   <div className="w-10 h-10 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/techstack-icons/aws.png" alt="AWS" width={28} height={28} className="object-contain" />
+                    <Image src="/techstack-icons/aws.webp" alt="AWS" width={28} height={28} className="object-contain" />
                   </div>
                   <div className="w-10 h-10 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/techstack-icons/docker.png" alt="Docker" width={28} height={28} className="object-contain" />
+                    <Image src="/techstack-icons/docker.webp" alt="Docker" width={28} height={28} className="object-contain" />
                   </div>
                 </OrbitingCircles>
 
                 {/* Orbiting Circles Layer 2 (Outer Orbit, Reverse) */}
                 <OrbitingCircles radius={250} duration={38} reverse iconSize={44}>
                   <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/techstack-icons/java.png" alt="Java" width={30} height={30} className="object-contain" />
+                    <Image src="/techstack-icons/java.webp" alt="Java" width={30} height={30} className="object-contain" />
                   </div>
                   <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/techstack-icons/azure.png" alt="Azure" width={30} height={30} className="object-contain" />
+                    <Image src="/techstack-icons/azure.webp" alt="Azure" width={30} height={30} className="object-contain" />
                   </div>
                   <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
-                    <Image src="/techstack-icons/linux.png" alt="Linux" width={30} height={30} className="object-contain" />
+                    <Image src="/techstack-icons/linux.webp" alt="Linux" width={30} height={30} className="object-contain" />
                   </div>
                   <div className="w-11 h-11 rounded-xl bg-neutral-950/90 border border-neutral-800/90 p-2 shadow-lg flex items-center justify-center">
                     <Image src="/techstack-icons/argo-cd.webp" alt="Argo CD" width={30} height={30} className="object-contain" />

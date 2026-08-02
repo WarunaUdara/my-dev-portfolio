@@ -209,7 +209,7 @@ export const CardNav: React.FC<CardNavProps> = ({
                 onClick={() => setShowMobileModal(false)}
                 className="relative block h-36 rounded-2xl overflow-hidden border border-neutral-800"
               >
-                <Image src="/bucket-list.png" alt="Bucket List" fill className="object-cover" />
+                <Image src="/bucket-list.webp" alt="Bucket List" fill className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                 <div className="absolute bottom-3 left-4">
                   <h4 className="text-white font-serif font-bold text-lg">Bucket List</h4>

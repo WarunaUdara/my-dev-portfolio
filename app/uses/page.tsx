@@ -19,38 +19,38 @@ interface ToolItem {
 }
 
 const CRAFT_TOOLS: ToolItem[] = [
-  { name: "Zed", icon: "/zed.png", link: "https://zed.dev/" },
-  { name: "VS Code", icon: "/techstack-icons/vscode.png", link: "https://code.visualstudio.com/" },
-  { name: "IntelliJ IDEA", icon: "/techstack-icons/intellij.png", link: "https://www.jetbrains.com/idea/" },
-  { name: "Postman", icon: "/techstack-icons/postman.png", link: "https://www.postman.com/" },
-  { name: "DBeaver", icon: "/techstack-icons/dbeaver.png", link: "https://dbeaver.io/" },
-  { name: "Figma", icon: "/techstack-icons/figma.png", link: "https://www.figma.com/" },
-  { name: "Framer", icon: "/framer-logo.png", link: "https://www.framer.com/" },
+  { name: "Zed", icon: "/zed.webp", link: "https://zed.dev/" },
+  { name: "VS Code", icon: "/techstack-icons/vscode.webp", link: "https://code.visualstudio.com/" },
+  { name: "IntelliJ IDEA", icon: "/techstack-icons/intellij.webp", link: "https://www.jetbrains.com/idea/" },
+  { name: "Postman", icon: "/techstack-icons/postman.webp", link: "https://www.postman.com/" },
+  { name: "DBeaver", icon: "/techstack-icons/dbeaver.webp", link: "https://dbeaver.io/" },
+  { name: "Figma", icon: "/techstack-icons/figma.webp", link: "https://www.figma.com/" },
+  { name: "Framer", icon: "/framer-logo.webp", link: "https://www.framer.com/" },
   { name: "Anti gravity", icon: "/uses/google-antigravity.webp", link: "https://antigravity.google/" },
 ];
 
 const CLI_TOOLS: ToolItem[] = [
   { name: "Ghostty", icon: "/ghostty copy.webp", link: "https://ghostty.org/" },
-  { name: "GitHub CLI", icon: "/techstack-icons/github.png", link: "https://cli.github.com/" },
-  { name: "Homebrew", icon: "/Homebrew.png", link: "https://brew.sh/" },
-  { name: "Git Worktrees", icon: "/techstack-icons/git.png" },
-  { name: "Gemini CLI", icon: "/gemini-cli-icon.png", link: "https://geminicli.com/" },
-  { name: "Opencode", icon: "/techstack-icons/opencode.png", link: "https://opencode.ai/" },
+  { name: "GitHub CLI", icon: "/techstack-icons/github.webp", link: "https://cli.github.com/" },
+  { name: "Homebrew", icon: "/Homebrew.webp", link: "https://brew.sh/" },
+  { name: "Git Worktrees", icon: "/techstack-icons/git.webp" },
+  { name: "Gemini CLI", icon: "/gemini-cli-icon.webp", link: "https://geminicli.com/" },
+  { name: "Opencode", icon: "/techstack-icons/opencode.webp", link: "https://opencode.ai/" },
   { name: "Codex", icon: "/codex-color.webp", link: "https://chatgpt.com/codex/cloud" },
-  { name: "Mole", icon: "/uses/mole-cleaner.png", link: "https://mole.fit/" },
+  { name: "Mole", icon: "/uses/mole-cleaner.webp", link: "https://mole.fit/" },
 ];
 
 const DAILY_APPS: ToolItem[] = [
-  { name: "Notion", icon: "/notion-logo-icon.png", link: "https://www.notion.so/" },
-  { name: "Notion Calendar", icon: "/notion-calendar.png", link: "https://www.notion.so/product/calendar" },
+  { name: "Notion", icon: "/notion-logo-icon.webp", link: "https://www.notion.so/" },
+  { name: "Notion Calendar", icon: "/notion-calendar.webp", link: "https://www.notion.so/product/calendar" },
   { name: "Google Calendar", icon: "https://img.icons8.com/?size=100&id=DEJypxE54F9v&format=png&color=000000", link: "https://calendar.google.com/" },
-  { name: "Obsidian", icon: "/obsidian-icon.png", link: "https://obsidian.md/" },
-  { name: "NotebookLM", icon: "/notebooklm.png", link: "https://notebooklm.google/" },
-  { name: "ChatWise", icon: "/chat-wise.png", link: "https://chatwise.app/" },
+  { name: "Obsidian", icon: "/obsidian-icon.webp", link: "https://obsidian.md/" },
+  { name: "NotebookLM", icon: "/notebooklm.webp", link: "https://notebooklm.google/" },
+  { name: "ChatWise", icon: "/chat-wise.webp", link: "https://chatwise.app/" },
   { name: "ClickUp", icon: "https://img.icons8.com/?size=100&id=znqq179L1K9g&format=png&color=000000", link: "https://clickup.com/" },
   { name: "Microsoft ToDo", icon: "https://img.icons8.com/?size=100&id=HpPqCqynotVp&format=png&color=000000", link: "https://todo.microsoft.com/" },
-  { name: "Spotify", icon: "/spotify-logo.png", link: "https://www.spotify.com/" },
-  { name: "Opal", icon: "/opal.png", link: "https://www.opal.so/" },
+  { name: "Spotify", icon: "/spotify-logo.webp", link: "https://www.spotify.com/" },
+  { name: "Opal", icon: "/opal.webp", link: "https://www.opal.so/" },
   { name: "Hermes", icon: "/uses/hermes-icon.webp", link: "https://hermes-agent.nousresearch.com/" },
 ];
 

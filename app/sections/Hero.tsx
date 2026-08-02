@@ -297,7 +297,7 @@ export default function Hero() {
           <div className="absolute inset-x-0 bottom-0 sm:hidden pointer-events-none z-30 eclipse-wrapper">
             <div className="relative mx-auto h-[100px] w-full overflow-hidden">
               <Image
-                src="/eclipse.svg"
+                src="/eclipse.webp"
                 alt=""
                 fill
                 sizes="100vw"
@@ -318,7 +318,7 @@ export default function Hero() {
           {/* Eclipse Background - Full Width */}
           <div className="hidden sm:block absolute -bottom-16 sm:-bottom-40 left-0 right-0 w-full overflow-hidden pointer-events-none z-10 eclipse-wrapper">
             <Image
-              src="/eclipse.png"
+              src="/eclipse.webp"
               alt=""
               width={1920}
               height={400}

@@ -52,7 +52,7 @@ export default function ContactSection() {
           {/* Google Meet Badge */}
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-neutral-900/90 border border-neutral-800 text-xs font-mono text-neutral-200 shadow-lg">
             <Image
-              src="/techstack-icons/google-meet.png"
+              src="/techstack-icons/google-meet.webp"
               alt="Google Meet"
               width={22}
               height={22}

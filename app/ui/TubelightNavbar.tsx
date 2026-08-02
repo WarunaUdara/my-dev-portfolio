@@ -286,7 +286,7 @@ export function NavBar({ items, className }: NavBarProps) {
                     className="group relative block rounded-xl overflow-hidden h-24 border border-white/10"
                   >
                     <Image
-                      src="/bucket-list.png"
+                      src="/bucket-list.webp"
                       alt="Bucket List"
                       fill
                       className="object-cover"
@@ -466,7 +466,7 @@ export function NavBar({ items, className }: NavBarProps) {
                     className="group relative block rounded-xl overflow-hidden h-full border border-white/15 hover:border-white/40 transition-all shadow-lg bg-neutral-900/60"
                   >
                     <Image
-                      src="/bucket-list.png"
+                      src="/bucket-list.webp"
                       alt="Bucket List"
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

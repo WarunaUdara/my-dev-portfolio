@@ -20,7 +20,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 const siteUrl = new URL("https://warunadev.vercel.app");
-const socialImageUrl = new URL("/og-image.png?v=20260504", siteUrl).toString();
+const socialImageUrl = new URL("/og-new.webp?v=20260504", siteUrl).toString();
 
 export const metadata: Metadata = {
   title: {

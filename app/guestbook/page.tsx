@@ -299,7 +299,7 @@ export default function GuestbookPage() {
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-3">
                     <Image
-                      src={user.photoURL || '/default-avatar.png'}
+                      src={user.photoURL || '/default-avatar.webp'}
                       alt={user.displayName || 'User'}
                       width={40}
                       height={40}
@@ -353,7 +353,7 @@ export default function GuestbookPage() {
                   >
                     <div className="flex items-start gap-4">
                       <Image
-                        src={msg.photoURL || '/default-avatar.png'}
+                        src={msg.photoURL || '/default-avatar.webp'}
                         alt={msg.name}
                         width={48}
                         height={48}

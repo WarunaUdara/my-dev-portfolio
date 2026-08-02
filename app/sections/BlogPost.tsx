@@ -168,7 +168,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
           <div className="flex flex-wrap items-center justify-between gap-4 pt-4 text-xs font-mono text-neutral-400 border-t border-dashed border-neutral-800/80">
             <div className="flex items-center gap-2 text-neutral-200">
               <div className="w-7 h-7 rounded-full bg-neutral-800 overflow-hidden relative">
-                <Image src="/WarunaUdaraSampath.jpg" alt={meta.author} fill className="object-cover" />
+                <Image src="/warunaudara.webp" alt={meta.author} fill className="object-cover" />
               </div>
               <span className="font-semibold">{meta.author}</span>
             </div>

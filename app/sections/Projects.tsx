@@ -35,17 +35,17 @@ const projects: ProjectData[] = [
       "Features native domain visualizers (Manim math animations, 3Dmol molecular models, tscircuit, Matter.js physics), OKLCH color space, zero-asset Web Audio sound synthesis, and streak gamification."
     ],
     techStack: [
-      { name: "React 19", icon: "/techstack-icons/react.png" },
+      { name: "React 19", icon: "/techstack-icons/react.webp" },
       { name: "Go 1.22", icon: "/techstack-icons/golang.webp" },
-      { name: "GraphQL", icon: "/techstack-icons/graphql.png" },
-      { name: "TanStack Router", icon: "/techstack-icons/tanstack.png" },
-      { name: "TanStack Query", icon: "/techstack-icons/tanstack.png" },
-      { name: "PostgreSQL", icon: "/techstack-icons/postgresql.png" },
-      { name: "Redis", icon: "/techstack-icons/redis.png" },
-      { name: "Kubernetes / Helm", icon: "/techstack-icons/kubernetes.png" },
+      { name: "GraphQL", icon: "/techstack-icons/graphql.webp" },
+      { name: "TanStack Router", icon: "/techstack-icons/tanstack.webp" },
+      { name: "TanStack Query", icon: "/techstack-icons/tanstack.webp" },
+      { name: "PostgreSQL", icon: "/techstack-icons/postgresql.webp" },
+      { name: "Redis", icon: "/techstack-icons/redis.webp" },
+      { name: "Kubernetes / Helm", icon: "/techstack-icons/kubernetes.webp" },
       { name: "OpenTofu", icon: "/techstack-icons/opentofu.webp" }
     ],
-    imageSrc: "/projects/studed.png",
+    imageSrc: "/projects/studed.webp",
     gradient: "bg-gradient-to-br from-violet-600 via-indigo-700 to-slate-950",
     link: "/blog/studed-microservices-educational-platform"
   },
@@ -60,15 +60,16 @@ const projects: ProjectData[] = [
     ],
     teamMembers: ["Waruna Udara (IT Ops Head)", "Pruthivi Thejan (UI/UX)", "Dharaka Meth", "Yesith Sri Hansana", "Pasindu Jeewan"],
     techStack: [
-      { name: "Next.js 15", icon: "/techstack-icons/nextjs.png" },
-      { name: "React 19", icon: "/techstack-icons/react.png" },
-      { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
-      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
-      { name: "Firebase", icon: "/techstack-icons/firebase.png" },
-      { name: "Node.js 22", icon: "/techstack-icons/nodejs.png" },
+      { name: "Next.js 15", icon: "/techstack-icons/nextjs.webp" },
+      { name: "React 19", icon: "/techstack-icons/react.webp" },
+      { name: "TypeScript", icon: "/techstack-icons/typescript.webp" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.webp" },
+      { name: "Firebase", icon: "/techstack-icons/firebase.webp" },
+      { name: "Node.js 22", icon: "/techstack-icons/nodejs.webp" },
       { name: "Vercel", icon: "/techstack-icons/vercel.webp" }
     ],
-    imageSrc: "/projects/jesa.png",
+
+    imageSrc: "/projects/jesa.webp",
     gradient: "bg-gradient-to-br from-amber-600 via-amber-700 to-amber-950",
     link: "https://jesa.lk"
   },
@@ -83,14 +84,15 @@ const projects: ProjectData[] = [
     ],
     teamMembers: ["Waruna Udara", "Malin Dhamsara", "Pruthivi Thejan", "Nuwan Konara"],
     techStack: [
-      { name: "React", icon: "/techstack-icons/react.png" },
-      { name: "TanStack Router", icon: "/techstack-icons/tanstack.png" },
-      { name: "TanStack Query", icon: "/techstack-icons/tanstack.png" },
-      { name: "Appwrite", icon: "/techstack-icons/postgresql.png" },
-      { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
-      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" }
+      { name: "React", icon: "/techstack-icons/react.webp" },
+      { name: "TanStack Router", icon: "/techstack-icons/tanstack.webp" },
+      { name: "TanStack Query", icon: "/techstack-icons/tanstack.webp" },
+      { name: "Appwrite", icon: "/techstack-icons/postgresql.webp" },
+      { name: "TypeScript", icon: "/techstack-icons/typescript.webp" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.webp" }
     ],
-    imageSrc: "/projects/cryptx.png",
+
+    imageSrc: "/projects/cryptx.webp",
     gradient: "bg-gradient-to-br from-cyan-600 via-cyan-700 to-blue-950",
     link: "https://cryptx.lk"
   },
@@ -105,14 +107,15 @@ const projects: ProjectData[] = [
     ],
     teamMembers: ["Waruna Udara", "Malin Dhamsara", "Vineth Ranathunga", "Farhan Hameeth", "Thisal Kokuhennadige"],
     techStack: [
-      { name: "React", icon: "/techstack-icons/react.png" },
-      { name: "TanStack Router", icon: "/techstack-icons/tanstack.png" },
-      { name: "TanStack Query", icon: "/techstack-icons/tanstack.png" },
-      { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
-      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
+      { name: "React", icon: "/techstack-icons/react.webp" },
+      { name: "TanStack Router", icon: "/techstack-icons/tanstack.webp" },
+      { name: "TanStack Query", icon: "/techstack-icons/tanstack.webp" },
+      { name: "TypeScript", icon: "/techstack-icons/typescript.webp" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.webp" },
       { name: "Vercel", icon: "/techstack-icons/vercel.webp" }
     ],
-    imageSrc: "/projects/emwee.png",
+
+    imageSrc: "/projects/emwee.webp",
     gradient: "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-950",
     link: "https://emwee.co"
   },
@@ -126,14 +129,15 @@ const projects: ProjectData[] = [
       "Deployed on Vercel with Bun package manager for speed."
     ],
     techStack: [
-      { name: "Next.js 15", icon: "/techstack-icons/nextjs.png" },
-      { name: "React 19", icon: "/techstack-icons/react.png" },
-      { name: "TypeScript", icon: "/techstack-icons/typescript.png" },
-      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
-      { name: "Bun", icon: "/techstack-icons/bun.png" },
+      { name: "Next.js 15", icon: "/techstack-icons/nextjs.webp" },
+      { name: "React 19", icon: "/techstack-icons/react.webp" },
+      { name: "TypeScript", icon: "/techstack-icons/typescript.webp" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.webp" },
+      { name: "Bun", icon: "/techstack-icons/bun.webp" },
       { name: "Vercel", icon: "/techstack-icons/vercel.webp" }
     ],
-    imageSrc: "/projects-portfolio.png",
+
+    imageSrc: "/projects-portfolio.webp",
     gradient: "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-950",
     link: "https://warunadev.vercel.app"
   },
@@ -147,13 +151,14 @@ const projects: ProjectData[] = [
       "Tailwind CSS for responsive design across all devices."
     ],
     techStack: [
-      { name: "Next.js", icon: "/techstack-icons/nextjs.png" },
-      { name: "React", icon: "/techstack-icons/react.png" },
-      { name: "MongoDB", icon: "/techstack-icons/mongodb.png" },
+      { name: "Next.js", icon: "/techstack-icons/nextjs.webp" },
+      { name: "React", icon: "/techstack-icons/react.webp" },
+      { name: "MongoDB", icon: "/techstack-icons/mongodb.webp" },
       { name: "Vercel", icon: "/techstack-icons/vercel.webp" },
-      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" }
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.webp" }
     ],
-    imageSrc: "/projects-beautyofcloud.png",
+
+    imageSrc: "/projects-beautyofcloud.webp",
     gradient: "bg-gradient-to-br from-blue-600 via-blue-700 to-blue-950",
     link: "https://beautyof.cloud"
   }

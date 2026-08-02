@@ -35,7 +35,7 @@ export const HACKATHONS: HackathonItem[] = [
       { name: "Platform Engineering" },
       { name: "AI Agents" },
       { name: "Cloud Architecture" },
-      { name: "Next.js", icon: "/techstack-icons/nextjs.png" },
+      { name: "Next.js", icon: "/techstack-icons/nextjs.webp" },
       { name: "n8n" },
       { name: "AWS" },
       { name: "Vercel", icon: "/techstack-icons/vercel.webp" },
@@ -54,12 +54,13 @@ export const HACKATHONS: HackathonItem[] = [
       "We presented our solution connecting vendors and digital nomads with working spaces in the tourism industry and we made it to the Top 15 out of 100+ teams."
     ],
     skills: [
-      { name: "React", icon: "/techstack-icons/react.png" },
-      { name: "Next.js", icon: "/techstack-icons/nextjs.png" },
+      { name: "React", icon: "/techstack-icons/react.webp" },
+      { name: "Next.js", icon: "/techstack-icons/nextjs.webp" },
       { name: "Web3" },
       { name: "Tourism Tech" },
-      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.png" },
+      { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.webp" },
     ],
+
     gradient: "from-neutral-900/90 via-neutral-950 to-black",
   },
 ];

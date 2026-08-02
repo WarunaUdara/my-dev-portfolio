@@ -18,7 +18,7 @@ const ROUTE_LOGS: Record<string, RouteConfig> = {
       "✔ Preloaded case study hero mockups & SVG tech icons.",
       "⚡ 0 lints, 0 syntax errors, 100% pure craftsmanship."
     ],
-    preloads: ["/projects-algoarena.png", "/projects-portfolio.png", "/projects-beautyofcloud.png"]
+    preloads: ["/projects-algoarena.webp", "/projects-portfolio.webp", "/projects-beautyofcloud.webp"]
   },
   "/about": {
     cmd: "git checkout feature/about-waruna",
@@ -27,7 +27,7 @@ const ROUTE_LOGS: Record<string, RouteConfig> = {
       "✔ Loaded BICT (Hons) Network Tech & institution logos.",
       "☕ Overclocking brain... Caffeine levels nominal."
     ],
-    preloads: ["/me/waruna-speaking.png", "/me/usj-logo.png", "/me/icet-logo.png", "/me/school-logo.png"]
+    preloads: ["/me/waruna-speaking.webp", "/me/usj-logo.webp", "/me/icet-image.webp", "/me/school-logo.webp"]
   },
   "/uses": {
     cmd: "cat ~/.config/setup.json",
@@ -36,7 +36,7 @@ const ROUTE_LOGS: Record<string, RouteConfig> = {
       "✔ Preloaded Ghostty terminal, Zed editor, & CLI icons.",
       "⚡ Developer environment fully loaded."
     ],
-    preloads: ["/uses/google-antigravity.webp", "/ghostty copy.webp", "/zed.png"]
+    preloads: ["/uses/google-antigravity.webp", "/ghostty copy.webp", "/zed.webp"]
   },
   "/guestbook": {
     cmd: "firebase firestore:listen --collection messages",
@@ -72,7 +72,7 @@ const ROUTE_LOGS: Record<string, RouteConfig> = {
       "✔ Initialized WebGL Hero canvas & glassmorphic cards.",
       "✨ Welcome to Waruna Udara's Portfolio."
     ],
-    preloads: ["/WarunaUdaraSampath.jpg", "/projects-algoarena.png"]
+    preloads: ["/warunaudara.webp", "/projects-algoarena.webp"]
   }
 };
 

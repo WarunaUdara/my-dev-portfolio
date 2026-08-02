@@ -14,28 +14,29 @@ import {
 
 // Complete Tools & Apps List from Uses Section
 const USES_TOOLS = [
-  { name: "Zed", icon: "/zed.png" },
-  { name: "VS Code", icon: "/techstack-icons/vscode.png" },
-  { name: "IntelliJ IDEA", icon: "/techstack-icons/intellij.png" },
+  { name: "Zed", icon: "/zed.webp" },
+  { name: "VS Code", icon: "/techstack-icons/vscode.webp" },
+  { name: "IntelliJ IDEA", icon: "/techstack-icons/intellij.webp" },
   { name: "Ghostty", icon: "/ghostty copy.webp" },
-  { name: "Opencode", icon: "/techstack-icons/opencode.png" },
-  { name: "Postman", icon: "/techstack-icons/postman.png" },
-  { name: "DBeaver", icon: "/techstack-icons/dbeaver.png" },
-  { name: "Figma", icon: "/techstack-icons/figma.png" },
-  { name: "Framer", icon: "/framer-logo.png" },
-  { name: "GitHub CLI", icon: "/techstack-icons/github.png" },
-  { name: "Homebrew", icon: "/Homebrew.png" },
-  { name: "Git", icon: "/techstack-icons/git.png" },
-  { name: "Gemini CLI", icon: "/gemini-cli-icon.png" },
+  { name: "Opencode", icon: "/techstack-icons/opencode.webp" },
+  { name: "Postman", icon: "/techstack-icons/postman.webp" },
+  { name: "DBeaver", icon: "/techstack-icons/dbeaver.webp" },
+  { name: "Figma", icon: "/techstack-icons/figma.webp" },
+  { name: "Framer", icon: "/.framer-logo.webp" },
+  { name: "GitHub CLI", icon: "/techstack-icons/github.webp" },
+  { name: "Homebrew", icon: "/Homebrew.webp" },
+  { name: "Git", icon: "/techstack-icons/git.webp" },
+  { name: "Gemini CLI", icon: "/gemini-cli-icon.webp" },
   { name: "Codex", icon: "/codex-color.webp" },
-  { name: "Notion", icon: "/notion-logo-icon.png" },
-  { name: "Notion Calendar", icon: "/notion-calendar.png" },
-  { name: "Obsidian", icon: "/obsidian-icon.png" },
-  { name: "NotebookLM", icon: "/notebooklm.png" },
-  { name: "ChatWise", icon: "/chat-wise.png" },
-  { name: "Spotify", icon: "/spotify-logo.png" },
-  { name: "Opal", icon: "/opal.png" },
+  { name: "Notion", icon: "/notion-logo-icon.webp" },
+  { name: "Notion Calendar", icon: "/notion-calendar.webp" },
+  { name: "Obsidian", icon: "/obsidian-icon.webp" },
+  { name: "NotebookLM", icon: "/notebooklm.webp" },
+  { name: "ChatWise", icon: "/chat-wise.webp" },
+  { name: "Spotify", icon: "/spotify-logo.webp" },
+  { name: "Opal", icon: "/opal.webp" },
 ];
+
 
 export const Explore = () => {
   return (
@@ -82,13 +83,13 @@ export const Explore = () => {
                 {/* Featured Tool App Badges */}
                 <div className="flex items-center justify-center gap-2.5 mb-3 mt-1">
                   <div className="relative w-12 h-12 bg-neutral-900/90 border border-neutral-800 rounded-xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2">
-                    <Image src="/obsidian-icon.png" alt="Obsidian" width={28} height={28} className="object-contain" />
+                    <Image src="/obsidian-icon.webp" alt="Obsidian" width={28} height={28} className="object-contain" />
                   </div>
                   <div className="relative w-14 h-14 bg-neutral-900/90 border border-neutral-700 rounded-xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 p-2.5">
-                    <Image src="/techstack-icons/vscode.png" alt="VSCode" width={34} height={34} className="object-contain" />
+                    <Image src="/techstack-icons/vscode.webp" alt="VSCode" width={34} height={34} className="object-contain" />
                   </div>
                   <div className="relative w-12 h-12 bg-neutral-900/90 border border-neutral-800 rounded-xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-300 p-2">
-                    <Image src="/notebooklm.png" alt="NotebookLM" width={28} height={28} className="object-contain" />
+                    <Image src="/notebooklm.webp" alt="NotebookLM" width={28} height={28} className="object-contain" />
                   </div>
                 </div>
 
