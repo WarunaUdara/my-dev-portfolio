@@ -33,8 +33,7 @@ export async function GET() {
       name: user.name,
       bio: user.bio,
     });
-  } catch (error) {
-    console.error('GitHub API Error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch GitHub data' },
       { status: 500 }

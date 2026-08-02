@@ -31,8 +31,8 @@ export default function BookCallModal({
           hideEventTypeDetails: false,
           layout: "month_view",
         });
-      } catch (err) {
-        console.error("Cal.com embed init error:", err);
+      } catch {
+        // Embed init is best-effort; failure should not block the modal
       }
     })();
   }, []);

@@ -102,10 +102,7 @@ async function getNowPlaying(access_token: string) {
   }
 
   if (!response.ok) {
-    const error = await getSpotifyError(response);
-    console.warn(
-      `Spotify currently-playing unavailable (${response.status}): ${error}`
-    );
+    await getSpotifyError(response);
     return null;
   }
 
@@ -123,10 +120,7 @@ async function getRecentlyPlayed(access_token: string) {
   });
 
   if (!response.ok) {
-    const error = await getSpotifyError(response);
-    console.warn(
-      `Spotify recently-played unavailable (${response.status}): ${error}`
-    );
+    await getSpotifyError(response);
     return null;
   }
 
@@ -195,8 +189,7 @@ export async function GET() {
       { status: 200 }
     );
 
-  } catch (error) {
-    console.error('Spotify API Error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Failed to fetch Spotify data' },
       { status: 500 }

@@ -100,10 +100,8 @@ server.resource("projects", "portfolio://projects", async () => ({
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Portfolio MCP Server running on stdio");
 }
 
-main().catch((error) => {
-  console.error("Fatal error in MCP Server:", error);
+main().catch(() => {
   process.exit(1);
 });

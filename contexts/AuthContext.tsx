@@ -48,7 +48,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error?.code === 'auth/cancelled-popup-request' || error?.code === 'auth/popup-closed-by-user') {
         return;
       }
-      console.error('Error signing in with Google:', error);
       throw error;
     }
   };
@@ -61,7 +60,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error?.code === 'auth/cancelled-popup-request' || error?.code === 'auth/popup-closed-by-user') {
         return;
       }
-      console.error('Error signing in with GitHub:', error);
       throw error;
     }
   };
@@ -70,7 +68,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await firebaseSignOut(auth);
     } catch (error) {
-      console.error('Error signing out:', error);
       throw error;
     }
   };

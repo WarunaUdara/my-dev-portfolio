@@ -96,8 +96,7 @@ export default function GuestbookPage() {
       setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
       setHasMore(snapshot.docs.length === MESSAGES_PER_PAGE);
       setInitialLoading(false);
-    }, (error) => {
-      console.error('Error loading messages:', error);
+    }, () => {
       setInitialLoading(false);
     });
 
@@ -130,8 +129,7 @@ export default function GuestbookPage() {
       } else {
         setHasMore(false);
       }
-    } catch (error) {
-      console.error('Error loading more messages:', error);
+    } catch {
       setToast({ show: true, message: 'Failed to load more messages', type: 'error' });
     } finally {
       setLoadingMore(false);
@@ -187,8 +185,7 @@ export default function GuestbookPage() {
 
       setNewMessage('');
       setToast({ show: true, message: 'Message posted successfully!', type: 'success' });
-    } catch (error) {
-      console.error('Error posting message:', error);
+    } catch {
       setToast({ show: true, message: 'Failed to post message. Please try again.', type: 'error' });
     } finally {
       setLoading(false);
@@ -199,8 +196,7 @@ export default function GuestbookPage() {
     try {
       await deleteDoc(doc(db, 'guestbook', messageId));
       setToast({ show: true, message: 'Message deleted successfully', type: 'success' });
-    } catch (error) {
-      console.error('Error deleting message:', error);
+    } catch {
       setToast({ show: true, message: 'Failed to delete message', type: 'error' });
     }
   };
@@ -214,8 +210,7 @@ export default function GuestbookPage() {
       }
       setShowAuthModal(false);
       setToast({ show: true, message: 'Signed in successfully!', type: 'success' });
-    } catch (error) {
-      console.error('Sign in error:', error);
+    } catch {
       setToast({ show: true, message: 'Failed to sign in. Please try again.', type: 'error' });
     }
   };

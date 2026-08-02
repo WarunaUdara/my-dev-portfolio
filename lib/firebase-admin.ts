@@ -18,8 +18,7 @@ function initializeFirebaseAdmin() {
           credential: cert(serviceAccount),
           projectId: serviceAccount.project_id,
         });
-      } catch (error) {
-        console.error('Error parsing service account key:', error);
+      } catch {
         // Fallback to project ID only (limited functionality)
         app = initializeApp({
           projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -27,7 +26,6 @@ function initializeFirebaseAdmin() {
       }
     } else {
       // Development fallback - uses default credentials or project ID
-      console.warn('FIREBASE_SERVICE_ACCOUNT_KEY not found, using project ID only');
       app = initializeApp({
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
       });

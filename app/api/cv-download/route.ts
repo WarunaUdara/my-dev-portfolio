@@ -43,8 +43,6 @@ export async function POST(req: NextRequest) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error tracking CV download:', error);
-    
     // Don't block the download if tracking fails
     return NextResponse.json({ 
       success: false,

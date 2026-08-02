@@ -596,7 +596,7 @@ export function createFrost(
     gl!.shaderSource(shader, text);
     gl!.compileShader(shader);
     if (!gl!.getShaderParameter(shader, gl!.COMPILE_STATUS)) {
-      console.error("Frost shader error:", gl!.getShaderInfoLog(shader));
+      // Failed shader is still pushed below so it is cleaned up with the rest
     }
     shaders.push(shader);
     return shader;
