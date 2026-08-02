@@ -1,6 +1,6 @@
 "use client";
+import React, { Suspense, lazy } from "react";
 import Image from "@/components/ui/Image";
-import { Globe } from "@/app/ui/Globe"
 import { IconMapPin } from "@tabler/icons-react";
 import AuroraText from "@/components/ui/aurora-text";
 
@@ -9,6 +9,12 @@ import { cn } from "@/lib/utils";
 import { BentoCard, BentoGrid } from "@/app/ui/BentoGrid";
 import { Marquee } from "@/components/ui/marquee";
 import { DottedGlowBackground } from "@/components/ui/dotted-glow-background";
+
+// cobe is a heavy WebGL dependency. Load it on demand so the initial bundle
+// (and first paint) don't pay for a globe that renders below the fold.
+const Globe = lazy(() =>
+  import("@/app/ui/Globe").then((m) => ({ default: m.Globe }))
+);
 
 const articles = [
   {
@@ -54,7 +60,9 @@ const features = [
 
         {/* Globe Container - Large arc centered under title matching reference design */}
         <div className="absolute inset-0 flex items-center justify-center scale-140 translate-y-16 pt-24 pointer-events-auto">
-          <Globe className="w-full max-w-[540px]" />
+          <Suspense fallback={null}>
+            <Globe className="w-full max-w-[540px]" />
+          </Suspense>
         </div>
         
         {/* Location Info Footer */}

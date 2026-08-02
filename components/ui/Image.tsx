@@ -42,6 +42,7 @@ export default function Image({
       className={className}
       style={combinedStyle}
       loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
       {...props}
     />
   );
