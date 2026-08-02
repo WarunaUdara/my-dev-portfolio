@@ -1,15 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from '@/components/ui/Image';
-import { IconBrandLinkedin, IconBrandGithub } from '@tabler/icons-react';
+import { IconBrandLinkedin, IconBrandGithub, IconChevronDown } from '@tabler/icons-react';
 import ScrollFrost from '@/components/canvasui/ScrollFrost';
 import AuroraText from '@/components/ui/aurora-text';
 import { OrbitingCircles } from '@/components/ui/orbiting-circles';
+import { cn } from '@/lib/utils';
 
 interface AboutProps {
   isAboutPage?: boolean;
 }
 
+// Long-form bio shown only on the /about page inside the collapsible block.
+const ABOUT_BIO = `I'm **Waruna Udara Sampath**, a **Full-Stack Developer** and **Cloud & Platform Engineering enthusiast** who loves building software that people genuinely enjoy using. From crafting modern web experiences to designing scalable cloud-native systems, I'm passionate about turning ambitious ideas into reliable, production-ready solutions.
+
+Curiosity has always been my biggest motivation. It's what drives me to explore distributed systems, cloud architecture, frontend engineering, **Agentic AI**, and everything in between. Over the past **3+ years**, I've built web platforms, cloud-native applications, and developer tools while leading student communities and collaborating with amazing people along the way.
+
+I enjoy working across the entire software lifecycle, whether it's designing intuitive user experiences, architecting microservices, automating cloud infrastructure, or deploying applications on Kubernetes. I believe great software is more than just clean code. It should be performant, scalable, maintainable, and enjoyable for both users and developers.
+
+Outside of development, I enjoy sharing what I learn through technical writing, mentoring aspiring developers, speaking at community events, and continuously challenging myself with new technologies. I believe the best engineers never stop learning, and every project is another opportunity to build something meaningful while growing both technically and personally.`;
+
 const About = ({ isAboutPage = false }: AboutProps) => {
+  const [bioExpanded, setBioExpanded] = useState(false);
+
+  // Renders `**bold**` markdown segments as <strong>.
+  const renderBold = (text: string) =>
+    text.split(/\*\*(.+?)\*\*/g).map((part, idx) =>
+      idx % 2 === 1 ? (
+        <strong key={idx} className="text-white font-semibold">
+          {part}
+        </strong>
+      ) : (
+        part
+      )
+    );
+
   return (
     <section id="about" className="relative min-h-screen bg-black text-white py-20 px-4 sm:px-6 scroll-mt-20 overflow-hidden">
       {/* Background Frost Layer with Scroll Trigger */}
@@ -34,12 +58,49 @@ const About = ({ isAboutPage = false }: AboutProps) => {
 
             {/* Description Paragraphs */}
             <div className="space-y-6 text-gray-200 text-base sm:text-lg leading-relaxed">
-              <p>
-                Driven by a deep curiosity for modern software systems, cloud architecture, and intuitive user design. Over the past 3+ years, I&apos;ve engineered robust web platforms, automated cloud infrastructures, and led tech communities.
-              </p>
-              <p>
-                Whether orchestrating containerized microservices, diving into frontend design systems, or exploring artificial intelligence, I build software that is performant, scalable, and delightful.
-              </p>
+              {/* Landing page keeps the short intro; /about uses the full bio below */}
+              {!isAboutPage && (
+                <>
+                  <p>
+                    Driven by a deep curiosity for modern software systems, cloud architecture, and intuitive user design. Over the past 3+ years, I&apos;ve engineered robust web platforms, automated cloud infrastructures, and led tech communities.
+                  </p>
+                  <p>
+                    Whether orchestrating containerized microservices, diving into frontend design systems, or exploring artificial intelligence, I build software that is performant, scalable, and delightful.
+                  </p>
+                </>
+              )}
+
+              {/* Long-form bio — only on the /about page, expands on demand */}
+              {isAboutPage && (
+                <div>
+                  <div
+                    className={cn(
+                      'space-y-4 overflow-hidden transition-[max-height] duration-500 ease-in-out',
+                      bioExpanded ? 'max-h-[2000px]' : 'max-h-[280px]'
+                    )}
+                  >
+                    <div className={cn(!bioExpanded && 'space-y-4')}>
+                      {ABOUT_BIO.split('\n\n').map((para, idx) => (
+                        <p key={idx}>{renderBold(para)}</p>
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setBioExpanded((v) => !v)}
+                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-mono text-neutral-300 hover:text-white transition-colors group"
+                    aria-expanded={bioExpanded}
+                  >
+                    <IconChevronDown
+                      className={cn(
+                        'w-4 h-4 transition-transform duration-300',
+                        bioExpanded && 'rotate-180'
+                      )}
+                    />
+                    {bioExpanded ? 'See Less' : 'See More'}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Social Links */}
