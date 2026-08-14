@@ -109,6 +109,16 @@ const mdxCustomComponents = {
       </code>
     );
   },
+  img: ({ src, alt }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <figure className="my-8 rounded-2xl overflow-hidden bg-neutral-950 border border-neutral-800 shadow-2xl">
+      <img src={src} alt={alt || "Article Diagram"} className="w-full h-auto object-cover" />
+      {alt && (
+        <figcaption className="p-3 text-center text-xs font-mono text-neutral-400 bg-neutral-900/60 border-t border-neutral-800">
+          {alt}
+        </figcaption>
+      )}
+    </figure>
+  ),
   hr: () => <hr className="my-10 border-neutral-800/80" />,
 };
 
