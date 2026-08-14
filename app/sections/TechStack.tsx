@@ -54,12 +54,14 @@ const TechStack = () => {
   { name: 'Grafana', icon: '/techstack-icons/grafana.webp' },
   { name: 'AWS', icon: '/techstack-icons/aws.webp' },
   { name: 'Azure', icon: '/techstack-icons/azure.webp' },
+  { name: 'Cloudflare', icon: '/techstack-icons/cloudflare.webp' },
   { name: 'Vercel', icon: '/techstack-icons/vercel.webp' },
   { name: 'Linux', icon: '/techstack-icons/linux.webp' },
   { name: 'ngrok', icon: '/techstack-icons/ngrok.webp' },
 
   // 6. Messaging, Runtime & Tools
   { name: 'Kafka', icon: '/techstack-icons/kafka.webp' },
+  { name: 'Zod', icon: '/techstack-icons/zod.svg' },
   { name: 'Bun', icon: '/techstack-icons/bun.webp' },
   { name: 'Git', icon: '/techstack-icons/git.webp' },
   { name: 'GitHub', icon: '/techstack-icons/github.webp' },

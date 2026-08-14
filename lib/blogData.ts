@@ -49,7 +49,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
     category: "SYSTEM ARCHITECTURE",
     readTime: "7 min read",
     tags: ["Go", "GraphQL", "Microservices", "gRPC", "Kubernetes", "OpenTofu", "GitOps"],
-    coverImage: "/projects/studed.png",
+    coverImage: "/projects/studed.webp",
     author: "Waruna Udara Sampath",
   },
   {
