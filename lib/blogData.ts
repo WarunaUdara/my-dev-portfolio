@@ -43,13 +43,13 @@ export const BLOG_POSTS: BlogPostMeta[] = [
   },
   {
     slug: "studed-microservices-educational-platform",
-    title: "StudEd: Architecting a Microservices & GraphQL Intelligent Learning Platform",
+    title: "Building StudEd: A Cloud-Native Microservices Platform for Learning",
     date: "Jul 28, 2026",
-    description: "An architectural breakdown of StudEd — Sri Lanka's premium subscription-based educational platform powered by 11 Go microservices, TanStack Router/Query, OKLCH perceptual color space, zero-asset Web Audio synthesis, and native 3Dmol & Manim visualizers.",
+    description: "A practical breakdown of StudEd — a cloud-native educational platform built with Go microservices, GraphQL, gRPC, Kubernetes, OpenTofu, and GitOps.",
     category: "SYSTEM ARCHITECTURE",
     readTime: "7 min read",
-    tags: ["Go", "GraphQL", "Microservices", "React 19", "TanStack", "PostgreSQL", "Kubernetes", "GitOps"],
-    coverImage: "/projects/studed.webp",
+    tags: ["Go", "GraphQL", "Microservices", "gRPC", "Kubernetes", "OpenTofu", "GitOps"],
+    coverImage: "/projects/studed.png",
     author: "Waruna Udara Sampath",
   },
   {
