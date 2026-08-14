@@ -119,6 +119,38 @@ const mdxCustomComponents = {
       )}
     </figure>
   ),
+  table: ({ children }: React.HTMLAttributes<HTMLTableElement>) => (
+    <div className="my-8 w-full overflow-x-auto rounded-2xl border border-neutral-800 bg-neutral-950/90 shadow-2xl backdrop-blur-md">
+      <table className="w-full text-left text-sm font-sans border-collapse">
+        {children}
+      </table>
+    </div>
+  ),
+  thead: ({ children }: React.HTMLAttributes<HTMLTableSectionElement>) => (
+    <thead className="bg-neutral-900/90 border-b border-neutral-800 text-xs font-mono uppercase tracking-wider text-neutral-300">
+      {children}
+    </thead>
+  ),
+  tbody: ({ children }: React.HTMLAttributes<HTMLTableSectionElement>) => (
+    <tbody className="divide-y divide-neutral-800/60 text-neutral-300">
+      {children}
+    </tbody>
+  ),
+  tr: ({ children }: React.HTMLAttributes<HTMLTableRowElement>) => (
+    <tr className="hover:bg-neutral-900/40 transition-colors">
+      {children}
+    </tr>
+  ),
+  th: ({ children }: React.HTMLAttributes<HTMLTableCellElement>) => (
+    <th className="px-6 py-4 font-semibold text-neutral-200 text-left border-r border-neutral-800/40 last:border-r-0">
+      {children}
+    </th>
+  ),
+  td: ({ children }: React.HTMLAttributes<HTMLTableCellElement>) => (
+    <td className="px-6 py-4 leading-relaxed whitespace-normal font-sans border-r border-neutral-800/30 last:border-r-0">
+      {children}
+    </td>
+  ),
   hr: () => <hr className="my-10 border-neutral-800/80" />,
 };
 
@@ -140,7 +172,7 @@ export const BlogPost = ({ slug }: { slug: string }) => {
   }
 
   return (
-    <article className="relative min-h-screen bg-transparent text-white py-24 px-4 sm:px-6 md:px-12 scroll-mt-20">
+    <article className="relative min-h-screen bg-transparent text-white pt-28 sm:pt-36 pb-24 px-4 sm:px-6 md:px-12 scroll-mt-28">
       {/* Background Architectural Blueprint Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
