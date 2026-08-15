@@ -253,11 +253,11 @@ export default function GuestbookPage() {
         />
         <ScrollFrost height="h-[500px]" />
 
-        {/* 2-Sided Scales Ruler Strips (Stops cleanly before Footer) */}
-        <div className="absolute top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-10 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+        {/* 2-Sided Scales Ruler Strips (Spreads until Footer) */}
+        <div className="absolute top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
           <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
         </div>
-        <div className="absolute top-0 bottom-0 right-3 sm:right-6 md:right-10 w-6 sm:w-8 z-10 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+        <div className="absolute top-0 bottom-0 right-3 sm:right-6 md:right-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
           <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
         </div>
 

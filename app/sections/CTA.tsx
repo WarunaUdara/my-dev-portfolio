@@ -11,7 +11,7 @@ import FigmaSplitLogo from "@/components/ui/FigmaSplitLogo";
 
 export default function CTA() {
   return (
-    <section className="relative w-full bg-black text-white py-12 px-4 sm:px-6">
+    <section className="relative w-full bg-transparent text-white py-12 px-4 sm:px-6">
       <div className="container mx-auto max-w-6xl">
         {/* Card Container */}
         <div className="relative w-full overflow-hidden rounded-3xl border border-white/15 bg-neutral-950 py-16 px-6 sm:px-12 shadow-2xl">
