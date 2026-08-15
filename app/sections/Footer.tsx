@@ -10,10 +10,10 @@ const Footer = () => {
     <>
       <CTA />
       <AdamFooterDither>
-        <footer className="bg-transparent text-white py-20 sm:py-28 px-6 sm:px-12 border-t border-neutral-900/80 relative z-30 min-h-[460px] sm:min-h-[560px] flex flex-col justify-between">
-          <div className="max-w-7xl mx-auto">
+        <footer className="bg-transparent text-white pt-16 sm:pt-20 pb-8 sm:pb-10 px-6 sm:px-12 border-t border-neutral-900/80 relative z-30 min-h-[500px] sm:min-h-[580px] flex flex-col justify-between">
+          <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
           {/* Main Footer Content */}
-          <div className="flex flex-col md:flex-row justify-between gap-16 mb-16">
+          <div className="flex flex-col md:flex-row justify-between gap-16 mb-auto">
             {/* Brand Section - Left Side */}
             <div className="max-w-sm space-y-4">
               <div className="flex items-center justify-start">
@@ -144,7 +144,7 @@ const Footer = () => {
           </div>
 
           {/* Bottom Section */}
-          <div className="border-t border-gray-900/80 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="border-t border-gray-900/80 pt-6 mt-16 sm:mt-24 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-6">
               <p className="text-sm text-gray-400">© 2026 Waruna Udara</p>
               <span className="text-gray-700">•</span>

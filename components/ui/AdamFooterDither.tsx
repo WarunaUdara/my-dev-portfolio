@@ -42,7 +42,7 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Parallax spring state
+  // Parallax spring state (very subtle and smooth)
   const mouseParallaxTarget = useRef({ x: 0, y: 0 });
   const mouseParallaxCur = useRef({ x: 0, y: 0 });
   const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
@@ -139,7 +139,7 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
 
       const levelRgb = LEVEL_COLORS.map(hexToRgb);
       const hoverRgb = hexToRgb("#ffffff");
-      const radiusPx = (18 / 100) * targetW;
+      const radiusPx = (20 / 100) * targetW;
       const intensity = 1.0;
       const speed = 0.18;
 
@@ -212,20 +212,42 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`w-full sm:w-[50%] h-[300px] sm:h-[400px] md:h-[500px] relative pointer-events-auto flex items-end ${
+      className={`w-full sm:w-[50%] h-[280px] sm:h-[380px] md:h-[460px] relative pointer-events-auto flex items-end ${
         isLeft ? "justify-start" : "justify-end"
       }`}
     >
+      {/* Subtle Deep Layer Beneath (Slower Parallax + Muted Filter) */}
+      <div
+        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end opacity-40 mix-blend-screen pointer-events-none filter blur-[1.5px]"
+        style={{
+          transform: `translate3d(${parallaxOffset.x * 5}px, ${parallaxOffset.y * 4}px, 0) scale(1.02)`,
+          justifyContent: isLeft ? "flex-start" : "flex-end",
+        }}
+      >
+        <canvas
+          ref={(node) => {
+            if (node && canvasRef.current && node !== canvasRef.current) {
+              node.width = canvasRef.current.width;
+              node.height = canvasRef.current.height;
+              const nCtx = node.getContext("2d");
+              if (nCtx) nCtx.drawImage(canvasRef.current, 0, 0);
+            }
+          }}
+          className="block max-h-full max-w-full object-contain"
+        />
+      </div>
+
+      {/* Top Crisp ASCII Dither Layer (Subtle Parallax Movement) */}
       <div
         className="w-full h-full relative transition-transform duration-100 ease-out flex items-end"
         style={{
-          transform: `translate3d(${parallaxOffset.x * 20}px, ${parallaxOffset.y * 15}px, 0)`,
+          transform: `translate3d(${parallaxOffset.x * 12}px, ${parallaxOffset.y * 9}px, 0)`,
           justifyContent: isLeft ? "flex-start" : "flex-end",
         }}
       >
         <canvas
           ref={canvasRef}
-          className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_20px_rgba(217,83,28,0.2)]"
+          className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(217,83,28,0.25)]"
         />
       </div>
     </div>
@@ -238,11 +260,11 @@ interface AdamFooterDitherProps {
 
 export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
   return (
-    <div className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[480px] sm:min-h-[580px] flex flex-col justify-between">
+    <div className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[500px] sm:min-h-[600px] flex flex-col justify-between">
       {/* -------------------------------------------------------------
           EXACT DITHER FILTER TOOL CANVASES (Creation of Adam Hands)
           ------------------------------------------------------------- */}
-      <div className="absolute inset-0 pointer-events-none z-10 flex flex-col sm:flex-row justify-between items-end pb-0 sm:pb-2">
+      <div className="absolute inset-0 pointer-events-none z-10 flex flex-col sm:flex-row justify-between items-end pb-0">
         <SingleHandDither imgSrc="/adam-hands/left-hand.png" isLeft={true} />
         <SingleHandDither imgSrc="/adam-hands/right-hand.png" isLeft={false} />
       </div>
@@ -250,7 +272,7 @@ export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
       {/* -------------------------------------------------------------
           FOOTER CONTENT & LINKS OVERLAY (Front Interactive Layer)
           ------------------------------------------------------------- */}
-      <div className="relative z-20">
+      <div className="relative z-20 w-full flex-1 flex flex-col justify-between">
         {children}
       </div>
     </div>
