@@ -4,13 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 
 // Exact 7 Tonal Level Colors from the Dithering Tool
 const LEVEL_COLORS = [
-  "#1a0a06",
-  "#3a1408",
-  "#6b220c",
-  "#a8330f",
-  "#d9531c",
-  "#f2823c",
-  "#ffd39b",
+  "#1a0a06", // 0: Shadow
+  "#3a1408", // 1: Low
+  "#6b220c", // 2: Mid-low
+  "#a8330f", // 3: Mid
+  "#d9531c", // 4: Mid-high
+  "#f2823c", // 5: High
+  "#ffd39b", // 6: Highlight
 ];
 
 // Exact Character Ramp from the Dithering Tool
@@ -40,9 +40,9 @@ interface SingleHandProps {
 
 function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const canvasDeepRef = useRef<HTMLCanvasElement>(null);
+  const canvasShadowRef = useRef<HTMLCanvasElement>(null);
   const canvasMidRef = useRef<HTMLCanvasElement>(null);
-  const canvasTopRef = useRef<HTMLCanvasElement>(null);
+  const canvasHighlightRef = useRef<HTMLCanvasElement>(null);
 
   // Parallax spring state (subtle, organic physical movement)
   const mouseParallaxTarget = useRef({ x: 0, y: 0 });
@@ -53,9 +53,9 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
   const hoverMousePos = useRef<{ x: number; y: number } | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current || !canvasTopRef.current) return;
+    if (!containerRef.current || !canvasHighlightRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const canvasRect = canvasTopRef.current.getBoundingClientRect();
+    const canvasRect = canvasHighlightRef.current.getBoundingClientRect();
 
     // Parallax relative to hand container (-1 to 1)
     const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -63,8 +63,8 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
     mouseParallaxTarget.current = { x: nx, y: ny };
 
     // Canvas internal pixel coordinates for hover glow
-    const scaleX = canvasTopRef.current.width / (canvasRect.width || 1);
-    const scaleY = canvasTopRef.current.height / (canvasRect.height || 1);
+    const scaleX = canvasHighlightRef.current.width / (canvasRect.width || 1);
+    const scaleY = canvasHighlightRef.current.height / (canvasRect.height || 1);
     hoverMousePos.current = {
       x: (e.clientX - canvasRect.left) * scaleX,
       y: (e.clientY - canvasRect.top) * scaleY,
@@ -89,7 +89,7 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
     return () => cancelAnimationFrame(animId);
   }, []);
 
-  // Exact Multi-Layer ASCII Dither Filter Engine
+  // Exact 3-Tier Tonal Separation Dither Filter Engine
   useEffect(() => {
     let isActive = true;
     let rafId: number;
@@ -101,32 +101,32 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
     img.onload = () => {
       if (
         !isActive ||
-        !canvasDeepRef.current ||
+        !canvasShadowRef.current ||
         !canvasMidRef.current ||
-        !canvasTopRef.current ||
+        !canvasHighlightRef.current ||
         !containerRef.current
       )
         return;
 
-      const topCanvas = canvasTopRef.current;
-      const topCtx = topCanvas.getContext("2d");
+      const shadowCanvas = canvasShadowRef.current;
+      const shadowCtx = shadowCanvas.getContext("2d");
       const midCanvas = canvasMidRef.current;
       const midCtx = midCanvas.getContext("2d");
-      const deepCanvas = canvasDeepRef.current;
-      const deepCtx = deepCanvas.getContext("2d");
+      const highlightCanvas = canvasHighlightRef.current;
+      const highlightCtx = highlightCanvas.getContext("2d");
 
-      if (!topCtx || !midCtx || !deepCtx) return;
+      if (!shadowCtx || !midCtx || !highlightCtx) return;
 
       const aspect = img.width / img.height;
       const targetW = 900;
       const targetH = Math.round(targetW / aspect);
 
-      topCanvas.width = targetW;
-      topCanvas.height = targetH;
+      shadowCanvas.width = targetW;
+      shadowCanvas.height = targetH;
       midCanvas.width = targetW;
       midCanvas.height = targetH;
-      deepCanvas.width = targetW;
-      deepCanvas.height = targetH;
+      highlightCanvas.width = targetW;
+      highlightCanvas.height = targetH;
 
       const cols = 75; // Resolution matching Dithering Tool
       const rows = Math.max(1, Math.round(cols / aspect));
@@ -147,7 +147,7 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
       const level = new Uint8Array(cols * rows);
       const influence = new Float32Array(cols * rows);
 
-      // Exact Dithering Tool Brightness & Quantization formula
+      // Exact Dithering Tool Brightness & Quantization formula (0 to 6)
       for (let i = 0, p = 0; i < brightness.length; i++, p += 4) {
         const a = imgData[p + 3] / 255;
         const b = ((imgData[p] * 0.299 + imgData[p + 1] * 0.587 + imgData[p + 2] * 0.114) / 255) * a;
@@ -163,17 +163,19 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
 
       const fontSize = Math.max(6, Math.min(cellW, cellH) * 1.05);
 
-      // 1. Draw static Deep Base Layer (Shadow & Contour ASCII)
-      deepCtx.clearRect(0, 0, targetW, targetH);
-      deepCtx.textAlign = "center";
-      deepCtx.textBaseline = "middle";
-      deepCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+      // -------------------------------------------------------------
+      // 1. TIER 1: SHADOW & LOW PLANE (Tonal Levels 0, 1, 2)
+      // -------------------------------------------------------------
+      shadowCtx.clearRect(0, 0, targetW, targetH);
+      shadowCtx.textAlign = "center";
+      shadowCtx.textBaseline = "middle";
+      shadowCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
 
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const idx = r * cols + c;
           const lvl = level[idx];
-          if (lvl === 0) continue;
+          if (lvl === 0 || lvl > 2) continue; // Only Shadow & Low
 
           const cx = c * cellW + cellW / 2;
           const cy = r * cellH + cellH / 2;
@@ -181,15 +183,16 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
           const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
           const ch = ASCII_RAMP[rampIdx];
           if (ch && ch !== " ") {
-            const shadowLvl = Math.min(3, lvl);
-            const rgb = levelRgb[shadowLvl];
-            deepCtx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.45)`;
-            deepCtx.fillText(ch, cx, cy);
+            const rgb = levelRgb[lvl];
+            shadowCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+            shadowCtx.fillText(ch, cx, cy);
           }
         }
       }
 
-      // 2. Draw static Midtone Layer
+      // -------------------------------------------------------------
+      // 2. TIER 2: MID-LOW & MID PLANE (Tonal Levels 3, 4)
+      // -------------------------------------------------------------
       midCtx.clearRect(0, 0, targetW, targetH);
       midCtx.textAlign = "center";
       midCtx.textBaseline = "middle";
@@ -199,7 +202,7 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
         for (let c = 0; c < cols; c++) {
           const idx = r * cols + c;
           const lvl = level[idx];
-          if (lvl < 2) continue;
+          if (lvl < 3 || lvl > 4) continue; // Only Midtones
 
           const cx = c * cellW + cellW / 2;
           const cy = r * cellH + cellH / 2;
@@ -208,13 +211,15 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
           const ch = ASCII_RAMP[rampIdx];
           if (ch && ch !== " ") {
             const rgb = levelRgb[lvl];
-            midCtx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.7)`;
+            midCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
             midCtx.fillText(ch, cx, cy);
           }
         }
       }
 
-      // 3. Continuous render loop for Top Layer (Full Highlight & Interactive Hover Glow)
+      // -------------------------------------------------------------
+      // 3. TIER 3: HIGH & HIGHLIGHT PLANE (Tonal Levels 5, 6 + Hover Glow)
+      // -------------------------------------------------------------
       const renderLoop = () => {
         if (!isActive) return;
 
@@ -235,16 +240,16 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
           }
         }
 
-        topCtx.clearRect(0, 0, targetW, targetH);
-        topCtx.textAlign = "center";
-        topCtx.textBaseline = "middle";
-        topCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+        highlightCtx.clearRect(0, 0, targetW, targetH);
+        highlightCtx.textAlign = "center";
+        highlightCtx.textBaseline = "middle";
+        highlightCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
 
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
             const idx = r * cols + c;
             const lvl = level[idx];
-            if (lvl === 0) continue;
+            if (lvl < 5) continue; // Only Highlights (Levels 5 & 6)
 
             const inf = influence[idx];
             const base = levelRgb[lvl];
@@ -257,8 +262,8 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
             const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
             const ch = ASCII_RAMP[rampIdx];
             if (ch && ch !== " ") {
-              topCtx.fillStyle = color;
-              topCtx.fillText(ch, cx, cy);
+              highlightCtx.fillStyle = color;
+              highlightCtx.fillText(ch, cx, cy);
             }
           }
         }
@@ -284,38 +289,38 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
         isLeft ? "justify-start" : "justify-end"
       }`}
     >
-      {/* LAYER 1: Deep Base ASCII Layer (Slower Parallax Shift) */}
+      {/* TIER 1: Shadow & Low Tonal Plane (Levels 0, 1, 2) - Slow Deep Parallax */}
       <div
-        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end opacity-50 mix-blend-screen pointer-events-none filter blur-[1px]"
+        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end pointer-events-none"
         style={{
-          transform: `translate3d(${parallaxOffset.x * 5}px, ${parallaxOffset.y * 3.5}px, 0) scale(0.98)`,
+          transform: `translate3d(${parallaxOffset.x * 4}px, ${parallaxOffset.y * 3}px, 0) scale(0.985)`,
           justifyContent: isLeft ? "flex-start" : "flex-end",
         }}
       >
-        <canvas ref={canvasDeepRef} className="block max-h-full max-w-full object-contain" />
+        <canvas ref={canvasShadowRef} className="block max-h-full max-w-full object-contain opacity-90" />
       </div>
 
-      {/* LAYER 2: Middle Midtone ASCII Layer (Medium Parallax Shift) */}
+      {/* TIER 2: Mid-Low & Mid Tonal Plane (Levels 3, 4) - Medium Body Parallax */}
       <div
-        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end opacity-65 pointer-events-none"
+        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end pointer-events-none"
         style={{
-          transform: `translate3d(${parallaxOffset.x * 10}px, ${parallaxOffset.y * 7}px, 0)`,
+          transform: `translate3d(${parallaxOffset.x * 9}px, ${parallaxOffset.y * 6.5}px, 0)`,
           justifyContent: isLeft ? "flex-start" : "flex-end",
         }}
       >
-        <canvas ref={canvasMidRef} className="block max-h-full max-w-full object-contain" />
+        <canvas ref={canvasMidRef} className="block max-h-full max-w-full object-contain opacity-95" />
       </div>
 
-      {/* LAYER 3: Foreground Highlight ASCII Layer (Interactive Hover + Parallax) */}
+      {/* TIER 3: High & Highlight Tonal Plane (Levels 5, 6 + Hover Glow) - Foreground Parallax */}
       <div
-        className="w-full h-full relative transition-transform duration-100 ease-out flex items-end"
+        className="w-full h-full relative transition-transform duration-100 ease-out flex items-end pointer-events-none"
         style={{
-          transform: `translate3d(${parallaxOffset.x * 16}px, ${parallaxOffset.y * 11}px, 0)`,
+          transform: `translate3d(${parallaxOffset.x * 15}px, ${parallaxOffset.y * 11}px, 0)`,
           justifyContent: isLeft ? "flex-start" : "flex-end",
         }}
       >
         <canvas
-          ref={canvasTopRef}
+          ref={canvasHighlightRef}
           className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(217,83,28,0.25)]"
         />
       </div>
