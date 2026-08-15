@@ -20,6 +20,7 @@ import {
 import { NavBar } from '@/app/ui/TubelightNavbar';
 import Footer from '@/app/sections/Footer';
 import Toast from '@/components/Toast';
+import Scales from "@/components/ui/scales";
 import { MessageSkeleton } from '@/components/MessageSkeleton';
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input';
 import { IconBrandGithub, IconBrandGoogle, IconPin, IconTrash, IconX, IconSend, IconHome, IconUser, IconBriefcase, IconFileText, IconArticle, IconPhoneCall } from '@tabler/icons-react';
@@ -250,6 +251,15 @@ export default function GuestbookPage() {
           schemas={[PERSON_SCHEMA]}
         />
         <ScrollFrost height="h-[500px]" />
+
+        {/* 2-Sided Scales Ruler Strips (Stops cleanly before Footer) */}
+        <div className="absolute top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-10 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+          <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
+        </div>
+        <div className="absolute top-0 bottom-0 right-3 sm:right-6 md:right-10 w-6 sm:w-8 z-10 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+          <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
+        </div>
+
         <div className="container mx-auto max-w-2xl relative z-10">
           {/* Header */}
           <div className="text-center mb-12">
