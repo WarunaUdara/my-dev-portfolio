@@ -34,6 +34,7 @@ const TechStack = () => {
   // 4. Databases & Search
   { name: 'MySQL', icon: '/techstack-icons/mysql.webp' },
   { name: 'PostgreSQL', icon: '/techstack-icons/postgresql.webp' },
+  { name: 'Neon DB', icon: '/techstack-icons/neon-db.webp' },
   { name: 'MongoDB', icon: '/techstack-icons/mongodb.webp' },
   { name: 'Elasticsearch', icon: '/techstack-icons/elasticsearch.webp' },
   { name: 'Oracle', icon: '/techstack-icons/oracle.webp' },
@@ -50,8 +51,10 @@ const TechStack = () => {
   { name: 'Terraform', icon: '/techstack-icons/terraform.webp' },
   { name: 'Kyverno', icon: '/techstack-icons/kyverno.webp' },
   { name: 'Trivy', icon: '/techstack-icons/trivy.webp', link: 'https://trivy.dev/' },
+  { name: 'OpenTelemetry', icon: '/techstack-icons/opentelemetry.webp' },
   { name: 'Prometheus', icon: '/techstack-icons/prometheus.webp' },
   { name: 'Grafana', icon: '/techstack-icons/grafana.webp' },
+  { name: 'Google Cloud', icon: '/techstack-icons/google-cloud.svg' },
   { name: 'AWS', icon: '/techstack-icons/aws.webp' },
   { name: 'Azure', icon: '/techstack-icons/azure.webp' },
   { name: 'Cloudflare', icon: '/techstack-icons/cloudflare.webp' },

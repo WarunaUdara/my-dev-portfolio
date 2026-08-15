@@ -121,22 +121,21 @@ const projects: ProjectData[] = [
   },
   {
     title: "Personal Portfolio",
-    detailsTitle: "Personal Developer Portfolio",
-    pillarText: "Interactive Developer Portfolio",
+    detailsTitle: "Personal Developer Portfolio: TanStack Router & Canvas UI",
+    pillarText: "Full-Stack Developer Portfolio & Experimental Canvas Engine",
     descriptionPoints: [
-      "Developed with Next.js 15, React 19, and TypeScript for type safety.",
-      "GSAP animations with ScrollTrigger and dynamic WebGL shaders.",
-      "Deployed on Vercel with Bun package manager for speed."
+      "Engineered high-performance SPA using TanStack Router, React 19, Vite, and Bun with strict TypeScript architecture and sub-second page transitions.",
+      "Built custom Canvas rendering engines including real-time 3-tier ASCII Dithering parallax and WebGL interactive shaders.",
+      "Integrated dynamic MDX developer blog, Firebase real-time guestbook, and automated CI/CD pipeline on Vercel."
     ],
     techStack: [
-      { name: "Next.js 15", icon: "/techstack-icons/nextjs.webp" },
+      { name: "TanStack Router", icon: "/techstack-icons/tanstack.webp" },
       { name: "React 19", icon: "/techstack-icons/react.webp" },
       { name: "TypeScript", icon: "/techstack-icons/typescript.webp" },
       { name: "Tailwind CSS", icon: "/techstack-icons/tailwindcss.webp" },
       { name: "Bun", icon: "/techstack-icons/bun.webp" },
       { name: "Vercel", icon: "/techstack-icons/vercel.webp" }
     ],
-
     imageSrc: "/projects-portfolio.webp",
     gradient: "bg-gradient-to-br from-purple-600 via-purple-700 to-purple-950",
     link: "https://warunadev.vercel.app"
@@ -240,7 +239,7 @@ const Projects = () => {
                   href={project.link}
                   target={project.link.startsWith("http") ? "_blank" : undefined}
                   rel={project.link.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className={`relative rounded-[32px] overflow-hidden ${project.gradient} border-2 border-white/20 transition-all duration-300 hover:translate-y-[-8px] block cursor-pointer shadow-2xl`}
+                  className={`relative rounded-[32px] overflow-hidden ${project.gradient} border border-white/20 bg-clip-padding transition-all duration-300 hover:translate-y-[-8px] block cursor-pointer shadow-2xl`}
                 >
                   {/* Arrow icon */}
                   <div className="absolute top-6 right-6 md:top-8 md:right-8 z-10 w-11 h-11 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 group-hover:scale-110">
@@ -281,7 +280,7 @@ const Projects = () => {
                       </div>
                       
                       {/* Mobile */}
-                      <div className="lg:hidden absolute inset-0 px-3 pt-0 pb-0">
+                      <div className="lg:hidden absolute inset-0 px-5 pb-5">
                         <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl bg-neutral-950 border border-white/10">
                           <Image
                             src={project.imageSrc}
