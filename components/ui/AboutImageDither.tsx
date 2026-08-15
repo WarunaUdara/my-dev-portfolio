@@ -3,15 +3,15 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Image from "@/components/ui/Image";
 
-// Exact 7 Tonal Level Colors from the Dithering Tool
+// Exact 7 Tonal Level Colors with visible warm bronze/charcoal for shadows & hair
 const LEVEL_COLORS = [
-  "#1a0a06", // 0: Shadow
-  "#3a1408", // 1: Low
-  "#6b220c", // 2: Mid-low
-  "#a8330f", // 3: Mid
-  "#d9531c", // 4: Mid-high
-  "#f2823c", // 5: High
-  "#f2823c", // 6: Highlight
+  "#4a2014", // 0: Visible warm charcoal-bronze for hair/beard/shadow contours
+  "#6e2d19", // 1: Low warm bronze
+  "#963914", // 2: Mid-low copper
+  "#c44e18", // 3: Mid amber-orange
+  "#e86b24", // 4: Mid-high bright orange
+  "#fa8f3e", // 5: High radiant orange
+  "#ffd5a6", // 6: Highlight gold-white
 ];
 
 const ASCII_RAMP = " .:-=+*#%@";
@@ -53,6 +53,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
   const highlightCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const [isHovered, setIsHovered] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 200, y: 250 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   const stateRef = useRef<AboutDitherState>({
@@ -64,13 +65,18 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
 
   const redrawHighlight = useRef<(() => void) | null>(null);
 
-  // Mouse Tracking & Parallax Dispatcher
+  // Mouse Tracking: Updates radial lens position & parallax target
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current || !highlightCanvasRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
-    const nx = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
-    const ny = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
+    const localX = e.clientX - rect.left;
+    const localY = e.clientY - rect.top;
+
+    setMousePos({ x: localX, y: localY });
+
+    const nx = Math.max(-1, Math.min(1, (localX / rect.width) * 2 - 1));
+    const ny = Math.max(-1, Math.min(1, (localY / rect.height) * 2 - 1));
 
     stateRef.current.target = { x: nx, y: ny };
 
@@ -78,13 +84,17 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
     const scaleX = canvas.width / (rect.width || 1);
     const scaleY = canvas.height / (rect.height || 1);
     stateRef.current.hoverCanvasPos = {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY,
+      x: localX * scaleX,
+      y: localY * scaleY,
     };
     stateRef.current.needsHighlightRedraw = true;
   }, []);
 
-  const handleMouseEnter = useCallback(() => {
+  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    }
     setIsHovered(true);
   }, []);
 
@@ -119,7 +129,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
     return () => cancelAnimationFrame(animId);
   }, []);
 
-  // 1-Time High-Performance ASCII Canvas Pre-Renderer
+  // 1-Time High-Performance ASCII Canvas Pre-Renderer with Shadow & Dark Visibility
   useEffect(() => {
     let isActive = true;
 
@@ -153,7 +163,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       highlightCanvas.width = targetW;
       highlightCanvas.height = targetH;
 
-      const cols = 70;
+      const cols = 72;
       const rows = Math.max(1, Math.round(cols / aspect));
       const cellW = targetW / cols;
       const cellH = targetH / rows;
@@ -168,15 +178,18 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       const imgData = thumbCtx.getImageData(0, 0, cols, rows).data;
 
       const level = new Uint8Array(cols * rows);
+      const isSubject = new Uint8Array(cols * rows);
       const influence = new Float32Array(cols * rows);
 
       for (let i = 0, p = 0; i < level.length; i++, p += 4) {
         const a = imgData[p + 3] / 255;
         if (a < 0.08) {
-          level[i] = 255; // Transparent / skip
+          level[i] = 255; // Transparent background
+          isSubject[i] = 0;
           continue;
         }
-        const b = ((imgData[p] * 0.299 + imgData[p + 1] * 0.587 + imgData[p + 2] * 0.114) / 255) * a;
+        isSubject[i] = 1;
+        const b = (imgData[p] * 0.299 + imgData[p + 1] * 0.587 + imgData[p + 2] * 0.114) / 255;
         level[i] = Math.min(6, Math.floor(b * 7));
       }
 
@@ -187,7 +200,9 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       const speed = 0.2;
       const fontSize = Math.max(6, Math.min(cellW, cellH) * 1.05);
 
-      // 1. Pre-Render Shadows (Levels 0, 1, 2)
+      // -------------------------------------------------------------
+      // 1. Pre-Render Shadows & Dark Contours (Levels 0, 1, 2)
+      // -------------------------------------------------------------
       shadowCtx.clearRect(0, 0, targetW, targetH);
       shadowCtx.textAlign = "center";
       shadowCtx.textBaseline = "middle";
@@ -196,22 +211,25 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const idx = r * cols + c;
+          if (!isSubject[idx]) continue;
+
           const lvl = level[idx];
-          if (lvl > 2) continue;
+          if (lvl > 2) continue; // Shadows only
 
           const cx = c * cellW + cellW / 2;
           const cy = r * cellH + cellH / 2;
-          const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
-          const ch = ASCII_RAMP[rampIdx];
-          if (ch && ch !== " ") {
-            const rgb = levelRgb[lvl];
-            shadowCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-            shadowCtx.fillText(ch, cx, cy);
-          }
+
+          // For darkest level 0 (hair/beard/deep shadows), use visible subtle glyphs
+          const ch = lvl === 0 ? "." : lvl === 1 ? ":" : "-";
+          const rgb = levelRgb[lvl];
+          shadowCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+          shadowCtx.fillText(ch, cx, cy);
         }
       }
 
+      // -------------------------------------------------------------
       // 2. Pre-Render Midtones (Levels 3, 4)
+      // -------------------------------------------------------------
       midCtx.clearRect(0, 0, targetW, targetH);
       midCtx.textAlign = "center";
       midCtx.textBaseline = "middle";
@@ -220,8 +238,10 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const idx = r * cols + c;
+          if (!isSubject[idx]) continue;
+
           const lvl = level[idx];
-          if (lvl < 3 || lvl > 4) continue;
+          if (lvl < 3 || lvl > 4) continue; // Midtones only
 
           const cx = c * cellW + cellW / 2;
           const cy = r * cellH + cellH / 2;
@@ -235,7 +255,9 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
         }
       }
 
+      // -------------------------------------------------------------
       // 3. Highlight Layer with Live Cursor Glow
+      // -------------------------------------------------------------
       const drawHighlight = () => {
         highlightCtx.clearRect(0, 0, targetW, targetH);
         highlightCtx.textAlign = "center";
@@ -247,8 +269,10 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
             const idx = r * cols + c;
+            if (!isSubject[idx]) continue;
+
             const lvl = level[idx];
-            if (lvl < 5 || lvl === 255) continue;
+            if (lvl < 5) continue; // Highlights only
 
             let target = 0;
             if (stateRef.current.hoverCanvasPos) {
@@ -298,6 +322,13 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
     };
   }, [src]);
 
+  // Radius Lens Cutout Mask on Top Image
+  const lensRadius = 150; // Radius in pixels for localized hover preview window
+
+  const topImageMask = isHovered
+    ? `radial-gradient(circle ${lensRadius}px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, transparent 60%, black 95%)`
+    : "none";
+
   return (
     <div
       ref={containerRef}
@@ -308,62 +339,63 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
         className || ""
       }`}
       style={{
-        WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 98%)",
-        maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 98%)",
+        WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 98%)",
+        maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 98%)",
       }}
     >
       {/* -------------------------------------------------------------
-          UNDERLYING ASCII FILTER IMAGE (Revealed on Hover with Parallax)
+          UNDERLYING ASCII FILTER IMAGE (Revealed inside Hover Radius)
+          - Exactly 1:1 Pixel & Size Matched with Top Photo
           ------------------------------------------------------------- */}
       <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none transition-transform duration-100 ease-out"
+        className="absolute inset-0 flex items-start justify-center pointer-events-none transition-transform duration-100 ease-out"
         style={{
           transform: `translate3d(${offset.x * 4}px, ${offset.y * 3}px, 0)`,
         }}
       >
-        {/* Layer 1: Shadow Plane */}
+        {/* Layer 1: Shadow Plane (With Visible Dark Tones for Hair & Beard) */}
         <div
-          className="absolute inset-0 flex items-center justify-center transition-transform duration-100 ease-out opacity-90"
+          className="absolute inset-0 flex items-start justify-center transition-transform duration-100 ease-out opacity-90"
           style={{
             transform: `translate3d(${offset.x * 1.5}px, ${offset.y * 1}px, 0) scale(0.995)`,
           }}
         >
-          <canvas ref={shadowCanvasRef} className="block max-h-full max-w-full object-contain" />
+          <canvas ref={shadowCanvasRef} className="block w-full h-full object-contain object-top" />
         </div>
 
         {/* Layer 2: Midtone Plane */}
         <div
-          className="absolute inset-0 flex items-center justify-center transition-transform duration-100 ease-out opacity-95"
+          className="absolute inset-0 flex items-start justify-center transition-transform duration-100 ease-out opacity-95"
           style={{
             transform: `translate3d(${offset.x * 3}px, ${offset.y * 2.2}px, 0)`,
           }}
         >
-          <canvas ref={midCanvasRef} className="block max-h-full max-w-full object-contain" />
+          <canvas ref={midCanvasRef} className="block w-full h-full object-contain object-top" />
         </div>
 
-        {/* Layer 3: Highlight Plane with Hover Glow */}
+        {/* Layer 3: Highlight Plane with Live Cursor Glow */}
         <div
-          className="w-full h-full relative flex items-center justify-center transition-transform duration-100 ease-out"
+          className="w-full h-full relative flex items-start justify-center transition-transform duration-100 ease-out"
           style={{
             transform: `translate3d(${offset.x * 5}px, ${offset.y * 3.8}px, 0)`,
           }}
         >
           <canvas
             ref={highlightCanvasRef}
-            className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_20px_rgba(217,83,28,0.35)]"
+            className="block w-full h-full object-contain object-top filter drop-shadow-[0_0_20px_rgba(217,83,28,0.35)]"
           />
         </div>
       </div>
 
       {/* -------------------------------------------------------------
-          TOP ORIGINAL CRISP PHOTO (Dissolves on Hover to reveal ASCII)
+          TOP ORIGINAL CRISP PHOTO (With Smooth Radial Cutout Lens on Hover)
           ------------------------------------------------------------- */}
       <div
-        className={`absolute inset-0 transition-all duration-700 ease-out pointer-events-none ${
-          isHovered ? "opacity-0 scale-[1.03]" : "opacity-100 scale-100"
-        }`}
+        className="absolute inset-0 pointer-events-none transition-transform duration-100 ease-out"
         style={{
-          transform: `translate3d(${offset.x * 2}px, ${offset.y * 1.5}px, 0)`,
+          maskImage: topImageMask,
+          WebkitMaskImage: topImageMask,
+          transform: `translate3d(${offset.x * 1.5}px, ${offset.y * 1}px, 0)`,
         }}
       >
         <Image
@@ -374,6 +406,21 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
           priority
         />
       </div>
+
+      {/* -------------------------------------------------------------
+          HOVER LENS APERTURE RING (Subtle Radiant Glowing Circular Boundary)
+          ------------------------------------------------------------- */}
+      {isHovered && (
+        <div
+          className="absolute pointer-events-none rounded-full border border-amber-400/35 shadow-[0_0_25px_rgba(245,135,61,0.25)] transition-opacity duration-300"
+          style={{
+            width: lensRadius * 2,
+            height: lensRadius * 2,
+            left: mousePos.x - lensRadius,
+            top: mousePos.y - lensRadius,
+          }}
+        />
+      )}
     </div>
   );
 }
