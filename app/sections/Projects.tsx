@@ -126,7 +126,7 @@ const projects: ProjectData[] = [
     descriptionPoints: [
       "Architected high-performance SPA using TanStack Router, React 19, Vite, and Bun with strict compile-time type-safety and instantaneous 0ms route preloading.",
       "Engineered unique interactive mechanics including multi-layer ASCII dithering parallax, WebGL Grainient shaders, and GSAP scroll-triggered physics.",
-      "Integrated dynamic MDX developer knowledge base with syntax highlighting, real-time Firebase guestbook, and local MCP server architecture for AI pair programming."
+      "Integrated dynamic MDX developer knowledge base with syntax highlighting and real-time Firebase guestbook."
     ],
     techStack: [
       { name: "TanStack Router", icon: "/techstack-icons/tanstack.webp" },
