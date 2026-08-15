@@ -129,7 +129,7 @@ export const WORK_PAGE_PROJECTS: WorkProjectItem[] = [
     category: "DEV PORTFOLIO",
     date: "2024 – 2026",
     title: "Personal Portfolio",
-    tagline: "High-performance SPA powered by TanStack Router, React 19, Canvas ASCII Dithering, & WebGL Shaders",
+    tagline: "High-performance SPA powered by TanStack Router, React 19, WebGL Shaders, & Experimental Micro-Interactions",
     imageSrc: "/projects-portfolio.webp",
     gradient: "bg-gradient-to-br from-indigo-600 via-purple-700 to-purple-950",
     link: "https://warunadev.vercel.app",

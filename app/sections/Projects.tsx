@@ -121,12 +121,12 @@ const projects: ProjectData[] = [
   },
   {
     title: "Personal Portfolio",
-    detailsTitle: "Personal Developer Portfolio: TanStack Router & Canvas UI",
-    pillarText: "Full-Stack Developer Portfolio & Experimental Canvas Engine",
+    detailsTitle: "Personal Developer Portfolio: TanStack Router & Interactive Systems",
+    pillarText: "Full-Stack Developer Portfolio & Experimental Interactive Systems",
     descriptionPoints: [
-      "Engineered high-performance SPA using TanStack Router, React 19, Vite, and Bun with strict TypeScript architecture and sub-second page transitions.",
-      "Built custom Canvas rendering engines including real-time 3-tier ASCII Dithering parallax and WebGL interactive shaders.",
-      "Integrated dynamic MDX developer blog, Firebase real-time guestbook, and automated CI/CD pipeline on Vercel."
+      "Architected high-performance SPA using TanStack Router, React 19, Vite, and Bun with strict compile-time type-safety and instantaneous 0ms route preloading.",
+      "Engineered unique interactive mechanics including multi-layer ASCII dithering parallax, WebGL Grainient shaders, and GSAP scroll-triggered physics.",
+      "Integrated dynamic MDX developer knowledge base with syntax highlighting, real-time Firebase guestbook, and local MCP server architecture for AI pair programming."
     ],
     techStack: [
       { name: "TanStack Router", icon: "/techstack-icons/tanstack.webp" },
