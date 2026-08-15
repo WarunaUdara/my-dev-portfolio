@@ -33,320 +33,413 @@ function lerpColor(
   ];
 }
 
-interface SingleHandProps {
-  imgSrc: string;
-  isLeft: boolean;
+interface HandData {
+  target: { x: number; y: number };
+  cur: { x: number; y: number };
+  hoverCanvasPos: { x: number; y: number } | null;
 }
 
-function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasShadowRef = useRef<HTMLCanvasElement>(null);
-  const canvasMidRef = useRef<HTMLCanvasElement>(null);
-  const canvasHighlightRef = useRef<HTMLCanvasElement>(null);
+export default function AdamFooterDither({ children }: { children?: React.ReactNode }) {
+  const rootRef = useRef<HTMLDivElement>(null);
 
-  // Parallax spring state (subtle, organic physical movement)
-  const mouseParallaxTarget = useRef({ x: 0, y: 0 });
-  const mouseParallaxCur = useRef({ x: 0, y: 0 });
-  const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
+  // Left Hand References
+  const leftWrapRef = useRef<HTMLDivElement>(null);
+  const leftShadowCanvasRef = useRef<HTMLCanvasElement>(null);
+  const leftMidCanvasRef = useRef<HTMLCanvasElement>(null);
+  const leftHighlightCanvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Hover color tracking (in canvas pixel space)
-  const hoverMousePos = useRef<{ x: number; y: number } | null>(null);
+  // Right Hand References
+  const rightWrapRef = useRef<HTMLDivElement>(null);
+  const rightShadowCanvasRef = useRef<HTMLCanvasElement>(null);
+  const rightMidCanvasRef = useRef<HTMLCanvasElement>(null);
+  const rightHighlightCanvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Independent Parallax States
+  const leftState = useRef<HandData>({ target: { x: 0, y: 0 }, cur: { x: 0, y: 0 }, hoverCanvasPos: null });
+  const rightState = useRef<HandData>({ target: { x: 0, y: 0 }, cur: { x: 0, y: 0 }, hoverCanvasPos: null });
+
+  const [leftOffset, setLeftOffset] = useState({ x: 0, y: 0 });
+  const [rightOffset, setRightOffset] = useState({ x: 0, y: 0 });
+
+  // Root Mouse Tracking: Never blocked by any children layers!
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current || !canvasHighlightRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const canvasRect = canvasHighlightRef.current.getBoundingClientRect();
+    // 1. Check Left Hand Hitbox & Parallax
+    if (leftWrapRef.current && leftHighlightCanvasRef.current) {
+      const rect = leftWrapRef.current.getBoundingClientRect();
+      const isOverLeft =
+        e.clientX >= rect.left - 40 &&
+        e.clientX <= rect.right + 40 &&
+        e.clientY >= rect.top - 60 &&
+        e.clientY <= rect.bottom + 60;
 
-    // Parallax relative to hand container (-1 to 1)
-    const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-    mouseParallaxTarget.current = { x: nx, y: ny };
+      if (isOverLeft) {
+        const nx = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
+        const ny = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
+        leftState.current.target = { x: nx, y: ny };
 
-    // Canvas internal pixel coordinates for hover glow
-    const scaleX = canvasHighlightRef.current.width / (canvasRect.width || 1);
-    const scaleY = canvasHighlightRef.current.height / (canvasRect.height || 1);
-    hoverMousePos.current = {
-      x: (e.clientX - canvasRect.left) * scaleX,
-      y: (e.clientY - canvasRect.top) * scaleY,
-    };
+        const canvas = leftHighlightCanvasRef.current;
+        const scaleX = canvas.width / (rect.width || 1);
+        const scaleY = canvas.height / (rect.height || 1);
+        leftState.current.hoverCanvasPos = {
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY,
+        };
+      } else {
+        leftState.current.target = { x: 0, y: 0 };
+        leftState.current.hoverCanvasPos = null;
+      }
+    }
+
+    // 2. Check Right Hand Hitbox & Parallax
+    if (rightWrapRef.current && rightHighlightCanvasRef.current) {
+      const rect = rightWrapRef.current.getBoundingClientRect();
+      const isOverRight =
+        e.clientX >= rect.left - 40 &&
+        e.clientX <= rect.right + 40 &&
+        e.clientY >= rect.top - 60 &&
+        e.clientY <= rect.bottom + 60;
+
+      if (isOverRight) {
+        const nx = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
+        const ny = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
+        rightState.current.target = { x: nx, y: ny };
+
+        const canvas = rightHighlightCanvasRef.current;
+        const scaleX = canvas.width / (rect.width || 1);
+        const scaleY = canvas.height / (rect.height || 1);
+        rightState.current.hoverCanvasPos = {
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY,
+        };
+      } else {
+        rightState.current.target = { x: 0, y: 0 };
+        rightState.current.hoverCanvasPos = null;
+      }
+    }
   };
 
   const handleMouseLeave = () => {
-    mouseParallaxTarget.current = { x: 0, y: 0 };
-    hoverMousePos.current = null;
+    leftState.current.target = { x: 0, y: 0 };
+    leftState.current.hoverCanvasPos = null;
+    rightState.current.target = { x: 0, y: 0 };
+    rightState.current.hoverCanvasPos = null;
   };
 
   // Parallax Spring Animation Loop
   useEffect(() => {
     let animId: number;
     const tick = () => {
-      mouseParallaxCur.current.x += (mouseParallaxTarget.current.x - mouseParallaxCur.current.x) * 0.08;
-      mouseParallaxCur.current.y += (mouseParallaxTarget.current.y - mouseParallaxCur.current.y) * 0.08;
-      setParallaxOffset({ ...mouseParallaxCur.current });
+      // Left Hand spring damping
+      leftState.current.cur.x += (leftState.current.target.x - leftState.current.cur.x) * 0.1;
+      leftState.current.cur.y += (leftState.current.target.y - leftState.current.cur.y) * 0.1;
+      setLeftOffset({ ...leftState.current.cur });
+
+      // Right Hand spring damping
+      rightState.current.cur.x += (rightState.current.target.x - rightState.current.cur.x) * 0.1;
+      rightState.current.cur.y += (rightState.current.target.y - rightState.current.cur.y) * 0.1;
+      setRightOffset({ ...rightState.current.cur });
+
       animId = requestAnimationFrame(tick);
     };
     animId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animId);
   }, []);
 
-  // Exact 3-Tier Tonal Separation Dither Filter Engine
+  // Setup 3-Tier Dither Renderers
   useEffect(() => {
     let isActive = true;
     let rafId: number;
 
-    const img = new window.Image();
-    img.crossOrigin = "anonymous";
-    img.src = imgSrc;
+    const setupHandRenderer = (
+      imgSrc: string,
+      shadowCanvas: HTMLCanvasElement | null,
+      midCanvas: HTMLCanvasElement | null,
+      highlightCanvas: HTMLCanvasElement | null,
+      stateRef: React.MutableRefObject<HandData>
+    ) => {
+      if (!shadowCanvas || !midCanvas || !highlightCanvas) return null;
 
-    img.onload = () => {
-      if (
-        !isActive ||
-        !canvasShadowRef.current ||
-        !canvasMidRef.current ||
-        !canvasHighlightRef.current ||
-        !containerRef.current
-      )
-        return;
-
-      const shadowCanvas = canvasShadowRef.current;
       const shadowCtx = shadowCanvas.getContext("2d");
-      const midCanvas = canvasMidRef.current;
       const midCtx = midCanvas.getContext("2d");
-      const highlightCanvas = canvasHighlightRef.current;
       const highlightCtx = highlightCanvas.getContext("2d");
+      if (!shadowCtx || !midCtx || !highlightCtx) return null;
 
-      if (!shadowCtx || !midCtx || !highlightCtx) return;
+      const img = new window.Image();
+      img.crossOrigin = "anonymous";
+      img.src = imgSrc;
 
-      const aspect = img.width / img.height;
-      const targetW = 900;
-      const targetH = Math.round(targetW / aspect);
+      let renderFrame: (() => void) | null = null;
 
-      shadowCanvas.width = targetW;
-      shadowCanvas.height = targetH;
-      midCanvas.width = targetW;
-      midCanvas.height = targetH;
-      highlightCanvas.width = targetW;
-      highlightCanvas.height = targetH;
-
-      const cols = 75; // Resolution matching Dithering Tool
-      const rows = Math.max(1, Math.round(cols / aspect));
-      const cellW = targetW / cols;
-      const cellH = targetH / rows;
-
-      // Offscreen thumbnail canvas to sample brightness
-      const thumb = document.createElement("canvas");
-      thumb.width = cols;
-      thumb.height = rows;
-      const thumbCtx = thumb.getContext("2d", { willReadFrequently: true });
-      if (!thumbCtx) return;
-
-      thumbCtx.drawImage(img, 0, 0, cols, rows);
-      const imgData = thumbCtx.getImageData(0, 0, cols, rows).data;
-
-      const brightness = new Float32Array(cols * rows);
-      const level = new Uint8Array(cols * rows);
-      const influence = new Float32Array(cols * rows);
-
-      // Exact Dithering Tool Brightness & Quantization formula (0 to 6)
-      for (let i = 0, p = 0; i < brightness.length; i++, p += 4) {
-        const a = imgData[p + 3] / 255;
-        const b = ((imgData[p] * 0.299 + imgData[p + 1] * 0.587 + imgData[p + 2] * 0.114) / 255) * a;
-        brightness[i] = b;
-        level[i] = Math.min(6, Math.floor(b * 7));
-      }
-
-      const levelRgb = LEVEL_COLORS.map(hexToRgb);
-      const hoverRgb = hexToRgb("#ffffff");
-      const radiusPx = (20 / 100) * targetW;
-      const intensity = 1.0;
-      const speed = 0.18;
-
-      const fontSize = Math.max(6, Math.min(cellW, cellH) * 1.05);
-
-      // -------------------------------------------------------------
-      // 1. TIER 1: SHADOW & LOW PLANE (Tonal Levels 0, 1, 2)
-      // -------------------------------------------------------------
-      shadowCtx.clearRect(0, 0, targetW, targetH);
-      shadowCtx.textAlign = "center";
-      shadowCtx.textBaseline = "middle";
-      shadowCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
-
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const idx = r * cols + c;
-          const lvl = level[idx];
-          if (lvl === 0 || lvl > 2) continue; // Only Shadow & Low
-
-          const cx = c * cellW + cellW / 2;
-          const cy = r * cellH + cellH / 2;
-
-          const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
-          const ch = ASCII_RAMP[rampIdx];
-          if (ch && ch !== " ") {
-            const rgb = levelRgb[lvl];
-            shadowCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-            shadowCtx.fillText(ch, cx, cy);
-          }
-        }
-      }
-
-      // -------------------------------------------------------------
-      // 2. TIER 2: MID-LOW & MID PLANE (Tonal Levels 3, 4)
-      // -------------------------------------------------------------
-      midCtx.clearRect(0, 0, targetW, targetH);
-      midCtx.textAlign = "center";
-      midCtx.textBaseline = "middle";
-      midCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
-
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const idx = r * cols + c;
-          const lvl = level[idx];
-          if (lvl < 3 || lvl > 4) continue; // Only Midtones
-
-          const cx = c * cellW + cellW / 2;
-          const cy = r * cellH + cellH / 2;
-
-          const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
-          const ch = ASCII_RAMP[rampIdx];
-          if (ch && ch !== " ") {
-            const rgb = levelRgb[lvl];
-            midCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-            midCtx.fillText(ch, cx, cy);
-          }
-        }
-      }
-
-      // -------------------------------------------------------------
-      // 3. TIER 3: HIGH & HIGHLIGHT PLANE (Tonal Levels 5, 6 + Hover Glow)
-      // -------------------------------------------------------------
-      const renderLoop = () => {
+      img.onload = () => {
         if (!isActive) return;
 
-        // Update Hover Influence
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            const idx = r * cols + c;
-            let target = 0;
-            if (hoverMousePos.current) {
-              const cx = c * cellW + cellW / 2;
-              const cy = r * cellH + cellH / 2;
-              const dist = Math.hypot(cx - hoverMousePos.current.x, cy - hoverMousePos.current.y);
-              const t = 1 - Math.min(1, dist / radiusPx);
-              target = Math.max(0, t) * intensity;
-            }
-            influence[idx] += (target - influence[idx]) * speed;
-            if (Math.abs(influence[idx]) < 0.001) influence[idx] = 0;
-          }
+        const aspect = img.width / img.height;
+        const targetW = 900;
+        const targetH = Math.round(targetW / aspect);
+
+        shadowCanvas.width = targetW;
+        shadowCanvas.height = targetH;
+        midCanvas.width = targetW;
+        midCanvas.height = targetH;
+        highlightCanvas.width = targetW;
+        highlightCanvas.height = targetH;
+
+        const cols = 75;
+        const rows = Math.max(1, Math.round(cols / aspect));
+        const cellW = targetW / cols;
+        const cellH = targetH / rows;
+
+        const thumb = document.createElement("canvas");
+        thumb.width = cols;
+        thumb.height = rows;
+        const thumbCtx = thumb.getContext("2d", { willReadFrequently: true });
+        if (!thumbCtx) return;
+
+        thumbCtx.drawImage(img, 0, 0, cols, rows);
+        const imgData = thumbCtx.getImageData(0, 0, cols, rows).data;
+
+        const brightness = new Float32Array(cols * rows);
+        const level = new Uint8Array(cols * rows);
+        const influence = new Float32Array(cols * rows);
+
+        for (let i = 0, p = 0; i < brightness.length; i++, p += 4) {
+          const a = imgData[p + 3] / 255;
+          const b = ((imgData[p] * 0.299 + imgData[p + 1] * 0.587 + imgData[p + 2] * 0.114) / 255) * a;
+          brightness[i] = b;
+          level[i] = Math.min(6, Math.floor(b * 7));
         }
 
-        highlightCtx.clearRect(0, 0, targetW, targetH);
-        highlightCtx.textAlign = "center";
-        highlightCtx.textBaseline = "middle";
-        highlightCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+        const levelRgb = LEVEL_COLORS.map(hexToRgb);
+        const hoverRgb = hexToRgb("#ffffff");
+        const radiusPx = (22 / 100) * targetW;
+        const intensity = 1.0;
+        const speed = 0.18;
+        const fontSize = Math.max(6, Math.min(cellW, cellH) * 1.05);
+
+        // 1. Render Layer 1: Shadows (Levels 0, 1, 2)
+        shadowCtx.clearRect(0, 0, targetW, targetH);
+        shadowCtx.textAlign = "center";
+        shadowCtx.textBaseline = "middle";
+        shadowCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
 
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
             const idx = r * cols + c;
             const lvl = level[idx];
-            if (lvl < 5) continue; // Only Highlights (Levels 5 & 6)
-
-            const inf = influence[idx];
-            const base = levelRgb[lvl];
-            const rgb = inf > 0.001 ? lerpColor(base, hoverRgb, inf) : base;
-            const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+            if (lvl === 0 || lvl > 2) continue;
 
             const cx = c * cellW + cellW / 2;
             const cy = r * cellH + cellH / 2;
-
             const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
             const ch = ASCII_RAMP[rampIdx];
             if (ch && ch !== " ") {
-              highlightCtx.fillStyle = color;
-              highlightCtx.fillText(ch, cx, cy);
+              const rgb = levelRgb[lvl];
+              shadowCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+              shadowCtx.fillText(ch, cx, cy);
             }
           }
         }
 
-        rafId = requestAnimationFrame(renderLoop);
+        // 2. Render Layer 2: Midtones (Levels 3, 4)
+        midCtx.clearRect(0, 0, targetW, targetH);
+        midCtx.textAlign = "center";
+        midCtx.textBaseline = "middle";
+        midCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const idx = r * cols + c;
+            const lvl = level[idx];
+            if (lvl < 3 || lvl > 4) continue;
+
+            const cx = c * cellW + cellW / 2;
+            const cy = r * cellH + cellH / 2;
+            const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
+            const ch = ASCII_RAMP[rampIdx];
+            if (ch && ch !== " ") {
+              const rgb = levelRgb[lvl];
+              midCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+              midCtx.fillText(ch, cx, cy);
+            }
+          }
+        }
+
+        // 3. Dynamic Highlight Layer with Hover Glow
+        renderFrame = () => {
+          for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+              const idx = r * cols + c;
+              let target = 0;
+              if (stateRef.current.hoverCanvasPos) {
+                const cx = c * cellW + cellW / 2;
+                const cy = r * cellH + cellH / 2;
+                const dist = Math.hypot(cx - stateRef.current.hoverCanvasPos.x, cy - stateRef.current.hoverCanvasPos.y);
+                const t = 1 - Math.min(1, dist / radiusPx);
+                target = Math.max(0, t) * intensity;
+              }
+              influence[idx] += (target - influence[idx]) * speed;
+              if (Math.abs(influence[idx]) < 0.001) influence[idx] = 0;
+            }
+          }
+
+          highlightCtx.clearRect(0, 0, targetW, targetH);
+          highlightCtx.textAlign = "center";
+          highlightCtx.textBaseline = "middle";
+          highlightCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+
+          for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+              const idx = r * cols + c;
+              const lvl = level[idx];
+              if (lvl < 5) continue;
+
+              const inf = influence[idx];
+              const base = levelRgb[lvl];
+              const rgb = inf > 0.001 ? lerpColor(base, hoverRgb, inf) : base;
+              const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+
+              const cx = c * cellW + cellW / 2;
+              const cy = r * cellH + cellH / 2;
+              const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
+              const ch = ASCII_RAMP[rampIdx];
+              if (ch && ch !== " ") {
+                highlightCtx.fillStyle = color;
+                highlightCtx.fillText(ch, cx, cy);
+              }
+            }
+          }
+        };
       };
 
-      rafId = requestAnimationFrame(renderLoop);
+      return () => {
+        if (renderFrame) renderFrame();
+      };
     };
+
+    const leftTick = setupHandRenderer(
+      "/adam-hands/left-hand.png",
+      leftShadowCanvasRef.current,
+      leftMidCanvasRef.current,
+      leftHighlightCanvasRef.current,
+      leftState
+    );
+
+    const rightTick = setupHandRenderer(
+      "/adam-hands/right-hand.png",
+      rightShadowCanvasRef.current,
+      rightMidCanvasRef.current,
+      rightHighlightCanvasRef.current,
+      rightState
+    );
+
+    const mainLoop = () => {
+      if (!isActive) return;
+      if (leftTick) leftTick();
+      if (rightTick) rightTick();
+      rafId = requestAnimationFrame(mainLoop);
+    };
+    rafId = requestAnimationFrame(mainLoop);
 
     return () => {
       isActive = false;
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [imgSrc]);
+  }, []);
 
   return (
     <div
-      ref={containerRef}
+      ref={rootRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`w-[50%] sm:w-[46%] md:w-[48%] h-full relative pointer-events-auto flex items-end ${
-        isLeft ? "justify-start" : "justify-end"
-      }`}
+      className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[520px] sm:min-h-[600px] flex flex-col justify-between"
     >
-      {/* TIER 1: Shadow & Low Tonal Plane (Levels 0, 1, 2) - Slow Deep Parallax */}
-      <div
-        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end pointer-events-none"
-        style={{
-          transform: `translate3d(${parallaxOffset.x * 4}px, ${parallaxOffset.y * 3}px, 0) scale(0.985)`,
-          justifyContent: isLeft ? "flex-start" : "flex-end",
-        }}
-      >
-        <canvas ref={canvasShadowRef} className="block max-h-full max-w-full object-contain opacity-90" />
-      </div>
-
-      {/* TIER 2: Mid-Low & Mid Tonal Plane (Levels 3, 4) - Medium Body Parallax */}
-      <div
-        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end pointer-events-none"
-        style={{
-          transform: `translate3d(${parallaxOffset.x * 9}px, ${parallaxOffset.y * 6.5}px, 0)`,
-          justifyContent: isLeft ? "flex-start" : "flex-end",
-        }}
-      >
-        <canvas ref={canvasMidRef} className="block max-h-full max-w-full object-contain opacity-95" />
-      </div>
-
-      {/* TIER 3: High & Highlight Tonal Plane (Levels 5, 6 + Hover Glow) - Foreground Parallax */}
-      <div
-        className="w-full h-full relative transition-transform duration-100 ease-out flex items-end pointer-events-none"
-        style={{
-          transform: `translate3d(${parallaxOffset.x * 15}px, ${parallaxOffset.y * 11}px, 0)`,
-          justifyContent: isLeft ? "flex-start" : "flex-end",
-        }}
-      >
-        <canvas
-          ref={canvasHighlightRef}
-          className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(217,83,28,0.25)]"
-        />
-      </div>
-    </div>
-  );
-}
-
-interface AdamFooterDitherProps {
-  children?: React.ReactNode;
-}
-
-export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
-  return (
-    <div className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[520px] sm:min-h-[600px] flex flex-col justify-between">
       {/* -------------------------------------------------------------
           BOTTOM-ANCHORED DUAL HANDS CONTAINER (Mobile & Desktop Clean Row)
           ------------------------------------------------------------- */}
       <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[240px] sm:h-[380px] md:h-[460px] px-0 sm:px-4">
-        <SingleHandDither imgSrc="/adam-hands/left-hand.png" isLeft={true} />
-        <SingleHandDither imgSrc="/adam-hands/right-hand.png" isLeft={false} />
+        {/* LEFT HAND (3-Tier Discrete Tonal Parallax) */}
+        <div
+          ref={leftWrapRef}
+          className="w-[50%] sm:w-[46%] md:w-[48%] h-full relative flex items-end justify-start pointer-events-none"
+        >
+          {/* Layer 1: Shadow Plane (Levels 0, 1, 2) */}
+          <div
+            className="absolute inset-0 transition-transform duration-100 ease-out flex items-end justify-start opacity-90"
+            style={{
+              transform: `translate3d(${leftOffset.x * 6}px, ${leftOffset.y * 4.5}px, 0) scale(0.985)`,
+            }}
+          >
+            <canvas ref={leftShadowCanvasRef} className="block max-h-full max-w-full object-contain" />
+          </div>
+
+          {/* Layer 2: Midtone Plane (Levels 3, 4) */}
+          <div
+            className="absolute inset-0 transition-transform duration-100 ease-out flex items-end justify-start opacity-95"
+            style={{
+              transform: `translate3d(${leftOffset.x * 14}px, ${leftOffset.y * 10}px, 0)`,
+            }}
+          >
+            <canvas ref={leftMidCanvasRef} className="block max-h-full max-w-full object-contain" />
+          </div>
+
+          {/* Layer 3: Highlight Plane (Levels 5, 6 + Glow) */}
+          <div
+            className="w-full h-full relative transition-transform duration-100 ease-out flex items-end justify-start"
+            style={{
+              transform: `translate3d(${leftOffset.x * 24}px, ${leftOffset.y * 18}px, 0)`,
+            }}
+          >
+            <canvas
+              ref={leftHighlightCanvasRef}
+              className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(217,83,28,0.25)]"
+            />
+          </div>
+        </div>
+
+        {/* RIGHT HAND (3-Tier Discrete Tonal Parallax) */}
+        <div
+          ref={rightWrapRef}
+          className="w-[50%] sm:w-[46%] md:w-[48%] h-full relative flex items-end justify-end pointer-events-none"
+        >
+          {/* Layer 1: Shadow Plane (Levels 0, 1, 2) */}
+          <div
+            className="absolute inset-0 transition-transform duration-100 ease-out flex items-end justify-end opacity-90"
+            style={{
+              transform: `translate3d(${rightOffset.x * 6}px, ${rightOffset.y * 4.5}px, 0) scale(0.985)`,
+            }}
+          >
+            <canvas ref={rightShadowCanvasRef} className="block max-h-full max-w-full object-contain" />
+          </div>
+
+          {/* Layer 2: Midtone Plane (Levels 3, 4) */}
+          <div
+            className="absolute inset-0 transition-transform duration-100 ease-out flex items-end justify-end opacity-95"
+            style={{
+              transform: `translate3d(${rightOffset.x * 14}px, ${rightOffset.y * 10}px, 0)`,
+            }}
+          >
+            <canvas ref={rightMidCanvasRef} className="block max-h-full max-w-full object-contain" />
+          </div>
+
+          {/* Layer 3: Highlight Plane (Levels 5, 6 + Glow) */}
+          <div
+            className="w-full h-full relative transition-transform duration-100 ease-out flex items-end justify-end"
+            style={{
+              transform: `translate3d(${rightOffset.x * 24}px, ${rightOffset.y * 18}px, 0)`,
+            }}
+          >
+            <canvas
+              ref={rightHighlightCanvasRef}
+              className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(217,83,28,0.25)]"
+            />
+          </div>
+        </div>
       </div>
 
       {/* -------------------------------------------------------------
-          FOOTER CONTENT & LINKS OVERLAY (Front Interactive Layer)
+          FOOTER CONTENT & LINKS OVERLAY (Pass-Through Pointer Events)
           ------------------------------------------------------------- */}
-      <div className="relative z-20 w-full flex-1 flex flex-col justify-between">
+      <div className="relative z-20 w-full flex-1 flex flex-col justify-between pointer-events-none [&_a]:pointer-events-auto [&_button]:pointer-events-auto [&_input]:pointer-events-auto">
         {children}
       </div>
     </div>
