@@ -40,9 +40,11 @@ interface SingleHandProps {
 
 function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasDeepRef = useRef<HTMLCanvasElement>(null);
+  const canvasMidRef = useRef<HTMLCanvasElement>(null);
+  const canvasTopRef = useRef<HTMLCanvasElement>(null);
 
-  // Parallax spring state (very subtle and smooth)
+  // Parallax spring state (subtle, organic physical movement)
   const mouseParallaxTarget = useRef({ x: 0, y: 0 });
   const mouseParallaxCur = useRef({ x: 0, y: 0 });
   const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
@@ -51,18 +53,18 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
   const hoverMousePos = useRef<{ x: number; y: number } | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current || !canvasRef.current) return;
+    if (!containerRef.current || !canvasTopRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const canvasRect = canvasRef.current.getBoundingClientRect();
+    const canvasRect = canvasTopRef.current.getBoundingClientRect();
 
     // Parallax relative to hand container (-1 to 1)
     const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
     mouseParallaxTarget.current = { x: nx, y: ny };
 
-    // Canvas internal pixel coordinates for hover color highlight
-    const scaleX = canvasRef.current.width / (canvasRect.width || 1);
-    const scaleY = canvasRef.current.height / (canvasRect.height || 1);
+    // Canvas internal pixel coordinates for hover glow
+    const scaleX = canvasTopRef.current.width / (canvasRect.width || 1);
+    const scaleY = canvasTopRef.current.height / (canvasRect.height || 1);
     hoverMousePos.current = {
       x: (e.clientX - canvasRect.left) * scaleX,
       y: (e.clientY - canvasRect.top) * scaleY,
@@ -87,7 +89,7 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
     return () => cancelAnimationFrame(animId);
   }, []);
 
-  // Exact Dither Filter Tool Engine
+  // Exact Multi-Layer ASCII Dither Filter Engine
   useEffect(() => {
     let isActive = true;
     let rafId: number;
@@ -97,18 +99,34 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
     img.src = imgSrc;
 
     img.onload = () => {
-      if (!isActive || !canvasRef.current || !containerRef.current) return;
+      if (
+        !isActive ||
+        !canvasDeepRef.current ||
+        !canvasMidRef.current ||
+        !canvasTopRef.current ||
+        !containerRef.current
+      )
+        return;
 
-      const outputCanvas = canvasRef.current;
-      const outputCtx = outputCanvas.getContext("2d");
-      if (!outputCtx) return;
+      const topCanvas = canvasTopRef.current;
+      const topCtx = topCanvas.getContext("2d");
+      const midCanvas = canvasMidRef.current;
+      const midCtx = midCanvas.getContext("2d");
+      const deepCanvas = canvasDeepRef.current;
+      const deepCtx = deepCanvas.getContext("2d");
+
+      if (!topCtx || !midCtx || !deepCtx) return;
 
       const aspect = img.width / img.height;
       const targetW = 900;
       const targetH = Math.round(targetW / aspect);
 
-      outputCanvas.width = targetW;
-      outputCanvas.height = targetH;
+      topCanvas.width = targetW;
+      topCanvas.height = targetH;
+      midCanvas.width = targetW;
+      midCanvas.height = targetH;
+      deepCanvas.width = targetW;
+      deepCanvas.height = targetH;
 
       const cols = 75; // Resolution matching Dithering Tool
       const rows = Math.max(1, Math.round(cols / aspect));
@@ -145,11 +163,62 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
 
       const fontSize = Math.max(6, Math.min(cellW, cellH) * 1.05);
 
-      // Continuous render & hover animation loop
+      // 1. Draw static Deep Base Layer (Shadow & Contour ASCII)
+      deepCtx.clearRect(0, 0, targetW, targetH);
+      deepCtx.textAlign = "center";
+      deepCtx.textBaseline = "middle";
+      deepCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const idx = r * cols + c;
+          const lvl = level[idx];
+          if (lvl === 0) continue;
+
+          const cx = c * cellW + cellW / 2;
+          const cy = r * cellH + cellH / 2;
+
+          const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
+          const ch = ASCII_RAMP[rampIdx];
+          if (ch && ch !== " ") {
+            const shadowLvl = Math.min(3, lvl);
+            const rgb = levelRgb[shadowLvl];
+            deepCtx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.45)`;
+            deepCtx.fillText(ch, cx, cy);
+          }
+        }
+      }
+
+      // 2. Draw static Midtone Layer
+      midCtx.clearRect(0, 0, targetW, targetH);
+      midCtx.textAlign = "center";
+      midCtx.textBaseline = "middle";
+      midCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const idx = r * cols + c;
+          const lvl = level[idx];
+          if (lvl < 2) continue;
+
+          const cx = c * cellW + cellW / 2;
+          const cy = r * cellH + cellH / 2;
+
+          const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
+          const ch = ASCII_RAMP[rampIdx];
+          if (ch && ch !== " ") {
+            const rgb = levelRgb[lvl];
+            midCtx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.7)`;
+            midCtx.fillText(ch, cx, cy);
+          }
+        }
+      }
+
+      // 3. Continuous render loop for Top Layer (Full Highlight & Interactive Hover Glow)
       const renderLoop = () => {
         if (!isActive) return;
 
-        // 1. Update Hover Influence
+        // Update Hover Influence
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
             const idx = r * cols + c;
@@ -166,17 +235,16 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
           }
         }
 
-        // 2. Exact Dithering Tool Draw Routine
-        outputCtx.clearRect(0, 0, targetW, targetH);
-        outputCtx.textAlign = "center";
-        outputCtx.textBaseline = "middle";
-        outputCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+        topCtx.clearRect(0, 0, targetW, targetH);
+        topCtx.textAlign = "center";
+        topCtx.textBaseline = "middle";
+        topCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
 
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
             const idx = r * cols + c;
             const lvl = level[idx];
-            if (lvl === 0) continue; // Skip empty background
+            if (lvl === 0) continue;
 
             const inf = influence[idx];
             const base = levelRgb[lvl];
@@ -189,8 +257,8 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
             const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
             const ch = ASCII_RAMP[rampIdx];
             if (ch && ch !== " ") {
-              outputCtx.fillStyle = color;
-              outputCtx.fillText(ch, cx, cy);
+              topCtx.fillStyle = color;
+              topCtx.fillText(ch, cx, cy);
             }
           }
         }
@@ -212,41 +280,42 @@ function SingleHandDither({ imgSrc, isLeft }: SingleHandProps) {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`w-full sm:w-[50%] h-[280px] sm:h-[380px] md:h-[460px] relative pointer-events-auto flex items-end ${
+      className={`w-[50%] sm:w-[46%] md:w-[48%] h-full relative pointer-events-auto flex items-end ${
         isLeft ? "justify-start" : "justify-end"
       }`}
     >
-      {/* Subtle Deep Layer Beneath (Slower Parallax + Muted Filter) */}
+      {/* LAYER 1: Deep Base ASCII Layer (Slower Parallax Shift) */}
       <div
-        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end opacity-40 mix-blend-screen pointer-events-none filter blur-[1.5px]"
+        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end opacity-50 mix-blend-screen pointer-events-none filter blur-[1px]"
         style={{
-          transform: `translate3d(${parallaxOffset.x * 5}px, ${parallaxOffset.y * 4}px, 0) scale(1.02)`,
+          transform: `translate3d(${parallaxOffset.x * 5}px, ${parallaxOffset.y * 3.5}px, 0) scale(0.98)`,
           justifyContent: isLeft ? "flex-start" : "flex-end",
         }}
       >
-        <canvas
-          ref={(node) => {
-            if (node && canvasRef.current && node !== canvasRef.current) {
-              node.width = canvasRef.current.width;
-              node.height = canvasRef.current.height;
-              const nCtx = node.getContext("2d");
-              if (nCtx) nCtx.drawImage(canvasRef.current, 0, 0);
-            }
-          }}
-          className="block max-h-full max-w-full object-contain"
-        />
+        <canvas ref={canvasDeepRef} className="block max-h-full max-w-full object-contain" />
       </div>
 
-      {/* Top Crisp ASCII Dither Layer (Subtle Parallax Movement) */}
+      {/* LAYER 2: Middle Midtone ASCII Layer (Medium Parallax Shift) */}
+      <div
+        className="absolute inset-0 transition-transform duration-100 ease-out flex items-end opacity-65 pointer-events-none"
+        style={{
+          transform: `translate3d(${parallaxOffset.x * 10}px, ${parallaxOffset.y * 7}px, 0)`,
+          justifyContent: isLeft ? "flex-start" : "flex-end",
+        }}
+      >
+        <canvas ref={canvasMidRef} className="block max-h-full max-w-full object-contain" />
+      </div>
+
+      {/* LAYER 3: Foreground Highlight ASCII Layer (Interactive Hover + Parallax) */}
       <div
         className="w-full h-full relative transition-transform duration-100 ease-out flex items-end"
         style={{
-          transform: `translate3d(${parallaxOffset.x * 12}px, ${parallaxOffset.y * 9}px, 0)`,
+          transform: `translate3d(${parallaxOffset.x * 16}px, ${parallaxOffset.y * 11}px, 0)`,
           justifyContent: isLeft ? "flex-start" : "flex-end",
         }}
       >
         <canvas
-          ref={canvasRef}
+          ref={canvasTopRef}
           className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(217,83,28,0.25)]"
         />
       </div>
@@ -260,11 +329,11 @@ interface AdamFooterDitherProps {
 
 export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
   return (
-    <div className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[500px] sm:min-h-[600px] flex flex-col justify-between">
+    <div className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[520px] sm:min-h-[600px] flex flex-col justify-between">
       {/* -------------------------------------------------------------
-          EXACT DITHER FILTER TOOL CANVASES (Creation of Adam Hands)
+          BOTTOM-ANCHORED DUAL HANDS CONTAINER (Mobile & Desktop Clean Row)
           ------------------------------------------------------------- */}
-      <div className="absolute inset-0 pointer-events-none z-10 flex flex-col sm:flex-row justify-between items-end pb-0">
+      <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[240px] sm:h-[380px] md:h-[460px] px-0 sm:px-4">
         <SingleHandDither imgSrc="/adam-hands/left-hand.png" isLeft={true} />
         <SingleHandDither imgSrc="/adam-hands/right-hand.png" isLeft={false} />
       </div>
