@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useInView } from "motion/react";
 
 // Exact 7 Tonal Level Colors from the Dithering Tool
 const LEVEL_COLORS = [
@@ -55,6 +56,15 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
   const rightMidCanvasRef = useRef<HTMLCanvasElement>(null);
   const rightHighlightCanvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Canvas Ready State
+  const [imagesReady, setImagesReady] = useState(false);
+
+  // Motion useInView: accurately tracks when footer is in view (with margin to avoid triggering on offscreen initial mount)
+  const isInView = useInView(rootRef, { amount: 0.2, once: false });
+
+  // Effective reveal active state
+  const isRevealed = imagesReady && isInView;
+
   // Independent Parallax & Interaction States
   const leftState = useRef<HandData>({
     target: { x: 0, y: 0 },
@@ -73,27 +83,9 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
   const [leftOffset, setLeftOffset] = useState({ x: 0, y: 0 });
   const [rightOffset, setRightOffset] = useState({ x: 0, y: 0 });
 
-  // Scroll In-View Trigger
-  const [isInView, setIsInView] = useState(false);
-
   // Render callback refs to trigger on-demand highlight updates without polling
   const redrawLeftHighlight = useRef<(() => void) | null>(null);
   const redrawRightHighlight = useRef<(() => void) | null>(null);
-
-  // Trigger reveal when scrolling into footer section
-  useEffect(() => {
-    if (!rootRef.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(rootRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   // Root Mouse Tracking: Non-blocking, event-driven
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -174,8 +166,6 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
   useEffect(() => {
     let animId: number;
     const tick = () => {
-      let isMoving = false;
-
       // Left Hand spring
       const leftDx = leftState.current.target.x - leftState.current.cur.x;
       const leftDy = leftState.current.target.y - leftState.current.cur.y;
@@ -183,7 +173,6 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
         leftState.current.cur.x += leftDx * 0.12;
         leftState.current.cur.y += leftDy * 0.12;
         setLeftOffset({ ...leftState.current.cur });
-        isMoving = true;
       }
 
       // Right Hand spring
@@ -193,7 +182,6 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
         rightState.current.cur.x += rightDx * 0.12;
         rightState.current.cur.y += rightDy * 0.12;
         setRightOffset({ ...rightState.current.cur });
-        isMoving = true;
       }
 
       // On-demand highlight canvas redraws (zero overhead when resting)
@@ -214,9 +202,18 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
   // 1-Time High-Performance Static ASCII Canvas Pre-Renderer
   useEffect(() => {
     let isActive = true;
+    let leftDone = false;
+    let rightDone = false;
+
+    const checkBothDone = () => {
+      if (leftDone && rightDone && isActive) {
+        setImagesReady(true);
+      }
+    };
 
     const setupHandRenderer = (
       imgSrc: string,
+      isLeft: boolean,
       shadowCanvas: HTMLCanvasElement | null,
       midCanvas: HTMLCanvasElement | null,
       highlightCanvas: HTMLCanvasElement | null,
@@ -388,6 +385,10 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
         // Initial 1-time highlight draw
         drawHighlight();
         updateHighlight = drawHighlight;
+
+        if (isLeft) leftDone = true;
+        else rightDone = true;
+        checkBothDone();
       };
 
       return () => {
@@ -397,6 +398,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
 
     redrawLeftHighlight.current = setupHandRenderer(
       "/adam-hands/left-hand.png",
+      true,
       leftShadowCanvasRef.current,
       leftMidCanvasRef.current,
       leftHighlightCanvasRef.current,
@@ -405,6 +407,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
 
     redrawRightHighlight.current = setupHandRenderer(
       "/adam-hands/right-hand.png",
+      false,
       rightShadowCanvasRef.current,
       rightMidCanvasRef.current,
       rightHighlightCanvasRef.current,
@@ -434,11 +437,12 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
         {/* LEFT HAND (Materializes from LEFT side -> sweeping across to the fingers) */}
         <div
           ref={leftWrapRef}
-          className="w-[50%] h-full relative flex items-end justify-start pointer-events-none transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="w-[50%] h-full relative flex items-end justify-start pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
-            clipPath: isInView ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
-            opacity: isInView ? 1 : 0,
-            transform: isInView ? "translate3d(0, 0, 0)" : "translate3d(-24px, 0, 0)",
+            clipPath: isRevealed ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
+            WebkitClipPath: isRevealed ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
+            opacity: isRevealed ? 1 : 0,
+            transform: isRevealed ? "translate3d(0, 0, 0)" : "translate3d(-30px, 0, 0)",
           }}
         >
           {/* Layer 1: Shadow Plane (Levels 0, 1, 2) */}
@@ -478,11 +482,12 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
         {/* RIGHT HAND (Materializes from RIGHT side -> sweeping across to the fingers) */}
         <div
           ref={rightWrapRef}
-          className="w-[50%] h-full relative flex items-end justify-end pointer-events-none transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="w-[50%] h-full relative flex items-end justify-end pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
-            clipPath: isInView ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",
-            opacity: isInView ? 1 : 0,
-            transform: isInView ? "translate3d(0, 0, 0)" : "translate3d(24px, 0, 0)",
+            clipPath: isRevealed ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",
+            WebkitClipPath: isRevealed ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",
+            opacity: isRevealed ? 1 : 0,
+            transform: isRevealed ? "translate3d(0, 0, 0)" : "translate3d(30px, 0, 0)",
           }}
         >
           {/* Layer 1: Shadow Plane (Levels 0, 1, 2) */}
