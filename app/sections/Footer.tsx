@@ -10,7 +10,7 @@ const Footer = () => {
     <>
       <CTA />
       <AdamFooterDither>
-        <footer className="bg-transparent text-white py-24 px-8 border-t border-neutral-900/80 relative z-30">
+        <footer className="bg-transparent text-white py-20 sm:py-28 px-6 sm:px-12 border-t border-neutral-900/80 relative z-30 min-h-[460px] sm:min-h-[560px] flex flex-col justify-between">
           <div className="max-w-7xl mx-auto">
           {/* Main Footer Content */}
           <div className="flex flex-col md:flex-row justify-between gap-16 mb-16">
