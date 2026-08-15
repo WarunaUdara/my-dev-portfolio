@@ -424,7 +424,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
       ref={rootRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[520px] sm:min-h-[600px] flex flex-col justify-between"
+      className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[560px] sm:min-h-[640px] md:min-h-[680px] flex flex-col justify-between"
     >
       {/* -------------------------------------------------------------
           BOTTOM-ANCHORED DUAL HANDS CONTAINER
@@ -432,12 +432,12 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           - Right Hand: Sweeps from RIGHT (Wrist/Arm) to LEFT (Fingers)
           - 100% GPU Hardware Accelerated clip-path transition (0% CPU load)
           ------------------------------------------------------------- */}
-      <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[240px] sm:h-[380px] md:h-[460px] px-0">
+      <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[280px] sm:h-[420px] md:h-[500px] lg:h-[550px] px-0">
         
         {/* LEFT HAND (Materializes from LEFT side -> sweeping across to the fingers) */}
         <div
           ref={leftWrapRef}
-          className="w-[50%] h-full relative flex items-end justify-start pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="w-[53%] sm:w-[52%] md:w-[51%] h-full relative flex items-end justify-start pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
             clipPath: isRevealed ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
             WebkitClipPath: isRevealed ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
@@ -482,7 +482,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
         {/* RIGHT HAND (Materializes from RIGHT side -> sweeping across to the fingers) */}
         <div
           ref={rightWrapRef}
-          className="w-[50%] h-full relative flex items-end justify-end pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="w-[53%] sm:w-[52%] md:w-[51%] h-full relative flex items-end justify-end pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
             clipPath: isRevealed ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",
             WebkitClipPath: isRevealed ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",

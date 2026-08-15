@@ -5,6 +5,7 @@ import { IconBrandLinkedin, IconBrandGithub, IconChevronDown, IconArrowRight } f
 import ScrollFrost from '@/components/canvasui/ScrollFrost';
 import AuroraText from '@/components/ui/aurora-text';
 import { OrbitingCircles } from '@/components/ui/orbiting-circles';
+import AboutImageDither from '@/components/ui/AboutImageDither';
 import { cn } from '@/lib/utils';
 
 interface AboutProps {
@@ -190,19 +191,11 @@ const About = ({ isAboutPage = false }: AboutProps) => {
                 </div>
               </div>
             ) : (
-              <div className="relative w-full max-w-sm lg:max-w-md mx-auto aspect-[3/4] group overflow-hidden flex items-start justify-center -mt-6 sm:-mt-10 lg:-mt-14">
-                <Image
-                  src="/warunaudara.webp"
-                  alt="Waruna Udara Sampath"
-                  fill
-                  className="object-contain object-top transition-transform duration-500 group-hover:scale-105"
-                  style={{
-                    WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 98%)",
-                    maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 65%, rgba(0,0,0,0) 98%)",
-                  }}
-                  priority
-                />
-              </div>
+              <AboutImageDither
+                src="/warunaudara.webp"
+                alt="Waruna Udara Sampath"
+                className="-mt-6 sm:-mt-10 lg:-mt-14"
+              />
             )}
           </div>
         </div>
