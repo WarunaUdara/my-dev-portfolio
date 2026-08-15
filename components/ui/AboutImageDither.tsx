@@ -65,7 +65,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
 
   const redrawHighlight = useRef<(() => void) | null>(null);
 
-  // Mouse Tracking: Updates radial lens position & parallax target
+  // Mouse Tracking: Updates radial lens position & synchronized parallax target
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current || !highlightCanvasRef.current) return;
 
@@ -105,7 +105,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
     stateRef.current.needsHighlightRedraw = true;
   }, []);
 
-  // Spring Parallax Loop
+  // Spring Parallax Loop: Subtle, synchronized micro-movement
   useEffect(() => {
     let animId: number;
     const tick = () => {
@@ -129,7 +129,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
     return () => cancelAnimationFrame(animId);
   }, []);
 
-  // 1-Time High-Performance ASCII Canvas Pre-Renderer with Shadow & Dark Visibility
+  // 1-Time High-Performance ASCII Canvas Pre-Renderer: 1:1 Pixel Accuracy
   useEffect(() => {
     let isActive = true;
 
@@ -152,9 +152,9 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
     img.onload = () => {
       if (!isActive) return;
 
-      const aspect = img.width / img.height;
-      const targetW = 600;
-      const targetH = Math.round(targetW / aspect);
+      // 1732x1732 image: render on exact square resolution
+      const targetW = 750;
+      const targetH = 750;
 
       shadowCanvas.width = targetW;
       shadowCanvas.height = targetH;
@@ -163,8 +163,8 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       highlightCanvas.width = targetW;
       highlightCanvas.height = targetH;
 
-      const cols = 72;
-      const rows = Math.max(1, Math.round(cols / aspect));
+      const cols = 75;
+      const rows = 75;
       const cellW = targetW / cols;
       const cellH = targetH / rows;
 
@@ -322,11 +322,11 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
     };
   }, [src]);
 
-  // Radius Lens Cutout Mask on Top Image
-  const lensRadius = 150; // Radius in pixels for localized hover preview window
+  // Ultra-Soft Feathered Radius Lens Cutout Mask on Top Image
+  const lensRadius = 175; // Soft aperture radius in pixels
 
   const topImageMask = isHovered
-    ? `radial-gradient(circle ${lensRadius}px at ${mousePos.x}px ${mousePos.y}px, transparent 0%, transparent 60%, black 95%)`
+    ? `radial-gradient(circle ${lensRadius}px at ${mousePos.x}px ${mousePos.y}px, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.6) 72%, rgba(0,0,0,0.92) 88%, rgba(0,0,0,1) 100%)`
     : "none";
 
   return (
@@ -335,7 +335,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative w-full max-w-sm lg:max-w-md mx-auto aspect-[3/4] group overflow-hidden flex items-start justify-center cursor-pointer select-none ${
+      className={`relative w-full max-w-sm lg:max-w-md mx-auto aspect-square overflow-hidden flex items-start justify-center cursor-pointer select-none ${
         className || ""
       }`}
       style={{
@@ -344,42 +344,26 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       }}
     >
       {/* -------------------------------------------------------------
-          UNDERLYING ASCII FILTER IMAGE (Revealed inside Hover Radius)
-          - Exactly 1:1 Pixel & Size Matched with Top Photo
+          UNDERLYING ASCII FILTER IMAGE (100% 1:1 Pixel-Matched Position)
           ------------------------------------------------------------- */}
       <div
-        className="absolute inset-0 flex items-start justify-center pointer-events-none transition-transform duration-100 ease-out"
+        className="absolute inset-0 w-full h-full pointer-events-none transition-transform duration-100 ease-out"
         style={{
-          transform: `translate3d(${offset.x * 4}px, ${offset.y * 3}px, 0)`,
+          transform: `translate3d(${offset.x * 2}px, ${offset.y * 1.5}px, 0)`,
         }}
       >
-        {/* Layer 1: Shadow Plane (With Visible Dark Tones for Hair & Beard) */}
-        <div
-          className="absolute inset-0 flex items-start justify-center transition-transform duration-100 ease-out opacity-90"
-          style={{
-            transform: `translate3d(${offset.x * 1.5}px, ${offset.y * 1}px, 0) scale(0.995)`,
-          }}
-        >
+        {/* Layer 1: Shadow Plane (Visible dark contours) */}
+        <div className="absolute inset-0 w-full h-full opacity-90">
           <canvas ref={shadowCanvasRef} className="block w-full h-full object-contain object-top" />
         </div>
 
         {/* Layer 2: Midtone Plane */}
-        <div
-          className="absolute inset-0 flex items-start justify-center transition-transform duration-100 ease-out opacity-95"
-          style={{
-            transform: `translate3d(${offset.x * 3}px, ${offset.y * 2.2}px, 0)`,
-          }}
-        >
+        <div className="absolute inset-0 w-full h-full opacity-95">
           <canvas ref={midCanvasRef} className="block w-full h-full object-contain object-top" />
         </div>
 
         {/* Layer 3: Highlight Plane with Live Cursor Glow */}
-        <div
-          className="w-full h-full relative flex items-start justify-center transition-transform duration-100 ease-out"
-          style={{
-            transform: `translate3d(${offset.x * 5}px, ${offset.y * 3.8}px, 0)`,
-          }}
-        >
+        <div className="absolute inset-0 w-full h-full">
           <canvas
             ref={highlightCanvasRef}
             className="block w-full h-full object-contain object-top filter drop-shadow-[0_0_20px_rgba(217,83,28,0.35)]"
@@ -388,14 +372,14 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       </div>
 
       {/* -------------------------------------------------------------
-          TOP ORIGINAL CRISP PHOTO (With Smooth Radial Cutout Lens on Hover)
+          TOP ORIGINAL CRISP PHOTO (With Ultra-Soft Feathered Radial Cutout)
           ------------------------------------------------------------- */}
       <div
-        className="absolute inset-0 pointer-events-none transition-transform duration-100 ease-out"
+        className="absolute inset-0 w-full h-full pointer-events-none transition-transform duration-100 ease-out"
         style={{
           maskImage: topImageMask,
           WebkitMaskImage: topImageMask,
-          transform: `translate3d(${offset.x * 1.5}px, ${offset.y * 1}px, 0)`,
+          transform: `translate3d(${offset.x * 2}px, ${offset.y * 1.5}px, 0)`,
         }}
       >
         <Image
@@ -406,21 +390,6 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
           priority
         />
       </div>
-
-      {/* -------------------------------------------------------------
-          HOVER LENS APERTURE RING (Subtle Radiant Glowing Circular Boundary)
-          ------------------------------------------------------------- */}
-      {isHovered && (
-        <div
-          className="absolute pointer-events-none rounded-full border border-amber-400/35 shadow-[0_0_25px_rgba(245,135,61,0.25)] transition-opacity duration-300"
-          style={{
-            width: lensRadius * 2,
-            height: lensRadius * 2,
-            left: mousePos.x - lensRadius,
-            top: mousePos.y - lensRadius,
-          }}
-        />
-      )}
     </div>
   );
 }
