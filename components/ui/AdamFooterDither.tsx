@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 // Exact 7 Tonal Level Colors from the Dithering Tool
 const LEVEL_COLORS = [
@@ -15,7 +15,6 @@ const LEVEL_COLORS = [
 
 // Exact Character Ramp from the Dithering Tool
 const ASCII_RAMP = " .:-=+*#%@";
-const CIPHER_CHARS = "*#%@+=-:~!?01X#&$";
 
 function hexToRgb(hex: string): [number, number, number] {
   const v = parseInt(hex.slice(1), 16);
@@ -38,6 +37,7 @@ interface HandData {
   target: { x: number; y: number };
   cur: { x: number; y: number };
   hoverCanvasPos: { x: number; y: number } | null;
+  needsHighlightRedraw: boolean;
 }
 
 export default function AdamFooterDither({ children }: { children?: React.ReactNode }) {
@@ -55,17 +55,30 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
   const rightMidCanvasRef = useRef<HTMLCanvasElement>(null);
   const rightHighlightCanvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Independent Parallax States
-  const leftState = useRef<HandData>({ target: { x: 0, y: 0 }, cur: { x: 0, y: 0 }, hoverCanvasPos: null });
-  const rightState = useRef<HandData>({ target: { x: 0, y: 0 }, cur: { x: 0, y: 0 }, hoverCanvasPos: null });
+  // Independent Parallax & Interaction States
+  const leftState = useRef<HandData>({
+    target: { x: 0, y: 0 },
+    cur: { x: 0, y: 0 },
+    hoverCanvasPos: null,
+    needsHighlightRedraw: false,
+  });
+
+  const rightState = useRef<HandData>({
+    target: { x: 0, y: 0 },
+    cur: { x: 0, y: 0 },
+    hoverCanvasPos: null,
+    needsHighlightRedraw: false,
+  });
 
   const [leftOffset, setLeftOffset] = useState({ x: 0, y: 0 });
   const [rightOffset, setRightOffset] = useState({ x: 0, y: 0 });
 
-  // Scroll In-View & Fingertip Reveal State
+  // Scroll In-View Trigger
   const [isInView, setIsInView] = useState(false);
-  const revealProgress = useRef(0);
-  const revealStartTime = useRef<number | null>(null);
+
+  // Render callback refs to trigger on-demand highlight updates without polling
+  const redrawLeftHighlight = useRef<(() => void) | null>(null);
+  const redrawRightHighlight = useRef<(() => void) | null>(null);
 
   // Trigger reveal when scrolling into footer section
   useEffect(() => {
@@ -76,14 +89,14 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           setIsInView(true);
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     );
     observer.observe(rootRef.current);
     return () => observer.disconnect();
   }, []);
 
-  // Root Mouse Tracking: Never blocked by any children layers!
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  // Root Mouse Tracking: Non-blocking, event-driven
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     // 1. Check Left Hand Hitbox & Parallax
     if (leftWrapRef.current && leftHighlightCanvasRef.current) {
       const rect = leftWrapRef.current.getBoundingClientRect();
@@ -105,9 +118,13 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           x: (e.clientX - rect.left) * scaleX,
           y: (e.clientY - rect.top) * scaleY,
         };
+        leftState.current.needsHighlightRedraw = true;
       } else {
-        leftState.current.target = { x: 0, y: 0 };
-        leftState.current.hoverCanvasPos = null;
+        if (leftState.current.hoverCanvasPos !== null || leftState.current.target.x !== 0) {
+          leftState.current.target = { x: 0, y: 0 };
+          leftState.current.hoverCanvasPos = null;
+          leftState.current.needsHighlightRedraw = true;
+        }
       }
     }
 
@@ -132,48 +149,74 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           x: (e.clientX - rect.left) * scaleX,
           y: (e.clientY - rect.top) * scaleY,
         };
+        rightState.current.needsHighlightRedraw = true;
       } else {
-        rightState.current.target = { x: 0, y: 0 };
-        rightState.current.hoverCanvasPos = null;
+        if (rightState.current.hoverCanvasPos !== null || rightState.current.target.x !== 0) {
+          rightState.current.target = { x: 0, y: 0 };
+          rightState.current.hoverCanvasPos = null;
+          rightState.current.needsHighlightRedraw = true;
+        }
       }
     }
-  };
+  }, []);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     leftState.current.target = { x: 0, y: 0 };
     leftState.current.hoverCanvasPos = null;
+    leftState.current.needsHighlightRedraw = true;
+
     rightState.current.target = { x: 0, y: 0 };
     rightState.current.hoverCanvasPos = null;
-  };
+    rightState.current.needsHighlightRedraw = true;
+  }, []);
 
-  // Parallax Spring Animation Loop
+  // Parallax Spring Animation Loop: Only does lightweight spring math & on-demand redraws
   useEffect(() => {
     let animId: number;
     const tick = () => {
-      // Left Hand spring damping
-      leftState.current.cur.x += (leftState.current.target.x - leftState.current.cur.x) * 0.1;
-      leftState.current.cur.y += (leftState.current.target.y - leftState.current.cur.y) * 0.1;
-      setLeftOffset({ ...leftState.current.cur });
+      let isMoving = false;
 
-      // Right Hand spring damping
-      rightState.current.cur.x += (rightState.current.target.x - rightState.current.cur.x) * 0.1;
-      rightState.current.cur.y += (rightState.current.target.y - rightState.current.cur.y) * 0.1;
-      setRightOffset({ ...rightState.current.cur });
+      // Left Hand spring
+      const leftDx = leftState.current.target.x - leftState.current.cur.x;
+      const leftDy = leftState.current.target.y - leftState.current.cur.y;
+      if (Math.abs(leftDx) > 0.0005 || Math.abs(leftDy) > 0.0005) {
+        leftState.current.cur.x += leftDx * 0.12;
+        leftState.current.cur.y += leftDy * 0.12;
+        setLeftOffset({ ...leftState.current.cur });
+        isMoving = true;
+      }
+
+      // Right Hand spring
+      const rightDx = rightState.current.target.x - rightState.current.cur.x;
+      const rightDy = rightState.current.target.y - rightState.current.cur.y;
+      if (Math.abs(rightDx) > 0.0005 || Math.abs(rightDy) > 0.0005) {
+        rightState.current.cur.x += rightDx * 0.12;
+        rightState.current.cur.y += rightDy * 0.12;
+        setRightOffset({ ...rightState.current.cur });
+        isMoving = true;
+      }
+
+      // On-demand highlight canvas redraws (zero overhead when resting)
+      if (leftState.current.needsHighlightRedraw && redrawLeftHighlight.current) {
+        redrawLeftHighlight.current();
+      }
+      if (rightState.current.needsHighlightRedraw && redrawRightHighlight.current) {
+        redrawRightHighlight.current();
+      }
 
       animId = requestAnimationFrame(tick);
     };
+
     animId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animId);
   }, []);
 
-  // Setup 3-Tier Dither Renderers with Fingertip-First Decrypt Reveal
+  // 1-Time High-Performance Static ASCII Canvas Pre-Renderer
   useEffect(() => {
     let isActive = true;
-    let rafId: number;
 
     const setupHandRenderer = (
       imgSrc: string,
-      isLeft: boolean,
       shadowCanvas: HTMLCanvasElement | null,
       midCanvas: HTMLCanvasElement | null,
       highlightCanvas: HTMLCanvasElement | null,
@@ -190,7 +233,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
       img.crossOrigin = "anonymous";
       img.src = imgSrc;
 
-      let renderFrame: (() => void) | null = null;
+      let updateHighlight: (() => void) | null = null;
 
       img.onload = () => {
         if (!isActive) return;
@@ -220,124 +263,92 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
         thumbCtx.drawImage(img, 0, 0, cols, rows);
         const imgData = thumbCtx.getImageData(0, 0, cols, rows).data;
 
-        const brightness = new Float32Array(cols * rows);
         const level = new Uint8Array(cols * rows);
         const influence = new Float32Array(cols * rows);
-        // Precompute normalized distance from the pointing index fingertip:
-        // Left hand finger is at column (cols - 1 = 74). Distance from tip: (74 - c) / 74.
-        // Right hand finger is at column 0. Distance from tip: c / 74.
-        const fingerDist = new Float32Array(cols * rows);
 
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            const idx = r * cols + c;
-            const p = idx * 4;
-            const a = imgData[p + 3] / 255;
-            const b = ((imgData[p] * 0.299 + imgData[p + 1] * 0.587 + imgData[p + 2] * 0.114) / 255) * a;
-            brightness[idx] = b;
-            level[idx] = Math.min(6, Math.floor(b * 7));
-
-            const dX = isLeft ? (cols - 1 - c) / (cols - 1) : c / (cols - 1);
-            fingerDist[idx] = dX;
-          }
+        for (let i = 0, p = 0; i < level.length; i++, p += 4) {
+          const a = imgData[p + 3] / 255;
+          const b = ((imgData[p] * 0.299 + imgData[p + 1] * 0.587 + imgData[p + 2] * 0.114) / 255) * a;
+          level[i] = Math.min(6, Math.floor(b * 7));
         }
 
         const levelRgb = LEVEL_COLORS.map(hexToRgb);
         const hoverRgb = hexToRgb("#ffffff");
-        const sparkRgb = hexToRgb("#fed7aa"); // Radiant amber/gold spark for active creation wave
         const radiusPx = (22 / 100) * targetW;
         const intensity = 1.0;
-        const speed = 0.18;
+        const speed = 0.2;
         const fontSize = Math.max(6, Math.min(cellW, cellH) * 1.05);
 
-        let lastStaticProgress = -1;
+        // -------------------------------------------------------------
+        // 1. Pre-Render Static Layer 1: Shadows (Levels 1, 2) - 1 DRAW CALL
+        // -------------------------------------------------------------
+        shadowCtx.clearRect(0, 0, targetW, targetH);
+        shadowCtx.textAlign = "center";
+        shadowCtx.textBaseline = "middle";
+        shadowCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
 
-        renderFrame = () => {
-          const currentReveal = revealProgress.current;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const idx = r * cols + c;
+            const lvl = level[idx];
+            if (lvl === 0 || lvl > 2) continue;
 
-          // -------------------------------------------------------------
-          // 1 & 2. Static Layers (Shadows & Midtones) redraw during reveal
-          // -------------------------------------------------------------
-          if (currentReveal < 1.0 || lastStaticProgress < 1.0) {
-            lastStaticProgress = currentReveal;
-
-            // Render Shadows (Levels 1, 2)
-            shadowCtx.clearRect(0, 0, targetW, targetH);
-            shadowCtx.textAlign = "center";
-            shadowCtx.textBaseline = "middle";
-            shadowCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
-
-            for (let r = 0; r < rows; r++) {
-              for (let c = 0; c < cols; c++) {
-                const idx = r * cols + c;
-                const lvl = level[idx];
-                if (lvl === 0 || lvl > 2) continue;
-
-                const d = fingerDist[idx];
-                if (d > currentReveal + 0.05) continue; // Not yet revealed
-
-                const isWave = d >= currentReveal - 0.15 && currentReveal < 1.0;
-                const cx = c * cellW + cellW / 2;
-                const cy = r * cellH + cellH / 2;
-
-                if (isWave) {
-                  const randCh = CIPHER_CHARS[Math.floor(Math.random() * CIPHER_CHARS.length)];
-                  shadowCtx.fillStyle = `rgba(${sparkRgb[0]},${sparkRgb[1]},${sparkRgb[2]},0.7)`;
-                  shadowCtx.fillText(randCh, cx, cy);
-                } else {
-                  const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
-                  const ch = ASCII_RAMP[rampIdx];
-                  if (ch && ch !== " ") {
-                    const rgb = levelRgb[lvl];
-                    shadowCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-                    shadowCtx.fillText(ch, cx, cy);
-                  }
-                }
-              }
-            }
-
-            // Render Midtones (Levels 3, 4)
-            midCtx.clearRect(0, 0, targetW, targetH);
-            midCtx.textAlign = "center";
-            midCtx.textBaseline = "middle";
-            midCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
-
-            for (let r = 0; r < rows; r++) {
-              for (let c = 0; c < cols; c++) {
-                const idx = r * cols + c;
-                const lvl = level[idx];
-                if (lvl < 3 || lvl > 4) continue;
-
-                const d = fingerDist[idx];
-                if (d > currentReveal + 0.05) continue;
-
-                const isWave = d >= currentReveal - 0.15 && currentReveal < 1.0;
-                const cx = c * cellW + cellW / 2;
-                const cy = r * cellH + cellH / 2;
-
-                if (isWave) {
-                  const randCh = CIPHER_CHARS[Math.floor(Math.random() * CIPHER_CHARS.length)];
-                  midCtx.fillStyle = `rgba(${sparkRgb[0]},${sparkRgb[1]},${sparkRgb[2]},0.85)`;
-                  midCtx.fillText(randCh, cx, cy);
-                } else {
-                  const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
-                  const ch = ASCII_RAMP[rampIdx];
-                  if (ch && ch !== " ") {
-                    const rgb = levelRgb[lvl];
-                    midCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-                    midCtx.fillText(ch, cx, cy);
-                  }
-                }
-              }
+            const cx = c * cellW + cellW / 2;
+            const cy = r * cellH + cellH / 2;
+            const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
+            const ch = ASCII_RAMP[rampIdx];
+            if (ch && ch !== " ") {
+              const rgb = levelRgb[lvl];
+              shadowCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+              shadowCtx.fillText(ch, cx, cy);
             }
           }
+        }
 
-          // -------------------------------------------------------------
-          // 3. Dynamic Highlight Layer with Hover Glow & Fingertip Wave
-          // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        // 2. Pre-Render Static Layer 2: Midtones (Levels 3, 4) - 1 DRAW CALL
+        // -------------------------------------------------------------
+        midCtx.clearRect(0, 0, targetW, targetH);
+        midCtx.textAlign = "center";
+        midCtx.textBaseline = "middle";
+        midCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const idx = r * cols + c;
+            const lvl = level[idx];
+            if (lvl < 3 || lvl > 4) continue;
+
+            const cx = c * cellW + cellW / 2;
+            const cy = r * cellH + cellH / 2;
+            const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
+            const ch = ASCII_RAMP[rampIdx];
+            if (ch && ch !== " ") {
+              const rgb = levelRgb[lvl];
+              midCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+              midCtx.fillText(ch, cx, cy);
+            }
+          }
+        }
+
+        // -------------------------------------------------------------
+        // 3. Highlight Layer: Pre-render default + On-demand hover updates
+        // -------------------------------------------------------------
+        const drawHighlight = () => {
+          highlightCtx.clearRect(0, 0, targetW, targetH);
+          highlightCtx.textAlign = "center";
+          highlightCtx.textBaseline = "middle";
+          highlightCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+
+          let anyActiveInfluence = false;
+
           for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
               const idx = r * cols + c;
+              const lvl = level[idx];
+              if (lvl < 5) continue;
+
+              // Calculate hover glow
               let target = 0;
               if (stateRef.current.hoverCanvasPos) {
                 const cx = c * cellW + cellW / 2;
@@ -346,102 +357,64 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
                 const t = 1 - Math.min(1, dist / radiusPx);
                 target = Math.max(0, t) * intensity;
               }
+
               influence[idx] += (target - influence[idx]) * speed;
-              if (Math.abs(influence[idx]) < 0.001) influence[idx] = 0;
-            }
-          }
+              if (Math.abs(influence[idx]) < 0.002) {
+                influence[idx] = 0;
+              } else {
+                anyActiveInfluence = true;
+              }
 
-          highlightCtx.clearRect(0, 0, targetW, targetH);
-          highlightCtx.textAlign = "center";
-          highlightCtx.textBaseline = "middle";
-          highlightCtx.font = `${fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, monospace`;
+              const inf = influence[idx];
+              const base = levelRgb[lvl];
+              const rgb = inf > 0.001 ? lerpColor(base, hoverRgb, inf) : base;
+              const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 
-          for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-              const idx = r * cols + c;
-              const lvl = level[idx];
-              if (lvl < 5) continue;
-
-              const d = fingerDist[idx];
-              if (d > currentReveal + 0.05) continue;
-
-              const isWave = d >= currentReveal - 0.15 && currentReveal < 1.0;
               const cx = c * cellW + cellW / 2;
               const cy = r * cellH + cellH / 2;
-
-              if (isWave) {
-                const randCh = CIPHER_CHARS[Math.floor(Math.random() * CIPHER_CHARS.length)];
-                highlightCtx.fillStyle = "#ffffff";
-                highlightCtx.fillText(randCh, cx, cy);
-              } else {
-                const inf = influence[idx];
-                const base = levelRgb[lvl];
-                const rgb = inf > 0.001 ? lerpColor(base, hoverRgb, inf) : base;
-                const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-
-                const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
-                const ch = ASCII_RAMP[rampIdx];
-                if (ch && ch !== " ") {
-                  highlightCtx.fillStyle = color;
-                  highlightCtx.fillText(ch, cx, cy);
-                }
+              const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
+              const ch = ASCII_RAMP[rampIdx];
+              if (ch && ch !== " ") {
+                highlightCtx.fillStyle = color;
+                highlightCtx.fillText(ch, cx, cy);
               }
             }
           }
+
+          // If no remaining influence animation, sleep until next mouse event
+          stateRef.current.needsHighlightRedraw = anyActiveInfluence || stateRef.current.hoverCanvasPos !== null;
         };
+
+        // Initial 1-time highlight draw
+        drawHighlight();
+        updateHighlight = drawHighlight;
       };
 
       return () => {
-        if (renderFrame) renderFrame();
+        if (updateHighlight) updateHighlight();
       };
     };
 
-    const leftTick = setupHandRenderer(
+    redrawLeftHighlight.current = setupHandRenderer(
       "/adam-hands/left-hand.png",
-      true,
       leftShadowCanvasRef.current,
       leftMidCanvasRef.current,
       leftHighlightCanvasRef.current,
       leftState
     );
 
-    const rightTick = setupHandRenderer(
+    redrawRightHighlight.current = setupHandRenderer(
       "/adam-hands/right-hand.png",
-      false,
       rightShadowCanvasRef.current,
       rightMidCanvasRef.current,
       rightHighlightCanvasRef.current,
       rightState
     );
 
-    const mainLoop = (timestamp: number) => {
-      if (!isActive) return;
-
-      // Advance Fingertip Emergence Animation Clock when in view
-      if (isInView) {
-        if (revealStartTime.current === null) {
-          revealStartTime.current = timestamp;
-        }
-        const elapsed = timestamp - revealStartTime.current;
-        const duration = 1400; // 1.4s smooth fingertip-to-wrist emergence
-        const t = Math.min(1, elapsed / duration);
-        // Cubic ease-out curve
-        const eased = 1 - Math.pow(1 - t, 3);
-        revealProgress.current = eased;
-      }
-
-      if (leftTick) leftTick();
-      if (rightTick) rightTick();
-      rafId = requestAnimationFrame(mainLoop);
-    };
-
-    rafId = requestAnimationFrame(mainLoop);
-
     return () => {
       isActive = false;
-      if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [isInView]);
+  }, []);
 
   return (
     <div
@@ -451,15 +424,22 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
       className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[520px] sm:min-h-[600px] flex flex-col justify-between"
     >
       {/* -------------------------------------------------------------
-          BOTTOM-ANCHORED DUAL HANDS CONTAINER (Fingertip Emergence Reveal)
+          BOTTOM-ANCHORED DUAL HANDS CONTAINER
+          - Left Hand: Sweeps from LEFT (Wrist/Arm) to RIGHT (Fingers)
+          - Right Hand: Sweeps from RIGHT (Wrist/Arm) to LEFT (Fingers)
+          - 100% GPU Hardware Accelerated clip-path transition (0% CPU load)
           ------------------------------------------------------------- */}
       <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[240px] sm:h-[380px] md:h-[460px] px-0">
-        {/* LEFT HAND (Fingertip Origin Emergence + 3-Tier Discrete Tonal Parallax) */}
+        
+        {/* LEFT HAND (Materializes from LEFT side -> sweeping across to the fingers) */}
         <div
           ref={leftWrapRef}
-          className={`w-[50%] h-full relative flex items-end justify-start pointer-events-none transition-all duration-1000 ease-out ${
-            isInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-6"
-          }`}
+          className="w-[50%] h-full relative flex items-end justify-start pointer-events-none transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{
+            clipPath: isInView ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
+            opacity: isInView ? 1 : 0,
+            transform: isInView ? "translate3d(0, 0, 0)" : "translate3d(-24px, 0, 0)",
+          }}
         >
           {/* Layer 1: Shadow Plane (Levels 0, 1, 2) */}
           <div
@@ -495,12 +475,15 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           </div>
         </div>
 
-        {/* RIGHT HAND (Fingertip Origin Emergence + 3-Tier Discrete Tonal Parallax) */}
+        {/* RIGHT HAND (Materializes from RIGHT side -> sweeping across to the fingers) */}
         <div
           ref={rightWrapRef}
-          className={`w-[50%] h-full relative flex items-end justify-end pointer-events-none transition-all duration-1000 ease-out ${
-            isInView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"
-          }`}
+          className="w-[50%] h-full relative flex items-end justify-end pointer-events-none transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{
+            clipPath: isInView ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",
+            opacity: isInView ? 1 : 0,
+            transform: isInView ? "translate3d(0, 0, 0)" : "translate3d(24px, 0, 0)",
+          }}
         >
           {/* Layer 1: Shadow Plane (Levels 0, 1, 2) */}
           <div
