@@ -152,9 +152,9 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
     img.onload = () => {
       if (!isActive) return;
 
-      // 1732x1732 image: render on exact square resolution
-      const targetW = 750;
-      const targetH = 750;
+      // 1732x1732 image: render on crisp square resolution
+      const targetW = 900;
+      const targetH = 900;
 
       shadowCanvas.width = targetW;
       shadowCanvas.height = targetH;
@@ -163,8 +163,8 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       highlightCanvas.width = targetW;
       highlightCanvas.height = targetH;
 
-      const cols = 75;
-      const rows = 75;
+      const cols = 80;
+      const rows = 80;
       const cellW = targetW / cols;
       const cellH = targetH / rows;
 
@@ -323,7 +323,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
   }, [src]);
 
   // Ultra-Soft Feathered Radius Lens Cutout Mask on Top Image
-  const lensRadius = 175; // Soft aperture radius in pixels
+  const lensRadius = 185; // Soft aperture radius in pixels
 
   const topImageMask = isHovered
     ? `radial-gradient(circle ${lensRadius}px at ${mousePos.x}px ${mousePos.y}px, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.6) 72%, rgba(0,0,0,0.92) 88%, rgba(0,0,0,1) 100%)`
@@ -335,7 +335,7 @@ export default function AboutImageDither({ src, alt, className }: AboutImageDith
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative w-full max-w-sm lg:max-w-md mx-auto aspect-square overflow-hidden flex items-start justify-center cursor-pointer select-none ${
+      className={`relative w-full max-w-[460px] sm:max-w-[520px] lg:max-w-[580px] xl:max-w-[620px] mx-auto aspect-square overflow-hidden flex items-start justify-center cursor-pointer select-none ${
         className || ""
       }`}
       style={{
