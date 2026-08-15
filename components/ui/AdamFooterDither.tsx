@@ -366,7 +366,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           <div
             className="absolute inset-0 transition-transform duration-100 ease-out flex items-end justify-start opacity-90"
             style={{
-              transform: `translate3d(${leftOffset.x * 6}px, ${leftOffset.y * 4.5}px, 0) scale(0.985)`,
+              transform: `translate3d(${leftOffset.x * 2}px, ${leftOffset.y * 1.5}px, 0) scale(0.99)`,
             }}
           >
             <canvas ref={leftShadowCanvasRef} className="block max-h-full max-w-full object-contain" />
@@ -376,7 +376,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           <div
             className="absolute inset-0 transition-transform duration-100 ease-out flex items-end justify-start opacity-95"
             style={{
-              transform: `translate3d(${leftOffset.x * 14}px, ${leftOffset.y * 10}px, 0)`,
+              transform: `translate3d(${leftOffset.x * 4.5}px, ${leftOffset.y * 3.5}px, 0)`,
             }}
           >
             <canvas ref={leftMidCanvasRef} className="block max-h-full max-w-full object-contain" />
@@ -386,7 +386,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           <div
             className="w-full h-full relative transition-transform duration-100 ease-out flex items-end justify-start"
             style={{
-              transform: `translate3d(${leftOffset.x * 24}px, ${leftOffset.y * 18}px, 0)`,
+              transform: `translate3d(${leftOffset.x * 7.5}px, ${leftOffset.y * 5.5}px, 0)`,
             }}
           >
             <canvas
@@ -405,7 +405,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           <div
             className="absolute inset-0 transition-transform duration-100 ease-out flex items-end justify-end opacity-90"
             style={{
-              transform: `translate3d(${rightOffset.x * 6}px, ${rightOffset.y * 4.5}px, 0) scale(0.985)`,
+              transform: `translate3d(${rightOffset.x * 2}px, ${rightOffset.y * 1.5}px, 0) scale(0.99)`,
             }}
           >
             <canvas ref={rightShadowCanvasRef} className="block max-h-full max-w-full object-contain" />
@@ -415,7 +415,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           <div
             className="absolute inset-0 transition-transform duration-100 ease-out flex items-end justify-end opacity-95"
             style={{
-              transform: `translate3d(${rightOffset.x * 14}px, ${rightOffset.y * 10}px, 0)`,
+              transform: `translate3d(${rightOffset.x * 4.5}px, ${rightOffset.y * 3.5}px, 0)`,
             }}
           >
             <canvas ref={rightMidCanvasRef} className="block max-h-full max-w-full object-contain" />
@@ -425,7 +425,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           <div
             className="w-full h-full relative transition-transform duration-100 ease-out flex items-end justify-end"
             style={{
-              transform: `translate3d(${rightOffset.x * 24}px, ${rightOffset.y * 18}px, 0)`,
+              transform: `translate3d(${rightOffset.x * 7.5}px, ${rightOffset.y * 5.5}px, 0)`,
             }}
           >
             <canvas
