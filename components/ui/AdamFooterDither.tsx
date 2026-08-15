@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Image from "@/components/ui/Image";
 
-// 7 Tonal level colors mapping from dark crimson to warm highlight
+// 7 Tonal level colors mapping from dark crimson to warm coral highlight
 const LEVEL_COLORS = [
   "#1c0502",
   "#420b04",
@@ -67,7 +66,7 @@ export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
     return () => cancelAnimationFrame(animId);
   }, []);
 
-  // ASCII Dither Rendering Loop with Per-Image Brightness Range Normalization
+  // Pure ASCII Dither Canvas Renderer
   useEffect(() => {
     let isActive = true;
 
@@ -97,7 +96,7 @@ export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
         canvas.height = height * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        const cellSize = 12;
+        const cellSize = 11;
         const cols = Math.floor(width / cellSize);
         const rows = Math.floor(height / cellSize);
 
@@ -111,7 +110,7 @@ export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
         tmpCtx.drawImage(img, 0, 0, cols, rows);
         const data = tmpCtx.getImageData(0, 0, cols, rows).data;
 
-        // Fix 1: Find this image's own min and max brightness range
+        // Per-image brightness normalization
         let min = 1, max = 0;
         const raw = new Float32Array(cols * rows);
         for (let i = 0, p = 0; i < raw.length; i++, p += 4) {
@@ -143,7 +142,7 @@ export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
             if (!char || char === " ") continue;
 
             const rgb = levelRgb[lvl];
-            ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${Math.min(1, norm * 1.2)})`;
+            ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${Math.min(1, norm * 1.3)})`;
             ctx.fillText(char, c * cellSize + cellSize / 2, r * cellSize + cellSize / 2);
           }
         }
@@ -170,91 +169,26 @@ export default function AdamFooterDither({ children }: AdamFooterDitherProps) {
       className="relative w-full overflow-hidden bg-[#060608] select-none"
     >
       {/* -------------------------------------------------------------
-          LAYER 1 (BOTTOM): ASCII Dither Canvas Layer (Slower Parallax)
+          PURE ASCII DITHER CANVAS LAYER (Anchored at Bottom with Parallax)
           ------------------------------------------------------------- */}
       <div
-        className="absolute inset-0 pointer-events-none z-10 flex opacity-75 transition-transform duration-100 ease-out"
+        className="absolute inset-0 pointer-events-none z-10 flex items-end opacity-90 transition-transform duration-100 ease-out"
         style={{
-          transform: `translate3d(${mousePos.x * 8}px, ${mousePos.y * 6}px, 0)`,
+          transform: `translate3d(${mousePos.x * 18}px, ${mousePos.y * 14 + 10}px, 0)`,
         }}
       >
-        <div className="w-1/2 h-full relative">
+        <div className="w-1/2 h-[75%] relative">
           <canvas ref={canvasLeftRef} className="w-full h-full block" />
         </div>
-        <div className="w-1/2 h-full relative">
+        <div className="w-1/2 h-[75%] relative">
           <canvas ref={canvasRightRef} className="w-full h-full block" />
         </div>
       </div>
 
       {/* -------------------------------------------------------------
-          LAYER 2 (MIDDLE): Muted Duplicate Copy Layer (Medium Parallax)
+          FOOTER CONTENT & LINKS OVERLAY (Front Interactive Layer)
           ------------------------------------------------------------- */}
-      <div
-        className="absolute inset-0 pointer-events-none z-20 flex justify-between items-center px-0 sm:px-4 opacity-15 mix-blend-screen transition-transform duration-100 ease-out"
-        style={{
-          transform: `translate3d(${mousePos.x * 20}px, ${mousePos.y * 15}px, 0) scale(1.02)`,
-        }}
-      >
-        {/* Left Hand Copy */}
-        <div className="relative w-[200px] sm:w-[280px] md:w-[340px] lg:w-[380px] aspect-[807/1117] -ml-6 sm:-ml-10">
-          <Image
-            src="/adam-hands/left-hand.png"
-            alt="Creation of Adam Left Hand Duplicate"
-            fill
-            className="object-contain filter sepia saturate-150 hue-rotate-[-10deg] brightness-75 contrast-125"
-          />
-        </div>
-
-        {/* Right Hand Copy */}
-        <div className="relative w-[200px] sm:w-[280px] md:w-[340px] lg:w-[380px] aspect-[829/1117] -mr-6 sm:-mr-10">
-          <Image
-            src="/adam-hands/right-hand.png"
-            alt="Creation of Adam Right Hand Duplicate"
-            fill
-            className="object-contain filter sepia saturate-150 hue-rotate-[-10deg] brightness-75 contrast-125"
-          />
-        </div>
-      </div>
-
-      {/* -------------------------------------------------------------
-          LAYER 3 (TOP): Shrunken & Muted Hand Cutouts (Fast 3D Parallax Tilt)
-          ------------------------------------------------------------- */}
-      <div className="absolute inset-0 pointer-events-none z-30 flex justify-between items-center px-0 sm:px-4">
-        {/* Top Left Hand */}
-        <div
-          className="relative w-[200px] sm:w-[280px] md:w-[340px] lg:w-[380px] aspect-[807/1117] -ml-6 sm:-ml-10 opacity-50 mix-blend-luminosity transition-transform duration-100 ease-out"
-          style={{
-            transform: `perspective(1000px) rotateX(${mousePos.y * -14}deg) rotateY(${mousePos.x * 16}deg) translate3d(${mousePos.x * 38}px, ${mousePos.y * 28}px, 0)`,
-          }}
-        >
-          <Image
-            src="/adam-hands/left-hand.png"
-            alt="Creation of Adam Left Hand"
-            fill
-            className="object-contain filter sepia saturate-150 hue-rotate-[-10deg] brightness-75 contrast-125 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
-          />
-        </div>
-
-        {/* Top Right Hand */}
-        <div
-          className="relative w-[200px] sm:w-[280px] md:w-[340px] lg:w-[380px] aspect-[829/1117] -mr-6 sm:-mr-10 opacity-50 mix-blend-luminosity transition-transform duration-100 ease-out"
-          style={{
-            transform: `perspective(1000px) rotateX(${mousePos.y * -14}deg) rotateY(${mousePos.x * 16}deg) translate3d(${mousePos.x * 38}px, ${mousePos.y * 28}px, 0)`,
-          }}
-        >
-          <Image
-            src="/adam-hands/right-hand.png"
-            alt="Creation of Adam Right Hand"
-            fill
-            className="object-contain filter sepia saturate-150 hue-rotate-[-10deg] brightness-75 contrast-125 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
-          />
-        </div>
-      </div>
-
-      {/* -------------------------------------------------------------
-          LAYER 4: Footer Content & Links Overlay (Front Interactive Layer)
-          ------------------------------------------------------------- */}
-      <div className="relative z-40">
+      <div className="relative z-20">
         {children}
       </div>
     </div>

@@ -15,7 +15,7 @@ const Footer = () => {
           {/* Main Footer Content */}
           <div className="flex flex-col md:flex-row justify-between gap-16 mb-16">
             {/* Brand Section - Left Side */}
-            <div className="max-w-sm space-y-4 bg-black/50 backdrop-blur-sm rounded-2xl p-6 -m-6 border border-white/5">
+            <div className="max-w-sm space-y-4">
               <div className="flex items-center justify-start">
                 <FigmaSplitLogo size={42} />
               </div>
