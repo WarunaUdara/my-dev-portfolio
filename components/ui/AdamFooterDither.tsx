@@ -3,24 +3,51 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useInView } from "motion/react";
 
-// Exact 7 Tonal Level Colors from the Dithering Tool
-const LEVEL_COLORS = [
-  "#1a0a06", // 0: Shadow
-  "#3a1408", // 1: Low
-  "#6b220c", // 2: Mid-low
-  "#a8330f", // 3: Mid
-  "#d9531c", // 4: Mid-high
-  "#f2823c", // 5: High
-  "#f2823c", // 6: Highlight
-];
-
-// Exact Character Ramp from the Dithering Tool
-const ASCII_RAMP = " .:-=+*#%@";
+// Header Lining Orange Accent from the Portfolio Theme (AuroraText "#ff6926")
+const BASE_COLOR = "#ff6926";
 
 function hexToRgb(hex: string): [number, number, number] {
   const v = parseInt(hex.slice(1), 16);
   return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
 }
+
+// Dynamically generate the 7 tonal levels mathematically from a single base color
+function generateTonalPalette(baseHex: string): [number, number, number][] {
+  const [r, g, b] = hexToRgb(baseHex);
+  
+  // Tonal stops from deep shadow to radiant highlight
+  const stops = [
+    0.10, // 0: Deep Shadow
+    0.24, // 1: Low Tone
+    0.42, // 2: Mid-Low Tone
+    0.62, // 3: Mid Tone
+    0.82, // 4: Mid-High Tone
+    1.00, // 5: Base Highlight (#ff6926)
+    1.35, // 6: Apex Luminous Highlight (tints towards white)
+  ];
+
+  return stops.map((factor) => {
+    if (factor <= 1.0) {
+      return [
+        Math.round(r * factor),
+        Math.round(g * factor),
+        Math.round(b * factor),
+      ];
+    } else {
+      const t = factor - 1.0;
+      return [
+        Math.round(r + (255 - r) * Math.min(1, t * 1.5)),
+        Math.round(g + (255 - g) * Math.min(1, t * 1.5)),
+        Math.round(b + (255 - b) * Math.min(1, t * 1.5)),
+      ];
+    }
+  });
+}
+
+const LEVEL_RGB = generateTonalPalette(BASE_COLOR);
+
+// Exact Character Ramp for ASCII Dithering
+const ASCII_RAMP = " .:-=+*#%@";
 
 function lerpColor(
   rgbA: [number, number, number],
@@ -59,7 +86,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
   // Canvas Ready State
   const [imagesReady, setImagesReady] = useState(false);
 
-  // Motion useInView: accurately tracks when footer is in view (with margin to avoid triggering on offscreen initial mount)
+  // Motion useInView: accurately tracks when footer enters view
   const isInView = useInView(rootRef, { amount: 0.2, once: false });
 
   // Effective reveal active state
@@ -269,7 +296,6 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           level[i] = Math.min(6, Math.floor(b * 7));
         }
 
-        const levelRgb = LEVEL_COLORS.map(hexToRgb);
         const hoverRgb = hexToRgb("#ffffff");
         const radiusPx = (22 / 100) * targetW;
         const intensity = 1.0;
@@ -295,7 +321,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
             const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
             const ch = ASCII_RAMP[rampIdx];
             if (ch && ch !== " ") {
-              const rgb = levelRgb[lvl];
+              const rgb = LEVEL_RGB[lvl];
               shadowCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
               shadowCtx.fillText(ch, cx, cy);
             }
@@ -321,7 +347,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
             const rampIdx = Math.min(ASCII_RAMP.length - 1, Math.round((lvl / 6) * (ASCII_RAMP.length - 1)));
             const ch = ASCII_RAMP[rampIdx];
             if (ch && ch !== " ") {
-              const rgb = levelRgb[lvl];
+              const rgb = LEVEL_RGB[lvl];
               midCtx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
               midCtx.fillText(ch, cx, cy);
             }
@@ -363,7 +389,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
               }
 
               const inf = influence[idx];
-              const base = levelRgb[lvl];
+              const base = LEVEL_RGB[lvl];
               const rgb = inf > 0.001 ? lerpColor(base, hoverRgb, inf) : base;
               const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 
@@ -424,7 +450,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
       ref={rootRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[520px] sm:min-h-[600px] flex flex-col justify-between"
+      className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[560px] sm:min-h-[640px] md:min-h-[680px] flex flex-col justify-between"
     >
       {/* -------------------------------------------------------------
           BOTTOM-ANCHORED DUAL HANDS CONTAINER
@@ -432,12 +458,12 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           - Right Hand: Sweeps from RIGHT (Wrist/Arm) to LEFT (Fingers)
           - 100% GPU Hardware Accelerated clip-path transition (0% CPU load)
           ------------------------------------------------------------- */}
-      <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[240px] sm:h-[380px] md:h-[460px] px-0">
+      <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[280px] sm:h-[420px] md:h-[500px] lg:h-[550px] px-0">
         
         {/* LEFT HAND (Materializes from LEFT side -> sweeping across to the fingers) */}
         <div
           ref={leftWrapRef}
-          className="w-[50%] h-full relative flex items-end justify-start pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="w-[53%] sm:w-[52%] md:w-[51%] h-full relative flex items-end justify-start pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
             clipPath: isRevealed ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
             WebkitClipPath: isRevealed ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
@@ -474,7 +500,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           >
             <canvas
               ref={leftHighlightCanvasRef}
-              className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(217,83,28,0.25)]"
+              className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(255,105,38,0.3)]"
             />
           </div>
         </div>
@@ -482,7 +508,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
         {/* RIGHT HAND (Materializes from RIGHT side -> sweeping across to the fingers) */}
         <div
           ref={rightWrapRef}
-          className="w-[50%] h-full relative flex items-end justify-end pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="w-[53%] sm:w-[52%] md:w-[51%] h-full relative flex items-end justify-end pointer-events-none transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
             clipPath: isRevealed ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",
             WebkitClipPath: isRevealed ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",
@@ -519,7 +545,7 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           >
             <canvas
               ref={rightHighlightCanvasRef}
-              className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(217,83,28,0.25)]"
+              className="block max-h-full max-w-full object-contain filter drop-shadow-[0_0_24px_rgba(255,105,38,0.3)]"
             />
           </div>
         </div>
