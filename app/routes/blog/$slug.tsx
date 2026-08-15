@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import BlogPost from "../../sections/BlogPost";
 import Footer from "../../sections/Footer";
+import CTA from "../../sections/CTA";
 import { NavBar } from "../../ui/TubelightNavbar";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
 import Scales from "@/components/ui/scales";
@@ -54,7 +55,7 @@ function BlogPostRoutePage() {
         />
       )}
 
-      {/* Main Content with 2-Sided Scales Ruler Strips (Stops cleanly before Footer) */}
+      {/* Main Content with 2-Sided Scales Ruler Strips (Spreads through CTA to Adam Hands Footer) */}
       <div className="relative">
         <div className="absolute top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
           <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
@@ -69,9 +70,14 @@ function BlogPostRoutePage() {
         <div className="relative z-10 pt-12">
           <BlogPost slug={slug} />
         </div>
+
+        {/* CTA Section covered by Scales */}
+        <div className="relative z-10 pt-16">
+          <CTA />
+        </div>
       </div>
 
-      <Footer />
+      <Footer hideCTA />
       <NavBar items={navItems} />
     </div>
   );

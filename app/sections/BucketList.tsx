@@ -99,7 +99,7 @@ const BucketList = () => {
   const progress = (completedCount / totalCount) * 100;
 
   return (
-    <section className="relative bg-black text-white py-20 px-4 sm:px-6 overflow-hidden">
+    <section className="relative bg-transparent text-white py-20 px-4 sm:px-6 overflow-hidden">
       <ScrollFrost height="h-[500px]" />
       <div className="container mx-auto max-w-5xl relative z-10">
         {/* Header */}

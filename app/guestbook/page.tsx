@@ -19,6 +19,7 @@ import {
 } from 'firebase/firestore';
 import { NavBar } from '@/app/ui/TubelightNavbar';
 import Footer from '@/app/sections/Footer';
+import CTA from '@/app/sections/CTA';
 import Toast from '@/components/Toast';
 import Scales from "@/components/ui/scales";
 import { MessageSkeleton } from '@/components/MessageSkeleton';
@@ -260,7 +261,7 @@ export default function GuestbookPage() {
           <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
         </div>
 
-        <div className="container mx-auto max-w-2xl relative z-10">
+        <div className="container mx-auto max-w-2xl relative z-10 pt-28 sm:pt-36 pb-20 px-4">
           {/* Header */}
           <div className="text-center mb-12">
             <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-gray-500 mb-6">
@@ -425,6 +426,11 @@ export default function GuestbookPage() {
             )}
           </div>
         </div>
+
+        {/* CTA Section covered by Scales */}
+        <div className="relative z-10 pt-16">
+          <CTA />
+        </div>
       </div>
 
       {/* Auth Modal */}
@@ -463,7 +469,7 @@ export default function GuestbookPage() {
         </div>
       )}
 
-      <Footer />
+      <Footer hideCTA />
 
       {/* Toast Notifications */}
       {toast.show && (

@@ -8,6 +8,7 @@ import AuroraText from "@/components/ui/aurora-text";
 import ScrollFrost from "@/components/canvasui/ScrollFrost";
 import { NavBar } from "@/app/ui/TubelightNavbar";
 import Footer from "@/app/sections/Footer";
+import CTA from "@/app/sections/CTA";
 import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText, IconPhoneCall } from "@tabler/icons-react";
 import SEOHead from "@/components/ui/SEOHead";
 import { PAGE_META, PERSON_SCHEMA, SITE_URL } from "@/lib/seo";
@@ -127,7 +128,7 @@ export default function UsesPage() {
         schemas={[PERSON_SCHEMA]}
       />
 
-      {/* Main Content with 2-Sided Scales Ruler Strips (Stops cleanly before Footer) */}
+      {/* Main Content with 2-Sided Scales Ruler Strips (Spreads through CTA to Adam Hands Footer) */}
       <div className="relative">
         <div className="absolute top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
           <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
@@ -308,9 +309,14 @@ export default function UsesPage() {
             </div>
           </div>
         </main>
+
+        {/* CTA Section covered by Scales */}
+        <div className="relative z-10 pt-16">
+          <CTA />
+        </div>
       </div>
 
-      <Footer />
+      <Footer hideCTA />
       <NavBar items={navItems} />
     </div>
   );

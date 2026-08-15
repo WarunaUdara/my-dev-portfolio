@@ -10,7 +10,7 @@ const LEVEL_COLORS = [
   "#a8330f", // 3: Mid
   "#d9531c", // 4: Mid-high
   "#f2823c", // 5: High
-  "#ffd39b", // 6: Highlight
+  "#f2823c", // 6: Highlight
 ];
 
 // Exact Character Ramp from the Dithering Tool
@@ -354,13 +354,13 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
       className="relative w-full overflow-hidden bg-[#060608] select-none min-h-[520px] sm:min-h-[600px] flex flex-col justify-between"
     >
       {/* -------------------------------------------------------------
-          BOTTOM-ANCHORED DUAL HANDS CONTAINER (Mobile & Desktop Clean Row)
+          BOTTOM-ANCHORED DUAL HANDS CONTAINER (Flush with Window Borders)
           ------------------------------------------------------------- */}
-      <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[240px] sm:h-[380px] md:h-[460px] px-0 sm:px-4">
-        {/* LEFT HAND (3-Tier Discrete Tonal Parallax) */}
+      <div className="absolute inset-x-0 bottom-0 pointer-events-none z-10 flex flex-row justify-between items-end pb-8 sm:pb-4 h-[240px] sm:h-[380px] md:h-[460px] px-0">
+        {/* LEFT HAND (3-Tier Discrete Tonal Parallax - Flush to Left Edge) */}
         <div
           ref={leftWrapRef}
-          className="w-[50%] sm:w-[46%] md:w-[48%] h-full relative flex items-end justify-start pointer-events-none"
+          className="w-[50%] h-full relative flex items-end justify-start pointer-events-none"
         >
           {/* Layer 1: Shadow Plane (Levels 0, 1, 2) */}
           <div
@@ -396,10 +396,10 @@ export default function AdamFooterDither({ children }: { children?: React.ReactN
           </div>
         </div>
 
-        {/* RIGHT HAND (3-Tier Discrete Tonal Parallax) */}
+        {/* RIGHT HAND (3-Tier Discrete Tonal Parallax - Flush to Right Edge) */}
         <div
           ref={rightWrapRef}
-          className="w-[50%] sm:w-[46%] md:w-[48%] h-full relative flex items-end justify-end pointer-events-none"
+          className="w-[50%] h-full relative flex items-end justify-end pointer-events-none"
         >
           {/* Layer 1: Shadow Plane (Levels 0, 1, 2) */}
           <div

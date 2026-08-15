@@ -3,6 +3,7 @@ import About from "../sections/About";
 import Education from "../sections/Education";
 import Volunteering from "../sections/Volunteering";
 import Footer from "../sections/Footer";
+import CTA from "../sections/CTA";
 import { NavBar } from "../ui/TubelightNavbar";
 import Scales from "@/components/ui/scales";
 import { IconHome, IconUser, IconBriefcase, IconArticle, IconFileText, IconPhoneCall } from "@tabler/icons-react";
@@ -34,12 +35,12 @@ function AboutPage() {
         schemas={[PERSON_SCHEMA]}
       />
 
-      {/* Main Content with 2-Sided Scales Ruler Strips (Stops cleanly before Footer) */}
+      {/* Main Content with 2-Sided Scales Ruler Strips (Spreads through CTA to Adam Hands Footer) */}
       <div className="relative">
-        <div className="absolute top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-10 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+        <div className="absolute top-0 bottom-0 left-3 sm:left-6 md:left-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
           <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
         </div>
-        <div className="absolute top-0 bottom-0 right-3 sm:right-6 md:right-10 w-6 sm:w-8 z-10 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
+        <div className="absolute top-0 bottom-0 right-3 sm:right-6 md:right-10 w-6 sm:w-8 z-20 border-x border-neutral-800/80 pointer-events-none hidden sm:block">
           <Scales orientation="diagonal" size={8} className="w-full opacity-60" />
         </div>
 
@@ -48,9 +49,14 @@ function AboutPage() {
           <Education />
           <Volunteering />
         </div>
+
+        {/* CTA Section covered by Scales */}
+        <div className="relative z-10 pt-16">
+          <CTA />
+        </div>
       </div>
 
-      <Footer />
+      <Footer hideCTA />
       <NavBar items={navItems} />
     </div>
   );
